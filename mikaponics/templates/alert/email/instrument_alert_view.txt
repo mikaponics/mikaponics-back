@@ -1,0 +1,30 @@
+{% load staticfiles i18n foundation_tags %}
+Mikapod Notification
+{% now "m/d/Y" %}
+
+Device ID #
+{{ alert.datum.instrument.device.id }}
+
+Instrument Type
+{{ alert.datum.get_pretty_instrument }}
+
+Measured Reading
+{{ alert.datum.get_pretty_value }}
+
+Measured At
+{{ alert.datum.get_pretty_timestamp }}
+
+Status
+{% if alert.is_red_alert %}
+  Red Alert
+{% elif alert.is_orange_alert %}
+  Orange Alert
+{% elif alert.is_yellow_alert %}
+  Yellow Alert
+{% endif %}
+
+Link:
+{{ url }}
+
+Link in Browser:
+{{ web_view_url }}

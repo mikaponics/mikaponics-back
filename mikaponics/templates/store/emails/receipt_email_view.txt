@@ -1,0 +1,17 @@
+{% load staticfiles i18n foundation_tags %}
+Invoice
+
+Invoice #:
+{{ order.id }}
+
+Client:
+{{ me.email }}
+
+Date:
+{% now "m/d/Y" %}
+
+Product:
+Mikapod
+
+Amount Due:
+{{ order.grand_total }}
