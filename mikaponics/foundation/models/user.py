@@ -353,6 +353,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     # SYSTEM FIELD
     #
 
+    timezone = models.CharField(
+        _("Timezone"),
+        max_length=63,
+        help_text=_('The timezone the user belongs to.'),
+        blank=True,
+        default='UTC',
+    )
     report_email_frequency = models.PositiveSmallIntegerField(
         _("Report email frequency"),
         help_text=_('The frequency to email the report by.'),
