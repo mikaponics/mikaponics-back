@@ -18,6 +18,11 @@ class RegisterSerializer(serializers.Serializer):
     last_name = serializers.CharField(required=True, allow_blank=False)
     timezone = serializers.CharField(required=True, allow_blank=False)
 
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise exceptions.ValidationError(_('Email already exists, pick another email.'))
+        return value
+
     def validate(self, attrs):
         email = attrs.get('email', None)
         password = attrs.get('password', None)
