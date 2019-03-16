@@ -10,6 +10,10 @@ urlpatterns = (
         name='mikaponics_order_receipt_email'
     ),
     ############################################################################
+    path('api/onboarding/validation',
+        views.OnboardingValidatorFuncAPIView.as_view(),
+        name='mikaponics_onboarding_validator_func_api_endpoint'
+    ),
     path('api/purchase-validation',
         views.PurchaseValidatorFuncAPIView.as_view(),
         name='mikaponics_purchase_validator_func_api_endpoint'
