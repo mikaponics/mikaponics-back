@@ -1,4 +1,5 @@
 from ecommerce.serializers.purchase_validator_func_serializers import PurchaseValidatorFuncSerializer
+from ecommerce.serializers.onboarding_calculator_func_serializers import OnboardingCalculatorFuncSerializer
 from ecommerce.serializers.onboarding_validator_func_serializers import OnboardingValidatorFuncSerializer
 from ecommerce.serializers.order_item_retrieve_update_destroy_serializers import (
     OrderItemRetrieveUpdateDestroySerializer,

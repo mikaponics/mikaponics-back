@@ -14,6 +14,10 @@ urlpatterns = (
         views.OnboardingValidatorFuncAPIView.as_view(),
         name='mikaponics_onboarding_validator_func_api_endpoint'
     ),
+    path('api/onboarding/calculator',
+        views.OnboardingCalculatorFuncAPIView.as_view(),
+        name='mikaponics_onboarding_calculator_func_api_endpoint'
+    ),    
     path('api/purchase-validation',
         views.PurchaseValidatorFuncAPIView.as_view(),
         name='mikaponics_purchase_validator_func_api_endpoint'
