@@ -2,6 +2,7 @@
 import django_rq
 import logging
 from datetime import datetime
+from ipware import get_client_ip
 from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib.auth.models import Group
@@ -19,7 +20,7 @@ from rest_framework import authentication, viewsets, permissions, status, parser
 from rest_framework.decorators import detail_route, list_route # See: http://www.django-rest-framework.org/api-guide/viewsets/#marking-extra-actions-for-routing
 from rest_framework.response import Response
 
-from account.serializers import RegisterSerializer
+from account.serializers import RegisterSerializer, ProfileInfoRetrieveUpdateSerializer
 from account.tasks import run_send_activation_email_func
 
 
@@ -39,6 +40,9 @@ class RegisterAPIView(APIView):
     renderer_classes = (renderers.JSONRenderer,)
 
     def post(self, request):
+        # Get the IP of the user.
+        client_ip, is_routable = get_client_ip(self.request)
+        
         # Save our code and return the serialized data.
         serializer = RegisterSerializer(data=request.data, context={
             'request': request,
@@ -71,18 +75,11 @@ class RegisterAPIView(APIView):
         # Send our activation email to the user.
         django_rq.enqueue(run_send_activation_email_func, email=authenticated_user.email)
 
-        # Return our new token.
-        return Response(
-            data = {
-                # --- REQUIRED --- #
-                'token': str(access_token),
-                'scope': access_token.scope,
-
-                # --- OPTIONAL --- #
-                "client_id": access_token.user.id,
-                "email": access_token.user.email,
-                # "exp": int(format(access_token.expires, 'U'))
-                "exp": access_token.expires,
-            },
-            status=status.HTTP_201_CREATED
-        )
+        serializer = ProfileInfoRetrieveUpdateSerializer(authenticated_user, many=False, context={
+            'authenticated_by': authenticated_user,
+            'authenticated_from': client_ip,
+            'authenticated_from_is_public': is_routable,
+            'token': str(access_token),
+            'scope': access_token.scope,
+        })
+        return Response(serializer.data, status=status.HTTP_200_OK)

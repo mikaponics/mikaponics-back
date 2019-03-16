@@ -47,7 +47,7 @@ class RegisterSerializer(serializers.Serializer):
         password = validated_data.get('password', None)
         first_name = validated_data.get('first_name', None)
         last_name = validated_data.get('last_name', None)
-        timezone = attrs.get('timezone', None)
+        timezone = validated_data.get('timezone', None)
 
         # Create the user.
         user = User.objects.create(

@@ -51,11 +51,11 @@ ALLOWED_HOSTS = ['*']
 
 SITE_ID = 1
 ADMIN_ENABLED = True
-LOGIN_URL = reverse_lazy('mikaponics_login_master')
-LOGOUT_URL = reverse_lazy('mikaponics_logout_redirector')
+# LOGIN_URL = reverse_lazy('mikaponics_login_master')
+# LOGOUT_URL = reverse_lazy('mikaponics_logout_redirector')
 # LOGIN_URL = 'login'
 # LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = 'mikaponics_dashboard_master' # See `dashboard/urls.py` file!
+# LOGIN_REDIRECT_URL = 'mikaponics_dashboard_master' # See `dashboard/urls.py` file!
 
 INSTALLED_APPS = [
     # Django
@@ -81,7 +81,7 @@ INSTALLED_APPS = [
     'django_rq',
     'anymail',
     'djmoney',
-    'social_django',
+    # 'social_django',
 
     # Our Apps
     'account',
@@ -121,7 +121,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',              # Extra Django App
     'oauth2_provider.middleware.OAuth2TokenMiddleware',       # Third Party
-    'social_django.middleware.SocialAuthExceptionMiddleware', # Third Party
+    # 'social_django.middleware.SocialAuthExceptionMiddleware', # Third Party
 ]
 
 ROOT_URLCONF = 'mikaponics.urls'
@@ -141,8 +141,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'foundation.context_processors.constants',          # Custom App
-                'social_django.context_processors.backends',        # Extra Django App
-                'social_django.context_processors.login_redirect',  # Extra Django App
+                # 'social_django.context_processors.backends',        # Extra Django App
+                # 'social_django.context_processors.login_redirect',  # Extra Django App
             ],
         },
     },
@@ -388,26 +388,26 @@ STRIPE_SECRET_KEY  =  env("STRIPE_TEST_SECRET_KEY")
 STRIPE_PUBLIC_KEY = env("STRIPE_TEST_PUBLIC_KEY")
 
 
-"""
-social-app-django
-https://github.com/python-social-auth/social-app-django
-"""
-SOCIAL_AUTH_GITHUB_KEY = env("SOCIAL_AUTH_GITHUB_KEY")
-SOCIAL_AUTH_GITHUB_SECRET = env("SOCIAL_AUTH_GITHUB_SECRET")
-SOCIAL_AUTH_GITHUB_SCOPE = [
-    'read:user',
-    'user:email',
-]
-SOCIAL_AUTH_USER_MODEL = 'foundation.User'
-SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
-SOCIAL_AUTH_POSTGRES_JSONFIELD = True
-SOCIAL_AUTH_LOGIN_ERROR_URL = reverse_lazy('mikaponics_profile_social_settings_detail')
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = reverse_lazy('mikaponics_dashboard_master')
-SOCIAL_AUTH_RAISE_EXCEPTIONS = False
-SOCIAL_AUTH_FACEBOOK_KEY = env("SOCIAL_AUTH_FACEBOOK_KEY")
-SOCIAL_AUTH_FACEBOOK_SECRET = env("SOCIAL_AUTH_FACEBOOK_SECRET")
-SOCIAL_AUTH_TWITTER_KEY = env("SOCIAL_AUTH_TWITTER_KEY")
-SOCIAL_AUTH_TWITTER_SECRET = env("SOCIAL_AUTH_TWITTER_SECRET")
+# """
+# social-app-django
+# https://github.com/python-social-auth/social-app-django
+# """
+# SOCIAL_AUTH_GITHUB_KEY = env("SOCIAL_AUTH_GITHUB_KEY")
+# SOCIAL_AUTH_GITHUB_SECRET = env("SOCIAL_AUTH_GITHUB_SECRET")
+# SOCIAL_AUTH_GITHUB_SCOPE = [
+#     'read:user',
+#     'user:email',
+# ]
+# SOCIAL_AUTH_USER_MODEL = 'foundation.User'
+# SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
+# SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+# SOCIAL_AUTH_LOGIN_ERROR_URL = reverse_lazy('mikaponics_profile_social_settings_detail')
+# SOCIAL_AUTH_LOGIN_REDIRECT_URL = reverse_lazy('mikaponics_dashboard_master')
+# SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+# SOCIAL_AUTH_FACEBOOK_KEY = env("SOCIAL_AUTH_FACEBOOK_KEY")
+# SOCIAL_AUTH_FACEBOOK_SECRET = env("SOCIAL_AUTH_FACEBOOK_SECRET")
+# SOCIAL_AUTH_TWITTER_KEY = env("SOCIAL_AUTH_TWITTER_KEY")
+# SOCIAL_AUTH_TWITTER_SECRET = env("SOCIAL_AUTH_TWITTER_SECRET")
 
 
 
