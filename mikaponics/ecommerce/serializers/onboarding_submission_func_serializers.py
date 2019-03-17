@@ -26,7 +26,8 @@ def get_todays_date_plus_days(days=0):
 class OnboardingSubmissionFuncSerializer(serializers.Serializer):
     # Purchase.
     number_of_devices = serializers.IntegerField(required=True)
-    stripe_token = serializers.CharField(required=True,allow_blank=False,)
+    payment_token = serializers.CharField(required=True,allow_blank=False,)
+    payment_created_at = serializers.IntegerField(required=True)
 
     # Billing address.
     billing_given_name = serializers.CharField(required=True,allow_blank=False,)
@@ -59,7 +60,8 @@ class OnboardingSubmissionFuncSerializer(serializers.Serializer):
         fields = (
             # Purchase.
             'number_of_devices',
-            'stripe_token',
+            'payment_token',
+            'payment_created_at',
 
             # Billing address.
             'billing_given_name',
@@ -69,7 +71,6 @@ class OnboardingSubmissionFuncSerializer(serializers.Serializer):
             'billing_address_locality',
             'billing_postal_code',
             'billing_street_address',
-            'billing_postal_code',
             'billing_post_office_box_number',
             'billing_email',
             'billing_telephone',

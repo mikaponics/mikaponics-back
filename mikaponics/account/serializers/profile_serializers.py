@@ -70,6 +70,11 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
     shipping_email = serializers.CharField(required=True,allow_blank=False,)
     shipping_telephone = serializers.CharField(required=True,allow_blank=False,)
 
+    # --- Misc ---
+    was_email_activated = serializers.ReadOnlyField()
+    was_onboarded = serializers.ReadOnlyField()
+    onboarding_survey_data = serializers.ReadOnlyField()
+
     # Meta Information.
     class Meta:
         fields = (
@@ -83,6 +88,14 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
             'customer_id',
             'customer_data',
             'subscription_status',
+            'was_email_activated',
+            'was_onboarded',
+            'onboarding_survey_data',
+            'is_ok_to_email',
+            'is_ok_to_text',
+            'location',
+            'created_at',
+            'last_modified_at',
 
             # --- Billing ---
             'billing_country',
