@@ -6,6 +6,7 @@ from ecommerce.views.resources.order_views import (
     OrderRetrieveUpdateShippingAddressAPIView
 )
 from ecommerce.views.resources.onboarding_calculator_func_views import OnboardingCalculatorFuncAPIView
+from ecommerce.views.resources.onboarding_submission_func_views import OnboardingSubmissionFuncAPIView
 from ecommerce.views.resources.onboarding_validator_func_views import OnboardingValidatorFuncAPIView;
 from ecommerce.views.resources.purchase_validator_func_views import PurchaseValidatorFuncAPIView;
 from ecommerce.views.resources.order_func_views import OrderCalculationFuncView
