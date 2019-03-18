@@ -13,7 +13,7 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
-from foundation.models import Order, Product
+from foundation.models import Invoice, Product
 
 
 logger = logging.getLogger(__name__)
@@ -24,15 +24,15 @@ def get_todays_date_plus_days(days=0):
     return timezone.now() + timedelta(days=days)
 
 
-class OrderItemRetrieveUpdateDestroySerializer(serializers.Serializer):
-    order = serializers.PrimaryKeyRelatedField(read_only=True)
+class InvoiceItemRetrieveUpdateDestroySerializer(serializers.Serializer):
+    invoice = serializers.PrimaryKeyRelatedField(read_only=True)
     product = serializers.PrimaryKeyRelatedField(read_only=True)
     number_of_products = serializers.IntegerField(required=False, allow_null=True)
 
     # Meta Information.
     class Meta:
         fields = (
-            'order',
+            'invoice',
             'product',
             'number_of_products'
         )
@@ -48,7 +48,7 @@ class OrderItemRetrieveUpdateDestroySerializer(serializers.Serializer):
         """
         instance.number_of_products = validated_data.get('number_of_products', instance.number_of_products)
         instance.save()
-        instance.order.invalidate('total')
+        instance.invoice.invalidate('total')
         return validated_data
 
     def delete(self, instance):

@@ -5,9 +5,9 @@ from ecommerce import views
 
 urlpatterns = (
     ############################################################################
-    path('order-receipt-email/<int:pk>',
+    path('invoice-receipt-email/<int:pk>',
         views.receipt_email_page,
-        name='mikaponics_order_receipt_email'
+        name='mikaponics_invoice_receipt_email'
     ),
     ############################################################################
     path('api/onboarding/validation',
@@ -26,21 +26,21 @@ urlpatterns = (
         views.PurchaseValidatorFuncAPIView.as_view(),
         name='mikaponics_purchase_validator_func_api_endpoint'
     ),
-    path('api/order/<int:pk>/calculate',
-        views.OrderCalculationFuncView.as_view(),
+    path('api/invoice/<int:pk>/calculate',
+        views.InvoiceCalculationFuncView.as_view(),
         name='mikaponics_purchase_validator_func_api_endpoint'
     ),
-    path('api/order/<int:pk>/shipping-address',
-        views.OrderRetrieveUpdateShippingAddressAPIView.as_view(),
-        name='mikaponics_order_item_retrieve_update_shipping_address_destroy_api_endpoint'
+    path('api/invoice/<int:pk>/shipping-address',
+        views.InvoiceRetrieveUpdateShippingAddressAPIView.as_view(),
+        name='mikaponics_invoice_item_retrieve_update_shipping_address_destroy_api_endpoint'
     ),
-    path('api/order-item/<int:pk>',
-        views.OrderItemRetrieveUpdateDestroyAPIView.as_view(),
-        name='mikaponics_order_item_retrieve_update_destroy_api_endpoint'
+    path('api/invoice-item/<int:pk>',
+        views.InvoiceItemRetrieveUpdateDestroyAPIView.as_view(),
+        name='mikaponics_invoice_item_retrieve_update_destroy_api_endpoint'
     ),
-    path('api/order/<int:pk>/billing-address',
-        views.OrderRetrieveUpdateBillingAddressAPIView.as_view(),
-        name='mikaponics_order_item_retrieve_update_billing_address_destroy_api_endpoint'
+    path('api/invoice/<int:pk>/billing-address',
+        views.InvoiceRetrieveUpdateBillingAddressAPIView.as_view(),
+        name='mikaponics_invoice_item_retrieve_update_billing_address_destroy_api_endpoint'
     ),
     path('api/stripe/webhook/',
         views.StripeEventAPIView.as_view(),

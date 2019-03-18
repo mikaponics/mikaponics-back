@@ -11,21 +11,21 @@ from rest_framework import generics
 from rest_framework import authentication, viewsets, permissions, status,  parsers, renderers
 from rest_framework.response import Response
 
-from foundation.models import Order
+from foundation.models import Invoice
 from ecommerce.serializers import (
-    OrderRetrieveUpdateBillingAddressSerializer,
-    OrderRetrieveUpdateShippingAddressSerializer
+    InvoiceRetrieveUpdateBillingAddressSerializer,
+    InvoiceRetrieveUpdateShippingAddressSerializer
 )
 
 
-class OrderRetrieveUpdateBillingAddressAPIView(generics.RetrieveUpdateDestroyAPIView):
+class InvoiceRetrieveUpdateBillingAddressAPIView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes= (OAuth2Authentication,)
-    serializer_class = OrderRetrieveUpdateBillingAddressSerializer
+    serializer_class = InvoiceRetrieveUpdateBillingAddressSerializer
     # pagination_class = StandardResultsSetPagination
     permission_classes = (
         permissions.IsAuthenticated,
         # IsAuthenticatedAndIsActivePermission,
-        # CanRetrieveUpdateDestroyOrderPermission
+        # CanRetrieveUpdateDestroyInvoicePermission
     )
     parser_classes = (
         parsers.FormParser,
@@ -39,12 +39,12 @@ class OrderRetrieveUpdateBillingAddressAPIView(generics.RetrieveUpdateDestroyAPI
         """
         Update
         """
-        obj = Order.objects.select_for_update().filter(pk=pk).first()
+        obj = Invoice.objects.select_for_update().filter(pk=pk).first()
         if obj is None:
             raise Http404()
         client_ip, is_routable = get_client_ip(self.request)
         self.check_object_permissions(request, obj)  # Validate permissions.
-        serializer = OrderRetrieveUpdateBillingAddressSerializer(obj, data=request.data, context={
+        serializer = InvoiceRetrieveUpdateBillingAddressSerializer(obj, data=request.data, context={
             'authenticated_by': request.user,
             'authenticated_from': client_ip,
             'authenticated_from_is_public': is_routable,
@@ -54,14 +54,14 @@ class OrderRetrieveUpdateBillingAddressAPIView(generics.RetrieveUpdateDestroyAPI
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class OrderRetrieveUpdateShippingAddressAPIView(generics.RetrieveUpdateDestroyAPIView):
+class InvoiceRetrieveUpdateShippingAddressAPIView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes= (OAuth2Authentication,)
-    serializer_class = OrderRetrieveUpdateShippingAddressSerializer
+    serializer_class = InvoiceRetrieveUpdateShippingAddressSerializer
     # pagination_class = StandardResultsSetPagination
     permission_classes = (
         permissions.IsAuthenticated,
         # IsAuthenticatedAndIsActivePermission,
-        # CanRetrieveUpdateDestroyOrderPermission
+        # CanRetrieveUpdateDestroyInvoicePermission
     )
     parser_classes = (
         parsers.FormParser,
@@ -75,12 +75,12 @@ class OrderRetrieveUpdateShippingAddressAPIView(generics.RetrieveUpdateDestroyAP
         """
         Update
         """
-        obj = Order.objects.select_for_update().filter(pk=pk).first()
+        obj = Invoice.objects.select_for_update().filter(pk=pk).first()
         if obj is None:
             raise Http404()
         client_ip, is_routable = get_client_ip(self.request)
         self.check_object_permissions(request, obj)  # Validate permissions.
-        serializer = OrderRetrieveUpdateShippingAddressSerializer(obj, data=request.data, context={
+        serializer = InvoiceRetrieveUpdateShippingAddressSerializer(obj, data=request.data, context={
             'authenticated_by': request.user,
             'authenticated_from': client_ip,
             'authenticated_from_is_public': is_routable,

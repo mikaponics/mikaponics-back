@@ -11,26 +11,26 @@ from rest_framework import generics
 from rest_framework import authentication, viewsets, permissions, status,  parsers, renderers
 from rest_framework.response import Response
 
-from foundation.models import OrderItem
+from foundation.models import InvoiceItem
 from ecommerce.serializers import (
-    OrderItemRetrieveUpdateDestroySerializer
+    InvoiceItemRetrieveUpdateDestroySerializer
 )
 
 
-# class OrderItemListCreateAPIView(generics.ListCreateAPIView):
-#     serializer_class = OrderItemListCreateSerializer
+# class InvoiceItemListCreateAPIView(generics.ListCreateAPIView):
+#     serializer_class = InvoiceItemListCreateSerializer
 #     pagination_class = StandardResultsSetPagination
 #     permission_classes = (
 #         permissions.IsAuthenticated,
 #         IsAuthenticatedAndIsActivePermission,
-#         CanListCreateOrderItemPermission
+#         CanListCreateInvoiceItemPermission
 #     )
 #
 #     def get_queryset(self):
 #         """
 #         List
 #         """
-#         queryset = OrderItem.objects.all().order_by('text')
+#         queryset = InvoiceItem.objects.all().invoice_by('text')
 #         return queryset
 #
 #     def post(self, request, format=None):
@@ -38,7 +38,7 @@ from ecommerce.serializers import (
 #         Create
 #         """
 #         client_ip, is_routable = get_client_ip(self.request)
-#         serializer = OrderItemListCreateSerializer(data=request.data, context={
+#         serializer = InvoiceItemListCreateSerializer(data=request.data, context={
 #             'created_by': request.user,
 #             'created_from': client_ip,
 #             'created_from_is_public': is_routable,
@@ -49,14 +49,14 @@ from ecommerce.serializers import (
 #         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class OrderItemRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+class InvoiceItemRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes= (OAuth2Authentication,)
-    serializer_class = OrderItemRetrieveUpdateDestroySerializer
+    serializer_class = InvoiceItemRetrieveUpdateDestroySerializer
     # pagination_class = StandardResultsSetPagination
     permission_classes = (
         permissions.IsAuthenticated,
         # IsAuthenticatedAndIsActivePermission,
-        # CanRetrieveUpdateDestroyOrderItemPermission
+        # CanRetrieveUpdateDestroyInvoiceItemPermission
     )
     parser_classes = (
         parsers.FormParser,
@@ -69,12 +69,12 @@ class OrderItemRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIVie
         """
         Retrieve
         """
-        obj = OrderItem.objects.select_for_update().filter(pk=pk).first()
+        obj = InvoiceItem.objects.select_for_update().filter(pk=pk).first()
         if obj is None:
             raise Http404()
         client_ip, is_routable = get_client_ip(self.request)
         self.check_object_permissions(request, obj)  # Validate permissions.
-        serializer = OrderItemRetrieveUpdateDestroySerializer(obj, many=False)
+        serializer = InvoiceItemRetrieveUpdateDestroySerializer(obj, many=False)
         return Response(
             data=serializer.data,
             status=status.HTTP_200_OK
@@ -85,12 +85,12 @@ class OrderItemRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIVie
         """
         Update
         """
-        obj = OrderItem.objects.select_for_update().filter(pk=pk).first()
+        obj = InvoiceItem.objects.select_for_update().filter(pk=pk).first()
         if obj is None:
             raise Http404()
         client_ip, is_routable = get_client_ip(self.request)
         self.check_object_permissions(request, obj)  # Validate permissions.
-        serializer = OrderItemRetrieveUpdateDestroySerializer(obj, data=request.data, context={
+        serializer = InvoiceItemRetrieveUpdateDestroySerializer(obj, data=request.data, context={
             'authenticated_by': request.user,
             'authenticated_from': client_ip,
             'authenticated_from_is_public': is_routable,
@@ -104,12 +104,12 @@ class OrderItemRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIVie
         """
         Delete
         """
-        obj = OrderItem.objects.select_for_update().filter(pk=pk).first()
+        obj = InvoiceItem.objects.select_for_update().filter(pk=pk).first()
         if obj is None:
             raise Http404()
         client_ip, is_routable = get_client_ip(self.request)
         self.check_object_permissions(request, obj)  # Validate permissions.
-        serializer = OrderItemRetrieveUpdateDestroySerializer(obj, data=request.data, context={
+        serializer = InvoiceItemRetrieveUpdateDestroySerializer(obj, data=request.data, context={
             'authenticated_by': request.user,
             'authenticated_from': client_ip,
             'authenticated_from_is_public': is_routable,

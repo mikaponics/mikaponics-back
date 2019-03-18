@@ -30,7 +30,7 @@ admin.site.unregister(Group)
 
 
 class DeviceAdmin(admin.ModelAdmin):
-    raw_id_fields = ['user_id', 'order',]
+    raw_id_fields = ['user_id', 'invoice',]
     list_filter = ['product',]
     list_display = ['id', 'user_id', 'product',]
     ordering = ['-id',]

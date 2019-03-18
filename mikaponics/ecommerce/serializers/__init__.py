@@ -2,11 +2,11 @@ from ecommerce.serializers.purchase_validator_func_serializers import PurchaseVa
 from ecommerce.serializers.onboarding_calculator_func_serializers import OnboardingCalculatorFuncSerializer
 from ecommerce.serializers.onboarding_submission_func_serializers import OnboardingSubmissionFuncSerializer
 from ecommerce.serializers.onboarding_validator_func_serializers import OnboardingValidatorFuncSerializer
-from ecommerce.serializers.order_item_retrieve_update_destroy_serializers import (
-    OrderItemRetrieveUpdateDestroySerializer,
+from ecommerce.serializers.invoice_item_retrieve_update_destroy_serializers import (
+    InvoiceItemRetrieveUpdateDestroySerializer,
 )
-from ecommerce.serializers.order_retrieve_update_destroy_serializers import (
-    OrderRetrieveUpdateBillingAddressSerializer,
-    OrderRetrieveUpdateShippingAddressSerializer
+from ecommerce.serializers.invoice_retrieve_update_destroy_serializers import (
+    InvoiceRetrieveUpdateBillingAddressSerializer,
+    InvoiceRetrieveUpdateShippingAddressSerializer
 )
 from ecommerce.serializers.stripe_event_serializers import StripeEventSerializer

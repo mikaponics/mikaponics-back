@@ -800,7 +800,7 @@ $(function () {
                 },
                 done: function () {
                     loadIndex += 1;
-                    strictEqual(sendIndex, loadIndex, 'upload in order');
+                    strictEqual(sendIndex, loadIndex, 'upload in invoice');
                 },
                 fail: function (e, data) {
                     strictEqual(data.errorThrown, 'abort', 'upload aborted');

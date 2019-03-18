@@ -27,7 +27,7 @@ class TimeSeriesDatumManager(models.Manager):
         # Generate our time-series data. We will iterate through our
         # timestamps array in reverse so the OLDEST records get created FIRST
         # until the NEWEST records are created LAST; therefore, our time-series
-        # data will be in the natural order.
+        # data will be in the natural invoice.
         results = []
         faker = Faker('en_CA')
         previous = None
@@ -119,7 +119,7 @@ class TimeSeriesDatum(models.Model):
     # data structure so we can do aggregate date modifications more easily.
     previous = models.ForeignKey(
         "self",
-        help_text=_('The previous time-series datum in the chain of successive orders based on time.'),
+        help_text=_('The previous time-series datum in the chain of successive invoices based on time.'),
         blank=True,
         null=True,
         related_name="+",
@@ -128,7 +128,7 @@ class TimeSeriesDatum(models.Model):
     )
     next = models.ForeignKey(
         "self",
-        help_text=_('The next time-series datum in the chain of successive orders based on time.'),
+        help_text=_('The next time-series datum in the chain of successive invoices based on time.'),
         blank=True,
         null=True,
         related_name="+",

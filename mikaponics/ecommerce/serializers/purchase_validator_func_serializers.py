@@ -94,15 +94,15 @@ class PurchaseValidatorFuncSerializer(serializers.Serializer):
         number_of_devices = data.get('number_of_devices', 0)
         if number_of_devices > 50:
             raise exceptions.ValidationError({
-                'number_of_devices': _('Cannot order more then 50 devices in one order, please contact <a href="mailto:info@mikaponics.com">info@mikasoftware.com</a> to order more.')
+                'number_of_devices': _('Cannot invoice more then 50 devices in one invoice, please contact <a href="mailto:info@mikaponics.com">info@mikasoftware.com</a> to invoice more.')
             })
         elif number_of_devices == 0:
             raise exceptions.ValidationError({
-                'number_of_devices': _('Please order more then zero!')
+                'number_of_devices': _('Please invoice more then zero!')
             })
         elif number_of_devices < 0:
             raise exceptions.ValidationError({
-                'number_of_devices': _('Please pick an order more then zero!')
+                'number_of_devices': _('Please pick an invoice more then zero!')
             })
 
     def validate_step2(self, data):

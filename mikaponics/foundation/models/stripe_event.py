@@ -115,9 +115,9 @@ class StripeEvent(models.Model):
         related_name="stripe_events",
         on_delete=models.CASCADE
     )
-    order = models.ForeignKey(
-        "Order",
-        help_text=_('The orders that this Stripe event is related to.'),
+    invoice = models.ForeignKey(
+        "Invoice",
+        help_text=_('The invoices that this Stripe event is related to.'),
         blank=True,
         null=True,
         related_name="stripe_events",

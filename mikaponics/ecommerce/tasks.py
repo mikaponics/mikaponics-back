@@ -7,8 +7,8 @@ from django.conf import settings
 from django.core.management import call_command
 
 
-def run_send_receipt_email_by_order_id_func(order_id):
-    call_command('send_receipt_email_by_order_id', order_id, verbosity=0)
+def run_send_receipt_email_by_invoice_id_func(invoice_id):
+    call_command('send_receipt_email_by_invoice_id', invoice_id, verbosity=0)
 
 
 def run_process_stripe_event_by_id_func(event_id):

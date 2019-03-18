@@ -107,7 +107,7 @@ def instrument_find_alarming_datum_in_system(instrument, start_dt, end_dt):
     datetime to the end datetime range to find the LATEST datum which will
     trigger an alarm.
     """
-    data = instrument.time_series_data.filter(timestamp__range=[start_dt, end_dt]).order_by('-id').iterator(chunk_size=250)
+    data = instrument.time_series_data.filter(timestamp__range=[start_dt, end_dt]).invoice_by('-id').iterator(chunk_size=250)
     for datum in data:
         if instrument.red_above_value and datum.value:
             if datum.value >= instrument.red_above_value:

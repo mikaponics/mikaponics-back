@@ -13,7 +13,7 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
-from foundation.models import Order, Product
+from foundation.models import Invoice, Product
 
 
 logger = logging.getLogger(__name__)

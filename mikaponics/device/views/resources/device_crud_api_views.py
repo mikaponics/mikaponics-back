@@ -115,7 +115,7 @@ class DeviceProfileAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (
         permissions.IsAuthenticated,
         # IsAuthenticatedAndIsActivePermission,
-        # CanListCreateWorkOrderPermission
+        # CanListCreateWorkInvoicePermission
     )
     parser_classes = (
         parsers.FormParser,

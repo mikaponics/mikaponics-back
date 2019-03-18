@@ -94,15 +94,15 @@ class OnboardingSubmissionFuncSerializer(serializers.Serializer):
         number_of_devices = data
         if number_of_devices > 50:
             raise exceptions.ValidationError({
-                'number_of_devices': _('Cannot order more then 50 devices in one order, please contact <a href="mailto:info@mikaponics.com">info@mikasoftware.com</a> to order more.')
+                'number_of_devices': _('Cannot invoice more then 50 devices in one invoice, please contact <a href="mailto:info@mikaponics.com">info@mikasoftware.com</a> to invoice more.')
             })
         elif number_of_devices == 0:
             raise exceptions.ValidationError({
-                'number_of_devices': _('Please order more then zero!')
+                'number_of_devices': _('Please invoice more then zero!')
             })
         elif number_of_devices < 0:
             raise exceptions.ValidationError({
-                'number_of_devices': _('Please pick an order more then zero!')
+                'number_of_devices': _('Please pick an invoice more then zero!')
             })
         return data
 
@@ -137,63 +137,63 @@ class OnboardingSubmissionFuncSerializer(serializers.Serializer):
         # Get variables.
         user = context['user']
 
-        # Get our open order.
-        draft_order = user.draft_order
+        # Get our open invoice.
+        draft_invoice = user.draft_invoice
 
-        # Set our order.
-        draft_order.number_of_devices = validated_data['number_of_devices']
+        # Set our invoice.
+        draft_invoice.number_of_devices = validated_data['number_of_devices']
 
-        draft_order.billing_given_name = validated_data['billing_given_name']
-        draft_order.billing_last_name = validated_data['billing_last_name']
-        draft_order.billing_country = validated_data['billing_address_country']
-        draft_order.billing_region = validated_data['billing_address_region']
-        draft_order.billing_locality = validated_data['billing_address_locality']
-        draft_order.billing_postal_code = validated_data['billing_postal_code']
-        draft_order.billing_street_address = validated_data['billing_street_address']
-        draft_order.billing_post_office_box_number = validated_data['billing_post_office_box_number']
-        draft_order.billing_email = validated_data['billing_email']
-        draft_order.billing_telephone = validated_data['billing_telephone']
+        draft_invoice.billing_given_name = validated_data['billing_given_name']
+        draft_invoice.billing_last_name = validated_data['billing_last_name']
+        draft_invoice.billing_country = validated_data['billing_address_country']
+        draft_invoice.billing_region = validated_data['billing_address_region']
+        draft_invoice.billing_locality = validated_data['billing_address_locality']
+        draft_invoice.billing_postal_code = validated_data['billing_postal_code']
+        draft_invoice.billing_street_address = validated_data['billing_street_address']
+        draft_invoice.billing_post_office_box_number = validated_data['billing_post_office_box_number']
+        draft_invoice.billing_email = validated_data['billing_email']
+        draft_invoice.billing_telephone = validated_data['billing_telephone']
 
-        draft_order.shipping_given_name = validated_data['shipping_given_name']
-        draft_order.shipping_last_name = validated_data['shipping_last_name']
-        draft_order.shipping_country = validated_data['shipping_address_country']
-        draft_order.shipping_region = validated_data['shipping_address_region']
-        draft_order.shipping_locality = validated_data['shipping_address_locality']
-        draft_order.shipping_postal_code = validated_data['shipping_postal_code']
-        draft_order.shipping_street_address = validated_data['shipping_street_address']
-        draft_order.shipping_postal_code = validated_data['shipping_postal_code']
-        draft_order.shipping_post_office_box_number = validated_data['shipping_post_office_box_number']
-        draft_order.shipping_email = validated_data['shipping_email']
-        draft_order.shipping_telephone = validated_data['shipping_telephone']
+        draft_invoice.shipping_given_name = validated_data['shipping_given_name']
+        draft_invoice.shipping_last_name = validated_data['shipping_last_name']
+        draft_invoice.shipping_country = validated_data['shipping_address_country']
+        draft_invoice.shipping_region = validated_data['shipping_address_region']
+        draft_invoice.shipping_locality = validated_data['shipping_address_locality']
+        draft_invoice.shipping_postal_code = validated_data['shipping_postal_code']
+        draft_invoice.shipping_street_address = validated_data['shipping_street_address']
+        draft_invoice.shipping_postal_code = validated_data['shipping_postal_code']
+        draft_invoice.shipping_post_office_box_number = validated_data['shipping_post_office_box_number']
+        draft_invoice.shipping_email = validated_data['shipping_email']
+        draft_invoice.shipping_telephone = validated_data['shipping_telephone']
 
         # # Extract our bill amount.
-        # grand_total_in_pennies = draft_order.get_grand_total_in_pennies()
+        # grand_total_in_pennies = draft_invoice.get_grand_total_in_pennies()
         #
         # # Perform our charge on `stripe.com`.
         # charge = stripe.Charge.create(
         #     amount=grand_total_in_pennies, # Written in pennies!
-        #     currency=draft_order.store.currency,
+        #     currency=draft_invoice.store.currency,
         #     description='A Django charge',
         #     customer=user.customer_id,
         #     shipping={
         #         "address":{
-        #             "city": draft_order.shipping_locality,
-        #             "country": draft_order.shipping_country,
-        #             "line1": draft_order.shipping_street_address,
-        #             "line2": draft_order.shipping_street_address_extra,
-        #             "postal_code": draft_order.shipping_postal_code,
-        #             "state": draft_order.shipping_region
+        #             "city": draft_invoice.shipping_locality,
+        #             "country": draft_invoice.shipping_country,
+        #             "line1": draft_invoice.shipping_street_address,
+        #             "line2": draft_invoice.shipping_street_address_extra,
+        #             "postal_code": draft_invoice.shipping_postal_code,
+        #             "state": draft_invoice.shipping_region
         #         },
-        #         "name": draft_order.shipping_given_name+" "+draft_order.shipping_last_name,
-        #         "phone": draft_order.shipping_telephone,
+        #         "name": draft_invoice.shipping_given_name+" "+draft_invoice.shipping_last_name,
+        #         "phone": draft_invoice.shipping_telephone,
         #     }
         # )
         #
-        # # Update our order.
-        # draft_order.state = Order.ORDER_STATE.PURCHASE_SUCCEEDED
-        # draft_order.stripe_receipt_id = str(charge.id)
-        # draft_order.stripe_receipt_data = charge
-        draft_order.save()
+        # # Update our invoice.
+        # draft_invoice.state = Invoice.ORDER_STATE.PURCHASE_SUCCEEDED
+        # draft_invoice.stripe_receipt_id = str(charge.id)
+        # draft_invoice.stripe_receipt_data = charge
+        draft_invoice.save()
 
         # Return our validated data.
         return validated_data

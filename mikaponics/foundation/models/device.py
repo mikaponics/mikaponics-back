@@ -144,9 +144,9 @@ class Device(models.Model):
         choices=TIMEZONE_CHOICES,
         default="UTC"
     )
-    order = models.ForeignKey(
-        "Order",
-        help_text=_('The e-commerce order this device is related to.'),
+    invoice = models.ForeignKey(
+        "Invoice",
+        help_text=_('The e-commerce invoice this device is related to.'),
         blank=True,
         null=True,
         related_name="devices",

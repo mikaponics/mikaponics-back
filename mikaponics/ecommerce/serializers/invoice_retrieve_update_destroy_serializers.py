@@ -13,7 +13,7 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
-from foundation.models import Order, Product
+from foundation.models import Invoice, Product
 
 
 logger = logging.getLogger(__name__)
@@ -24,7 +24,7 @@ def get_todays_date_plus_days(days=0):
     return timezone.now() + timedelta(days=days)
 
 
-class OrderRetrieveUpdateBillingAddressSerializer(serializers.Serializer):
+class InvoiceRetrieveUpdateBillingAddressSerializer(serializers.Serializer):
     billing_given_name = serializers.CharField(required=False,allow_blank=True,)
     billing_last_name = serializers.CharField(required=False,allow_blank=True,)
     billing_country = serializers.CharField(required=False,allow_blank=True,)
@@ -73,7 +73,7 @@ class OrderRetrieveUpdateBillingAddressSerializer(serializers.Serializer):
 
 
 
-class OrderRetrieveUpdateShippingAddressSerializer(serializers.Serializer):
+class InvoiceRetrieveUpdateShippingAddressSerializer(serializers.Serializer):
     shipping_given_name = serializers.CharField(required=False,allow_blank=True,)
     shipping_last_name = serializers.CharField(required=False,allow_blank=True,)
     shipping_country = serializers.CharField(required=False,allow_blank=True,)

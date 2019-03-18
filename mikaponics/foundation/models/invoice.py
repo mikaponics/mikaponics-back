@@ -8,16 +8,16 @@ from django.utils.functional import cached_property
 from djmoney.models.fields import MoneyField
 
 
-class OrderManager(models.Manager):
+class InvoiceManager(models.Manager):
     def delete_all(self):
-        items = Order.objects.all()
+        items = Invoice.objects.all()
         for item in items.all():
             item.delete()
 
 
-class Order(models.Model):
+class Invoice(models.Model):
     """
-    The purchase order a user made with Mikaponics.
+    The purchase invoice a user made with Mikaponics.
     """
 
     '''
@@ -25,9 +25,9 @@ class Order(models.Model):
     '''
     class Meta:
         app_label = 'foundation'
-        db_table = 'mika_orders'
-        verbose_name = _('Order')
-        verbose_name_plural = _('Orders')
+        db_table = 'mika_invoices'
+        verbose_name = _('Invoice')
+        verbose_name_plural = _('Invoices')
         default_permissions = ()
         permissions = (
             # ("can_get_opening_hours_specifications", "Can get opening hours specifications"),
@@ -64,38 +64,38 @@ class Order(models.Model):
     '''
     Object Managers
     '''
-    objects = OrderManager()
+    objects = InvoiceManager()
 
     '''
     Fields
     '''
     store = models.ForeignKey(
         "Store",
-        help_text=_('The store this order belongs to.'),
+        help_text=_('The store this invoice belongs to.'),
         blank=False,
         null=False,
-        related_name="orders",
+        related_name="invoices",
         on_delete=models.CASCADE
     )
     user = models.ForeignKey(
         "foundation.User",
-        help_text=_('The user whom this purchase order belongs to.'),
+        help_text=_('The user whom this purchase invoice belongs to.'),
         blank=False,
         null=False,
-        related_name="orders",
+        related_name="invoices",
         on_delete=models.CASCADE
     )
     shipper = models.ForeignKey(
         "Shipper",
-        help_text=_('The shipper whom is responsible for delivering this order.'),
+        help_text=_('The shipper whom is responsible for delivering this invoice.'),
         blank=True,
         null=True,
-        related_name="orders",
+        related_name="invoices",
         on_delete=models.SET_NULL
     )
     state = models.PositiveSmallIntegerField(
         _("State"),
-        help_text=_('The state of the order.'),
+        help_text=_('The state of the invoice.'),
         blank=False,
         null=False,
         default=ORDER_STATE.DRAFT,
@@ -128,35 +128,35 @@ class Order(models.Model):
 
     total_before_tax = MoneyField(
         _("Total (before tax)"),
-        help_text=_('The total amount that must be paid for this order. Tax not included.'),
+        help_text=_('The total amount that must be paid for this invoice. Tax not included.'),
         max_digits=14,
         decimal_places=2,
         default_currency='CAD'
     )
     tax = MoneyField(
         _("Tax"),
-        help_text=_('The tax that must be applied to this order.'),
+        help_text=_('The tax that must be applied to this invoice.'),
         max_digits=14,
         decimal_places=2,
         default_currency='CAD'
     )
     total_after_tax = MoneyField(
         _("Total (after tax)"),
-        help_text=_('The total amount that must be paid for this order. Tax included.'),
+        help_text=_('The total amount that must be paid for this invoice. Tax included.'),
         max_digits=14,
         decimal_places=2,
         default_currency='CAD'
     )
     shipping = MoneyField(
         _("Shipping"),
-        help_text=_('The shipping amount that must be paid to deliver this order.'),
+        help_text=_('The shipping amount that must be paid to deliver this invoice.'),
         max_digits=14,
         decimal_places=2,
         default_currency='CAD'
     )
     credit = MoneyField(
         _("Credit"),
-        help_text=_('The credit amount associated with this order.'),
+        help_text=_('The credit amount associated with this invoice.'),
         max_digits=14,
         decimal_places=2,
         default_currency='CAD'
@@ -314,8 +314,8 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     created_by = models.ForeignKey(
         "foundation.User",
-        help_text=_('The user whom created this purchase order.'),
-        related_name="created_orders",
+        help_text=_('The user whom created this purchase invoice.'),
+        related_name="created_invoices",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
@@ -338,8 +338,8 @@ class Order(models.Model):
     last_modified_at = models.DateTimeField(auto_now=True)
     last_modified_by = models.ForeignKey(
         "foundation.User",
-        help_text=_('The user whom last modified this purchase order.'),
-        related_name="last_modified_orders",
+        help_text=_('The user whom last modified this purchase invoice.'),
+        related_name="last_modified_invoices",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
@@ -370,12 +370,12 @@ class Order(models.Model):
     @cached_property
     def total(self):
         """
-        Function will calculate the order totals and return the calculation
+        Function will calculate the invoice totals and return the calculation
         in JSON format.
         """
         # Calculate the total.
         self.total_before_tax.amount = 0
-        for item in self.order_items.all():
+        for item in self.invoice_items.all():
             self.total_before_tax += (item.product_price * item.number_of_products)
 
         # Calculate the tax.

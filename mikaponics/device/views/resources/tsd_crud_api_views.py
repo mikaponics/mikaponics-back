@@ -58,7 +58,7 @@ class TimeSeriesDataListCreateAPIView(generics.ListCreateAPIView):
         """
         queryset = TimeSeriesDatum.objects.filter(
             instrumente__device__user=request.user
-        ).order_by('-id')
+        ).invoice_by('-id')
         s = self.get_serializer_class()
         queryset = s.setup_eager_loading(self, queryset)
         return queryset

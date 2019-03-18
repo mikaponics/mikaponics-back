@@ -62,7 +62,7 @@ class DeviceInstrumentSetTimeSeriesDatumeOperationAPIView(generics.CreateAPIView
     permission_classes = (
         # permissions.IsAuthenticated,
         # IsAuthenticatedAndIsActivePermission,
-        # CanListCreateWorkOrderPermission
+        # CanListCreateWorkInvoicePermission
     )
 
     def post(self, request, format=None):

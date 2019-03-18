@@ -20,7 +20,7 @@ class InstrumentAlertConfigRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateD
     permission_classes = (
         permissions.IsAuthenticated,
         # IsAuthenticatedAndIsActivePermission,
-        # CanRetrieveUpdateDestroyOrderPermission
+        # CanRetrieveUpdateDestroyInvoicePermission
     )
     parser_classes = (
         parsers.FormParser,

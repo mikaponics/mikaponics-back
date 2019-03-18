@@ -11,15 +11,15 @@ from rest_framework import generics
 from rest_framework import authentication, viewsets, permissions, status,  parsers, renderers
 from rest_framework.response import Response
 
-from foundation.models import Order
+from foundation.models import Invoice
 
 
-class OrderCalculationFuncView(generics.CreateAPIView):
+class InvoiceCalculationFuncView(generics.CreateAPIView):
     authentication_classes= (OAuth2Authentication,)
     permission_classes = (
         permissions.IsAuthenticated,
         # IsAuthenticatedAndIsActivePermission,
-        # CanListCreateWorkOrderPermission
+        # CanListCreateWorkInvoicePermission
     )
     parser_classes = (
         parsers.FormParser,
@@ -33,7 +33,7 @@ class OrderCalculationFuncView(generics.CreateAPIView):
         """
         Create
         """
-        obj = Order.objects.select_for_update().filter(pk=pk).first()
+        obj = Invoice.objects.select_for_update().filter(pk=pk).first()
         if obj is None:
             raise Http404()
 

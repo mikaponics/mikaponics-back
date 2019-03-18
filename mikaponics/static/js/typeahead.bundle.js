@@ -1122,7 +1122,7 @@
                     position: "absolute",
                     top: "0",
                     left: "0",
-                    borderColor: "transparent",
+                    binvoiceColor: "transparent",
                     boxShadow: "none",
                     opacity: "1"
                 },

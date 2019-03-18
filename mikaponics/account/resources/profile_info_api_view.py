@@ -21,7 +21,7 @@ class ProfileInfoRetrieveUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (
         permissions.IsAuthenticated,
         # IsAuthenticatedAndIsActivePermission,
-        # CanRetrieveUpdateDestroyOrderPermission
+        # CanRetrieveUpdateDestroyInvoicePermission
     )
     parser_classes = (
         parsers.FormParser,

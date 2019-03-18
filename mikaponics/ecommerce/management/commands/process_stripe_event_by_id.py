@@ -18,7 +18,7 @@ from django.utils import timezone
 from djmoney.money import Money
 from oauthlib.common import generate_token
 
-from foundation.models import Store, Product, Shipper, Order, StripeEvent
+from foundation.models import Store, Product, Shipper, Invoice, StripeEvent
 from foundation.models import User
 
 
@@ -126,11 +126,11 @@ class Command(BaseCommand):
 "issuing_settlement.updated",
 "issuing_transaction.created",
 "issuing_transaction.updated",
-"order.created",
-"order.payment_failed",
-"order.payment_succeeded",
-"order.updated",
-"order_return.created",
+"invoice.created",
+"invoice.payment_failed",
+"invoice.payment_succeeded",
+"invoice.updated",
+"invoice_return.created",
 "payment_intent.amount_capturable_updated",
 "payment_intent.created",
 "payment_intent.payment_failed",

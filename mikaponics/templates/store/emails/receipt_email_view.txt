@@ -2,7 +2,7 @@
 Invoice
 
 Invoice #:
-{{ order.id }}
+{{ invoice.id }}
 
 Client:
 {{ me.email }}
@@ -14,4 +14,4 @@ Product:
 Mikapod
 
 Amount Due:
-{{ order.grand_total }}
+{{ invoice.grand_total }}

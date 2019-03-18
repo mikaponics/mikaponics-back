@@ -18,7 +18,7 @@ class PurchaseValidatorFuncAPIView(generics.CreateAPIView):
     permission_classes = (
         permissions.IsAuthenticated,
         # IsAuthenticatedAndIsActivePermission,
-        # CanListCreateWorkOrderPermission
+        # CanListCreateWorkInvoicePermission
     )
     parser_classes = (
         parsers.FormParser,

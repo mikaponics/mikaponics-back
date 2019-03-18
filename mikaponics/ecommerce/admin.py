@@ -49,7 +49,7 @@ admin.site.register(Shipper, ShipperAdmin)
 
 
 
-class OrderAdmin(admin.ModelAdmin):
+class InvoiceAdmin(admin.ModelAdmin):
     list_display = [
         'id', 'state', 'user', 'created_at', 'last_modified_at',
     ]
@@ -77,22 +77,22 @@ class OrderAdmin(admin.ModelAdmin):
         obj.last_modified_from_is_public = is_routable
         super().save_model(request, obj, form, change)
 
-admin.site.register(Order, OrderAdmin)
+admin.site.register(Invoice, InvoiceAdmin)
 
 
-class OrderItemAdmin(admin.ModelAdmin):
+class InvoiceItemAdmin(admin.ModelAdmin):
     list_display = [
-        'id', 'order', 'product', 'number_of_products', 'product_price',
+        'id', 'invoice', 'product', 'number_of_products', 'product_price',
     ]
     list_filter = []
     # search_fields = ['device_id',]
-    raw_id_fields = ['order', 'product']
+    raw_id_fields = ['invoice', 'product']
     ordering = ['id']
     readonly_fields = [
         'id',
     ]
 
-admin.site.register(OrderItem, OrderItemAdmin)
+admin.site.register(InvoiceItem, InvoiceItemAdmin)
 
 
 class ProductAdmin(admin.ModelAdmin):

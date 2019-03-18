@@ -558,37 +558,37 @@ class User(AbstractBaseUser, PermissionsMixin):
         return today >= self.pr_expiry_date
 
     @cached_property
-    def draft_order(self):
+    def draft_invoice(self):
         """
-        Returns a single order which has been opened and is ready for the
-        user to add products to purchase. If no draft order was returned then
+        Returns a single invoice which has been opened and is ready for the
+        user to add products to purchase. If no draft invoice was returned then
         we will create one and return it here.
         """
-        from foundation.models.order import Order
+        from foundation.models.invoice import Invoice
         from foundation.models.store import Store
         from foundation.models.shipper import Shipper
         store = Store.objects.default_store
-        order = Order.objects.filter(
+        invoice = Invoice.objects.filter(
             store=store,
-            state=Order.ORDER_STATE.DRAFT,
+            state=Invoice.ORDER_STATE.DRAFT,
             user=self
-        ).order_by('created_at').first()
-        if order is None:
-            order = Order.objects.create(
+        ).invoice_by('created_at').first()
+        if invoice is None:
+            invoice = Invoice.objects.create(
                 store=store,
                 user=self,
-                state=Order.ORDER_STATE.DRAFT,
+                state=Invoice.ORDER_STATE.DRAFT,
                 shipper=Shipper.objects.all().first(),
             )
-        return order
+        return invoice
 
     def invalidate(self, method_name):
         """
         Function used to clear the cache for the cached property functions.
         """
         try:
-            if method_name == 'draft_order':
-                del self.draft_order
+            if method_name == 'draft_invoice':
+                del self.draft_invoice
             else:
                 raise Exception("Method name not found.")
         except AttributeError:
