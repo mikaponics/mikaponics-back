@@ -17,8 +17,11 @@ class UserAdmin(BaseUserAdmin):
 
         ('Permissions', {'fields': ('is_staff',)}),
 
-        ('E-Ecommerce', {'fields': ('customer_id','customer_data',)}),
+        ('E-Ecommerce', {'fields': (
+            'customer_id','customer_data', 'subscription_plan', 'subscription_status',
+        )}),
     )
+    readonly_fields = ['subscription_status', 'subscription_plan',]
 
     search_fields =  ['email',]
     ordering = ['email',]

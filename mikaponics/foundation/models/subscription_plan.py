@@ -38,8 +38,8 @@ class SubscriptionPlan(models.Model):
     Constants & Choices
     '''
     class INTERVAL_STATE:
-        MONTHLY = 1
-        ANNUALLY = 2
+        MONTHLY = 'monthly'
+        ANNUALLY = 'annually'
 
     INTERVAL_STATE_CHOICES = (
         (INTERVAL_STATE.MONTHLY, _("Monthly")),

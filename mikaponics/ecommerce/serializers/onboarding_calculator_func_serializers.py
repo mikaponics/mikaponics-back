@@ -65,6 +65,10 @@ class OnboardingCalculatorFuncSerializer(serializers.Serializer):
         draft_invoice.save()
         draft_invoice.invalidate('total')
 
+        # Update our user to be enrolled in the subscription plan.
+        user.subscription_plan = default_subscription
+        user.save()
+
         # Add our purchase.
         InvoiceItem.objects.update_or_create(
             invoice=draft_invoice,
