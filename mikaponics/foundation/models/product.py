@@ -46,7 +46,21 @@ class Product(models.Model):
         blank=False,
         null=False,
     )
+    description = models.TextField(
+        _("Description"),
+        help_text=_('A description of the product.'),
+        blank=True,
+        null=True,
+        default='',
+    )
     price = MoneyField(max_digits=14, decimal_places=2, default_currency='CAD')
+    payment_product_id = models.CharField(
+        _("Payment Product ID"),
+        max_length=127,
+        help_text=_('The product ID set by the payment merchant.'),
+        blank=True,
+        null=True,
+    )
 
     def __str__(self):
         return str(self.name)

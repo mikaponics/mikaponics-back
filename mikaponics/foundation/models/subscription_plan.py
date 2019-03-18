@@ -69,6 +69,13 @@ class SubscriptionPlan(models.Model):
         blank=False,
         null=False,
     )
+    description = models.TextField(
+        _("Description"),
+        help_text=_('A description of the subscription.'),
+        blank=True,
+        null=True,
+        default='',
+    )
     amount = MoneyField(
         _("Amount"),
         help_text=_('A positive integer in cents (or 0 for a free plan) representing how much to charge on a recurring basis.'),

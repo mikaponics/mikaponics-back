@@ -132,3 +132,21 @@ class StripeEventAdmin(admin.ModelAdmin):
     ]
 
 admin.site.register(StripeEvent, StripeEventAdmin)
+
+
+class SubscriptionPlanAdmin(admin.ModelAdmin):
+    list_display = [
+        'name', 'amount', 'interval',
+    ]
+    list_filter = []
+    ordering = ['-id',]
+    raw_id_fields = []
+    readonly_fields = ['id',]
+
+    # def has_add_permission(self, request, obj=None):
+    #     return False
+    #
+    # def has_delete_permission(self, request, obj=None):
+    #     return False
+
+admin.site.register(SubscriptionPlan, SubscriptionPlanAdmin)

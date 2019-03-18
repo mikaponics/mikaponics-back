@@ -17,7 +17,8 @@ from django.utils import timezone
 from djmoney.money import Money
 from oauthlib.common import generate_token
 
-from foundation.models import Store, Product, Shipper
+from foundation.constants import *
+from foundation.models import Store, Product, Shipper, SubscriptionPlan
 from foundation.models import User
 
 
@@ -58,13 +59,14 @@ class Command(BaseCommand):
 
         '''
         Create the product which integrates with our MIKAPOD project. See via
-        link: https://github.com/mikaponics/mikapod-py
+        link: https://github.com/mikaponics/mikapod-py. This is our default
+        product to offer in the onboarding code.
         '''
         Product.objects.update_or_create(
-            id=1,
+            id=MIKAPONICS_DEFAULT_PRODUCT_ID,
             store=store,
             defaults={
-                'id': 1,
+                'id': MIKAPONICS_DEFAULT_PRODUCT_ID,
                 'store': store,
                 'name': "Mikapod",
                 "price": Money(10, 'CAD')
@@ -86,10 +88,25 @@ class Command(BaseCommand):
         )
 
         '''
+        Create the default subscription plan.
+        '''
+        SubscriptionPlan.objects.update_or_create(
+            id=MIKAPONICS_DEFAULT_SUBSCRIPTION_ID,
+            store=store,
+            defaults={
+                'id': MIKAPONICS_DEFAULT_SUBSCRIPTION_ID,
+                'store': store,
+                'name': 'Monthly Subscription',
+                "amount": Money(15, 'CAD'),
+                "interval": SubscriptionPlan.INTERVAL_STATE.MONTHLY
+            }
+        )
+
+        '''
         Create the default shipper for our store.
         '''
         Shipper.objects.update_or_create(
-            id=1,
+            id=MIKAPONICS_DEFAULT_SHIPPER_ID,
             store=store,
             name='Generic shipper',
             shipping_price=Money(amount=10,currency='CAD')
