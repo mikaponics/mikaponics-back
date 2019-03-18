@@ -381,7 +381,7 @@ class Invoice(models.Model):
         # Calculate the tax.
         from djmoney.money import Money
 
-        tax_percent = self.store.get_tax_rate(self.billing_country, self.billing_region)
+        tax_percent = self.store.get_tax_rate(self.shipping_country, self.shipping_region)
         if tax_percent:
             tax_rate = tax_percent / Decimal(100.00)
             tax = self.total_before_tax.amount * tax_rate
@@ -411,6 +411,7 @@ class Invoice(models.Model):
             'shipping': self.shipping.amount,
             'credit': self.credit.amount,
             'grand_total': self.grand_total.amount,
+            'grand_total_in_cents': self.grand_total.amount * 100
         }
 
     def invalidate(self, method_name):

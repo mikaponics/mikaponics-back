@@ -572,7 +572,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             store=store,
             state=Invoice.ORDER_STATE.DRAFT,
             user=self
-        ).invoice_by('created_at').first()
+        ).order_by('created_at').first()
         if invoice is None:
             invoice = Invoice.objects.create(
                 store=store,

@@ -30,7 +30,7 @@ from ecommerce.serializers import (
 #         """
 #         List
 #         """
-#         queryset = InvoiceItem.objects.all().invoice_by('text')
+#         queryset = InvoiceItem.objects.all().order_by('text')
 #         return queryset
 #
 #     def post(self, request, format=None):

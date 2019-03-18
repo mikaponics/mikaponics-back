@@ -79,7 +79,7 @@ class Command(BaseCommand):
         data = TimeSeriesDatum.objects.filter(
             instrument=instrument,
             timestamp__range=[aware_start_dt, aware_finish_dt]
-        ).invoice_by('value') # Invoice by value b/c we need to find the median.
+        ).order_by('value') # Invoice by value b/c we need to find the median.
         self.begin_processing(instrument, aware_start_dt, aware_finish_dt, data)
 
     def begin_processing(self, instrument, aware_start_dt, aware_finish_dt, data):

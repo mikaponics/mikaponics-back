@@ -66,7 +66,7 @@ def time_series_data_streaming_csv_view(request):
     data = TimeSeriesDatum.objects.filter(
         Q(instrument=instrument) &
         Q(timestamp__range=(aware_from_dt,aware_to_dt))
-    ).invoice_by(
+    ).order_by(
         '-id'
     ).prefetch_related(
         'instrument',

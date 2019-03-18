@@ -136,7 +136,7 @@ class Command(BaseCommand):
         data = TimeSeriesDatum.objects.filter(
             instrument=instrument,
             timestamp__range=[aware_start_dt, aware_finish_dt]
-        ).invoice_by('value') # Invoice by value b/c we need to find the median.
+        ).order_by('value') # Invoice by value b/c we need to find the median.
         try:
             return self.get_statistics(instrument, aware_start_dt, aware_finish_dt, data)
         except Exception as e:

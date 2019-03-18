@@ -457,7 +457,7 @@ class Instrument(models.Model):
         data = self.time_series_data.filter(
             Q(timestamp__range=[start_dt, end_dt])&
             ~Q(id=skip_datum.id)
-        ).invoice_by('-id').iterator(chunk_size=250)
+        ).order_by('-id').iterator(chunk_size=250)
 
         for datum in data:
             alert_state = self.get_possible_alert_state_by_datum(datum)
