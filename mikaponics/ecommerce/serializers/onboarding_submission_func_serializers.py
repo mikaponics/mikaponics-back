@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import stripe
 from datetime import datetime, timedelta
 from dateutil import tz
 from django.conf import settings
@@ -105,7 +106,104 @@ class OnboardingSubmissionFuncSerializer(serializers.Serializer):
             })
         return data
 
+    def process_customer(self, validated_data, context):
+        """
+        Function will create a customer account on the payment merchant if there
+        has no account created previously.
+        """
+        # Get our variables.
+        token = validated_data['payment_token']
+        user = context['user']
+
+        # Get the stripe customer ID if we have it.
+        customer_id = user.customer_id
+
+        # If we don't have it then create our account now.
+        if customer_id is None:
+            customer = stripe.Customer.create(
+                source=token,
+                email=user.email,
+            )
+            user.customer_id = customer.id
+            user.customer_data = customer
+            user.save()
+
+        # Return our validated data.
+        return validated_data
+
+    def process_product_purchase(self, validated_data, context):
+        # print(validated_data) # For debugging purposes.
+
+        # Get variables.
+        user = context['user']
+
+        # Get our open order.
+        draft_order = user.draft_order
+
+        # Set our order.
+        draft_order.number_of_devices = validated_data['number_of_devices']
+
+        draft_order.billing_given_name = validated_data['billing_given_name']
+        draft_order.billing_last_name = validated_data['billing_last_name']
+        draft_order.billing_country = validated_data['billing_address_country']
+        draft_order.billing_region = validated_data['billing_address_region']
+        draft_order.billing_locality = validated_data['billing_address_locality']
+        draft_order.billing_postal_code = validated_data['billing_postal_code']
+        draft_order.billing_street_address = validated_data['billing_street_address']
+        draft_order.billing_post_office_box_number = validated_data['billing_post_office_box_number']
+        draft_order.billing_email = validated_data['billing_email']
+        draft_order.billing_telephone = validated_data['billing_telephone']
+
+        draft_order.shipping_given_name = validated_data['shipping_given_name']
+        draft_order.shipping_last_name = validated_data['shipping_last_name']
+        draft_order.shipping_country = validated_data['shipping_address_country']
+        draft_order.shipping_region = validated_data['shipping_address_region']
+        draft_order.shipping_locality = validated_data['shipping_address_locality']
+        draft_order.shipping_postal_code = validated_data['shipping_postal_code']
+        draft_order.shipping_street_address = validated_data['shipping_street_address']
+        draft_order.shipping_postal_code = validated_data['shipping_postal_code']
+        draft_order.shipping_post_office_box_number = validated_data['shipping_post_office_box_number']
+        draft_order.shipping_email = validated_data['shipping_email']
+        draft_order.shipping_telephone = validated_data['shipping_telephone']
+
+        # # Extract our bill amount.
+        # grand_total_in_pennies = draft_order.get_grand_total_in_pennies()
+        #
+        # # Perform our charge on `stripe.com`.
+        # charge = stripe.Charge.create(
+        #     amount=grand_total_in_pennies, # Written in pennies!
+        #     currency=draft_order.store.currency,
+        #     description='A Django charge',
+        #     customer=user.customer_id,
+        #     shipping={
+        #         "address":{
+        #             "city": draft_order.shipping_locality,
+        #             "country": draft_order.shipping_country,
+        #             "line1": draft_order.shipping_street_address,
+        #             "line2": draft_order.shipping_street_address_extra,
+        #             "postal_code": draft_order.shipping_postal_code,
+        #             "state": draft_order.shipping_region
+        #         },
+        #         "name": draft_order.shipping_given_name+" "+draft_order.shipping_last_name,
+        #         "phone": draft_order.shipping_telephone,
+        #     }
+        # )
+        #
+        # # Update our order.
+        # draft_order.state = Order.ORDER_STATE.PURCHASE_SUCCEEDED
+        # draft_order.stripe_receipt_id = str(charge.id)
+        # draft_order.stripe_receipt_data = charge
+        draft_order.save()
+
+        # Return our validated data.
+        return validated_data
+
+    def process_subscription(self, validated_data, context):
+        return validated_data
+
     @transaction.atomic
     def create(self, validated_data):
-        # Do nothing.
+        validated_data = self.process_customer(validated_data, self.context)
+        validated_data = self.process_product_purchase(validated_data, self.context)
+        validated_data = self.process_subscription(validated_data, self.context)
         return validated_data
