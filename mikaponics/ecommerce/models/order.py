@@ -360,6 +360,10 @@ class Order(models.Model):
         editable=False,
     )
 
+    '''
+    Methods.
+    '''
+
     def __str__(self):
         return str(self.id)
 

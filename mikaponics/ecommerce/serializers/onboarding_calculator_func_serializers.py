@@ -14,6 +14,8 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
+from ecommerce.models.product import Product
+
 
 logger = logging.getLogger(__name__)
 
