@@ -4,7 +4,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
 # from django.contrib.auth.admin import UserAdmin
 
-from ecommerce.models import *
+from foundation.models import *
 
 
 

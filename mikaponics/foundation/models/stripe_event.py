@@ -19,7 +19,7 @@ class StripeEvent(models.Model):
     Model was built on Stripe API endpoint version "2019-02-19".
     """
     class Meta:
-        app_label = 'ecommerce'
+        app_label = 'foundation'
         db_table = 'mika_stripe_events'
         verbose_name = _('Stripe Event')
         verbose_name_plural = _('Stripe Events')

@@ -564,9 +564,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         user to add products to purchase. If no draft order was returned then
         we will create one and return it here.
         """
-        from ecommerce.models.order import Order
-        from ecommerce.models.store import Store
-        from ecommerce.models.shipper import Shipper
+        from foundation.models.order import Order
+        from foundation.models.store import Store
+        from foundation.models.shipper import Shipper
         store = Store.objects.default_store
         order = Order.objects.filter(
             store=store,

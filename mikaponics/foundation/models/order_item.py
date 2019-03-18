@@ -17,7 +17,7 @@ class OrderItem(models.Model):
     The purchase order a user made with Mikaponics.
     """
     class Meta:
-        app_label = 'ecommerce'
+        app_label = 'foundation'
         db_table = 'mika_order_items'
         verbose_name = _('Order Item')
         verbose_name_plural = _('Order Items')
@@ -32,7 +32,7 @@ class OrderItem(models.Model):
 
     objects = OrderItemManager()
     order = models.ForeignKey(
-        "ecommerce.Order",
+        "Order",
         help_text=_('The user whom this purchase order belongs to.'),
         blank=False,
         null=False,
@@ -40,7 +40,7 @@ class OrderItem(models.Model):
         on_delete=models.CASCADE
     )
     product = models.ForeignKey(
-        "ecommerce.Product",
+        "Product",
         help_text=_('The product that will be ordered for this order item.'),
         blank=False,
         null=False,

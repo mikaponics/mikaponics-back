@@ -18,7 +18,7 @@ from django.utils import timezone
 from djmoney.money import Money
 from oauthlib.common import generate_token
 
-from ecommerce.models import Store, Product, Shipper, Order, StripeEvent
+from foundation.models import Store, Product, Shipper, Order, StripeEvent
 from foundation.models import User
 
 

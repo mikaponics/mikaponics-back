@@ -39,7 +39,7 @@ class Store(models.Model):
     associate with it.
     """
     class Meta:
-        app_label = 'ecommerce'
+        app_label = 'foundation'
         db_table = 'mika_stores'
         verbose_name = _('Store')
         verbose_name_plural = _('Stores')

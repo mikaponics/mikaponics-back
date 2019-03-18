@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.template.loader import render_to_string    # HTML to TXT
 
-from ecommerce.models import Order
+from foundation.models import Order
 from foundation import constants
 from foundation.utils import reverse_with_full_domain
 

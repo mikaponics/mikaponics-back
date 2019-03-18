@@ -116,7 +116,7 @@ class Device(models.Model):
         on_delete=models.CASCADE
     )
     product = models.ForeignKey(
-        "ecommerce.Product",
+        "Product",
         help_text=_('The type of product this device is.'),
         blank=False,
         null=False,
@@ -145,7 +145,7 @@ class Device(models.Model):
         default="UTC"
     )
     order = models.ForeignKey(
-        "ecommerce.Order",
+        "Order",
         help_text=_('The e-commerce order this device is related to.'),
         blank=True,
         null=True,

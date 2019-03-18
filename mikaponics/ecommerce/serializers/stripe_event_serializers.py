@@ -15,7 +15,7 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
-from ecommerce.models import StripeEvent
+from foundation.models import StripeEvent
 from ecommerce.tasks import run_process_stripe_event_by_id_func
 
 

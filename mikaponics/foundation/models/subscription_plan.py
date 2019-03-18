@@ -21,7 +21,7 @@ class SubscriptionPlan(models.Model):
     Metadata
     '''
     class Meta:
-        app_label = 'ecommerce'
+        app_label = 'foundation'
         db_table = 'mika_subscription_plans'
         verbose_name = _('Subscription Plan')
         verbose_name_plural = _('Subscription Plans')
@@ -55,7 +55,7 @@ class SubscriptionPlan(models.Model):
     Fields
     '''
     store = models.ForeignKey(
-        "ecommerce.Store",
+        "Store",
         help_text=_('The store this product belongs to.'),
         blank=False,
         null=False,

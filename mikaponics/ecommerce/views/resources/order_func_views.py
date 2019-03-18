@@ -11,7 +11,7 @@ from rest_framework import generics
 from rest_framework import authentication, viewsets, permissions, status,  parsers, renderers
 from rest_framework.response import Response
 
-from ecommerce.models import Order
+from foundation.models import Order
 
 
 class OrderCalculationFuncView(generics.CreateAPIView):

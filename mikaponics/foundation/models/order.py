@@ -24,7 +24,7 @@ class Order(models.Model):
     Metadata
     '''
     class Meta:
-        app_label = 'ecommerce'
+        app_label = 'foundation'
         db_table = 'mika_orders'
         verbose_name = _('Order')
         verbose_name_plural = _('Orders')
@@ -70,7 +70,7 @@ class Order(models.Model):
     Fields
     '''
     store = models.ForeignKey(
-        "ecommerce.Store",
+        "Store",
         help_text=_('The store this order belongs to.'),
         blank=False,
         null=False,
@@ -86,7 +86,7 @@ class Order(models.Model):
         on_delete=models.CASCADE
     )
     shipper = models.ForeignKey(
-        "ecommerce.Shipper",
+        "Shipper",
         help_text=_('The shipper whom is responsible for delivering this order.'),
         blank=True,
         null=True,
