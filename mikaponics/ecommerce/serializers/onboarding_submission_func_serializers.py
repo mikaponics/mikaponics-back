@@ -15,6 +15,8 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
+from foundation.models import Invoice, User
+
 
 logger = logging.getLogger(__name__)
 
@@ -136,6 +138,7 @@ class OnboardingSubmissionFuncSerializer(serializers.Serializer):
 
         # Get variables.
         user = context['user']
+        payment_token = validated_data['payment_token']
 
         # Get our open invoice.
         draft_invoice = user.draft_invoice
@@ -166,39 +169,60 @@ class OnboardingSubmissionFuncSerializer(serializers.Serializer):
         draft_invoice.shipping_email = validated_data['shipping_email']
         draft_invoice.shipping_telephone = validated_data['shipping_telephone']
 
-        # # Extract our bill amount.
-        # grand_total_in_pennies = draft_invoice.get_grand_total_in_pennies()
-        #
-        # # Perform our charge on `stripe.com`.
-        # charge = stripe.Charge.create(
-        #     amount=grand_total_in_pennies, # Written in pennies!
-        #     currency=draft_invoice.store.currency,
-        #     description='A Django charge',
-        #     customer=user.customer_id,
-        #     shipping={
-        #         "address":{
-        #             "city": draft_invoice.shipping_locality,
-        #             "country": draft_invoice.shipping_country,
-        #             "line1": draft_invoice.shipping_street_address,
-        #             "line2": draft_invoice.shipping_street_address_extra,
-        #             "postal_code": draft_invoice.shipping_postal_code,
-        #             "state": draft_invoice.shipping_region
-        #         },
-        #         "name": draft_invoice.shipping_given_name+" "+draft_invoice.shipping_last_name,
-        #         "phone": draft_invoice.shipping_telephone,
-        #     }
-        # )
-        #
+        # Extract our bill amount.
+        grand_total_in_pennies = draft_invoice.get_grand_total_in_pennies()
+
+        # Perform our charge on `stripe.com`.
+        charge = stripe.Charge.create(
+            amount=grand_total_in_pennies, # Written in pennies!
+            currency=draft_invoice.store.currency,
+            description='A Django charge', #TODO: CHANGE NAME.
+            customer=user.customer_id,
+            shipping={
+                "address":{
+                    "city": draft_invoice.shipping_locality,
+                    "country": draft_invoice.shipping_country,
+                    "line1": draft_invoice.shipping_street_address,
+                    "line2": draft_invoice.shipping_street_address_extra,
+                    "postal_code": draft_invoice.shipping_postal_code,
+                    "state": draft_invoice.shipping_region
+                },
+                "name": draft_invoice.shipping_given_name+" "+draft_invoice.shipping_last_name,
+                "phone": draft_invoice.shipping_telephone,
+            }
+        )
+
         # # Update our invoice.
-        # draft_invoice.state = Invoice.ORDER_STATE.PURCHASE_SUCCEEDED
-        # draft_invoice.stripe_receipt_id = str(charge.id)
-        # draft_invoice.stripe_receipt_data = charge
+        draft_invoice.state = Invoice.ORDER_STATE.PURCHASE_SUCCEEDED
+        draft_invoice.stripe_receipt_id = str(charge.id)
+        draft_invoice.stripe_receipt_data = charge
         draft_invoice.save()
 
         # Return our validated data.
         return validated_data
 
     def process_subscription(self, validated_data, context):
+        # Get variables.
+        user = context['user']
+        draft_invoice = user.draft_invoice
+
+        # If user has not been subscribed, then proceed to do so now.
+        if user.subscription_status != User.SUBSCRIPTION_STATUS.ACTIVE:
+            # Submit to the payment merchant our subscription request.
+            result = stripe.Subscription.create(
+                customer=user.customer_id,
+                items=[{
+                    "plan": user.subscription_plan.payment_plan_id,
+                    "quantity": 1,
+                },]
+            )
+            print(result)
+
+            # Update our model object to be saved.
+            user.subscription_status = User.SUBSCRIPTION_STATUS.ACTIVE;
+            user.subscription_data = result;
+            user.save()
+
         return validated_data
 
     @transaction.atomic

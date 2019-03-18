@@ -92,7 +92,6 @@ class OnboardingValidatorFuncSerializer(serializers.Serializer):
 
     def validate_number_of_devices(self, data):
         number_of_devices = data
-        print(">>",data)
         if number_of_devices > 50:
             raise exceptions.ValidationError({
                 'number_of_devices': _('Cannot invoice more then 50 devices in one invoice, please contact <a href="mailto:info@mikaponics.com">info@mikasoftware.com</a> to invoice more.')
