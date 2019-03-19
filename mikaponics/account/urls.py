@@ -23,6 +23,6 @@ urlpatterns = (
     url(r'^api/reset-password$', resources.ResetPasswordAPIView.as_view(), name='mikaponics_reset_password_api_endpoint'),
     url(r'^api/send-password-reset$', resources.SendPasswordResetAPIView.as_view(), name='mikaponics_send_password_reset_api_endpoint'),
     # Profile
-    url(r'^api/profile/info$', resources.ProfileInfoRetrieveUpdateAPIView.as_view(), name='mikaponics_profile_info_api_endpoint'),
+    url(r'^api/profile$', resources.ProfileInfoRetrieveUpdateAPIView.as_view(), name='mikaponics_profile_info_api_endpoint'),
     ############################################################################
 )

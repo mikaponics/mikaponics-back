@@ -123,7 +123,6 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
         )
 
     def get_token(self, obj):
-        print(self.context.get('token', None))
         return self.context.get('token', None)
 
     def get_scope(self, obj):
