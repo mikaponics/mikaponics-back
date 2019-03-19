@@ -372,7 +372,9 @@ class Device(models.Model):
         return reverse('mikaponics_device_detail', args=[self.id])
 
     def get_environment_variables_file_url(self):
-        return reverse('mikaponics_device_environment_variable_file_detail', args=[self.id])
+        if self.id:
+            return reverse('mikaponics_device_environment_variable_file_detail', args=[self.id])
+        return None
 
     def get_pretty_state(self):
         return dict(self.DEVICE_STATE_CHOICES).get(self.state)
