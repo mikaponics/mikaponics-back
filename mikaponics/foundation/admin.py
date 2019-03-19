@@ -9,7 +9,7 @@ from foundation.models import *
 
 # Define a new User admin
 class UserAdmin(BaseUserAdmin):
-    list_display = ['email', 'is_staff', 'is_active', 'was_email_activated',]
+    list_display = ['email', 'is_staff', 'is_active', 'was_email_activated', 'was_onboarded',]
     list_filter = ('is_staff',)
 
     fieldsets = (
@@ -18,6 +18,7 @@ class UserAdmin(BaseUserAdmin):
         ('Permissions', {'fields': ('is_staff',)}),
 
         ('E-Ecommerce', {'fields': (
+            'was_onboarded',
             'customer_id','customer_data', 'subscription_plan', 'subscription_status',
         )}),
     )
@@ -33,7 +34,7 @@ admin.site.unregister(Group)
 
 
 class DeviceAdmin(admin.ModelAdmin):
-    raw_id_fields = ['user_id', 'invoice',]
+    raw_id_fields = ['user', 'invoice',]
     list_filter = ['product',]
     list_display = ['id', 'user_id', 'product',]
     ordering = ['-id',]
@@ -70,7 +71,7 @@ class InstrumentAdmin(admin.ModelAdmin):
     list_display = ['id', 'device_id', 'type_of', 'last_modified_at']
     list_filter = ['type_of',]
     # search_fields = ['device_id',]
-    raw_id_fields = ['device_id',]
+    raw_id_fields = ['device',]
     ordering = ['-id',]
     readonly_fields = [
         'id', 'uuid', 'created_at', 'created_by', 'created_from',
