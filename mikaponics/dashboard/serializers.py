@@ -38,8 +38,8 @@ class DashboardSerializer(serializers.Serializer):
         arr = []
         for device in user.devices.all():
             arr.append({
-                'id': device.id,
-                'uuid': device.uuid,
+                'name': "Your device" if device.name is '' else device.name,
+                'description': "Your device description goes here..." if device.description is '' else device.description,
                 'state': device.get_pretty_state(),
                 'last_measured_timestamp': device.pretty_last_measured_timestamp,
                 'absolute_url': device.get_absolute_url(),
