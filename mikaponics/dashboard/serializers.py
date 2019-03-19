@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import pytz
 from datetime import datetime, timedelta
 from dateutil import tz
 from django.conf import settings
@@ -20,16 +21,27 @@ logger = logging.getLogger(__name__)
 
 
 class DashboardSerializer(serializers.Serializer):
-    # --- Authentication Credentials ---
-    token = serializers.SerializerMethodField()
+    timestamp = serializers.SerializerMethodField()
+    devices = serializers.SerializerMethodField()
 
     # Meta Information.
     class Meta:
         fields = (
-            # --- Authentication Credentials ---
-            'token',
+            'devices',
         )
 
-    def get_token(self, obj):
-        print(">>>")
-        return self.context.get('token', None)
+    def get_timestamp(self, obj):
+        return datetime.now(tz=pytz.utc).timestamp()
+
+    def get_devices(self, obj):
+        user = self.context['authenticated_by']
+        arr = []
+        for device in user.devices.all():
+            arr.append({
+                'id': device.id,
+                'uuid': device.uuid,
+                'state': device.get_pretty_state(),
+                'last_measured_timestamp': device.pretty_last_measured_timestamp,
+                'absolute_url': device.get_absolute_url(),
+            })
+        return arr

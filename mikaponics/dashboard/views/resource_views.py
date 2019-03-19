@@ -31,19 +31,14 @@ class DashboardAPIView(generics.RetrieveUpdateDestroyAPIView):
     renderer_classes = (renderers.JSONRenderer,)
 
     @transaction.atomic
-    def post(self, request):
-        """
-        Update
-        """
+    def get(self, request):
         client_ip, is_routable = get_client_ip(self.request)
         self.check_object_permissions(request, request.user)  # Validate permissions.
-        serializer = ProfileInfoRetrieveUpdateSerializer(request.user, data=request.data, context={
+        serializer = DashboardSerializer(request.user, context={
             'authenticated_by': request.user,
             'authenticated_from': client_ip,
             'authenticated_from_is_public': is_routable,
             'token': None,
             'scope': None,
         })
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)

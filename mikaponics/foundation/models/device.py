@@ -369,7 +369,7 @@ class Device(models.Model):
         return "UID: #"+str(self.user.id)+" | ID: #"+str(self.id)+" | Created: "+str(self.created_at)
 
     def get_absolute_url(self):
-        return reverse('mikaponics_device_detail', args=[self.id])
+        return "/device/"+str(self.id)+"";
 
     def get_environment_variables_file_url(self):
         if self.id:
