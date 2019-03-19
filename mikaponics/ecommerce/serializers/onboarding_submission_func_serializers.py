@@ -121,14 +121,22 @@ class OnboardingSubmissionFuncSerializer(serializers.Serializer):
         customer_id = user.customer_id
 
         # If we don't have it then create our account now.
-        if customer_id is None:
-            customer = stripe.Customer.create(
-                source=token,
-                email=user.email,
-            )
-            user.customer_id = customer.id
-            user.customer_data = customer
-            user.save()
+        try:
+            if customer_id is None:
+                customer = stripe.Customer.create(
+                    source=token,
+                    email=user.email,
+                )
+                user.customer_id = customer.id
+                user.customer_data = customer
+                user.save()
+        except Exception as e:
+            raise exceptions.ValidationError({
+                'non_field_errors': [
+                    str(e),
+                ]
+            })
+
 
         # Return our validated data.
         return validated_data
@@ -153,7 +161,7 @@ class OnboardingSubmissionFuncSerializer(serializers.Serializer):
         draft_invoice.billing_locality = validated_data['billing_address_locality']
         draft_invoice.billing_postal_code = validated_data['billing_postal_code']
         draft_invoice.billing_street_address = validated_data['billing_street_address']
-        draft_invoice.billing_post_office_box_number = validated_data['billing_post_office_box_number']
+        draft_invoice.billing_post_office_box_number = validated_data.get('billing_post_office_box_number', None)
         draft_invoice.billing_email = validated_data['billing_email']
         draft_invoice.billing_telephone = validated_data['billing_telephone']
 
@@ -165,7 +173,7 @@ class OnboardingSubmissionFuncSerializer(serializers.Serializer):
         draft_invoice.shipping_postal_code = validated_data['shipping_postal_code']
         draft_invoice.shipping_street_address = validated_data['shipping_street_address']
         draft_invoice.shipping_postal_code = validated_data['shipping_postal_code']
-        draft_invoice.shipping_post_office_box_number = validated_data['shipping_post_office_box_number']
+        draft_invoice.shipping_post_office_box_number = validated_data.get('shipping_post_office_box_number', None)
         draft_invoice.shipping_email = validated_data['shipping_email']
         draft_invoice.shipping_telephone = validated_data['shipping_telephone']
 
