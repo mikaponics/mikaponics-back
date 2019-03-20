@@ -43,45 +43,19 @@ class DeviceListCreateSerializer(serializers.ModelSerializer):
 
 
 class DeviceInstrumentSerializer(serializers.ModelSerializer):
-    last_measured_value = serializers.SerializerMethodField()
-    last_measured_timestamp = serializers.SerializerMethodField()
-    unit_of_measure = serializers.SerializerMethodField()
-    icon = serializers.SerializerMethodField()
-    pretty_last_measured_value = serializers.SerializerMethodField()
-    pretty_last_measured_timestamp = serializers.SerializerMethodField()
-    statistics = serializers.ReadOnlyField()
+    uuid = serializers.ReadOnlyField()
+    unit_of_measure = serializers.ReadOnlyField(source='get_unit_of_measure')
 
     class Meta:
         model = Instrument
         fields = (
-            'state',
+            'uuid',
             'last_measured_value',
             'last_measured_timestamp',
             'unit_of_measure',
-            'icon',
             'pretty_last_measured_value',
             'pretty_last_measured_timestamp',
-            'statistics',
         )
-
-    def get_last_measured_value(self, obj):
-        return obj.last_measured_value
-
-    def get_last_measured_timestamp(self, obj):
-        return obj.last_measured_timestamp
-
-    def get_unit_of_measure(self, obj):
-        return obj.get_unit_of_measure()
-
-    def get_icon(self, obj):
-        return obj.get_icon()
-
-    def get_pretty_last_measured_value(self, obj):
-        return obj.pretty_last_measured_value
-
-    def get_pretty_last_measured_timestamp(self, obj):
-        return obj.pretty_last_measured_timestamp
-
 
 
 class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
@@ -95,7 +69,8 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
     state = serializers.SerializerMethodField()
     last_measured_value = serializers.SerializerMethodField()
     last_measured_timestamp = serializers.SerializerMethodField()
-    last_measured_instrument = serializers.SerializerMethodField()
+    last_measured_instrument_type_of = serializers.SerializerMethodField()
+    last_measured_instrument_id = serializers.SerializerMethodField()
     last_measured_unit_of_measure = serializers.SerializerMethodField()
     humidity = serializers.SerializerMethodField()
     temperature = serializers.SerializerMethodField()
@@ -113,7 +88,8 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
             'last_measured_value',
             'last_measured_timestamp',
             'last_measured_unit_of_measure',
-            'last_measured_instrument',
+            'last_measured_instrument_type_of',
+            'last_measured_instrument_id',
             'humidity',
             'temperature'
         )
@@ -133,8 +109,13 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
     def get_last_measured_unit_of_measure(self, obj):
         return obj.last_measured_unit_of_measure;
 
-    def get_last_measured_instrument(self, obj):
-        return obj.last_measured_instrument
+    def get_last_measured_instrument_type_of(self, obj):
+        instrument = obj.last_measured_instrument
+        return instrument.get_pretty_instrument_type_of()
+
+    def get_last_measured_instrument_id(self, obj):
+        instrument = obj.last_measured_instrument
+        return instrument.id
 
     def get_humidity(self, obj):
         humidity_instrument = obj.humidity_instrument

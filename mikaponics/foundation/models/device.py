@@ -396,6 +396,10 @@ class Device(models.Model):
                 del self.pretty_last_measured_timestamp
             elif method_name == 'pretty_last_measured_instrument':
                 del self.pretty_last_measured_instrument
+            elif method_name == 'humidity_instrument':
+                del self.humidity_instrument
+            elif method_name == 'temperature_instrument':
+                del self.temperature_instrument
             else:
                 raise Exception("Method name not found.")
         except AttributeError:
@@ -418,7 +422,7 @@ class Device(models.Model):
     @cached_property
     def last_measured_unit_of_measure(self):
         if self.last_recorded_datum:
-            return self.last_recorded_datum.instrument.get_pretty_instrument_type_of()
+            return self.last_recorded_datum.instrument.get_unit_of_measure()
         return None
 
     @cached_property
