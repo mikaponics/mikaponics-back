@@ -25,7 +25,7 @@ class DeviceListCreateAPIView(generics.ListCreateAPIView):
     CREATE EXAMPLE:
     http post 127.0.0.1:8000/api/devices \
         Authorization:"Bearer NJKcqxrc7JeuwV87Pm4qa3fn1vc9Gl" \
-        data_interval_in_minutes="1
+        data_interval_in_seconds="1
     """
     # filter_class = DeviceFilter
     serializer_class = DeviceListCreateSerializer

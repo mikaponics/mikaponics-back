@@ -24,7 +24,7 @@ def get_device_configuration_data(device):
 
     # Generate our configuration data based on the "LOGGER" device type.
     return {
-        "data_interval_in_minutes": device.data_interval_in_minutes,
+        "data_interval_in_seconds": device.data_interval_in_seconds,
         "humidity": humidity_configuration,
         "temperature": temperature_configuration,
     }

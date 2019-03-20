@@ -123,12 +123,12 @@ class Device(models.Model):
         related_name="devices",
         on_delete=models.CASCADE
     )
-    data_interval_in_minutes = models.PositiveSmallIntegerField(
-        _("Data Interval (Minutes)"),
-        help_text=_('The data interval all the instruments will poll by. Interval measured in minutes.'),
+    data_interval_in_seconds = models.PositiveSmallIntegerField(
+        _("Data Interval (Seconds)"),
+        help_text=_('The data interval all the instruments will poll by. Interval measured in seconds.'),
         blank=False,
         null=False,
-        default=1,
+        default=60, # 60 seconds is 1 minute.
     )
     activated_at = models.DateTimeField(
         _("Activated At"),
@@ -369,7 +369,7 @@ class Device(models.Model):
         return "UID: #"+str(self.user.id)+" | ID: #"+str(self.id)+" | Created: "+str(self.created_at)
 
     def get_absolute_url(self):
-        return "/device/"+str(self.id)+"";
+        return "/device/"+str(self.id)+""
 
     def get_environment_variables_file_url(self):
         if self.id:
@@ -416,6 +416,12 @@ class Device(models.Model):
         return None
 
     @cached_property
+    def last_measured_unit_of_measure(self):
+        if self.last_recorded_datum:
+            return self.last_recorded_datum.instrument.get_pretty_instrument_type_of()
+        return None
+
+    @cached_property
     def last_measured_instrument(self):
         if self.last_recorded_datum:
             return self.last_recorded_datum.instrument
@@ -439,6 +445,20 @@ class Device(models.Model):
             return self.last_recorded_datum.get_pretty_instrument()
         return None
 
+    @cached_property
+    def humidity_instrument(self):
+        if self.instruments:
+            from foundation.models.instrument import Instrument
+            return self.instruments.filter(type_of=Instrument.INSTRUMENT_TYPE.HUMIDITY).first()
+        return None
+
+    @cached_property
+    def temperature_instrument(self):
+        if self.instruments:
+            from foundation.models.instrument import Instrument
+            return self.instruments.filter(type_of=Instrument.INSTRUMENT_TYPE.TEMPERATURE).first()
+        return None
+
     def set_last_recorded_datum(self, datum):
         # Update our value.
         self.last_recorded_datum = datum
@@ -451,3 +471,5 @@ class Device(models.Model):
         self.invalidate('pretty_last_measured_value')
         self.invalidate('pretty_last_measured_timestamp')
         self.invalidate('pretty_last_measured_instrument')
+        self.invalidate('humidity_instrument')
+        self.invalidate('temperature_instrument')
