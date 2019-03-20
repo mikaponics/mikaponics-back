@@ -11,6 +11,7 @@ urlpatterns = (
     ),
     #---------------------------------------------------------------------------
     path('api/devices', views.DeviceListCreateAPIView.as_view(), name='mikaponics_list_create_device_api_endpoint'),
+    path('api/device/<str:pk>', views.DeviceRetrieveUpdateDestroyAPIView.as_view(), name='mikaponics_retrieve_update_destroy_device_api_endpoint'),
     path('api/device/<str:device_uuid>/profile', views.DeviceProfileAPIView.as_view(), name='mikaponics_device_profile_api_endpoint'),
     path('api/device-operations/activate', views.DeviceActivateOperationAPIView.as_view(), name='mikaponics_device_activate_operation_api_endpoint'),
     path('api/device-operations/submit-data', views.DeviceInstrumentSetTimeSeriesDatumeOperationAPIView.as_view(), name='mikaponics_device_submit_dat_operation_api_endpoint'),
