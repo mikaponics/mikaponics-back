@@ -53,8 +53,6 @@ class DeviceInstrumentSerializer(serializers.ModelSerializer):
             'last_measured_value',
             'last_measured_timestamp',
             'unit_of_measure',
-            'pretty_last_measured_value',
-            'pretty_last_measured_timestamp',
         )
 
 
@@ -67,13 +65,20 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
     data_interval_in_minutes = serializers.SerializerMethodField()
     statistics = serializers.JSONField(read_only=True)
     state = serializers.SerializerMethodField()
+
     last_measured_value = serializers.SerializerMethodField()
     last_measured_timestamp = serializers.SerializerMethodField()
     last_measured_instrument_type_of = serializers.SerializerMethodField()
     last_measured_instrument_id = serializers.SerializerMethodField()
     last_measured_unit_of_measure = serializers.SerializerMethodField()
-    humidity = serializers.SerializerMethodField()
-    temperature = serializers.SerializerMethodField()
+
+    humidity_last_measured_value = serializers.SerializerMethodField()
+    humidity_last_measured_timestamp = serializers.SerializerMethodField()
+    humidity_unit_of_measure = serializers.SerializerMethodField()
+
+    temperature_last_measured_value = serializers.SerializerMethodField()
+    temperature_last_measured_timestamp = serializers.SerializerMethodField()
+    temperature_unit_of_measure = serializers.SerializerMethodField()
 
     class Meta:
         model = Device
@@ -90,8 +95,12 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
             'last_measured_unit_of_measure',
             'last_measured_instrument_type_of',
             'last_measured_instrument_id',
-            'humidity',
-            'temperature'
+            'humidity_last_measured_value',
+            'humidity_last_measured_timestamp',
+            'humidity_unit_of_measure',
+            'temperature_last_measured_value',
+            'temperature_last_measured_timestamp',
+            'temperature_unit_of_measure'
         )
 
     def get_data_interval_in_minutes(self, obj):

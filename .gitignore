@@ -173,17 +173,17 @@ env/pip-selfcheck.json
 # Important Note: Make sure this is the name of the virtualenv directory
 # that you set when you where setting up the project.
 # Do not share our secret configuration file.
-workery/workery/.env
+mikaponics/mikaponics/.env
 
 # Do not share our converage file.
 coverage.txt
 
 # Do not share your `sqlite3` database related files.
-workery/db.sqlite3
-workery/db.sqlite3-journal
+mikaponics/db.sqlite3
+mikaponics/db.sqlite3-journal
 
 # Do not share your 'django-haystack' related files.
-workery/workery/whoosh_index
+mikaponics/mikaponics/whoosh_index
 
 # Do not share real-life production data.
 prod_*.csv
@@ -192,5 +192,5 @@ prod_*.csv
 private_notes.txt
 
 # Do not share collected static files.
-workery/workery/static
-workery/staticfiles
+mikaponics/mikaponics/static
+mikaponics/staticfiles
