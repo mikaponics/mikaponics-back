@@ -90,6 +90,7 @@ class Command(BaseCommand):
             'unit_of_measure': instrument.get_unit_of_measure(),
             'slug': instrument.slug,
             'absolute_url': instrument.get_absolute_url(),
+            'absolute_parent_url': instrument.device.get_absolute_url(),
 
             # Latest values
             'last_measured_value': latest_measured_value,
