@@ -27,6 +27,7 @@ class InstrumentListSerializer(serializers.ModelSerializer):
 class InstrumentRetrieveUpdateSerializer(serializers.ModelSerializer):
 
     absolute_parent_url = serializers.SerializerMethodField()
+    absolute_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Instrument
@@ -43,7 +44,12 @@ class InstrumentRetrieveUpdateSerializer(serializers.ModelSerializer):
             'yellow_alert_delay_in_seconds',
             'min_value',
             'absolute_parent_url',
+            'absolute_url',
+            'slug',
         )
 
     def get_absolute_parent_url(self, obj):
         return obj.device.get_absolute_url()
+
+    def get_absolute_url(self, obj):
+        return obj.get_absolute_url()
