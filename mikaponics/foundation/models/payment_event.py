@@ -5,14 +5,14 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
-class StripeEventLogManager(models.Manager):
+class PaymentEventLogManager(models.Manager):
     def delete_all(self):
-        items = StripeEventLog.objects.all()
+        items = PaymentEventLog.objects.all()
         for item in items.all():
             item.delete()
 
 
-class StripeEvent(models.Model):
+class PaymentEvent(models.Model):
     """
     The model used to store the webhook data from Stripe.
 
@@ -20,9 +20,9 @@ class StripeEvent(models.Model):
     """
     class Meta:
         app_label = 'foundation'
-        db_table = 'mika_stripe_events'
-        verbose_name = _('Stripe Event')
-        verbose_name_plural = _('Stripe Events')
+        db_table = 'mika_payment_events'
+        verbose_name = _('Payment Event')
+        verbose_name_plural = _('Payment Events')
         default_permissions = ()
         permissions = (
             # ("can_get_opening_hours_specifications", "Can get opening hours specifications"),
@@ -32,7 +32,7 @@ class StripeEvent(models.Model):
             # ("can_delete_opening_hours_specification", "Can delete opening hours specifications"),
         )
 
-    objects = StripeEventLogManager()
+    objects = PaymentEventLogManager()
 
     '''
     Fields

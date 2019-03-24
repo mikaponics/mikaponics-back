@@ -43,7 +43,7 @@ urlpatterns = (
         name='mikaponics_invoice_item_retrieve_update_billing_address_destroy_api_endpoint'
     ),
     path('api/stripe/webhook/',
-        views.StripeEventAPIView.as_view(),
+        views.PaymentEventAPIView.as_view(),
         name='mikaponics_stripe_event_api_endpoint'
     ),
 )

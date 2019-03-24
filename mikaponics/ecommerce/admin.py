@@ -116,7 +116,7 @@ admin.site.register(Product, ProductAdmin)
 
 
 
-class StripeEventAdmin(admin.ModelAdmin):
+class PaymentEventAdmin(admin.ModelAdmin):
 
     list_display = ['id', 'event_id', 'type', 'created', 'livemode',]
     list_filter = ['type', 'livemode', 'object', 'pending_webhooks', 'api_version',]
@@ -131,7 +131,7 @@ class StripeEventAdmin(admin.ModelAdmin):
         'last_modified_at',
     ]
 
-admin.site.register(StripeEvent, StripeEventAdmin)
+admin.site.register(PaymentEvent, PaymentEventAdmin)
 
 
 class SubscriptionPlanAdmin(admin.ModelAdmin):

@@ -85,8 +85,11 @@ class Command(BaseCommand):
         # Combine all our statistics into a single variable.
         statistics = {
             # ----------------------------| v1.0 |------------------------------
-            # Statistics generated at
+            # General information.
             'generated_at_utc': str(timezone.now()),
+            'unit_of_measure': instrument.get_unit_of_measure(),
+            'slug': instrument.slug,
+            'absolute_url': instrument.get_absolute_url(),
 
             # Latest values
             'last_measured_value': latest_measured_value,
@@ -94,9 +97,9 @@ class Command(BaseCommand):
 
             # Last 24h statistics.
             'last_24h_min_value': last_24h_statistics.get('min_value', None),
-            'last_24h_min_timestamp': last_24h_statistics.get('min_timestamp_utc', None),
+            'last_24h_min_timestamp_at_utc': last_24h_statistics.get('min_timestamp_utc', None),
             'last_24h_max_value': last_24h_statistics.get('max_value', None),
-            'last_24h_max_timestamp': last_24h_statistics.get('max_timestamp_utc', None),
+            'last_24h_max_timestamp_at_utc': last_24h_statistics.get('max_timestamp_utc', None),
             'last_24h_mean_value': last_24h_statistics.get('mean_value', None),
             'last_24h_median_value': last_24h_statistics.get('median_value', None),
             'last_24h_mode_value': last_24h_statistics.get('mode_value', None),

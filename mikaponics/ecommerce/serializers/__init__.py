@@ -9,4 +9,4 @@ from ecommerce.serializers.invoice_retrieve_update_destroy_serializers import (
     InvoiceRetrieveUpdateBillingAddressSerializer,
     InvoiceRetrieveUpdateShippingAddressSerializer
 )
-from ecommerce.serializers.stripe_event_serializers import StripeEventSerializer
+from ecommerce.serializers.stripe_event_serializers import PaymentEventSerializer

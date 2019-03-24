@@ -4,8 +4,11 @@ import pytz
 from datetime import date, datetime, timedelta
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
+from django.db import IntegrityError
 from django.db import models
+from django.template.defaultfilters import slugify
 from django.utils import timezone
+from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -129,6 +132,15 @@ class Instrument(models.Model):
         help_text=_('The configuration details of this instrument with device.'),
         blank=False,
         null=False,
+    )
+    slug = models.SlugField(
+        _("Slug"),
+        help_text=_('The unique slug used for this instrument when accessing instrument details page.'),
+        max_length=63,
+        blank=True,
+        null=False,
+        db_index=True,
+        unique=True,
     )
 
     #
@@ -329,6 +341,29 @@ class Instrument(models.Model):
     '''
     Class methods.
     '''
+    def save(self, *args, **kwargs):
+        """
+        Override the save function so we can add extra functionality.
+
+        (1) If we created the object then we will generate a custom slug.
+        (a) If user exists then generate slug based on user's name.
+        (b) Else generate slug with random string.
+        """
+        if not self.slug:
+            # CASE 1 OF 2: HAS USER.
+            if self.device.user:
+                count = Instrument.objects.filter(device=self.device).count()
+                count += 1
+                try:
+                    self.slug = self.device.slug+"-instrument-"+str(count)
+                except IntegrityError as e:
+                    if 'unique constraint' in e.message:
+                        self.slug = self.device.slug+"-instrument-"+str(count)+"-"+get_random_string(length=5)
+            # CASE 2 OF 2: DOES NOT HAVE USER.
+            else:
+                self.slug = "instrument-"+get_random_string(length=32)
+
+        super(Instrument, self).save(*args, **kwargs)
 
     def __str__(self):
         return "#"+str(self.id)+" - "+str(self.get_pretty_instrument_type_of())
@@ -337,7 +372,7 @@ class Instrument(models.Model):
         return dict(self.INSTRUMENT_TYPE_OF_CHOICES).get(self.type_of)
 
     def get_absolute_url(self):
-        return reverse('mikaponics_instrument_detail', args=[self.id])
+        return "/instrument/"+str(self.slug)
 
     def get_unit_of_measure(self):
         if self.type_of == Instrument.INSTRUMENT_TYPE.HUMIDITY:

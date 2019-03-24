@@ -19,10 +19,10 @@ from rest_framework import authentication, viewsets, permissions, status, parser
 from rest_framework.decorators import detail_route, list_route # See: http://www.django-rest-framework.org/api-guide/viewsets/#marking-extra-actions-for-routing
 from rest_framework.response import Response
 
-from ecommerce.serializers import StripeEventSerializer
+from ecommerce.serializers import PaymentEventSerializer
 
 
-class StripeEventAPIView(APIView):
+class PaymentEventAPIView(APIView):
     """
     """
     throttle_classes = ()
@@ -45,7 +45,7 @@ class StripeEventAPIView(APIView):
         client_ip, is_routable = get_client_ip(self.request)
 
         # Serialize our input.
-        serializer = StripeEventSerializer(data=request.data, context={
+        serializer = PaymentEventSerializer(data=request.data, context={
             'from': client_ip,
             'from_is_public': is_routable,
         })

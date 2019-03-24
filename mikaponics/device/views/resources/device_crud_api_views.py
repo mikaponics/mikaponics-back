@@ -66,11 +66,11 @@ class DeviceRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     )
 
     @transaction.atomic
-    def get(self, request, pk=None):
+    def get(self, request, slug=None):
         """
         Retrieve
         """
-        skill_set = get_object_or_404(Device, pk=pk)
+        skill_set = get_object_or_404(Device, slug=slug)
         self.check_object_permissions(request, skill_set)  # Validate permissions.
         serializer = DeviceRetrieveUpdateDestroySerializer(skill_set, many=False)
         return Response(
@@ -79,11 +79,11 @@ class DeviceRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
         )
 
     @transaction.atomic
-    def put(self, request, pk=None):
+    def put(self, request, slug=None):
         """
         Update
         """
-        skill_set = get_object_or_404(Device, pk=pk)
+        skill_set = get_object_or_404(Device, slug=slug)
         self.check_object_permissions(request, skill_set)  # Validate permissions.
         serializer = DeviceRetrieveUpdateDestroySerializer(skill_set, data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -91,11 +91,11 @@ class DeviceRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @transaction.atomic
-    def delete(self, request, pk=None):
+    def delete(self, request, slug=None):
         """
         Delete
         """
-        skill_set = get_object_or_404(Device, pk=pk)
+        skill_set = get_object_or_404(Device, slug=slug)
         self.check_object_permissions(request, skill_set)  # Validate permissions.
         skill_set.delete()
         return Response(data=[], status=status.HTTP_200_OK)

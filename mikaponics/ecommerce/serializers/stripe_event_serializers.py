@@ -15,7 +15,7 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
-from foundation.models import StripeEvent
+from foundation.models import PaymentEvent
 from ecommerce.tasks import run_process_stripe_event_by_id_func
 
 
@@ -27,7 +27,7 @@ def get_todays_date_plus_days(days=0):
     return timezone.now() + timedelta(days=days)
 
 
-class StripeEventSerializer(serializers.Serializer):
+class PaymentEventSerializer(serializers.Serializer):
     created = serializers.IntegerField(required=True)
     livemode = serializers.BooleanField(required=True)
     id = serializers.CharField(required=True)
@@ -72,7 +72,7 @@ class StripeEventSerializer(serializers.Serializer):
         naive_dt = datetime.fromtimestamp(created_ts)
         utc_aware_dt = naive_dt.replace(tzinfo=pytz.utc)
 
-        event_id = StripeEvent.objects.create(
+        event_id = PaymentEvent.objects.create(
             created=utc_aware_dt,
             livemode=livemode,
             event_id=id,

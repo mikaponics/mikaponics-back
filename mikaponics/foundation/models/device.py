@@ -6,8 +6,11 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.db.models import PointField
 from django.contrib.postgres.fields import JSONField
+from django.db import IntegrityError
 from django.db import models
+from django.template.defaultfilters import slugify
 from django.urls import reverse
+from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
@@ -151,6 +154,15 @@ class Device(models.Model):
         null=True,
         related_name="devices",
         on_delete=models.SET_NULL
+    )
+    slug = models.SlugField(
+        _("Slug"),
+        help_text=_('The unique slug used for this device when accessing device details page.'),
+        max_length=63,
+        blank=True,
+        null=False,
+        db_index=True,
+        unique=True,
     )
 
     #
@@ -365,11 +377,35 @@ class Device(models.Model):
         editable=False,
     )
 
+    def save(self, *args, **kwargs):
+        """
+        Override the save function so we can add extra functionality.
+
+        (1) If we created the object then we will generate a custom slug.
+        (a) If user exists then generate slug based on user's name.
+        (b) Else generate slug with random string.
+        """
+        if not self.slug:
+            # CASE 1 OF 2: HAS USER.
+            if self.user:
+                count = Device.objects.filter(user=self.user).count()
+                count += 1
+                try:
+                    self.slug = slugify(self.user)+"-device-"+str(count)
+                except IntegrityError as e:
+                    if 'unique constraint' in e.message:
+                        self.slug = slugify(self.user)+"-device-"+str(count)+"-"+get_random_string(length=5)
+            # CASE 2 OF 2: DOES NOT HAVE USER.
+            else:
+                self.slug = "device-"+get_random_string(length=32)
+
+        super(Device, self).save(*args, **kwargs)
+
     def __str__(self):
         return "UID: #"+str(self.user.id)+" | ID: #"+str(self.id)+" | Created: "+str(self.created_at)
 
     def get_absolute_url(self):
-        return "/device/"+str(self.id)+""
+        return "/device/"+str(self.slug)
 
     def get_environment_variables_file_url(self):
         if self.id:

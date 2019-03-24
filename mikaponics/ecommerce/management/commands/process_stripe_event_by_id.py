@@ -18,7 +18,7 @@ from django.utils import timezone
 from djmoney.money import Money
 from oauthlib.common import generate_token
 
-from foundation.models import Store, Product, Shipper, Invoice, StripeEvent
+from foundation.models import Store, Product, Shipper, Invoice, PaymentEvent
 from foundation.models import User
 
 
@@ -35,9 +35,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             for event_id in options['event_id']:
-                event = StripeEvent.objects.get(id=event_id)
+                event = PaymentEvent.objects.get(id=event_id)
                 self.begin_processing(event)
-        except StripeEvent.DoesNotExist:
+        except PaymentEvent.DoesNotExist:
             raise CommandError(_('Stripe event ID does not exist.'))
 
         # Return success message.

@@ -12,4 +12,4 @@ from foundation.models.subscription_plan import SubscriptionPlan
 from foundation.models.shipper import Shipper
 from foundation.models.invoice import Invoice
 from foundation.models.invoice_item import InvoiceItem
-from foundation.models.stripe_event import StripeEvent
+from foundation.models.payment_event import PaymentEvent

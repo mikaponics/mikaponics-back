@@ -63,22 +63,16 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
         required=True,
     )
     data_interval_in_minutes = serializers.SerializerMethodField()
-    statistics = serializers.JSONField(read_only=True)
     state = serializers.SerializerMethodField()
+    slug = serializers.ReadOnlyField()
 
     last_measured_value = serializers.SerializerMethodField()
     last_measured_timestamp = serializers.SerializerMethodField()
     last_measured_instrument_type_of = serializers.SerializerMethodField()
-    last_measured_instrument_id = serializers.SerializerMethodField()
     last_measured_unit_of_measure = serializers.SerializerMethodField()
 
-    humidity_last_measured_value = serializers.SerializerMethodField()
-    humidity_last_measured_timestamp = serializers.SerializerMethodField()
-    humidity_unit_of_measure = serializers.SerializerMethodField()
-
-    temperature_last_measured_value = serializers.SerializerMethodField()
-    temperature_last_measured_timestamp = serializers.SerializerMethodField()
-    temperature_unit_of_measure = serializers.SerializerMethodField()
+    humidity = serializers.SerializerMethodField()
+    temperature = serializers.SerializerMethodField()
 
     class Meta:
         model = Device
@@ -88,19 +82,15 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
             'timezone',
             'data_interval_in_seconds',
             'data_interval_in_minutes',
-            'statistics',
             'state',
+            'slug',
             'last_measured_value',
             'last_measured_timestamp',
             'last_measured_unit_of_measure',
             'last_measured_instrument_type_of',
-            'last_measured_instrument_id',
-            'humidity_last_measured_value',
-            'humidity_last_measured_timestamp',
-            'humidity_unit_of_measure',
-            'temperature_last_measured_value',
-            'temperature_last_measured_timestamp',
-            'temperature_unit_of_measure'
+
+            'humidity',
+            'temperature',
         )
 
     def get_data_interval_in_minutes(self, obj):
@@ -120,19 +110,20 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
 
     def get_last_measured_instrument_type_of(self, obj):
         instrument = obj.last_measured_instrument
-        return instrument.get_pretty_instrument_type_of()
-
-    def get_last_measured_instrument_id(self, obj):
-        instrument = obj.last_measured_instrument
-        return instrument.id
+        try:
+            return instrument.get_pretty_instrument_type_of()
+        except Exception as e:
+            return None;
 
     def get_humidity(self, obj):
         humidity_instrument = obj.humidity_instrument
+        return humidity_instrument.statistics
         s = DeviceInstrumentSerializer(humidity_instrument, many=False)
         return s.data
 
     def get_temperature(self, obj):
         temperature_instrument = obj.temperature_instrument
+        return temperature_instrument.statistics
         s = DeviceInstrumentSerializer(temperature_instrument, many=False)
         return s.data
 
