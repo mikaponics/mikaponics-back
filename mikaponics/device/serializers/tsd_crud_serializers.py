@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 class TimeSeriesDatumCreateSerializer(serializers.Serializer):
     # Primary fields.
-    instrument_uuid = serializers.UUIDField(required=True)
+    instrument_uuid = serializers.UUIDField(required=True, write_only=True)
     value = serializers.FloatField(required=True)
     unix_timestamp = serializers.CharField(required=True, allow_blank=False)
 
@@ -147,13 +147,13 @@ class TimeSeriesDatumCreateSerializer(serializers.Serializer):
 
 
 class TimeSeriesDataListSerializer(serializers.Serializer):
-    instrument_uuid = serializers.UUIDField(source="instrument.uuid")
+    instrument_slug = serializers.SlugField(source="instrument.slug")
     value = serializers.FloatField()
     timestamp = serializers.DateTimeField()
 
     class Meta:
         fields = (
-            'instrument_uuid',
+            'instrument_slug',
             'value',
             'timestamp',
         )

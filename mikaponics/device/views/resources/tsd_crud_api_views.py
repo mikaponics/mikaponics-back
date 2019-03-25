@@ -56,9 +56,25 @@ class TimeSeriesDataListCreateAPIView(generics.ListCreateAPIView):
         """
         List
         """
-        queryset = TimeSeriesDatum.objects.filter(
-            instrumente__device__user=request.user
-        ).order_by('-id')
+        # STEP 1:
+        # Check to see if there are any URL parameters and extract the `slug`
+        # value used to filter the user's data.
+        slug = self.request.query_params.get('slug', None)
+
+        # STEP 2:
+        # Either we filter by the instrument `slug` value or else return all
+        # the time series data belonging to the `user` account.
+        if slug is not None:
+            queryset = TimeSeriesDatum.objects.filter(
+                instrument__slug=slug
+            ).order_by('-id')
+        else:
+            queryset = TimeSeriesDatum.objects.filter(
+                instrument__device__user=self.request.user
+            ).order_by('-id')
+
+        # STEP 3:
+        # Take the queryset and apply the joins to increase performance.
         s = self.get_serializer_class()
         queryset = s.setup_eager_loading(self, queryset)
         return queryset
