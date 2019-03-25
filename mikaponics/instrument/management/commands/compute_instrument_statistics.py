@@ -70,7 +70,8 @@ class Command(BaseCommand):
             return
 
         latest_measured_value = latest_datum.value if latest_datum else None
-        latest_measured_at_utc = latest_datum.timestamp if latest_datum else None
+        latest_measured_at = latest_datum.timestamp if latest_datum else None
+        latest_measured_unit_of_measure = latest_datum.get_unit_of_measure() if latest_datum else None
 
         # Generate our statistics for the specific date-time ranges.
         last_24h_statistics = self.compute_statistics(instrument, utc_now_minus_24h, utc_now)
@@ -82,40 +83,24 @@ class Command(BaseCommand):
         # print(last_48h_statistics)
         # print(last_72h_statistics)
 
-        # Combine all our statistics into a single variable.
-        statistics = {
-            # ----------------------------| v1.0 |------------------------------
-            # General information.
-            'generated_at_utc': str(timezone.now()),
-            'unit_of_measure': instrument.get_unit_of_measure(),
-            'slug': instrument.slug,
-            'absolute_url': instrument.get_absolute_url(),
-            'absolute_parent_url': instrument.device.get_absolute_url(),
+        # Latest values
+        instrument.last_measured_value = latest_measured_value
+        instrument.last_measured_at = latest_measured_at
+        instrument.last_measured_unit_of_measure = latest_measured_unit_of_measure
 
-            # Latest values
-            'last_measured_value': latest_measured_value,
-            'last_measured_at_utc': str(latest_measured_at_utc),
-
-            # Last 24h statistics.
-            'last_24h_min_value': last_24h_statistics.get('min_value', None),
-            'last_24h_min_timestamp_at_utc': last_24h_statistics.get('min_timestamp_utc', None),
-            'last_24h_max_value': last_24h_statistics.get('max_value', None),
-            'last_24h_max_timestamp_at_utc': last_24h_statistics.get('max_timestamp_utc', None),
-            'last_24h_mean_value': last_24h_statistics.get('mean_value', None),
-            'last_24h_median_value': last_24h_statistics.get('median_value', None),
-            'last_24h_mode_value': last_24h_statistics.get('mode_value', None),
-            'last_24h_mode_values': last_24h_statistics.get('mode_values', None),
-            'last_24h_range_value': last_24h_statistics.get('range_value', None),
-            'last_24h_stedv_value': last_24h_statistics.get('stedv_value', None),
-            'last_24h_variance_value': last_24h_statistics.get('variance_value', None),
-            'last_24h_median_value': last_24h_statistics.get('median_value', None),
-        }
-
-        # For debugging purposes only.
-        # print(statistics)
-
-        # Save our unified statistics.
-        instrument.statistics = statistics
+        # Last 24h statistics.
+        instrument.last_24h_min_value' = last_24h_statistics.get('min_value', None)
+        instrument.last_24h_min_timestamp_at_utc' = last_24h_statistics.get('min_timestamp_utc', None)
+        instrument.last_24h_max_value' = last_24h_statistics.get('max_value', None)
+        instrument.last_24h_max_timestamp_at_utc' = last_24h_statistics.get('max_timestamp_utc', None)
+        instrument.last_24h_mean_value' = last_24h_statistics.get('mean_value', None)
+        instrument.last_24h_median_value' = last_24h_statistics.get('median_value', None)
+        instrument.last_24h_mode_value' = last_24h_statistics.get('mode_value', None)
+        instrument.last_24h_mode_values' = last_24h_statistics.get('mode_values', None)
+        instrument.last_24h_range_value' = last_24h_statistics.get('range_value', None)
+        instrument.last_24h_stedv_value' = last_24h_statistics.get('stedv_value', None)
+        instrument.last_24h_variance_value' = last_24h_statistics.get('variance_value', None)
+        instrument.last_24h_median_value' = last_24h_statistics.get('median_value', None)
         instrument.save()
 
         # For debugging purposes only.

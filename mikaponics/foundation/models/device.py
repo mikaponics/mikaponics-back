@@ -178,23 +178,27 @@ class Device(models.Model):
         choices=DEVICE_STATE_CHOICES,
         editable=False, # Only device or web-app can change this state, not admin user!
     )
-    last_recorded_datum = models.ForeignKey(
-        "TimeSeriesDatum",
-        help_text=_('The last record datum for this device for any particular device instrument.'),
+    last_measured_value = models.FloatField(
+        _("Last measured value"),
+        help_text=_('The last measured value since operation.'),
         blank=True,
         null=True,
-        related_name="+", # Note: Uni-directional relationship.
-        on_delete=models.SET_NULL,
-        editable=False, # Note: Only device or web-app can change this state, not admin user!
+        editable=False,
     )
-    statistics = JSONField(
-        _("Statistics"),
-        help_text=_('The current operational statistics for this device.'),
+    last_measured_at = models.DateTimeField(
+        _("Last measured at"),
+        help_text=_('The datetime of the last measured value since operation.'),
         blank=True,
         null=True,
-        editable=False, # Note: Only instrument or web-app can change this value, not admin user!
+        editable=False,
     )
-
+    last_measured_unit_of_measure = models.FloatField(
+        _("Last measured unit of measure"),
+        help_text=_('The last measured unit of measure since operation.'),
+        blank=True,
+        null=True,
+        editable=False,
+    )
 
     #
     # Hardware Product Information
@@ -415,24 +419,22 @@ class Device(models.Model):
     def get_pretty_state(self):
         return dict(self.DEVICE_STATE_CHOICES).get(self.state)
 
+    def get_pretty_last_measured_value(self):
+        if self.last_measured_value:
+            return str(self.last_measured_value)+" "+self.last_measured_unit_of_measure
+        return _("No data available")
+
+    def get_pretty_last_measured_at(self):
+        if self.last_measured_at:
+            return str(self.last_measured_at)
+        return _("No data available")
+
     def invalidate(self, method_name):
         """
         Function used to clear the cache for the cached property functions.
         """
         try:
-            if method_name == 'last_measured_value':
-                del self.last_measured_value
-            elif method_name == 'last_measured_timestamp':
-                del self.last_measured_timestamp
-            elif method_name == 'last_measured_instrument':
-                del self.last_measured_instrument
-            elif method_name == 'pretty_last_measured_value':
-                del self.pretty_last_measured_value
-            elif method_name == 'pretty_last_measured_timestamp':
-                del self.pretty_last_measured_timestamp
-            elif method_name == 'pretty_last_measured_instrument':
-                del self.pretty_last_measured_instrument
-            elif method_name == 'humidity_instrument':
+            if method_name == 'humidity_instrument':
                 del self.humidity_instrument
             elif method_name == 'temperature_instrument':
                 del self.temperature_instrument
@@ -440,50 +442,6 @@ class Device(models.Model):
                 raise Exception("Method name not found.")
         except AttributeError:
             pass
-
-    @cached_property
-    def last_measured_value(self):
-        if self.last_recorded_datum:
-            return self.last_recorded_datum.value
-        return None
-
-    @cached_property
-    def last_measured_timestamp(self):
-        if self.last_recorded_datum:
-            naive_dt = self.last_recorded_datum.timestamp
-            utc_aware_dt = naive_dt.replace(tzinfo=pytz.utc)
-            return utc_aware_dt
-        return None
-
-    @cached_property
-    def last_measured_unit_of_measure(self):
-        if self.last_recorded_datum:
-            return self.last_recorded_datum.instrument.get_unit_of_measure()
-        return None
-
-    @cached_property
-    def last_measured_instrument(self):
-        if self.last_recorded_datum:
-            return self.last_recorded_datum.instrument
-        return None
-
-    @cached_property
-    def pretty_last_measured_value(self):
-        if self.last_recorded_datum:
-            return self.last_recorded_datum.get_pretty_value()
-        return None
-
-    @cached_property
-    def pretty_last_measured_timestamp(self):
-        if self.last_recorded_datum:
-            return self.last_recorded_datum.get_pretty_timestamp()
-        return None
-
-    @cached_property
-    def pretty_last_measured_instrument(self):
-        if self.last_recorded_datum:
-            return self.last_recorded_datum.get_pretty_instrument()
-        return None
 
     @cached_property
     def humidity_instrument(self):
@@ -501,15 +459,11 @@ class Device(models.Model):
 
     def set_last_recorded_datum(self, datum):
         # Update our value.
-        self.last_recorded_datum = datum
+        self.last_measured_value = datum.value
+        self.last_measured_at = datum.timestamp
+        self.last_measured_unit_of_measure = datum.get_unit_of_measure()
         self.save()
 
         # Clear our cache of previously saved values.
-        self.invalidate('last_measured_value')
-        self.invalidate('last_measured_timestamp')
-        self.invalidate('last_measured_instrument')
-        self.invalidate('pretty_last_measured_value')
-        self.invalidate('pretty_last_measured_timestamp')
-        self.invalidate('pretty_last_measured_instrument')
         self.invalidate('humidity_instrument')
         self.invalidate('temperature_instrument')

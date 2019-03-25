@@ -14,15 +14,36 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
-from foundation.models import Invoice, Product
+from foundation.models import Device, Invoice, Product
 
 
 logger = logging.getLogger(__name__)
 
 
+class DashboardDeviceListSerializer(serializers.ModelSerializer):
+    absolute_url = serializers.ReadOnlyField(source='get_absolute_url')
+    state = serializers.ReadOnlyField(source='get_pretty_state')
+    last_measured_pretty_value = serializers.ReadOnlyField(source='get_pretty_last_measured_value')
+    last_measured_pretty_at = serializers.ReadOnlyField(source='get_pretty_last_measured_at')
+
+    class Meta:
+        model = Device
+        fields = (
+            'name',
+            'description',
+            'state',
+            'last_measured_value',
+            'last_measured_pretty_value',
+            'last_measured_pretty_at',
+            'last_measured_at',
+            'last_measured_unit_of_measure',
+            'absolute_url',
+        )
+
+
 class DashboardSerializer(serializers.Serializer):
     timestamp = serializers.SerializerMethodField()
-    devices = serializers.SerializerMethodField()
+    devices = DashboardDeviceListSerializer(many=True)
 
     # Meta Information.
     class Meta:
@@ -32,16 +53,3 @@ class DashboardSerializer(serializers.Serializer):
 
     def get_timestamp(self, obj):
         return datetime.now(tz=pytz.utc).timestamp()
-
-    def get_devices(self, obj):
-        user = self.context['authenticated_by']
-        arr = []
-        for device in user.devices.all():
-            arr.append({
-                'name': "Your device" if device.name is '' else device.name,
-                'description': "Your device description goes here..." if device.description is '' else device.description,
-                'state': device.get_pretty_state(),
-                'last_measured_timestamp': device.pretty_last_measured_timestamp,
-                'absolute_url': device.get_absolute_url(),
-            })
-        return arr

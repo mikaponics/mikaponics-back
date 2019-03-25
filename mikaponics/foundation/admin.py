@@ -42,9 +42,8 @@ class DeviceAdmin(admin.ModelAdmin):
         'uuid', 'created_at', 'created_by', 'created_from',
         'created_from_is_public', 'last_modified_at', 'last_modified_by',
         'last_modified_from', 'last_modified_from_is_public', 'activated_at',
-        'name', 'description', 'last_measured_value', 'last_measured_timestamp',
-        'last_measured_instrument', 'get_environment_variables_file_url',
-        'statistics',
+        'name', 'description', 'last_measured_value', 'last_measured_at',
+        'last_measured_unit_of_measure', 'get_environment_variables_file_url',
     ]
 
     def save_model(self, request, obj, form, change):
@@ -77,7 +76,7 @@ class InstrumentAdmin(admin.ModelAdmin):
         'id', 'uuid', 'created_at', 'created_by', 'created_from',
         'created_from_is_public', 'last_modified_at', 'last_modified_by',
         'last_modified_from', 'last_modified_from_is_public',
-        'last_measured_value', 'last_measured_timestamp', 'statistics',
+        'last_measured_value', 'last_measured_at',
     ]
 
     def save_model(self, request, obj, form, change):

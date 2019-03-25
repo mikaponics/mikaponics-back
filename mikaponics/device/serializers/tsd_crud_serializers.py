@@ -114,8 +114,12 @@ class TimeSeriesDatumCreateSerializer(serializers.Serializer):
         )
 
         # Update our device / instrument with our latest record.
-        instrument.set_last_recorded_datum(time_series_datum)
-        instrument.device.set_last_recorded_datum(time_series_datum)
+        instrument.last_measured_value = time_series_datum.value
+        instrument.last_measured_at = time_series_datum.timestamp
+        instrument.last_measured_unit_of_measure = time_series_datum.get_unit_of_measure()
+        instrument.device.last_measured_value = time_series_datum.value
+        instrument.device.last_measured_at = time_series_datum.timestamp
+        instrument.device.last_measured_unit_of_measure = time_series_datum.get_unit_of_measure()
 
         # Update the device state and fill out our audit details.
         instrument.device.state = Device.DEVICE_STATE.ONLINE

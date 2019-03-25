@@ -43,16 +43,26 @@ class DeviceListCreateSerializer(serializers.ModelSerializer):
 
 
 class DeviceInstrumentSerializer(serializers.ModelSerializer):
-    uuid = serializers.ReadOnlyField()
+    absolute_url = serializers.ReadOnlyField(source='get_absolute_url')
+    absolute_parent_url = serializers.ReadOnlyField(source='get_absolute_parent_url')
     unit_of_measure = serializers.ReadOnlyField(source='get_unit_of_measure')
+    state = serializers.ReadOnlyField(source='get_pretty_state')
+    last_measured_pretty_value = serializers.ReadOnlyField(source='get_pretty_last_measured_value')
+    last_measured_pretty_at = serializers.ReadOnlyField(source='get_pretty_last_measured_at')
+    slug = serializers.SlugField()
 
     class Meta:
         model = Instrument
         fields = (
-            'uuid',
+            'absolute_url',
+            'absolute_parent_url',
             'last_measured_value',
-            'last_measured_timestamp',
+            'last_measured_at',
             'unit_of_measure',
+            'last_measured_pretty_value',
+            'last_measured_pretty_at',
+            'state',
+            'slug',
         )
 
 
@@ -66,10 +76,8 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
     state = serializers.SerializerMethodField()
     slug = serializers.ReadOnlyField()
 
-    last_measured_value = serializers.SerializerMethodField()
-    last_measured_timestamp = serializers.SerializerMethodField()
-    last_measured_instrument_type_of = serializers.SerializerMethodField()
-    last_measured_unit_of_measure = serializers.SerializerMethodField()
+    last_measured_pretty_value = serializers.ReadOnlyField(source='get_pretty_last_measured_value')
+    last_measured_pretty_at = serializers.ReadOnlyField(source='get_pretty_last_measured_at')
 
     humidity = serializers.SerializerMethodField()
     temperature = serializers.SerializerMethodField()
@@ -84,10 +92,12 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
             'data_interval_in_minutes',
             'state',
             'slug',
+
             'last_measured_value',
-            'last_measured_timestamp',
+            'last_measured_at',
             'last_measured_unit_of_measure',
-            'last_measured_instrument_type_of',
+            'last_measured_pretty_value',
+            'last_measured_pretty_at',
 
             'humidity',
             'temperature',
@@ -99,31 +109,13 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
     def get_state(self, obj):
         return obj.get_pretty_state()
 
-    def get_last_measured_value(self, obj):
-        return obj.last_measured_value
-
-    def get_last_measured_timestamp(self, obj):
-        return obj.last_measured_timestamp
-
-    def get_last_measured_unit_of_measure(self, obj):
-        return obj.last_measured_unit_of_measure;
-
-    def get_last_measured_instrument_type_of(self, obj):
-        instrument = obj.last_measured_instrument
-        try:
-            return instrument.get_pretty_instrument_type_of()
-        except Exception as e:
-            return None;
-
     def get_humidity(self, obj):
         humidity_instrument = obj.humidity_instrument
-        return humidity_instrument.statistics
         s = DeviceInstrumentSerializer(humidity_instrument, many=False)
         return s.data
 
     def get_temperature(self, obj):
         temperature_instrument = obj.temperature_instrument
-        return temperature_instrument.statistics
         s = DeviceInstrumentSerializer(temperature_instrument, many=False)
         return s.data
 

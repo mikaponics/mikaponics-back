@@ -156,21 +156,103 @@ class Instrument(models.Model):
         choices=INSTRUMENT_STATE_CHOICES,
         editable=False, # Note: Only instrument or web-app can change this state, not admin user!
     )
-    last_recorded_datum = models.ForeignKey(
-        "TimeSeriesDatum",
-        help_text=_('The last record datum for this instrument.'),
+    last_measured_value = models.FloatField(
+        _("Last measured value"),
+        help_text=_('The last measured value since operation.'),
         blank=True,
         null=True,
-        related_name="+", # Note: Uni-directional relationship.
-        on_delete=models.SET_NULL,
-        editable=False, # Note: Only instrument or web-app can change this value, not admin user!
+        editable=False,
     )
-    statistics = JSONField(
-        _("Statistics"),
-        help_text=_('The current operational statistics for this instrument.'),
+    last_measured_at = models.DateTimeField(
+        _("Last measured at"),
+        help_text=_('The datetime of the last measured value since operation.'),
         blank=True,
         null=True,
-        editable=False, # Note: Only instrument or web-app can change this value, not admin user!
+        editable=False,
+    )
+    last_24h_min_value = models.FloatField(
+        _("Last 24h minimum value"),
+        help_text=_('The lastest measured minimum value within the last 24 hours of operation.'),
+        blank=True,
+        null=True,
+        editable=False,
+    )
+    last_24h_min_timestamp_at = models.DateTimeField(
+        _("Last 24h minimum datetime"),
+        help_text=_('The datetime of the last 24h measured minimum value since operation.'),
+        blank=True,
+        null=True,
+        editable=False,
+    )
+    last_24h_max_value = models.FloatField(
+        _("Last 24h maximum value"),
+        help_text=_('The lastest measured maximum value within the last 24 hours of operation.'),
+        blank=True,
+        null=True,
+        editable=False,
+    )
+    last_24h_max_timestamp_at = models.DateTimeField(
+        _("Last 24h maximum datetime"),
+        help_text=_('The datetime of the last 24h measured maximum value since operation.'),
+        blank=True,
+        null=True,
+        editable=False,
+    )
+    last_24h_mean_value = models.FloatField(
+        _("Last 24h mean value"),
+        help_text=_('The latest measured mean value within the last 24 hours of operation.'),
+        blank=True,
+        null=True,
+        editable=False,
+    )
+    last_24h_median_value = models.FloatField(
+        _("Last 24h median value"),
+        help_text=_('The latest measured median value within the last 24 hours of operation.'),
+        blank=True,
+        null=True,
+        editable=False,
+    )
+    last_24h_mode_value = models.FloatField(
+        _("Last 24h mode value"),
+        help_text=_('The latest measured mode value within the last 24 hours of operation.'),
+        blank=True,
+        null=True,
+        editable=False,
+    )
+    last_24h_mode_values = JSONField(
+        _("last 24h mode values"),
+        help_text=_('The latest measured mode values within the last 24 hours of operation.'),
+        blank=True,
+        null=True,
+        editable=False,
+    )
+    last_24h_range_value = models.FloatField(
+        _("Last 24h range value"),
+        help_text=_('The latest measured range value within the last 24 hours of operation.'),
+        blank=True,
+        null=True,
+        editable=False,
+    )
+    last_24h_stedv_value = models.FloatField(
+        _("last_24h_stedv_value"),
+        help_text=_('The value of the datum.'),
+        blank=True,
+        null=True,
+        editable=False,
+    )
+    last_24h_variance_value = models.FloatField(
+        _("last_24h_variance_value"),
+        help_text=_('The value of the datum.'),
+        blank=True,
+        null=True,
+        editable=False,
+    )
+    last_24h_median_value = models.FloatField(
+        _("last_24h_median_value"),
+        help_text=_('The value of the datum.'),
+        blank=True,
+        null=True,
+        editable=False,
     )
 
     #
@@ -373,11 +455,27 @@ class Instrument(models.Model):
     def __str__(self):
         return self.slug
 
+    def get_pretty_state(self):
+        return dict(self.INSTRUMENT_STATE_CHOICES).get(self.state)
+
+    def get_pretty_last_measured_value(self):
+        if self.last_measured_value:
+            return str(self.last_measured_value)+" "+self.get_unit_of_measure()
+        return _("No data available")
+
+    def get_pretty_last_measured_at(self):
+        if self.last_measured_at:
+            return str(self.last_measured_at)
+        return _("No data available")
+
     def get_pretty_instrument_type_of(self):
         return dict(self.INSTRUMENT_TYPE_OF_CHOICES).get(self.type_of)
 
     def get_absolute_url(self):
         return "/instrument/"+str(self.slug)
+
+    def get_absolute_parent_url(self):
+        return self.device.get_absolute_url()
 
     def get_unit_of_measure(self):
         if self.type_of == Instrument.INSTRUMENT_TYPE.HUMIDITY:
@@ -396,63 +494,15 @@ class Instrument(models.Model):
             return "thermometer-three-quarters"
         return ""
 
-    def invalidate(self, method_name):
-        """
-        Function used to clear the cache for the cached property functions.
-        """
-        try:
-            if method_name == 'last_measured_value':
-                del self.last_measured_value
-            elif method_name == 'last_measured_timestamp':
-                del self.last_measured_timestamp
-            elif method_name == 'pretty_last_measured_value':
-                del self.pretty_last_measured_value
-            elif method_name == 'pretty_last_measured_timestamp':
-                del self.pretty_last_measured_timestamp
-            else:
-                raise Exception("Method name not found.")
-        except AttributeError:
-            pass
-
     def get_pretty_instrument_type_of(self):
         return dict(self.INSTRUMENT_TYPE_OF_CHOICES).get(self.type_of)
 
-    @cached_property
-    def last_measured_value(self):
-        if self.last_recorded_datum:
-            return self.last_recorded_datum.value
-        return None
-
-    @cached_property
-    def last_measured_timestamp(self):
-        if self.last_recorded_datum:
-            naive_dt = self.last_recorded_datum.timestamp
-            utc_aware_dt = naive_dt.replace(tzinfo=pytz.utc)
-            return utc_aware_dt
-        return None
-
-    @cached_property
-    def pretty_last_measured_value(self):
-        if self.last_recorded_datum:
-            return self.last_recorded_datum.get_pretty_value()
-        return None
-
-    @cached_property
-    def pretty_last_measured_timestamp(self):
-        if self.last_recorded_datum:
-            return self.last_recorded_datum.get_pretty_timestamp()
-        return None
-
     def set_last_recorded_datum(self, datum):
         # Update our value.
-        self.last_recorded_datum = datum
+        self.last_measured_value = datum.value
+        self.last_measured_at = datum.timestamp
+        self.last_measured_unit_of_measure = datum.get_unit_of_measure()
         self.save()
-
-        # Clear our cache of previously saved values.
-        self.invalidate('last_measured_value')
-        self.invalidate('last_measured_timestamp')
-        self.invalidate('pretty_last_measured_value')
-        self.invalidate('pretty_last_measured_timestamp')
 
     def get_alert_state_by_datum(self, datum):
         """

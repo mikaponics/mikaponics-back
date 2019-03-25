@@ -79,9 +79,12 @@ class Command(BaseCommand):
 
                 # Step 5: Save the last recorded value.
                 last_datum = tsd[0]
-                instrument.last_recorded_datum = last_datum
+                instrument.last_measured_value = last_datum.value
+                instrument.last_measured_timestamp = last_datum.timestamp
                 instrument.save()
-                device.last_recorded_datum = last_datum
+                device.last_measured_value = last_datum.value
+                device.last_measured_at = last_datum.timestamp
+                device.last_measured_unit_of_measure = last_datum.get_unit_of_measure()
                 device.save()
 
         # For debugging purposes.

@@ -139,6 +139,9 @@ class TimeSeriesDatum(models.Model):
     def __str__(self):
         return str(self.id)
 
+    def get_unit_of_measure(self):
+        return self.instrument.get_unit_of_measure()
+
     def get_pretty_value(self):
         """
         Function will add the unit of measurement with the value
