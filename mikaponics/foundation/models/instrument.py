@@ -363,10 +363,15 @@ class Instrument(models.Model):
             else:
                 self.slug = "instrument-"+get_random_string(length=32)
 
+            # Attach the instrument type to the slug.
+            self.slug = self.slug +" - "+self.get_pretty_instrument_type_of()
+            self.slug = self.slug.lower()
+
+        # Call the parent class and load the default the save functionality.
         super(Instrument, self).save(*args, **kwargs)
 
     def __str__(self):
-        return "#"+str(self.id)+" - "+str(self.get_pretty_instrument_type_of())
+        return self.slug
 
     def get_pretty_instrument_type_of(self):
         return dict(self.INSTRUMENT_TYPE_OF_CHOICES).get(self.type_of)

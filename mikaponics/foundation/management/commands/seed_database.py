@@ -55,8 +55,16 @@ class Command(BaseCommand):
             )
             devices = Device.objects.seed(user, product, numb_of_devices)
 
-            # Step 3: Create our instruments per device.
+            # Iterate through the devices and update them.
             for device in devices:
+                device.hardware_manufacturer = "Raspberry Pi Foundation"
+                device.hardware_product_name = "Raspberry Pi 3 Model B+"
+                device.hardware_produt_id = "PI3P"
+                device.hardware_product_serial = "0000000000000000"
+                device.save()
+
+                # Step 3: Create our instruments per device.
+
                 # NOTE: 1 & 2 are the unique `type_of` values.
                 for type_of in [1,2]:
                     self.stdout.write(
@@ -65,7 +73,13 @@ class Command(BaseCommand):
                     instrument = Instrument.objects.create(
                         device = device,
                         type_of = type_of,
-                        configuration = {},
+                        configuration = {"serial_number": 538319, "channel_number": 0, "hub_port_number": 0},
+                        hardware_manufacturer="Phidgets Inc.",
+                        hardware_product_name="Humidity Phidget",
+                        hardware_produt_id="HUM1000_0",
+                        hardware_product_serial="538319",
+                        # max_value=
+                        # min_value=
                     )
 
                     # Step 4: Create our time-series data per instrument.

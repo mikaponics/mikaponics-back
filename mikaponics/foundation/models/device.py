@@ -402,7 +402,7 @@ class Device(models.Model):
         super(Device, self).save(*args, **kwargs)
 
     def __str__(self):
-        return "UID: #"+str(self.user.id)+" | ID: #"+str(self.id)+" | Created: "+str(self.created_at)
+        return self.slug
 
     def get_absolute_url(self):
         return "/device/"+str(self.slug)

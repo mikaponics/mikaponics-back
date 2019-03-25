@@ -66,7 +66,7 @@ class Command(BaseCommand):
                 instrument = Instrument.objects.create(
                     device = device,
                     type_of = type_of,
-                    configuration = {},
+                    configuration = {"serial_number": 538319, "channel_number": 0, "hub_port_number": 0},
                 )
 
                 # Step 4: Create our time-series data per instrument.
