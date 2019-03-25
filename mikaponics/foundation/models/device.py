@@ -192,9 +192,10 @@ class Device(models.Model):
         null=True,
         editable=False,
     )
-    last_measured_unit_of_measure = models.FloatField(
+    last_measured_unit_of_measure = models.CharField(
         _("Last measured unit of measure"),
         help_text=_('The last measured unit of measure since operation.'),
+        max_length=7,
         blank=True,
         null=True,
         editable=False,
