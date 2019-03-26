@@ -18,7 +18,7 @@ from device.permissions import (
     CanListCreateTimeSeriesDatumPermission,
     CanRetrieveUpdateDestroyTimeSeriesDatumPermission
 )
-from foundation.pagination import LargeResultsSetPagination
+from foundation.pagination import StandardResultsSetPagination
 from foundation.models import TimeSeriesDatum
 
 
@@ -37,7 +37,7 @@ class TimeSeriesDataListCreateAPIView(generics.ListCreateAPIView):
     """
 
     # filter_class = TimeSeriesDatumFilter
-    pagination_class = LargeResultsSetPagination
+    pagination_class = StandardResultsSetPagination
     authentication_classes= (OAuth2Authentication,)
     permission_classes = (
         permissions.IsAuthenticated,
