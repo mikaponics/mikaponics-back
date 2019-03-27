@@ -64,15 +64,21 @@ class DeviceRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
         # IsAuthenticatedAndIsActivePermission,
         # CanRetrieveUpdateDestroyDevicePermission
     )
+    parser_classes = (
+        parsers.FormParser,
+        parsers.MultiPartParser,
+        parsers.JSONParser,
+    )
+    renderer_classes = (renderers.JSONRenderer,)
 
     @transaction.atomic
     def get(self, request, slug=None):
         """
         Retrieve
         """
-        skill_set = get_object_or_404(Device, slug=slug)
-        self.check_object_permissions(request, skill_set)  # Validate permissions.
-        serializer = DeviceRetrieveUpdateDestroySerializer(skill_set, many=False)
+        device = get_object_or_404(Device, slug=slug)
+        self.check_object_permissions(request, device)  # Validate permissions.
+        serializer = DeviceRetrieveUpdateDestroySerializer(device, many=False)
         return Response(
             data=serializer.data,
             status=status.HTTP_200_OK
@@ -83,21 +89,30 @@ class DeviceRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
         """
         Update
         """
-        skill_set = get_object_or_404(Device, slug=slug)
-        self.check_object_permissions(request, skill_set)  # Validate permissions.
-        serializer = DeviceRetrieveUpdateDestroySerializer(skill_set, data=request.data)
+        device = get_object_or_404(Device, slug=slug)
+        self.check_object_permissions(request, device)  # Validate permissions.
+        serializer = DeviceRetrieveUpdateDestroySerializer(device, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
+
+        # Refresh the recently updated model.
+        device.refresh_from_db()
+
+        # Return our serialized device.
+        s = DeviceRetrieveUpdateDestroySerializer(device, many=False)
+        return Response(
+            data=s.data,
+            status=status.HTTP_200_OK
+        )
 
     @transaction.atomic
     def delete(self, request, slug=None):
         """
         Delete
         """
-        skill_set = get_object_or_404(Device, slug=slug)
-        self.check_object_permissions(request, skill_set)  # Validate permissions.
-        skill_set.delete()
+        device = get_object_or_404(Device, slug=slug)
+        self.check_object_permissions(request, device)  # Validate permissions.
+        device.delete()
         return Response(data=[], status=status.HTTP_200_OK)
 
 
@@ -125,26 +140,26 @@ class DeviceProfileAPIView(generics.RetrieveUpdateDestroyAPIView):
     renderer_classes = (renderers.JSONRenderer,)
 
     @transaction.atomic
-    def get(self, request, device_uuid=None):
+    def get(self, request, slug=None):
         """
         Retrieve
         """
-        skill_set = get_object_or_404(Device, uuid=device_uuid)
-        self.check_object_permissions(request, skill_set)  # Validate permissions.
-        serializer = DeviceProfileSerializer(skill_set, many=False)
+        device = get_object_or_404(Device, slug=slug)
+        self.check_object_permissions(request, device)  # Validate permissions.
+        serializer = DeviceProfileSerializer(device, many=False)
         return Response(
             data=serializer.data,
             status=status.HTTP_200_OK
         )
 
     @transaction.atomic
-    def put(self, request, device_uuid=None):
+    def put(self, request, slug=None):
         """
         Update
         """
-        skill_set = get_object_or_404(Device, uuid=device_uuid)
-        self.check_object_permissions(request, skill_set)  # Validate permissions.
-        serializer = DeviceProfileSerializer(skill_set, data=request.data)
+        device = get_object_or_404(Device, slug=slug)
+        self.check_object_permissions(request, device)  # Validate permissions.
+        serializer = DeviceProfileSerializer(device, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)

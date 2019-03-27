@@ -69,6 +69,14 @@ class DeviceInstrumentSerializer(serializers.ModelSerializer):
 class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
     uuid = serializers.ReadOnlyField()
     activated_at = serializers.ReadOnlyField()
+    name = serializers.CharField(
+        required=True,
+        allow_blank=False,
+    )
+    description = serializers.CharField(
+        required=True,
+        allow_blank=False,
+    )
     data_interval_in_seconds = serializers.IntegerField(
         required=True,
     )
@@ -88,6 +96,8 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
             'uuid',
             'activated_at',
             'timezone',
+            'name',
+            'description',
             'data_interval_in_seconds',
             'data_interval_in_minutes',
             'state',
@@ -104,20 +114,48 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
         )
 
     def get_data_interval_in_minutes(self, obj):
-        return obj.data_interval_in_seconds / 60.0
+        try:
+            return obj.data_interval_in_seconds / 60.0
+        except Exception as e:
+            return None
 
     def get_state(self, obj):
-        return obj.get_pretty_state()
+        try:
+            return obj.get_pretty_state()
+        except Exception as e:
+            return None
 
     def get_humidity(self, obj):
-        humidity_instrument = obj.humidity_instrument
-        s = DeviceInstrumentSerializer(humidity_instrument, many=False)
-        return s.data
+        try:
+            humidity_instrument = obj.humidity_instrument
+            s = DeviceInstrumentSerializer(humidity_instrument, many=False)
+            return s.data
+        except Exception as e:
+            return None
 
     def get_temperature(self, obj):
-        temperature_instrument = obj.temperature_instrument
-        s = DeviceInstrumentSerializer(temperature_instrument, many=False)
-        return s.data
+        try:
+            temperature_instrument = obj.temperature_instrument
+            s = DeviceInstrumentSerializer(temperature_instrument, many=False)
+            return s.data
+        except Exception as e:
+            return None
+
+
+    def update(self, instance, validated_data):
+        """
+        Override this function to include extra functionality.
+        """
+        instance.name = validated_data.get('name', instance.name)
+        instance.description = validated_data.get('description', instance.description)
+        instance.data_interval_in_seconds = validated_data.get('data_interval_in_seconds', instance.data_interval_in_seconds)
+        instance.save()
+        # instance.invoice.invalidate('total')
+        return validated_data
+
+    def delete(self, instance):
+        instance.delete()
+
 
 
 class DeviceProfileSerializer(serializers.ModelSerializer):
