@@ -89,18 +89,18 @@ class Command(BaseCommand):
         instrument.last_measured_unit_of_measure = latest_measured_unit_of_measure
 
         # Last 24h statistics.
-        instrument.last_24h_min_value' = last_24h_statistics.get('min_value', None)
-        instrument.last_24h_min_timestamp_at_utc' = last_24h_statistics.get('min_timestamp_utc', None)
-        instrument.last_24h_max_value' = last_24h_statistics.get('max_value', None)
-        instrument.last_24h_max_timestamp_at_utc' = last_24h_statistics.get('max_timestamp_utc', None)
-        instrument.last_24h_mean_value' = last_24h_statistics.get('mean_value', None)
-        instrument.last_24h_median_value' = last_24h_statistics.get('median_value', None)
-        instrument.last_24h_mode_value' = last_24h_statistics.get('mode_value', None)
-        instrument.last_24h_mode_values' = last_24h_statistics.get('mode_values', None)
-        instrument.last_24h_range_value' = last_24h_statistics.get('range_value', None)
-        instrument.last_24h_stedv_value' = last_24h_statistics.get('stedv_value', None)
-        instrument.last_24h_variance_value' = last_24h_statistics.get('variance_value', None)
-        instrument.last_24h_median_value' = last_24h_statistics.get('median_value', None)
+        instrument.last_24h_min_value = last_24h_statistics.get('min_value', None)
+        instrument.last_24h_min_timestamp_at_utc = last_24h_statistics.get('min_timestamp_utc', None)
+        instrument.last_24h_max_value = last_24h_statistics.get('max_value', None)
+        instrument.last_24h_max_timestamp_at_utc = last_24h_statistics.get('max_timestamp_utc', None)
+        instrument.last_24h_mean_value = last_24h_statistics.get('mean_value', None)
+        instrument.last_24h_median_value = last_24h_statistics.get('median_value', None)
+        instrument.last_24h_mode_value = last_24h_statistics.get('mode_value', None)
+        instrument.last_24h_mode_values = last_24h_statistics.get('mode_values', None)
+        instrument.last_24h_range_value = last_24h_statistics.get('range_value', None)
+        instrument.last_24h_stedv_value = last_24h_statistics.get('stedv_value', None)
+        instrument.last_24h_variance_value = last_24h_statistics.get('variance_value', None)
+        instrument.last_24h_median_value = last_24h_statistics.get('median_value', None)
         instrument.save()
 
         # For debugging purposes only.

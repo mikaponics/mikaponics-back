@@ -66,7 +66,7 @@ class Command(BaseCommand):
         If the device last updated time was less then the specified amount
         then we need to set the status of the device to be offline.
         """
-        last_measured_utc_timestamp = device.last_measured_timestamp
+        last_measured_utc_timestamp = device.last_measured_at
 
         '''
         Process online devices.
