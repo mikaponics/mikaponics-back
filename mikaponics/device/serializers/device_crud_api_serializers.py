@@ -146,10 +146,20 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
         """
         Override this function to include extra functionality.
         """
+        # Get our context data.
+        authenticated_user = self.context['authenticated_user']
+        authenticated_user_from = self.context['authenticated_user_from']
+        authenticated_user_from_is_public = self.context['authenticated_user_from_is_public']
+
+        # Save our inputted & context data.
         instance.name = validated_data.get('name', instance.name)
         instance.description = validated_data.get('description', instance.description)
         instance.data_interval_in_seconds = validated_data.get('data_interval_in_seconds', instance.data_interval_in_seconds)
+        instance.last_modified_by = authenticated_user
+        instance.last_modified_from = authenticated_user_from
+        instance.last_modified_from_is_public = authenticated_user_from_is_public
         instance.save()
+        
         # instance.invoice.invalidate('total')
         return validated_data
 

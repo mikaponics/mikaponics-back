@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import django_filters
+from ipware import get_client_ip
 from django_filters import rest_framework as filters
 from django.conf.urls import url, include
 from django.db import transaction
@@ -91,7 +92,12 @@ class DeviceRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
         """
         device = get_object_or_404(Device, slug=slug)
         self.check_object_permissions(request, device)  # Validate permissions.
-        serializer = DeviceRetrieveUpdateDestroySerializer(device, data=request.data)
+        client_ip, is_routable = get_client_ip(self.request)
+        serializer = DeviceRetrieveUpdateDestroySerializer(device, data=request.data, context={
+            'authenticated_user': request.user,
+            'authenticated_user_from': client_ip,
+            'authenticated_user_from_is_public': is_routable,
+        })
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
@@ -99,7 +105,11 @@ class DeviceRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
         device.refresh_from_db()
 
         # Return our serialized device.
-        s = DeviceRetrieveUpdateDestroySerializer(device, many=False)
+        s = DeviceRetrieveUpdateDestroySerializer(device, many=False, context={
+            'authenticated_user': request.user,
+            'authenticated_user_from': client_ip,
+            'authenticated_user_from_is_public': is_routable,
+        })
         return Response(
             data=s.data,
             status=status.HTTP_200_OK
