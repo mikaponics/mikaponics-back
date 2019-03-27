@@ -4,7 +4,7 @@ from instrument import views
 
 
 urlpatterns = (
-    path('data/csv',
+    path('api/data/csv',
         views.time_series_data_streaming_csv_view,
         name='mikaponics_download_data_api_endpoint'
     ),

@@ -39,22 +39,22 @@ def time_series_data_streaming_csv_view(request):
     # Get our user parameters.
     naive_from_dt = request.GET.get('from_dt', None)
     naive_to_dt = request.GET.get('to_dt', None)
-    instrument_id = request.GET.get('instrument_id', None)
+    instrument_slug = request.GET.get('instrument_slug', None)
 
     # Defensive code:
     if naive_from_dt is None:
         raise SuspiciousOperation("Invalid request - you must include `naive_from_dt` URL parameter.")
     if naive_to_dt is None:
         raise SuspiciousOperation("Invalid request - you must include `naive_to_dt` URL parameter.")
-    if instrument_id is None:
-        raise SuspiciousOperation("Invalid request - you must include `instrument_id` URL parameter.")
+    if instrument_slug is None:
+        raise SuspiciousOperation("Invalid request - you must include `instrument_slug` URL parameter.")
 
     # Convert our datatime `string` into a `datatime` object.
     naive_from_dt = parser.parse(naive_from_dt)
     naive_to_dt = parser.parse(naive_to_dt)
 
     # Get the instrument.
-    instrument = Instrument.objects.filter(id=int(instrument_id)).first()
+    instrument = Instrument.objects.filter(slug=instrument_slug).first()
 
     # Convert our naive datetimes to the aware datetimes based on the specific
     # timezone of the tenant.
