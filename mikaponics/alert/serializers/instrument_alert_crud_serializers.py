@@ -41,6 +41,14 @@ class InstrumentAlertListSerializer(serializers.ModelSerializer):
 
     def get_state(self, obj):
         return obj.get_pretty_state()
+
+    def setup_eager_loading(cls, queryset):
+        """ Perform necessary eager loading of data. """
+        queryset = queryset.prefetch_related(
+            'instrument',
+            'instrument__device',
+        )
+        return queryset
 #
 #
 # class InstrumentRetrieveUpdateSerializer(serializers.ModelSerializer):

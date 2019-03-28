@@ -27,8 +27,8 @@ class InstrumentAlertsListAPIView(generics.ListAPIView):
 
     @transaction.atomic
     def get_queryset(self):
-        """
-        List
-        """
         queryset = InstrumentAlert.objects.all()
-        return queryset
+
+        # Take the queryset and apply the joins to increase performance.
+        s = self.get_serializer_class()
+        return s.setup_eager_loading(self, queryset)
