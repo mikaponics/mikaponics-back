@@ -17,10 +17,22 @@ from foundation.models import InstrumentAlert
 class InstrumentAlertListSerializer(serializers.ModelSerializer):
 
     state = serializers.SerializerMethodField()
+    device_name = serializers.CharField(read_only=True, source="instrument.device.name")
+    device_slug = serializers.SlugField(read_only=True, source="instrument.device.slug")
+    device_absolute_url = serializers.SlugField(read_only=True, source="instrument.device.get_absolute_url")
+    instrument_type = serializers.CharField(read_only=True, source="instrument.get_pretty_instrument_type_of")
+    instrument_slug = serializers.SlugField(read_only=True, source="instrument.slug")
+    instrument_absolute_url = serializers.SlugField(read_only=True, source="instrument.get_absolute_url")
 
     class Meta:
         model = InstrumentAlert
         fields = (
+            'device_name',
+            'device_slug',
+            'device_absolute_url',
+            'instrument_type',
+            'instrument_slug',
+            'instrument_absolute_url',
             'datum_timestamp',
             'datum_value',
             'state',

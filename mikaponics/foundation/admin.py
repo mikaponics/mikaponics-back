@@ -36,7 +36,7 @@ admin.site.unregister(Group)
 class DeviceAdmin(admin.ModelAdmin):
     raw_id_fields = ['user', 'invoice',]
     list_filter = ['product',]
-    list_display = ['id', 'user_id', 'product',]
+    list_display = ['slug', 'id', 'user_id', 'product',]
     ordering = ['-id',]
     readonly_fields = [
         'uuid', 'created_at', 'created_by', 'created_from',
@@ -67,7 +67,7 @@ admin.site.register(Device, DeviceAdmin)
 
 
 class InstrumentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'device_id', 'type_of', 'last_modified_at']
+    list_display = ['slug', 'id', 'device_id', 'type_of', 'last_modified_at']
     list_filter = ['type_of',]
     # search_fields = ['device_id',]
     raw_id_fields = ['device',]
