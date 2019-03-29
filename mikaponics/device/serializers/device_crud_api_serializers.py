@@ -28,6 +28,7 @@ class DeviceListCreateSerializer(serializers.ModelSerializer):
     )
     created_at = serializers.DateTimeField(read_only=True)
     last_modified_at = serializers.DateTimeField(read_only=True)
+    absolute_url = serializers.ReadOnlyField(source='get_absolute_url')
 
     class Meta:
         model = Device
@@ -39,6 +40,7 @@ class DeviceListCreateSerializer(serializers.ModelSerializer):
             'data_interval_in_seconds',
             'created_at',
             'last_modified_at',
+            'absolute_url'
         )
 
 
@@ -83,6 +85,7 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
     data_interval_in_minutes = serializers.SerializerMethodField()
     state = serializers.SerializerMethodField()
     slug = serializers.ReadOnlyField()
+    absolute_url = serializers.ReadOnlyField(source='get_absolute_url')
 
     last_measured_pretty_value = serializers.ReadOnlyField(source='get_pretty_last_measured_value')
     last_measured_pretty_at = serializers.ReadOnlyField(source='get_pretty_last_measured_at')
@@ -102,6 +105,7 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
             'data_interval_in_minutes',
             'state',
             'slug',
+            'absolute_url',
 
             'last_measured_value',
             'last_measured_at',
@@ -159,7 +163,7 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
         instance.last_modified_from = authenticated_user_from
         instance.last_modified_from_is_public = authenticated_user_from_is_public
         instance.save()
-        
+
         # instance.invoice.invalidate('total')
         return validated_data
 
