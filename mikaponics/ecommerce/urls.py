@@ -10,6 +10,7 @@ urlpatterns = (
         name='mikaponics_invoice_receipt_email'
     ),
     ############################################################################
+    # --- ONBOARDING ---
     path('api/onboarding/validation',
         views.OnboardingValidatorFuncAPIView.as_view(),
         name='mikaponics_onboarding_validator_func_api_endpoint'
@@ -21,6 +22,12 @@ urlpatterns = (
     path('api/onboarding/submission',
         views.OnboardingSubmissionFuncAPIView.as_view(),
         name='mikaponics_onboarding_submission_func_api_endpoint'
+    ),
+
+    # --- INVOICE ---
+    path('api/invoices',
+        views.InvoiceListCreateAPIView.as_view(),
+        name='mikaponics_invoices_list_api_endpoint'
     ),
     path('api/purchase-validation',
         views.PurchaseValidatorFuncAPIView.as_view(),
@@ -42,6 +49,8 @@ urlpatterns = (
         views.InvoiceRetrieveUpdateBillingAddressAPIView.as_view(),
         name='mikaponics_invoice_item_retrieve_update_billing_address_destroy_api_endpoint'
     ),
+
+    # --- WEBHOOK ---
     path('api/stripe/webhook/',
         views.PaymentEventAPIView.as_view(),
         name='mikaponics_stripe_event_api_endpoint'

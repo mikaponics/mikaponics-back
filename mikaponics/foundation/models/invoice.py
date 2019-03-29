@@ -3,6 +3,8 @@ import uuid
 from decimal import Decimal
 from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.template.defaultfilters import slugify
+from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 from django.utils.functional import cached_property
 from djmoney.models.fields import MoneyField
@@ -69,6 +71,15 @@ class Invoice(models.Model):
     '''
     Fields
     '''
+    slug = models.SlugField(
+        _("Slug"),
+        help_text=_('The unique slug used for this invoice when accessing invoice details page.'),
+        max_length=63,
+        blank=True,
+        null=False,
+        db_index=True,
+        unique=True,
+    )
     store = models.ForeignKey(
         "Store",
         help_text=_('The store this invoice belongs to.'),
@@ -101,6 +112,18 @@ class Invoice(models.Model):
         default=ORDER_STATE.DRAFT,
         choices=ORDER_STATE_CHOICES,
         editable=False, # Only device or web-app can change this state, not admin user!
+    )
+    purchased_at = models.DateTimeField(
+        _("Purchased at"),
+        help_text=_('The date/time that the customer purchased this invoice.'),
+        blank=False,
+        null=False,
+    )
+    delivered_at = models.DateTimeField(
+        _("Delivered at"),
+        help_text=_('The date/time that the customer received their order for this invoice.'),
+        blank=False,
+        null=False,
     )
 
     #
@@ -364,6 +387,30 @@ class Invoice(models.Model):
     Methods.
     '''
 
+    def save(self, *args, **kwargs):
+        """
+        Override the save function so we can add extra functionality.
+
+        (1) If we created the object then we will generate a custom slug.
+        (a) If user exists then generate slug based on user's name.
+        (b) Else generate slug with random string.
+        """
+        if not self.slug:
+            # CASE 1 OF 2: HAS USER.
+            if self.user:
+                count = Invoice.objects.filter(user=self.user).count()
+                count += 1
+                try:
+                    self.slug = slugify(self.user)+"-order-"+str(count)
+                except IntegrityError as e:
+                    if 'unique constraint' in e.message:
+                        self.slug = slugify(self.user)+"-order-"+str(count)+"-"+get_random_string(length=5)
+            # CASE 2 OF 2: DOES NOT HAVE USER.
+            else:
+                self.slug = "order-"+get_random_string(length=32)
+
+        super(Invoice, self).save(*args, **kwargs)
+
     def __str__(self):
         return str(self.id)
 
@@ -430,6 +477,8 @@ class Invoice(models.Model):
         value = self.grand_total * Decimal(100.00)
         return int(value.amount)
 
-    @cached_property
-    def pretty_state(self):
+    def get_pretty_state(self):
         return dict(self.ORDER_STATE_CHOICES).get(self.state)
+
+    def get_absolute_url(self):
+        return "/invoice/"+self.slug

@@ -2,6 +2,7 @@ from ecommerce.views.resources.invoice_item_views import (
     InvoiceItemRetrieveUpdateDestroyAPIView
 )
 from ecommerce.views.resources.invoice_views import (
+    InvoiceListCreateAPIView,
     InvoiceRetrieveUpdateBillingAddressAPIView,
     InvoiceRetrieveUpdateShippingAddressAPIView
 )

@@ -13,9 +13,49 @@ from rest_framework.response import Response
 
 from foundation.models import Invoice
 from ecommerce.serializers import (
+    InvoiceListCreateSerializer,
     InvoiceRetrieveUpdateBillingAddressSerializer,
     InvoiceRetrieveUpdateShippingAddressSerializer
 )
+
+
+class InvoiceListCreateAPIView(generics.ListCreateAPIView):
+    authentication_classes= (OAuth2Authentication,)
+    serializer_class = InvoiceListCreateSerializer
+    # pagination_class = StandardResultsSetPagination
+    permission_classes = (
+        permissions.IsAuthenticated,
+        # IsAuthenticatedAndIsActivePermission,
+        # CanRetrieveUpdateDestroyInvoicePermission
+    )
+    parser_classes = (
+        parsers.FormParser,
+        parsers.MultiPartParser,
+        parsers.JSONParser,
+    )
+    renderer_classes = (renderers.JSONRenderer,)
+
+    def get_queryset(self):
+        """
+        List
+        """
+        queryset = Invoice.objects.filter(user=self.request.user).order_by('-created_at')
+        return queryset
+
+    def post(self, request, format=None):
+        """
+        Create
+        """
+        client_ip, is_routable = get_client_ip(self.request)
+        serializer = InvoiceListCreateSerializer(data=request.data, context={
+            'created_by': request.user,
+            'created_from': client_ip,
+            'created_from_is_public': is_routable,
+            'franchise': request.tenant
+        })
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class InvoiceRetrieveUpdateBillingAddressAPIView(generics.RetrieveUpdateDestroyAPIView):
