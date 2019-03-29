@@ -32,6 +32,9 @@ class ProfileInfoRetrieveUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
     )
     renderer_classes = (renderers.JSONRenderer,)
 
+    def get_queryset(self):
+        return self.request.user
+
     @transaction.atomic
     def get(self, request):
         """

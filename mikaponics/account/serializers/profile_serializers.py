@@ -30,8 +30,8 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
     scope = serializers.SerializerMethodField()
 
     # --- Misc Fields ---
-    report_email_frequency = serializers.CharField(required=True,allow_blank=False,)
-    type_of = serializers.CharField(required=True,allow_blank=False,)
+    report_email_frequency = serializers.CharField(required=False,allow_blank=True,)
+    type_of = serializers.CharField(required=False,allow_blank=True,)
     customer_id = serializers.CharField(read_only=True,)
     customer_data = serializers.JSONField(read_only=True,)
     subscription_status = serializers.CharField(read_only=True,)
@@ -39,12 +39,12 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
     # --- User Details ---
     email = serializers.CharField(required=True,allow_blank=False,)
     first_name = serializers.CharField(required=True,allow_blank=False,)
-    middle_name = serializers.CharField(required=True,allow_blank=False,)
+    middle_name = serializers.CharField(required=False,allow_blank=True,)
     last_name = serializers.CharField(required=True,allow_blank=False,)
-    avatar = serializers.CharField(required=True,allow_blank=False,)
-    birthdate = serializers.CharField(required=True,allow_blank=False,)
-    nationality = serializers.CharField(required=True,allow_blank=False,)
-    gender = serializers.CharField(required=True,allow_blank=False,)
+    avatar = serializers.CharField(required=False,allow_blank=True,)
+    birthdate = serializers.CharField(required=False,allow_blank=True,)
+    nationality = serializers.CharField(required=False,allow_blank=True,)
+    gender = serializers.CharField(required=False,allow_blank=True,)
 
     # --- Billing ---
     billing_country = serializers.CharField(required=True,allow_blank=False,)
@@ -64,9 +64,9 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
     shipping_locality = serializers.CharField(required=True,allow_blank=False,)
     shipping_postal_code = serializers.CharField(required=True,allow_blank=False,)
     shipping_street_address = serializers.CharField(required=True,allow_blank=False,)
-    shipping_street_address_extra = serializers.CharField(required=False,allow_blank=True,)
+    shipping_street_address_extra = serializers.CharField(required=False,allow_blank=True,allow_null=True,)
     shipping_postal_code = serializers.CharField(required=True,allow_blank=False,)
-    shipping_post_office_box_number = serializers.CharField(required=False,allow_blank=True,)
+    shipping_post_office_box_number = serializers.CharField(required=False,allow_blank=True,allow_null=True,)
     shipping_email = serializers.CharField(required=True,allow_blank=False,)
     shipping_telephone = serializers.CharField(required=True,allow_blank=False,)
 
