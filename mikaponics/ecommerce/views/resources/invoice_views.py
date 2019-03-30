@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from foundation.models import Invoice
 from ecommerce.serializers import (
     InvoiceListCreateSerializer,
+    InvoiceRetrieveUpdateSerializer,
     InvoiceRetrieveUpdateBillingAddressSerializer,
     InvoiceRetrieveUpdateShippingAddressSerializer
 )
@@ -56,6 +57,62 @@ class InvoiceListCreateAPIView(generics.ListCreateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class InvoiceRetrieveDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes= (OAuth2Authentication,)
+    serializer_class = InvoiceRetrieveUpdateSerializer
+    # pagination_class = StandardResultsSetPagination
+    permission_classes = (
+        permissions.IsAuthenticated,
+        # IsAuthenticatedAndIsActivePermission,
+        # CanRetrieveUpdateDestroyInvoicePermission
+    )
+    parser_classes = (
+        parsers.FormParser,
+        parsers.MultiPartParser,
+        parsers.JSONParser,
+    )
+    renderer_classes = (renderers.JSONRenderer,)
+
+    @transaction.atomic
+    def get(self, request, slug=None):
+        """
+        Retrieve
+        """
+        obj = Invoice.objects.select_for_update().filter(slug=slug).first()
+        if obj is None:
+            raise Http404()
+
+        client_ip, is_routable = get_client_ip(self.request)
+        self.check_object_permissions(request, obj)  # Validate permissions.
+
+        serializer = InvoiceRetrieveUpdateSerializer(obj, many=False)
+        return Response(
+            data=serializer.data,
+            status=status.HTTP_200_OK
+        )
+
+    @transaction.atomic
+    def put(self, request, pk=None):
+        """
+        Update
+        """
+        obj = Invoice.objects.select_for_update().filter(pk=pk).first()
+        if obj is None:
+            raise Http404()
+
+        client_ip, is_routable = get_client_ip(self.request)
+        self.check_object_permissions(request, obj)  # Validate permissions.
+
+        serializer = InvoiceRetrieveUpdateSerializer(obj, data=request.data, context={
+            'authenticated_by': request.user,
+            'authenticated_from': client_ip,
+            'authenticated_from_is_public': is_routable,
+        })
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class InvoiceRetrieveUpdateBillingAddressAPIView(generics.RetrieveUpdateDestroyAPIView):

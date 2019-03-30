@@ -27,7 +27,11 @@ urlpatterns = (
     # --- INVOICE ---
     path('api/invoices',
         views.InvoiceListCreateAPIView.as_view(),
-        name='mikaponics_invoices_list_api_endpoint'
+        name='mikaponics_invoices_list_create_api_endpoint'
+    ),
+    path('api/invoice/<str:slug>',
+        views.InvoiceRetrieveDestroyAPIView.as_view(),
+        name='mikaponics_invoices_retrieve_update_destroy_api_endpoint'
     ),
     path('api/purchase-validation',
         views.PurchaseValidatorFuncAPIView.as_view(),

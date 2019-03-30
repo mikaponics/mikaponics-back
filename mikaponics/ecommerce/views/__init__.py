@@ -3,6 +3,7 @@ from ecommerce.views.resources.invoice_item_views import (
 )
 from ecommerce.views.resources.invoice_views import (
     InvoiceListCreateAPIView,
+    InvoiceRetrieveDestroyAPIView,
     InvoiceRetrieveUpdateBillingAddressAPIView,
     InvoiceRetrieveUpdateShippingAddressAPIView
 )

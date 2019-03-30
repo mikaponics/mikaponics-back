@@ -7,6 +7,7 @@ from ecommerce.serializers.invoice_item_retrieve_update_destroy_serializers impo
     InvoiceItemRetrieveUpdateDestroySerializer,
 )
 from ecommerce.serializers.invoice_retrieve_update_destroy_serializers import (
+    InvoiceRetrieveUpdateSerializer,
     InvoiceRetrieveUpdateBillingAddressSerializer,
     InvoiceRetrieveUpdateShippingAddressSerializer
 )
