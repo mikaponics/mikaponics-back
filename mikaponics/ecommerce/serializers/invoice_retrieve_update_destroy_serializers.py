@@ -25,6 +25,17 @@ def get_todays_date_plus_days(days=0):
 
 
 class InvoiceRetrieveUpdateSerializer(serializers.Serializer):
+    state = serializers.CharField(read_only=True, source="get_pretty_state")
+    slug = serializers.SlugField(read_only=True)
+    absolute_url = serializers.ReadOnlyField(source="get_absolute_url")
+    purchased_at = serializers.DateTimeField(read_only=True)
+    total_before_tax = serializers.CharField(read_only=True)
+    tax = serializers.CharField(read_only=True)
+    total_after_tax = serializers.CharField(read_only=True)
+    shipping = serializers.CharField(read_only=True)
+    credit = serializers.CharField(read_only=True)
+    grand_total = serializers.CharField(read_only=True)
+
     billing_given_name = serializers.CharField(required=False,allow_blank=True,)
     billing_last_name = serializers.CharField(required=False,allow_blank=True,)
     billing_country = serializers.CharField(required=False,allow_blank=True,)
@@ -43,7 +54,8 @@ class InvoiceRetrieveUpdateSerializer(serializers.Serializer):
     shipping_locality = serializers.CharField(required=False,allow_blank=True,)
     shipping_postal_code = serializers.CharField(required=False,allow_blank=True,)
     shipping_street_address = serializers.CharField(required=False,allow_blank=True,)
-    shipping_postal_code = serializers.CharField(required=False,allow_blank=True,)
+    shipping_street_address_extra = serializers.CharField(required=False,allow_blank=True,)
+    shipping_postal_code = serializers.CharField(required=False,allow_blank=True,allow_null=True)
     shipping_post_office_box_number = serializers.CharField(required=False,allow_blank=True,)
     shipping_email = serializers.CharField(required=False,allow_blank=True,)
     shipping_telephone = serializers.CharField(required=False,allow_blank=True,)
@@ -51,6 +63,17 @@ class InvoiceRetrieveUpdateSerializer(serializers.Serializer):
     # Meta Information.
     class Meta:
         fields = (
+            'state',
+            'slug',
+            'absolute_url',
+            'purchased_at',
+            'total_before_tax',
+            'tax',
+            'total_after_tax',
+            'shipping',
+            'credit',
+            'grand_total',
+
             'billing_given_name',
             'billing_last_name',
             'billing_country',
@@ -69,6 +92,7 @@ class InvoiceRetrieveUpdateSerializer(serializers.Serializer):
             'shipping_locality',
             'shipping_postal_code',
             'shipping_street_address',
+            'shipping_street_address_extra',
             'shipping_postal_code',
             'shipping_post_office_box_number',
             'shipping_email',
