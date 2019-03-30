@@ -19,6 +19,14 @@ class InstrumentAnalysisListCreateSerializer(serializers.ModelSerializer):
     instrument_slug = serializers.SlugField(read_only=True, source="instrument.slug")
     instrument_absolute_url = serializers.SlugField(read_only=True, source="instrument.get_absolute_url")
     absolute_url = serializers.ReadOnlyField(source="get_absolute_url")
+    start_dt = serializers.DateField(
+        required=True,
+        input_formats=['iso-8601']
+    )
+    finish_dt = serializers.DateField(
+        required=True,
+        input_formats=['iso-8601']
+    )
 
     class Meta:
         model = InstrumentAnalysis
