@@ -16,6 +16,10 @@ urlpatterns = (
         views.InstrumentListAPIView.as_view(),
         name='mikaponics_instrument_alert_config_api_endpoint'
     ),
+    path('api/instrument/analyses',
+        views.InstrumentAnalysisListCreateAPIView.as_view(),
+        name='mikaponics_instrument_analysis_create_list_api_endpoint'
+    ),
     path('api/instrument/<str:slug>',
         views.InstrumentRetrieveUpdateAPIView.as_view(),
         name='mikaponics_instrument_retrieve_update_api_endpoint'
