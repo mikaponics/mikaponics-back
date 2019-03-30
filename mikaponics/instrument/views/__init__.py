@@ -5,5 +5,6 @@ from instrument.views.resource.instrument_crud_api_views import (
     InstrumentRetrieveUpdateAPIView
 )
 from instrument.views.resource.instrument_analysis_crud_views import (
-    InstrumentAnalysisListCreateAPIView
+    InstrumentAnalysisListCreateAPIView,
+    InstrumentAnalysisRetrieveUpdateDestroyAPIView
 )

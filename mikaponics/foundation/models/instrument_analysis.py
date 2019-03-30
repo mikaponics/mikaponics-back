@@ -205,4 +205,4 @@ class InstrumentAnalysis(models.Model):
         return str(self.id)
 
     def get_absolute_url(self):
-        return "/instrument/"+str(self.slug)
+        return "/instrument/analysis/"+str(self.slug)

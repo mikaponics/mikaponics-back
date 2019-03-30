@@ -24,4 +24,8 @@ urlpatterns = (
         views.InstrumentRetrieveUpdateAPIView.as_view(),
         name='mikaponics_instrument_retrieve_update_api_endpoint'
     ),
+    path('api/instrument/analysis/<str:slug>',
+        views.InstrumentAnalysisRetrieveUpdateDestroyAPIView.as_view(),
+        name='mikaponics_instrument_analysis_retrieve_update_destroy_api_endpoint'
+    ),
 )
