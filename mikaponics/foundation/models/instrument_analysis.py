@@ -80,7 +80,7 @@ class InstrumentAnalysis(models.Model):
         _("Slug"),
         help_text=_('The unique slug used for this instrument analysis when accessing details page.'),
         max_length=127,
-        blank=True,
+        blank=False,
         null=False,
         db_index=True,
         unique=True,
@@ -93,67 +93,67 @@ class InstrumentAnalysis(models.Model):
     min_value = models.FloatField(
         _("Minimum value"),
         help_text=_('The lowest possible value.'),
-        blank=False,
+        blank=True,
         null=True,
     )
     min_timestamp = models.DateTimeField(
         _("Timestamp of minimum value"),
         help_text=_('The date and time that this minimum value occured on.'),
-        blank=False,
+        blank=True,
         null=False,
     )
     max_value = models.FloatField(
         _("Maximum value"),
         help_text=_('The largest possible value.'),
-        blank=False,
+        blank=True,
         null=True,
     )
     max_timestamp = models.DateTimeField(
         _("Timestamp of maximum value"),
         help_text=_('The date and time that this maximum value occured on.'),
-        blank=False,
+        blank=True,
         null=False,
     )
     mean_value = models.FloatField(
         _("Mean value"),
         help_text=_('The mean value.'),
-        blank=False,
+        blank=True,
         null=True,
     )
     median_value = models.FloatField(
         _("Median value"),
         help_text=_('The median value.'),
-        blank=False,
+        blank=True,
         null=True,
     )
     mode_value = models.FloatField(
         _("Mode value"),
         help_text=_('The mode value.'),
-        blank=False,
+        blank=True,
         null=True,
     )
     mode_values = JSONField(
         _("Mode values"),
         help_text=_('The mode values.'),
-        blank=False,
+        blank=True,
         null=True,
     )
     range_value = models.FloatField(
         _("Range value"),
         help_text=_('The range value.'),
-        blank=False,
+        blank=True,
         null=True,
     )
     stedv_value = models.FloatField(
         _("Standard deviation value"),
         help_text=_('The standard deviation value.'),
-        blank=False,
+        blank=True,
         null=True,
     )
     variance_value = models.FloatField(
         _("Variance value"),
         help_text=_('The variance value.'),
-        blank=False,
+        blank=True,
         null=True,
     )
 
