@@ -135,8 +135,8 @@ class Instrument(models.Model):
     )
     slug = models.SlugField(
         _("Slug"),
-        help_text=_('The unique slug used for this instrument when accessing instrument details page.'),
-        max_length=63,
+        help_text=_('The unique slug used for this instrument when accessing details page.'),
+        max_length=127,
         blank=True,
         null=False,
         db_index=True,

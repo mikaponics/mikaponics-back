@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.urls import reverse
+from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -74,6 +75,15 @@ class InstrumentAnalysis(models.Model):
         help_text=_('The end date and time to base this analysis on.'),
         blank=False,
         null=False,
+    )
+    slug = models.SlugField(
+        _("Slug"),
+        help_text=_('The unique slug used for this instrument analysis when accessing details page.'),
+        max_length=127,
+        blank=True,
+        null=False,
+        db_index=True,
+        unique=True,
     )
 
     #
@@ -167,5 +177,32 @@ class InstrumentAnalysis(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified_at = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        """
+        Override the save function so we can add extra functionality.
+
+        (1) If we created the object then we will generate a custom slug.
+        (a) If user exists then generate slug based on user's name.
+        (b) Else generate slug with random string.
+        """
+        if not self.slug:
+            # CASE 1 OF 2: HAS USER.
+            if self.instrument:
+                count = InstrumentAnalysis.objects.filter(instrument=instrument).count()
+                count += 1
+                try:
+                    self.slug = slugify(self.instrument)+"-analysis-"+str(count)
+                except IntegrityError as e:
+                    if 'unique constraint' in e.message:
+                        self.slug = slugify(self.instrument)+"-analysis-"+str(count)+"-"+get_random_string(length=5)
+            # CASE 2 OF 2: DOES NOT HAVE USER.
+            else:
+                self.slug = "analysis-"+get_random_string(length=32)
+
+        super(InstrumentAnalysis, self).save(*args, **kwargs)
+
     def __str__(self):
         return str(self.id)
+
+    def get_absolute_url(self):
+        return "/instrument/"+str(self.slug)

@@ -73,8 +73,8 @@ class Invoice(models.Model):
     '''
     slug = models.SlugField(
         _("Slug"),
-        help_text=_('The unique slug used for this invoice when accessing invoice details page.'),
-        max_length=63,
+        help_text=_('The unique slug used for this invoice when accessing details page.'),
+        max_length=127,
         blank=True,
         null=False,
         db_index=True,

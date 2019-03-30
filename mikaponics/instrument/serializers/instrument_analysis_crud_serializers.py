@@ -15,13 +15,14 @@ from foundation.models import InstrumentAnalysis
 
 
 class InstrumentAnalysisListCreateSerializer(serializers.ModelSerializer):
-
+    slug = serializers.SlugField(read_only=True)
     instrument_slug = serializers.SlugField(read_only=True, source="instrument.slug")
     instrument_absolute_url = serializers.SlugField(read_only=True, source="instrument.get_absolute_url")
 
     class Meta:
         model = InstrumentAnalysis
         fields = (
+            'slug',
             'instrument_slug',
             'instrument_absolute_url',
             'start_dt',

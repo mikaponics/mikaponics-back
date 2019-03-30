@@ -158,7 +158,7 @@ class Device(models.Model):
     slug = models.SlugField(
         _("Slug"),
         help_text=_('The unique slug used for this device when accessing device details page.'),
-        max_length=63,
+        max_length=127,
         blank=True,
         null=False,
         db_index=True,
