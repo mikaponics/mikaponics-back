@@ -1,0 +1,1 @@
+from instrument.model_resources.instrument_analysis_resources import generate_instrument_analysis

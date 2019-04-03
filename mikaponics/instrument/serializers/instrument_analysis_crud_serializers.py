@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+import pytz
 from datetime import datetime, timedelta
 from dateutil import tz
+from dateutil.parser import *
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate
@@ -12,18 +14,21 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 
 from foundation.models import InstrumentAnalysis
+from instrument.model_resources import generate_instrument_analysis
 
 
 class InstrumentAnalysisListCreateSerializer(serializers.ModelSerializer):
     slug = serializers.SlugField(read_only=True)
     instrument_slug = serializers.SlugField(read_only=True, source="instrument.slug")
+    instrument_slug = serializers.SlugField(write_only=True)
+    timezone_name = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
     instrument_absolute_url = serializers.SlugField(read_only=True, source="instrument.get_absolute_url")
     absolute_url = serializers.ReadOnlyField(source="get_absolute_url")
-    start_dt = serializers.DateField(
+    start_dt = serializers.DateTimeField(
         required=True,
         input_formats=['iso-8601']
     )
-    finish_dt = serializers.DateField(
+    finish_dt = serializers.DateTimeField(
         required=True,
         input_formats=['iso-8601']
     )
@@ -37,6 +42,7 @@ class InstrumentAnalysisListCreateSerializer(serializers.ModelSerializer):
             'instrument_absolute_url',
             'start_dt',
             'finish_dt',
+            'timezone_name',
             # 'min_value',
             # 'min_timestamp',
             # 'max_value',
@@ -53,10 +59,33 @@ class InstrumentAnalysisListCreateSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        print("TODO")
+        # Fetch our outputs.
+        naive_start_dt = validated_data.get('start_dt')
+        naive_finish_dt = validated_data.get('finish_dt')
+        instrument_slug = validated_data.get('instrument_slug')
+        timezone_name = validated_data.get('timezone_name', "UTC")
 
-        # Return our calculations.
-        return validated_data
+        # Convert our datetimes to be timezone specific.
+        local_timezone = pytz.timezone(timezone_name)
+        aware_start_dt = naive_start_dt.replace(tzinfo=local_timezone)
+        aware_finish_dt = naive_finish_dt.replace(tzinfo=local_timezone)
+
+        # Generate our analysis.
+        try:
+            analysis = generate_instrument_analysis(
+                instrument_slug=instrument_slug,
+                aware_start_dt=aware_start_dt,
+                aware_finish_dt=aware_finish_dt
+            )
+        except Exception as e:
+            raise exceptions.ValidationError({
+                'non_field_errors': [
+                    str(e),
+                ]
+            })
+
+        # Return our created object.
+        return analysis
 
 
 class InstrumentAnalysisRetrieveUpdateSerializer(serializers.ModelSerializer):

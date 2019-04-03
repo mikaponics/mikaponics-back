@@ -2,7 +2,9 @@
 import pytz
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
+from django.db import IntegrityError
 from django.db import models
+from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
@@ -188,7 +190,7 @@ class InstrumentAnalysis(models.Model):
         if not self.slug:
             # CASE 1 OF 2: HAS USER.
             if self.instrument:
-                count = InstrumentAnalysis.objects.filter(instrument=instrument).count()
+                count = InstrumentAnalysis.objects.filter(instrument=self.instrument).count()
                 count += 1
                 try:
                     self.slug = slugify(self.instrument)+"-analysis-"+str(count)
