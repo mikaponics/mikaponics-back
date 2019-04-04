@@ -13,9 +13,17 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('is_staff',)
 
     fieldsets = (
-        (None, {'fields': ('email','password')}),
+        (None,
+            {'fields': ('email','password')}
+        ),
 
-        ('Permissions', {'fields': ('is_staff',)}),
+        ('Permissions',
+            {'fields': ('is_staff',)}
+        ),
+
+        ('Email Activation / Password Reset',
+            {'fields': ('was_email_activated', 'pr_access_code', 'pr_expiry_date')}
+        ),
 
         ('E-Ecommerce', {'fields': (
             'was_onboarded',
