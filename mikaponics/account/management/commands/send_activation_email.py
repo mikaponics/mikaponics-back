@@ -45,10 +45,7 @@ class Command(BaseCommand):
         pr_access_code = me.generate_pr_code()
 
         # Generate the data.
-        url = reverse_with_full_domain(
-            reverse_url_id='mikaponics_user_activation_detail',
-            resolve_url_args=[pr_access_code]
-        )
+        url = settings.MIKAPONICS_FRONTEND_HTTP_PROTOCOL+settings.MIKAPONICS_FRONTEND_HTTP_DOMAIN+"/activate/"+str(pr_access_code)
         web_view_url = reverse_with_full_domain(
             reverse_url_id='mikaponics_activate_email',
             resolve_url_args=[pr_access_code]

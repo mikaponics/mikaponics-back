@@ -17,6 +17,6 @@ def get_app_domain():
     Returns the full URL to the domain. The output from this function gets
     generally appended with a path string.
     """
-    url = settings.MIKAPONICS_APP_HTTP_PROTOCOL
-    url += settings.MIKAPONICS_APP_HTTP_DOMAIN
+    url = settings.MIKAPONICS_BACKEND_HTTP_PROTOCOL
+    url += settings.MIKAPONICS_BACKEND_HTTP_DOMAIN
     return url

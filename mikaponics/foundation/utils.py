@@ -18,8 +18,8 @@ from foundation import constants
 
 
 def reverse_with_full_domain(reverse_url_id, resolve_url_args=[]):
-    url = settings.MIKAPONICS_APP_HTTP_PROTOCOL
-    url += settings.MIKAPONICS_APP_HTTP_DOMAIN
+    url = settings.MIKAPONICS_BACKEND_HTTP_PROTOCOL
+    url += settings.MIKAPONICS_BACKEND_HTTP_DOMAIN
     url += reverse(reverse_url_id, args=resolve_url_args)
     url = url.replace("None","en")
     return url
