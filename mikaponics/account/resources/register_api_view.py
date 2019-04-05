@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.db import connection # Used for django tenants.
 from django.http import Http404
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from oauthlib.common import generate_token
 from oauth2_provider.models import Application, AbstractApplication, AbstractAccessToken, AccessToken, RefreshToken
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
@@ -20,7 +21,7 @@ from rest_framework import authentication, viewsets, permissions, status, parser
 from rest_framework.decorators import detail_route, list_route # See: http://www.django-rest-framework.org/api-guide/viewsets/#marking-extra-actions-for-routing
 from rest_framework.response import Response
 
-from account.serializers import RegisterSerializer, ProfileInfoRetrieveUpdateSerializer
+from account.serializers import RegisterSerializer
 from account.tasks import run_send_activation_email_func
 
 
@@ -42,7 +43,7 @@ class RegisterAPIView(APIView):
     def post(self, request):
         # Get the IP of the user.
         client_ip, is_routable = get_client_ip(self.request)
-        
+
         # Save our code and return the serialized data.
         serializer = RegisterSerializer(data=request.data, context={
             'request': request,
@@ -53,33 +54,10 @@ class RegisterAPIView(APIView):
         # Get the newly created user from the registration.
         authenticated_user = data['user']
 
-        # Get our web application authorization.
-        application = Application.objects.filter(name=settings.MIKAPONICS_RESOURCE_SERVER_NAME).first()
-
-        # Generate our access token which does not have a time limit.
-        aware_dt = timezone.now()
-        expires_dt = aware_dt.replace(aware_dt.year + 1776)
-        access_token, created = AccessToken.objects.update_or_create(
-            application=application,
-            user=authenticated_user,
-            defaults={
-                'user': authenticated_user,
-                'application': application,
-                'expires': expires_dt,
-                'token': generate_token(),
-                'scope': 'read,write,introspection'
-            },
-            scope='read,write,introspection'
-        )
-
         # Send our activation email to the user.
         django_rq.enqueue(run_send_activation_email_func, email=authenticated_user.email)
 
-        serializer = ProfileInfoRetrieveUpdateSerializer(authenticated_user, many=False, context={
-            'authenticated_by': authenticated_user,
-            'authenticated_from': client_ip,
-            'authenticated_from_is_public': is_routable,
-            'token': str(access_token),
-            'scope': access_token.scope,
-        })
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        # Return a simple message indicating that the user was registered.
+        return Response(data={
+            'detail': _('Your account has been registered. Please check your email for verification.')
+        }, status=status.HTTP_201_CREATED)

@@ -34,4 +34,4 @@ class LoginSerializer(serializers.Serializer):
                 raise exceptions.ValidationError(_('Your account was not activated!'))
             if not user.is_active:
                 raise exceptions.ValidationError(_('Your account is suspended!'))
-            raise exceptions.ValidationError(_('Incorrect Pasword!'))
+            raise exceptions.ValidationError(_('Wrong password or email!'))
