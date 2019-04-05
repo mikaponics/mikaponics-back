@@ -116,14 +116,14 @@ class Invoice(models.Model):
     purchased_at = models.DateTimeField(
         _("Purchased at"),
         help_text=_('The date/time that the customer purchased this invoice.'),
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
     )
     delivered_at = models.DateTimeField(
         _("Delivered at"),
         help_text=_('The date/time that the customer received their order for this invoice.'),
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
     )
 
     #
