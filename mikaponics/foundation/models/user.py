@@ -583,17 +583,28 @@ class User(AbstractBaseUser, PermissionsMixin):
         from foundation.models.store import Store
         from foundation.models.shipper import Shipper
         store = Store.objects.default_store
+
+        # # For debugging purposes only.
+        # print("STORE:", store)
+        # print("STATE:", Invoice.ORDER_STATE.DRAFT)
+        # print("USER:", self)
+
+        # Attempt to find our invoice for the specific criteria.
         invoice = Invoice.objects.filter(
             store=store,
             state=Invoice.ORDER_STATE.DRAFT,
             user=self
         ).order_by('created_at').first()
+
+        # If our attempt failed then we generate our invoice here, else we
+        # return the invoice we originally found.
         if invoice is None:
             invoice = Invoice.objects.create(
                 store=store,
                 user=self,
                 state=Invoice.ORDER_STATE.DRAFT,
                 shipper=Shipper.objects.all().first(),
+                slug=None
             )
         return invoice
 
