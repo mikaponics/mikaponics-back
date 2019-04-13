@@ -456,7 +456,8 @@ class Instrument(models.Model):
         return self.slug
 
     def get_pretty_state(self):
-        return dict(self.INSTRUMENT_STATE_CHOICES).get(self.state)
+        result = dict(self.INSTRUMENT_STATE_CHOICES).get(self.state)
+        return str(result)
 
     def get_pretty_last_measured_value(self):
         if self.last_measured_value:
@@ -469,7 +470,8 @@ class Instrument(models.Model):
         return _("No data available")
 
     def get_pretty_instrument_type_of(self):
-        return dict(self.INSTRUMENT_TYPE_OF_CHOICES).get(self.type_of)
+        result = dict(self.INSTRUMENT_TYPE_OF_CHOICES).get(self.type_of)
+        return str(result)
 
     def get_absolute_url(self):
         return "/instrument/"+str(self.slug)
@@ -495,7 +497,8 @@ class Instrument(models.Model):
         return ""
 
     def get_pretty_instrument_type_of(self):
-        return dict(self.INSTRUMENT_TYPE_OF_CHOICES).get(self.type_of)
+        result = dict(self.INSTRUMENT_TYPE_OF_CHOICES).get(self.type_of)
+        return str(result)
 
     def set_last_recorded_datum(self, datum):
         # Update our value.

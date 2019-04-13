@@ -418,7 +418,8 @@ class Device(models.Model):
         return None
 
     def get_pretty_state(self):
-        return dict(self.DEVICE_STATE_CHOICES).get(self.state)
+        result = dict(self.DEVICE_STATE_CHOICES).get(self.state)
+        return str(result)
 
     def get_pretty_last_measured_value(self):
         if self.last_measured_value:
