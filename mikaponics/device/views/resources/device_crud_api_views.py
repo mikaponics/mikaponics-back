@@ -43,7 +43,7 @@ class DeviceListCreateAPIView(generics.ListCreateAPIView):
         """
         List
         """
-        queryset = Device.objects.all()
+        queryset = Device.objects.all().order_by('-slug')
         return queryset
 
     @transaction.atomic

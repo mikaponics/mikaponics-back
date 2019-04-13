@@ -38,6 +38,8 @@ class DeviceManager(models.Manager):
         faker = Faker('en_CA')
         for i in range(0,length):
             device = Device.objects.create(
+                name = faker.domain_word(),
+                description = faker.sentence(nb_words=6, variable_nb_words=True, ext_word_list=None),
                 user = user,
                 product = product,
             )

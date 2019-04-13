@@ -71,8 +71,9 @@ class Command(BaseCommand):
 
                 # Step 4: Create our time-series data per instrument.
                 self.stdout.write(
-                    self.style.SUCCESS(_('SEED: Seeding time-series data for instrument ID # %(id)s...')%{
-                        'id': str(instrument.id)
+                    self.style.SUCCESS(_('SEED: Seeding time-series data for instrument ID # %(iid)s in device ID # %(did)s...')%{
+                        'iid': str(instrument.id),
+                        'did': str(device.id),
                     })
                 )
                 tsd = TimeSeriesDatum.objects.seed(instrument, numb_of_tsd)
