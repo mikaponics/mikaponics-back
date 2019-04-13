@@ -23,7 +23,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         """
         Run manually in console:
-        python manage.py seed_user "bart@mikasoftware.com" 5 2500
+        python manage.py seed_user "bart@mikasoftware.com" 3 5000
         """
         parser.add_argument('email', nargs='+', type=str)
         parser.add_argument('numb_of_devices', nargs='+', type=int)

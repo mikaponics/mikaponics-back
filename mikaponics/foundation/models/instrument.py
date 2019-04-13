@@ -446,7 +446,7 @@ class Instrument(models.Model):
                 self.slug = "instrument-"+get_random_string(length=32)
 
             # Attach the instrument type to the slug.
-            self.slug = self.slug +" - "+self.get_pretty_instrument_type_of()
+            self.slug = self.slug +"-"+self.get_pretty_instrument_type_of()
             self.slug = self.slug.lower()
 
         # Call the parent class and load the default the save functionality.
