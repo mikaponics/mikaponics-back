@@ -23,6 +23,7 @@ class InstrumentAlertListSerializer(serializers.ModelSerializer):
     instrument_type = serializers.CharField(read_only=True, source="instrument.get_pretty_instrument_type_of")
     instrument_slug = serializers.SlugField(read_only=True, source="instrument.slug")
     instrument_absolute_url = serializers.SlugField(read_only=True, source="instrument.get_absolute_url")
+    icon = serializers.CharField(read_only=True, source="get_icon")
 
     class Meta:
         model = InstrumentAlert
@@ -37,6 +38,7 @@ class InstrumentAlertListSerializer(serializers.ModelSerializer):
             'datum_value',
             'state',
             'created_at',
+            'icon',
         )
 
     def get_state(self, obj):

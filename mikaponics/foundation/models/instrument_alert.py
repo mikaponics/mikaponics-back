@@ -129,3 +129,12 @@ class InstrumentAlert(models.Model):
 
     def is_yellow_alert(self):
         return self.state == self.INSTRUMENT_ALERT_STATE.YELLOW_ABOVE_VALUE or self.state == self.INSTRUMENT_ALERT_STATE.YELLOW_BELOW_VALUE
+
+    def get_icon(self):
+        if self.is_red_alert():
+            return "fire"
+        elif self.is_orange_alert():
+            return "exclamation-circle"
+        elif self.is_yellow_alert():
+            return "exclamation-triangle"
+        return None
