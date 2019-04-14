@@ -64,6 +64,7 @@ class InstrumentAlertRetrieveSerializer(serializers.ModelSerializer):
     instrument_type = serializers.CharField(read_only=True, source="instrument.get_pretty_instrument_type_of")
     instrument_slug = serializers.SlugField(read_only=True, source="instrument.slug")
     instrument_absolute_url = serializers.SlugField(read_only=True, source="instrument.get_absolute_url")
+    instrument_icon = serializers.SlugField(read_only=True, source="instrument.get_icon")
     icon = serializers.CharField(read_only=True, source="get_icon")
     absolute_url = serializers.CharField(read_only=True, source="get_absolute_url")
 
@@ -76,6 +77,7 @@ class InstrumentAlertRetrieveSerializer(serializers.ModelSerializer):
             'instrument_type',
             'instrument_slug',
             'instrument_absolute_url',
+            'instrument_icon',
             'icon',
             'state',
             'absolute_url',
