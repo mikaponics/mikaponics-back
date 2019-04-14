@@ -139,7 +139,7 @@ class InstrumentAlertAdmin(admin.ModelAdmin):
     list_filter = ['state',]
     ordering = ['-id',]
     raw_id_fields = ['instrument',]
-    readonly_fields = ['id','created_at',]
+    readonly_fields = ['id','created_at','slug',]
 
     # def has_add_permission(self, request, obj=None):
     #     return False

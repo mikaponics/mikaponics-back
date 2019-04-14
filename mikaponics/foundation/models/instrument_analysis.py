@@ -86,6 +86,7 @@ class InstrumentAnalysis(models.Model):
         null=False,
         db_index=True,
         unique=True,
+        editable=False,
     )
 
     #

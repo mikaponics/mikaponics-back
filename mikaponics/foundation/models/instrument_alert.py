@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import pytz
 from django.contrib.auth import get_user_model
+from django.db import IntegrityError
 from django.db import models
+from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
@@ -77,6 +79,16 @@ class InstrumentAlert(models.Model):
     '''
     Fields
     '''
+    slug = models.SlugField(
+        _("Slug"),
+        help_text=_('The unique slug used for this instrument alert when accessing details page.'),
+        max_length=255,
+        blank=False,
+        null=False,
+        db_index=True,
+        unique=True,
+        editable=False, # Only device or web-app can change this state, not admin user!
+    )
     instrument = models.ForeignKey(
         "Instrument",
         help_text=_('The instrument this alert belongs to.'),
@@ -115,8 +127,35 @@ class InstrumentAlert(models.Model):
     Methods
     '''
 
+    def save(self, *args, **kwargs):
+        """
+        Override the save function so we can add extra functionality.
+
+        (1) If we created the object then we will generate a custom slug.
+        (a) If user exists then generate slug based on user's name.
+        (b) Else generate slug with random string.
+        """
+        if not self.slug:
+            # CASE 1 OF 2: HAS USER.
+            if self.instrument.device.user:
+                count = InstrumentAlert.objects.filter(instrument__device__user=self.instrument.device.user).count()
+                count += 1
+                try:
+                    self.slug = slugify(self.instrument.device.user)+"-instrument-alert-"+str(count)
+                except IntegrityError as e:
+                    if 'unique constraint' in e.message:
+                        self.slug = slugify(self.user)+"-instrument-alert-"+str(count)+"-"+get_random_string(length=5)
+            # CASE 2 OF 2: DOES NOT HAVE USER.
+            else:
+                self.slug = "instrument-alert-"+get_random_string(length=32)
+
+        super(InstrumentAlert, self).save(*args, **kwargs)
+
     def __str__(self):
         return str(self.id)
+
+    def get_absolute_url(self):
+        return "/instrument-alert/"+str(self.slug)
 
     def get_pretty_state(self):
         return dict(self.INSTRUMENT_ALERT_STATE_CHOICES).get(self.state)
