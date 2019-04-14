@@ -9,7 +9,8 @@ from rest_framework import authentication, viewsets, permissions, status,  parse
 from rest_framework.response import Response
 
 from alert.serializers import (
-    InstrumentAlertListSerializer
+    InstrumentAlertListSerializer,
+    InstrumentAlertRetrieveSerializer
 )
 from foundation.models import InstrumentAlert
 
@@ -32,3 +33,28 @@ class InstrumentAlertsListAPIView(generics.ListAPIView):
         # Take the queryset and apply the joins to increase performance.
         s = self.get_serializer_class()
         return s.setup_eager_loading(self, queryset)
+
+
+class InstrumentAlertRetrieveAPIView(generics.RetrieveAPIView):
+    # filter_class = InstrumentFilter
+    serializer_class = InstrumentAlertRetrieveSerializer
+    # pagination_class = StandardResultsSetPagination
+    permission_classes = (
+        # permissions.IsAuthenticated,
+        # IsAuthenticatedAndIsActivePermission,
+        # CanListCreateInstrumentPermission
+    )
+    # TODO: https://django-oauth-toolkit.readthedocs.io/en/latest/rest-framework/permissions.html#tokenmatchesoasrequirements
+
+    @transaction.atomic
+    def get(self, request, slug=None):
+        """
+        Retrieve
+        """
+        obj = get_object_or_404(InstrumentAlert, slug=slug)
+        self.check_object_permissions(request, obj)  # Validate permissions.
+        serializer = InstrumentAlertRetrieveSerializer(obj, many=False)
+        return Response(
+            data=serializer.data,
+            status=status.HTTP_200_OK
+        )
