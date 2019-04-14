@@ -28,7 +28,7 @@ class InstrumentRetrieveUpdateSerializer(serializers.ModelSerializer):
 
     absolute_parent_url = serializers.SerializerMethodField()
     absolute_url = serializers.SerializerMethodField()
-    icon = serializers.CharField(source='get_icon')
+    icon = serializers.CharField(read_only=True, source='get_icon')
 
     class Meta:
         model = Instrument
