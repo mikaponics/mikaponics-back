@@ -32,10 +32,7 @@ class Command(BaseCommand):
         pr_access_code = me.generate_pr_code()
 
         # Generate the links.
-        url = reverse_with_full_domain(
-            reverse_url_id='mikaponics_reset_password_master',
-            resolve_url_args=[pr_access_code]
-        )
+        url = settings.MIKAPONICS_FRONTEND_HTTP_PROTOCOL+settings.MIKAPONICS_FRONTEND_HTTP_DOMAIN+"/reset-password/"+str(pr_access_code)
         web_view_url = reverse_with_full_domain(
             reverse_url_id='mikaponics_reset_password_email',
             resolve_url_args=[pr_access_code]

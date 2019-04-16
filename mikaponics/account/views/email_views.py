@@ -33,10 +33,7 @@ def reset_password_email_page(request, pr_access_code=None):
         raise PermissionDenied(_('Wrong access code.'))
 
     # Generate the data.
-    url = reverse_with_full_domain(
-        reverse_url_id='mikaponics_reset_password_master',
-        resolve_url_args=[pr_access_code]
-    )
+    url = settings.MIKAPONICS_FRONTEND_HTTP_PROTOCOL+settings.MIKAPONICS_FRONTEND_HTTP_DOMAIN+"/reset-password/"+str(pr_access_code)
     web_view_url = reverse_with_full_domain(
         reverse_url_id='mikaponics_reset_password_email',
         resolve_url_args=[pr_access_code]
