@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import django_filters
 import django_rq
+from ipware import get_client_ip
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.core.management import call_command
@@ -16,7 +17,7 @@ from rest_framework.views import APIView
 from rest_framework import authentication, permissions, status, parsers, renderers
 from rest_framework.response import Response
 
-from account.serializers import ResetPasswordSerializer
+from account.serializers import ProfileInfoRetrieveUpdateSerializer, ResetPasswordSerializer
 from foundation.models import User
 
 
@@ -33,6 +34,7 @@ class ResetPasswordAPIView(APIView):
     renderer_classes = (renderers.JSONRenderer,)
 
     def post(self, request, format=None):
+        client_ip, is_routable = get_client_ip(self.request)
         serializer = ResetPasswordSerializer(data=request.data)
 
         # Perform validation.
@@ -80,11 +82,11 @@ class ResetPasswordAPIView(APIView):
             scope='read,write,introspection'
         )
 
-        # Return our new token.
-        return Response(
-            data = {
-                'token': str(access_token),
-                'scope': access_token.scope,
-            },
-            status=status.HTTP_200_OK
-        )
+        serializer = ProfileInfoRetrieveUpdateSerializer(request.user, many=False, context={
+            'authenticated_by': request.user,
+            'authenticated_from': client_ip,
+            'authenticated_from_is_public': is_routable,
+            'token': str(access_token),
+            'scope': 'read,write,introspection'
+        })
+        return Response(serializer.data, status=status.HTTP_200_OK)
