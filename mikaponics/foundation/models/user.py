@@ -578,9 +578,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         based on whether the user was "onboarded" or not.
         """
         if self.was_onboarded:
-            return "/onboard"
-        else:
             return "/dashboard"
+        else:
+            return "/onboard"
 
     @cached_property
     def draft_invoice(self):
