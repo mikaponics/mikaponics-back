@@ -48,7 +48,7 @@ class ResetPasswordAPIView(APIView):
         user.set_password(password)
         user.save()
 
-        # Security: Remove the "pr_access_code" so it cannot be used again.
+        # Security: Remove the "pr_access_code" so it cannot be used again. #TODO: REMOVE.
         user.pr_access_code = ''
         user.save()
 
