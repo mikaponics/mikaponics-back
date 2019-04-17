@@ -278,21 +278,21 @@ class Device(models.Model):
     name = models.CharField(
         _("Name"),
         max_length=255,
-        help_text=_('The name of the name.'),
+        help_text=_('The name of the device.'),
         blank=False,
         null=False,
     )
     alternate_name = models.CharField(
         _("Alternate Name"),
         max_length=255,
-        help_text=_('An alias for the name.'),
+        help_text=_('An alias for the device.'),
         blank=True,
         null=True,
     )
     description = models.TextField(
         _("Description"),
-        help_text=_('A description of the place.'),
-        blank=True,
+        help_text=_('A description of the device.'),
+        blank=False,
         null=True,
         default='',
     )
