@@ -250,25 +250,9 @@ class Device(models.Model):
         blank=True,
         null=True
     )
-    latitude = models.DecimalField(
-        _("Latitude"),
-        max_digits=8,
-        decimal_places=3,
-        help_text=_('The latitude of a location. For example 37.42242 (<a href="https://en.wikipedia.org/wiki/World_Geodetic_System">WGS 84</a>).'),
-        blank=True,
-        null=True
-    )
-    longitude = models.DecimalField(
-        _("Longitude"),
-        max_digits=8,
-        decimal_places=3,
-        help_text=_('The longitude of a location. For example -122.08585 (<a href="https://en.wikipedia.org/wiki/World_Geodetic_System">WGS 84</a>).'),
-        blank=True,
-        null=True
-    )
-    location = PointField(
+    location = PointField( # Combine latitude and longitude into a single field.
         _("Location"),
-        help_text=_('A longitude and latitude coordinates of this device.'),
+        help_text=_('A longitude and latitude coordinates of this device. For example -81.245277,42.984924 (<a href="https://en.wikipedia.org/wiki/World_Geodetic_System">WGS 84</a>).'),
         null=True,
         blank=True,
         srid=4326,
