@@ -66,7 +66,9 @@ class DeviceEnvironmentVariablesFileView(LoginRequiredMixin, MikaponicsDetailVie
         #-------------------------------#
         # API WEB-SERVICE CONFIGURATION #
         #-------------------------------#
-        modified_context['WEB_SERVICE_URL'] = None
+        aURL = settings.MIKAPONICS_BACKEND_HTTP_PROTOCOL
+        aURL += settings.MIKAPONICS_BACKEND_HTTP_DOMAIN
+        modified_context['WEB_SERVICE_URL'] = aURL
         modified_context['WEB_SERVICE_CLIENT_ID'] = application.client_id
         modified_context['WEB_SERVICE_CLIENT_SECRET'] = application.client_secret
         modified_context['WEB_SERVICE_DEVICE_UUID'] = self.object.uuid
