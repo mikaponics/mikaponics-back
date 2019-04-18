@@ -236,21 +236,14 @@ class Instrument(models.Model):
     )
     last_24h_stedv_value = models.FloatField(
         _("last_24h_stedv_value"),
-        help_text=_('The value of the datum.'),
+        help_text=_('The standard deviation value of the past 24 hours.'),
         blank=True,
         null=True,
         editable=False,
     )
     last_24h_variance_value = models.FloatField(
         _("last_24h_variance_value"),
-        help_text=_('The value of the datum.'),
-        blank=True,
-        null=True,
-        editable=False,
-    )
-    last_24h_median_value = models.FloatField(
-        _("last_24h_median_value"),
-        help_text=_('The value of the datum.'),
+        help_text=_('The variance value of the past 24 hours.'),
         blank=True,
         null=True,
         editable=False,

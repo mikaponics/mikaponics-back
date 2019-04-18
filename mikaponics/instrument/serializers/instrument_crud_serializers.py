@@ -48,6 +48,20 @@ class InstrumentRetrieveUpdateSerializer(serializers.ModelSerializer):
             'absolute_url',
             'slug',
             'icon',
+            'state',
+            'last_measured_value',
+            'last_measured_at',
+            'last_24h_min_value',
+            'last_24h_min_timestamp_at',
+            'last_24h_max_value',
+            'last_24h_max_timestamp_at',
+            'last_24h_mean_value',
+            'last_24h_median_value',
+            'last_24h_mode_value',
+            'last_24h_mode_values',
+            'last_24h_range_value',
+            'last_24h_stedv_value',
+            'last_24h_variance_value',
         )
 
     def get_absolute_parent_url(self, obj):
