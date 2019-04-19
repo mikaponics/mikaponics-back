@@ -29,6 +29,8 @@ class InstrumentRetrieveUpdateSerializer(serializers.ModelSerializer):
     absolute_parent_url = serializers.SerializerMethodField()
     absolute_url = serializers.SerializerMethodField()
     icon = serializers.CharField(read_only=True, source='get_icon')
+    unit_of_measure = serializers.CharField(read_only=True, source='get_unit_of_measure')
+    type_of = serializers.CharField(read_only=True, source='get_pretty_instrument_type_of')
 
     class Meta:
         model = Instrument
@@ -62,6 +64,8 @@ class InstrumentRetrieveUpdateSerializer(serializers.ModelSerializer):
             'last_24h_range_value',
             'last_24h_stedv_value',
             'last_24h_variance_value',
+            'unit_of_measure',
+            'type_of',
         )
 
     def get_absolute_parent_url(self, obj):

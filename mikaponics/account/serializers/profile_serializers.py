@@ -71,6 +71,7 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
     shipping_telephone = serializers.CharField(required=True,allow_blank=False,)
 
     # --- Misc ---
+    timezone = serializers.CharField(required=False,allow_blank=False,)
     was_email_activated = serializers.ReadOnlyField()
     was_onboarded = serializers.ReadOnlyField()
     onboarding_survey_data = serializers.ReadOnlyField()
@@ -98,6 +99,7 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
             'created_at',
             'last_modified_at',
             'dashboard_path',
+            'timezone',
 
             # --- Billing ---
             'billing_country',

@@ -17,6 +17,10 @@ class UserAdmin(BaseUserAdmin):
             {'fields': ('email','password')}
         ),
 
+        ('Global Settings',
+            {'fields': ('timezone',)}
+        ),
+
         ('Permissions',
             {'fields': ('is_staff',)}
         ),
