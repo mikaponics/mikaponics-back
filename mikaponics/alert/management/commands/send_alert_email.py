@@ -57,12 +57,10 @@ class Command(BaseCommand):
 
     def begin_processing(self, alert):
         me = alert.instrument.device.user
+        instrument = alert.instrument
 
         # Generate the links.
-        url = reverse_with_full_domain(
-            reverse_url_id='mikaponics_instrument_detail',
-            resolve_url_args=[alert.id]
-        )
+        url = settings.MIKAPONICS_FRONTEND_HTTP_PROTOCOL+settings.MIKAPONICS_FRONTEND_HTTP_DOMAIN+instrument.get_absolute_url()
         web_view_url = reverse_with_full_domain(
             reverse_url_id='mikaponics_instrument_alerts_email',
             resolve_url_args=[alert.id]

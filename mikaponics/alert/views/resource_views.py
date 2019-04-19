@@ -28,7 +28,7 @@ class InstrumentAlertsListAPIView(generics.ListAPIView):
 
     @transaction.atomic
     def get_queryset(self):
-        queryset = InstrumentAlert.objects.all()
+        queryset = InstrumentAlert.objects.all().order_by('-created_at')
 
         # Take the queryset and apply the joins to increase performance.
         s = self.get_serializer_class()
