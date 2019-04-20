@@ -29,8 +29,13 @@ class InvoiceRetrieveUpdateSerializer(serializers.Serializer):
     slug = serializers.SlugField(read_only=True)
     absolute_url = serializers.ReadOnlyField(source="get_absolute_url")
     purchased_at = serializers.DateTimeField(read_only=True)
+    created_at = serializers.DateTimeField(read_only=True)
+    last_modified_at = serializers.DateTimeField(read_only=True)
+    due_at = serializers.DateTimeField(read_only=True)
+    number = serializers.IntegerField(read_only=True)
     total_before_tax = serializers.CharField(read_only=True)
     tax = serializers.CharField(read_only=True)
+    tax_percent = serializers.FloatField(read_only=True)
     total_after_tax = serializers.CharField(read_only=True)
     shipping = serializers.CharField(read_only=True)
     credit = serializers.CharField(read_only=True)
@@ -67,8 +72,13 @@ class InvoiceRetrieveUpdateSerializer(serializers.Serializer):
             'slug',
             'absolute_url',
             'purchased_at',
+            'due_at',
+            'created_at',
+            'last_modified_at',
+            'number',
             'total_before_tax',
             'tax',
+            'tax_percent',
             'total_after_tax',
             'shipping',
             'credit',

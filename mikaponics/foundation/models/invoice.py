@@ -126,6 +126,20 @@ class Invoice(models.Model):
         blank=True,
         null=True,
     )
+    due_at = models.DateTimeField(
+        _("Due at"),
+        help_text=_('The date/time that the customer must pay this invoice off before the customer is considered delinquent on payment.'),
+        blank=True,
+        null=True,
+    )
+    number = models.BigIntegerField(
+        _("Invoice Number"),
+        help_text=_('The invoice number of the purchase.'),
+        blank=False,
+        null=False,
+        unique=True,
+        editable=False, # Only device or web-app can change this state, not admin user!
+    )
 
     #
     # Stripe Fields
@@ -156,6 +170,10 @@ class Invoice(models.Model):
         max_digits=14,
         decimal_places=2,
         default_currency='CAD'
+    )
+    tax_percent = models.FloatField(
+        _("Tax Percent"),
+        help_text=_('The tax percent that was for calculating this invoices tax.'),
     )
     tax = MoneyField(
         _("Tax"),
@@ -410,6 +428,11 @@ class Invoice(models.Model):
             else:
                 self.slug = "order-"+get_random_string(length=32)
 
+        if not self.number:
+            count = Invoice.objects.all().count()
+            count += 1
+            self.number = count
+
         super(Invoice, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -434,6 +457,7 @@ class Invoice(models.Model):
             tax_rate = tax_percent / Decimal(100.00)
             tax = self.total_before_tax.amount * tax_rate
             self.tax = Money(amount=tax, currency=self.store.currency)
+        self.tax_percent = tax_percent
         self.total_after_tax = self.total_before_tax + self.tax
 
         # Calculate grand total

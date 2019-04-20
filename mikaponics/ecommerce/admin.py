@@ -51,14 +51,14 @@ admin.site.register(Shipper, ShipperAdmin)
 
 class InvoiceAdmin(admin.ModelAdmin):
     list_display = [
-        'id', 'state', 'user', 'created_at', 'last_modified_at',
+        'number', 'state', 'user', 'created_at', 'last_modified_at',
     ]
     list_filter = []
     # search_fields = ['device_id',]
     raw_id_fields = ['user',]
-    ordering = ['id']
+    ordering = ['number']
     readonly_fields = [
-        'id', 'created_at', 'created_by', 'created_from',
+        'number', 'created_at', 'created_by', 'created_from',
         'created_from_is_public', 'last_modified_at', 'last_modified_by',
         'last_modified_from', 'last_modified_from_is_public',
         'stripe_receipt_id', 'stripe_receipt_data',
