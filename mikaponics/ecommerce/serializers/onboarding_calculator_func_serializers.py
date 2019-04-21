@@ -21,7 +21,6 @@ from foundation.constants import (
 )
 from foundation.models import Product, SubscriptionPlan, Shipper, InvoiceItem
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -76,8 +75,10 @@ class OnboardingCalculatorFuncSerializer(serializers.Serializer):
             defaults={
                 'invoice': draft_invoice,
                 'product': default_product,
-                'number_of_products': validated_data['number_of_devices'],
-                'product_price': default_product.price,
+                'description': default_product.description,
+                'quantity': validated_data['quantity'],
+                'unit_price': default_product.price,
+                'total_price': default_product.price * validated_data['quantity']
             }
         )
 

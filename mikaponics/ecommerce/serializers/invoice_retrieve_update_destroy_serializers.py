@@ -13,6 +13,7 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
+from ecommerce.serializers.invoice_item_retrieve_update_destroy_serializers import InvoiceItemRetrieveUpdateDestroySerializer
 from foundation.models import Invoice, Product
 
 
@@ -65,6 +66,8 @@ class InvoiceRetrieveUpdateSerializer(serializers.Serializer):
     shipping_email = serializers.CharField(required=False,allow_blank=True,)
     shipping_telephone = serializers.CharField(required=False,allow_blank=True,)
 
+    items = InvoiceItemRetrieveUpdateDestroySerializer(read_only=True, many=True, source="invoice_items")
+
     # Meta Information.
     class Meta:
         fields = (
@@ -107,6 +110,8 @@ class InvoiceRetrieveUpdateSerializer(serializers.Serializer):
             'shipping_post_office_box_number',
             'shipping_email',
             'shipping_telephone',
+
+            'items',
         )
 
     def update(self, instance, validated_data):

@@ -47,16 +47,30 @@ class InvoiceItem(models.Model):
         related_name="invoice_items",
         on_delete=models.CASCADE
     )
-    number_of_products = models.PositiveSmallIntegerField(
-        _("Number of products"),
+    description = models.CharField(
+        _("Description"),
+        max_length=127,
+        help_text=_('The description of the invoice item.'),
+        blank=False,
+        null=False,
+    )
+    quantity = models.PositiveSmallIntegerField(
+        _("Quantity"),
         help_text=_('The number of `Products` this invoice item holds.'),
         default=1,
         blank=True,
         db_index=False,
     )
-    product_price = MoneyField(
-        _("Price of"),
+    unit_price = MoneyField(
+        _("Unit Price"),
         help_text=_('The price of a single `Product` for this invoice item.'),
+        max_digits=14,
+        decimal_places=2,
+        default_currency='CAD'
+    )
+    total_price = MoneyField(
+        _("Total Price"),
+        help_text=_('The total price of all `Products` in this invoice item.'),
         max_digits=14,
         decimal_places=2,
         default_currency='CAD'

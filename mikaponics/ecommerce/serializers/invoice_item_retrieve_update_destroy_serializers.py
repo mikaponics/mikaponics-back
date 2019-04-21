@@ -27,17 +27,23 @@ def get_todays_date_plus_days(days=0):
 class InvoiceItemRetrieveUpdateDestroySerializer(serializers.Serializer):
     invoice = serializers.PrimaryKeyRelatedField(read_only=True)
     product = serializers.PrimaryKeyRelatedField(read_only=True)
-    number_of_products = serializers.IntegerField(required=False, allow_null=True)
+    description = serializers.CharField(read_only=True,)
+    quantity = serializers.IntegerField(required=False, allow_null=True)
+    unit_price = serializers.CharField(read_only=True)
+    total_price = serializers.CharField(read_only=True)
 
     # Meta Information.
     class Meta:
         fields = (
             'invoice',
             'product',
-            'number_of_products'
+            'description',
+            'quantity',
+            'unit_price',
+            'total_price'
         )
 
-    def validate_number_of_products(self, data):
+    def validate_quantity(self, data):
         if data < 1:
             raise exceptions.ValidationError(_("Please pick number greater then zero."))
         return data
@@ -46,7 +52,7 @@ class InvoiceItemRetrieveUpdateDestroySerializer(serializers.Serializer):
         """
         Override this function to include extra functionality.
         """
-        instance.number_of_products = validated_data.get('number_of_products', instance.number_of_products)
+        instance.quantity = validated_data.get('quantity', instance.quantity)
         instance.save()
         instance.invoice.invalidate('total')
         return validated_data

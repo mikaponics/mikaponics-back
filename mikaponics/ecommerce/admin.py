@@ -82,7 +82,7 @@ admin.site.register(Invoice, InvoiceAdmin)
 
 class InvoiceItemAdmin(admin.ModelAdmin):
     list_display = [
-        'id', 'invoice', 'product', 'number_of_products', 'product_price',
+        'id', 'invoice', 'product', 'unit_price', 'quantity', 'total_price'
     ]
     list_filter = []
     # search_fields = ['device_id',]
