@@ -27,7 +27,7 @@ class OnboardingValidatorFuncSerializer(serializers.Serializer):
     step_number = serializers.IntegerField(required=False)
 
     # STEP 1 OF 6:
-    number_of_devices = serializers.IntegerField(required=True)
+    quantity = serializers.IntegerField(required=True)
 
     # STEP 2 OF 6:
     billing_given_name = serializers.CharField(required=True,allow_blank=False,)
@@ -61,7 +61,7 @@ class OnboardingValidatorFuncSerializer(serializers.Serializer):
             'step_number',
 
             # STEP 1 OF 6:
-            'number_of_devices',
+            'quantity',
 
             # STEP 2 OF 6:
             'billing_given_name',
@@ -90,19 +90,19 @@ class OnboardingValidatorFuncSerializer(serializers.Serializer):
             'shipping_telephone',
         )
 
-    def validate_number_of_devices(self, data):
-        number_of_devices = data
-        if number_of_devices > 50:
+    def validate_quantity(self, data):
+        quantity = data
+        if quantity > 50:
             raise exceptions.ValidationError({
-                'number_of_devices': _('Cannot invoice more then 50 devices in one invoice, please contact <a href="mailto:info@mikaponics.com">info@mikasoftware.com</a> to invoice more.')
+                'quantity': _('Cannot invoice more then 50 devices in one invoice, please contact <a href="mailto:info@mikaponics.com">info@mikasoftware.com</a> to invoice more.')
             })
-        elif number_of_devices == 0:
+        elif quantity == 0:
             raise exceptions.ValidationError({
-                'number_of_devices': _('Please invoice more then zero!')
+                'quantity': _('Please invoice more then zero!')
             })
-        elif number_of_devices < 0:
+        elif quantity < 0:
             raise exceptions.ValidationError({
-                'number_of_devices': _('Please pick an invoice more then zero!')
+                'quantity': _('Please pick an invoice more then zero!')
             })
         return data
 

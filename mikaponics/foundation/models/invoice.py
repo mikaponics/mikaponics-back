@@ -447,7 +447,7 @@ class Invoice(models.Model):
         # Calculate the total.
         self.total_before_tax.amount = 0
         for item in self.invoice_items.all():
-            self.total_before_tax += (item.product_price * item.number_of_products)
+            self.total_before_tax += (item.unit_price * item.quantity)
 
         # Calculate the tax.
         from djmoney.money import Money

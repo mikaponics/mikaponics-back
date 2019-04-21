@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 class OnboardingCalculatorFuncSerializer(serializers.Serializer):
-    number_of_devices = serializers.IntegerField(required=True)
+    quantity = serializers.IntegerField(required=True)
     shipping_address_country = serializers.CharField(required=True,allow_blank=False,)
     shipping_address_region = serializers.CharField(required=True,allow_blank=False,)
     calculation = serializers.JSONField(read_only=True)
@@ -33,7 +33,7 @@ class OnboardingCalculatorFuncSerializer(serializers.Serializer):
     # Meta Information.
     class Meta:
         fields = (
-            'number_of_devices',
+            'quantity',
             'shipping_address_country',
             'shipping_address_region',
             'calculation',
@@ -57,7 +57,7 @@ class OnboardingCalculatorFuncSerializer(serializers.Serializer):
         draft_invoice = user.draft_invoice
 
         # Update our open invoice with how many devices the user wants to purchase.
-        draft_invoice.number_of_devices = validated_data['number_of_devices']
+        draft_invoice.quantity = validated_data['quantity']
         draft_invoice.shipper = default_shipper
         draft_invoice.shipping_country = validated_data['shipping_address_country']
         draft_invoice.shipping_region = validated_data['shipping_address_region']
@@ -88,7 +88,7 @@ class OnboardingCalculatorFuncSerializer(serializers.Serializer):
         # Create our calculation output.
         validated_data['calculation'] = {
             'monthlyFee': str(default_subscription.amount),
-            'numberOfDevices': draft_invoice.number_of_devices,
+            'quantity': draft_invoice.quantity,
             'pricePerDevice': str(default_product.price),
             'totalBeforeTax': str(draft_invoice.total_before_tax),
             'tax': str(draft_invoice.tax),
