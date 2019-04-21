@@ -1,4 +1,5 @@
 from account.serializers.activate_serializers import ActivateSerializer
+from account.serializers.logout_serializers import LogoutSerializer
 from account.serializers.login_serializers import LoginSerializer
 from account.serializers.register_serializers import RegisterSerializer
 from account.serializers.send_password_reset_serializer import SendPasswordResetSerializer

@@ -54,19 +54,17 @@ class LoginAPIView(APIView):
         # Get our web application authorization.
         application = Application.objects.filter(name=settings.MIKAPONICS_RESOURCE_SERVER_NAME).first()
 
-        # Generate our access token which does not have a time limit.
+        # Generate our "NEW" access token which does not have a time limit.
+        # We want to generate a new token every time because the user may be
+        # logging in from multiple locations and may log out from multiple
+        # locations so we don't want the user using the same token every time.
         aware_dt = timezone.now()
         expires_dt = aware_dt.replace(aware_dt.year + 1776)
-        access_token, created = AccessToken.objects.update_or_create(
+        access_token = AccessToken.objects.create(
             application=application,
             user=authenticated_user,
-            defaults={
-                'user': authenticated_user,
-                'application': application,
-                'expires': expires_dt,
-                'token': generate_token(),
-                'scope': 'read,write,introspection'
-            },
+            expires=expires_dt,
+            token=generate_token(),
             scope='read,write,introspection'
         )
 

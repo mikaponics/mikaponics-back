@@ -19,11 +19,14 @@ from rest_framework import authentication, viewsets, permissions, status, parser
 from rest_framework.decorators import detail_route, list_route # See: http://www.django-rest-framework.org/api-guide/viewsets/#marking-extra-actions-for-routing
 from rest_framework.response import Response
 
+from account.serializers import LogoutSerializer
+
 
 class LogoutAPIView(APIView):
     """
     API endpoint used for users to invalidate their valid oAuth 2.0 token.
     """
+    authentication_classes= (OAuth2Authentication,)
     throttle_classes = ()
     permission_classes = ()
     parser_classes = (
@@ -37,5 +40,28 @@ class LogoutAPIView(APIView):
     def post(self, request):
         # Get the IP of the user.
         client_ip, is_routable = get_client_ip(self.request)
-        #TODO: IMPLEMENT.
-        return Response(data={'detail': 'You are now logged off.'}, status=status.HTTP_501_NOT_IMPLEMENTED)
+
+        authenticated_user = None
+        if request.user.is_authenticated:
+            authenticated_user = request.user
+
+        # Serializer to get our login details.
+        serializer = LogoutSerializer(data=request.data, context={
+            'authenticated_by': authenticated_user,
+            'authenticated_from': client_ip,
+            'authenticated_from_is_public': is_routable
+        })
+
+        # Validate the token.
+        serializer.is_valid(raise_exception=True)
+
+        # Return our validated token.
+        access_token = serializer.validated_data['access_token']
+
+        # Invalidate the token.
+        aware_dt = timezone.now()
+        expires_now_dt = aware_dt.replace(aware_dt.day - 1)
+        access_token.expires = expires_now_dt
+        access_token.save()
+
+        return Response(data={'detail': 'You are now logged off.'}, status=status.HTTP_200_OK)
