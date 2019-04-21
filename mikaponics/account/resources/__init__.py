@@ -1,4 +1,5 @@
 from account.resources.activate_api_view import ActivateAPIView
+from account.resources.logout_api_view import LogoutAPIView
 from account.resources.login_api_view import LoginAPIView
 from account.resources.register_api_view import RegisterAPIView
 from account.resources.send_password_reset_view import SendPasswordResetAPIView

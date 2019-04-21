@@ -18,6 +18,7 @@ urlpatterns = (
     ############################################################################
     # Authentication.
     url(r'^api/activate$', resources.ActivateAPIView.as_view(), name='mikaponics_activate_api_endpoint'),
+    url(r'^api/logout$', resources.LogoutAPIView.as_view(), name='mikaponics_logout_api_endpoint'),
     url(r'^api/login$', resources.LoginAPIView.as_view(), name='mikaponics_login_api_endpoint'),
     url(r'^api/register$', resources.RegisterAPIView.as_view(), name='mikaponics_register_api_endpoint'),
     # url(r'^api/logout$', LogoutAPIView.as_view(), name='mikaponics_logout_api_endpoint'),
