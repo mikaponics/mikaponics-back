@@ -69,7 +69,7 @@ class Command(BaseCommand):
                 'id': MIKAPONICS_DEFAULT_PRODUCT_ID,
                 'store': store,
                 'name': "Mikapod",
-                'description': 'Mikapod aquaponics/hydroponics telemetry device'
+                'description': 'Mikapod aquaponics/hydroponics telemetry device',
                 "price": Money(10, 'CAD')
             }
         )
