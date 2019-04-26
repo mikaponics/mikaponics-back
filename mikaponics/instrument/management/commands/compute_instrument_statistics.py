@@ -90,9 +90,9 @@ class Command(BaseCommand):
 
         # Last 24h statistics.
         instrument.last_24h_min_value = last_24h_statistics.get('min_value', None)
-        instrument.last_24h_min_timestamp_at_utc = last_24h_statistics.get('min_timestamp_utc', None)
+        instrument.last_24h_min_timestamp_at = last_24h_statistics.get('min_timestamp_utc', None)
         instrument.last_24h_max_value = last_24h_statistics.get('max_value', None)
-        instrument.last_24h_max_timestamp_at_utc = last_24h_statistics.get('max_timestamp_utc', None)
+        instrument.last_24h_max_timestamp_at = last_24h_statistics.get('max_timestamp_utc', None)
         instrument.last_24h_mean_value = last_24h_statistics.get('mean_value', None)
         instrument.last_24h_median_value = last_24h_statistics.get('median_value', None)
         instrument.last_24h_mode_value = last_24h_statistics.get('mode_value', None)
