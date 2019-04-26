@@ -52,6 +52,11 @@ class DeviceReport(models.Model):
     '''
     Fields
     '''
+    id = models.BigAutoField(
+        _("ID"),
+        primary_key=True,
+        auto_created=True,
+    )
     device = models.ForeignKey(
         "Device",
         help_text=_('The device which this report is based on.'),

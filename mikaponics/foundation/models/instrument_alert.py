@@ -79,6 +79,11 @@ class InstrumentAlert(models.Model):
     '''
     Fields
     '''
+    id = models.BigAutoField(
+        _("ID"),
+        primary_key=True,
+        auto_created=True,
+    )
     slug = models.SlugField(
         _("Slug"),
         help_text=_('The unique slug used for this instrument alert when accessing details page.'),

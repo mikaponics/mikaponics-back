@@ -31,6 +31,11 @@ class InvoiceItem(models.Model):
         )
 
     objects = InvoiceItemManager()
+    id = models.BigAutoField(
+        _("ID"),
+        primary_key=True,
+        auto_created=True,
+    )
     invoice = models.ForeignKey(
         "Invoice",
         help_text=_('The user whom this purchase invoice belongs to.'),

@@ -58,6 +58,11 @@ class InstrumentAnalysis(models.Model):
     # Primary identification fields.
     #
 
+    id = models.BigAutoField(
+        _("ID"),
+        primary_key=True,
+        auto_created=True,
+    )
     instrument = models.ForeignKey(
         "Instrument",
         help_text=_('The instrument that this anlysis will based on.'),

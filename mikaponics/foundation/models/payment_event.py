@@ -37,6 +37,13 @@ class PaymentEvent(models.Model):
     '''
     Fields
     '''
+    
+    id = models.BigAutoField(
+        _("ID"),
+        primary_key=True,
+        auto_created=True,
+    )
+
 
     #
     # Stripe webhook pre-pocessed data.

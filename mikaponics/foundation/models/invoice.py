@@ -71,6 +71,11 @@ class Invoice(models.Model):
     '''
     Fields
     '''
+    id = models.BigAutoField(
+        _("ID"),
+        primary_key=True,
+        auto_created=True,
+    )
     slug = models.SlugField(
         _("Slug"),
         help_text=_('The unique slug used for this invoice when accessing details page.'),

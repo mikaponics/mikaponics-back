@@ -90,6 +90,11 @@ class TimeSeriesDatum(models.Model):
     # Essential time-series datum fields.
     #
 
+    id = models.BigAutoField(
+        _("ID"),
+        primary_key=True,
+        auto_created=True,
+    )
     instrument = models.ForeignKey(
         "Instrument",
         help_text=_('The instrument this datum belongs to.'),
