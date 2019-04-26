@@ -18,6 +18,9 @@ from instrument.model_resources import generate_instrument_analysis
 
 
 class InstrumentAnalysisListCreateSerializer(serializers.ModelSerializer):
+    device_name = serializers.CharField(read_only=True, source="instrument.device.name")
+    device_slug = serializers.SlugField(read_only=True, source="instrument.device.slug")
+    device_timezone = serializers.SlugField(read_only=True, source="instrument.device.timezone")
     slug = serializers.SlugField(read_only=True)
     instrument_slug = serializers.SlugField(read_only=True, source="instrument.slug")
     instrument_slug = serializers.SlugField(write_only=True)
@@ -36,6 +39,9 @@ class InstrumentAnalysisListCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = InstrumentAnalysis
         fields = (
+            'device_name',
+            'device_slug',
+            'device_timezone',
             'absolute_url',
             'slug',
             'instrument_slug',
@@ -89,18 +95,26 @@ class InstrumentAnalysisListCreateSerializer(serializers.ModelSerializer):
 
 
 class InstrumentAnalysisRetrieveUpdateSerializer(serializers.ModelSerializer):
+    device_name = serializers.CharField(read_only=True, source="instrument.device.name")
+    device_slug = serializers.SlugField(read_only=True, source="instrument.device.slug")
+    device_timezone = serializers.SlugField(read_only=True, source="instrument.device.timezone")
     slug = serializers.SlugField(read_only=True)
     instrument_slug = serializers.SlugField(read_only=True, source="instrument.slug")
     instrument_absolute_url = serializers.SlugField(read_only=True, source="instrument.get_absolute_url")
+    instrument_unit_of_measure = serializers.CharField(read_only=True, source="instrument.get_unit_of_measure", allow_null=True)
     absolute_url = serializers.ReadOnlyField(source="get_absolute_url")
 
     class Meta:
         model = InstrumentAnalysis
         fields = (
+            'device_name',
+            'device_slug',
+            'device_timezone',
             'absolute_url',
             'slug',
             'instrument_slug',
             'instrument_absolute_url',
+            'instrument_unit_of_measure',
             'start_dt',
             'finish_dt',
             'min_value',
