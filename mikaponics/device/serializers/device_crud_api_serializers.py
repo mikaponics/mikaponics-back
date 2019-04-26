@@ -54,6 +54,7 @@ class DeviceInstrumentSerializer(serializers.ModelSerializer):
     last_measured_pretty_value = serializers.ReadOnlyField(source='get_pretty_last_measured_value')
     last_measured_pretty_at = serializers.ReadOnlyField(source='get_pretty_last_measured_at')
     slug = serializers.SlugField()
+    timezone = serializers.ReadOnlyField(source='device.timezone')
 
     class Meta:
         model = Instrument
@@ -67,6 +68,7 @@ class DeviceInstrumentSerializer(serializers.ModelSerializer):
             'last_measured_pretty_at',
             'state',
             'slug',
+            'timezone'
         )
 
 
