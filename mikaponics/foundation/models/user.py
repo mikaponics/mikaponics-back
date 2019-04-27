@@ -78,14 +78,18 @@ class UserManager(BaseUserManager):
         faker = Faker('en_CA')
         for i in range(0,length):
             try:
+                first_name = faker.first_name()
+                last_name = faker.last_name()
                 user = User.objects.create(
                     email = faker.safe_email(),
-                    first_name = faker.first_name(),
+                    first_name = first_name,
                     middle_name = None,
-                    last_name = faker.last_name(),
+                    last_name = last_name,
                     birthdate = None,
                     nationality = None,
                     gender = None,
+                    billing_given_name = first_name,
+                    billing_last_name = last_name,
                     billing_email = faker.safe_email(),
                     billing_telephone = faker.msisdn(),
                     billing_country = faker.country(),
@@ -95,6 +99,9 @@ class UserManager(BaseUserManager):
                     billing_postal_code = faker.postalcode(),
                     billing_street_address = faker.street_address(),
                     # billing_street_address_extra = faker.
+                    is_shipping_same_as_billing = False,
+                    shipping_given_name = first_name,
+                    shipping_last_name = last_name,
                     shipping_email = faker.safe_email(),
                     shipping_telephone = faker.msisdn(),
                     shipping_country = faker.country(),
@@ -215,9 +222,23 @@ class User(AbstractBaseUser, PermissionsMixin):
     # Billing Address Fields
     #
 
+    billing_given_name = models.CharField(
+        _("Billing Given Name"),
+        help_text=_('The given name used for billing.'),
+        blank=True,
+        null=True,
+        max_length=127,
+    )
+    billing_last_name = models.CharField(
+        _("Billing Last Name"),
+        help_text=_('The last name used for billing.'),
+        blank=True,
+        null=True,
+        max_length=127,
+    )
     billing_email = models.EmailField(
         _("Billing Email"),
-        max_length=127,
+        max_length=255,
         help_text=_('The email used for billing'),
         blank=True,
         null=True,
@@ -284,6 +305,26 @@ class User(AbstractBaseUser, PermissionsMixin):
     # Shipping Address Fields
     #
 
+    is_shipping_same_as_billing = models.BooleanField(
+        _("Is shipping information same as billing information"),
+        default=False,
+        help_text=_('Boolean indicates whether the shipping information is the same as the billing information.'),
+        blank=True,
+    )
+    shipping_given_name = models.CharField(
+        _("Shipping Given Name"),
+        help_text=_('The given name used for shipping.'),
+        blank=True,
+        null=True,
+        max_length=127,
+    )
+    shipping_last_name = models.CharField(
+        _("Shipping Last Name"),
+        help_text=_('The last name used for shipping.'),
+        blank=True,
+        null=True,
+        max_length=127,
+    )
     shipping_email = models.EmailField(
         _("Shipping Email"),
         max_length=127,

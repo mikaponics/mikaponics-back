@@ -25,14 +25,14 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         # User Account.
-        parser.add_argument('user_id' , nargs='+', type=int)
+        parser.add_argument('email' , nargs='+', type=str)
 
     def handle(self, *args, **options):
-        user_id = options['user_id'][0]
+        email = options['email'][0]
 
         try:
-            for user_id in options['user_id']:
-                user = User.objects.get(id=user_id)
+            for email in options['email']:
+                user = User.objects.get(email=email)
                 self.begin_processing(user)
         except User.DoesNotExist:
             raise CommandError(_('Account does not exist with the id: %s') % str(id))

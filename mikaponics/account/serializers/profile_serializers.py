@@ -47,6 +47,8 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
     gender = serializers.CharField(required=False,allow_blank=True,)
 
     # --- Billing ---
+    billing_given_name = serializers.CharField(required=True,allow_blank=False,)
+    billing_last_name = serializers.CharField(required=True,allow_blank=False,)
     billing_country = serializers.CharField(required=True,allow_blank=False,)
     billing_region = serializers.CharField(required=True,allow_blank=False,)
     billing_locality = serializers.CharField(required=True,allow_blank=False,)
@@ -59,6 +61,9 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
     billing_telephone = serializers.CharField(required=True,allow_blank=False,)
 
     # --- Shipping ---
+    is_shipping_same_as_billing = serializers.BooleanField(required=True,)
+    shipping_given_name = serializers.CharField(required=True,allow_blank=False,)
+    shipping_last_name = serializers.CharField(required=True,allow_blank=False,)
     shipping_country = serializers.CharField(required=True,allow_blank=False,)
     shipping_region = serializers.CharField(required=True,allow_blank=False,)
     shipping_locality = serializers.CharField(required=True,allow_blank=False,)
@@ -102,6 +107,8 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
             'timezone',
 
             # --- Billing ---
+            'billing_given_name',
+            'billing_last_name',
             'billing_country',
             'billing_region',
             'billing_locality',
@@ -114,6 +121,9 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
             'billing_telephone',
 
             # --- Shipping ---
+            'is_shipping_same_as_billing',
+            'shipping_given_name',
+            'shipping_last_name',
             'shipping_country',
             'shipping_region',
             'shipping_locality',
@@ -137,6 +147,8 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
         Override this function to include extra functionality.
         """
         # --- Billing ---
+        instance.billing_given_name = validated_data.get('billing_given_name', instance.billing_given_name)
+        instance.billing_last_name = validated_data.get('billing_last_name', instance.billing_last_name)
         instance.billing_country = validated_data.get('billing_country', instance.billing_country)
         instance.billing_region = validated_data.get('billing_region', instance.billing_region)
         instance.billing_locality = validated_data.get('billing_locality', instance.billing_locality)
@@ -149,6 +161,9 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
         instance.billing_telephone = validated_data.get('billing_telephone', instance.billing_telephone)
 
         # --- Shipping ---
+        instance.is_shipping_same_as_billing = validated_data.get('is_shipping_same_as_billing', instance.is_shipping_same_as_billing)
+        instance.shipping_given_name = validated_data.get('shipping_given_name', instance.shipping_given_name)
+        instance.shipping_last_name = validated_data.get('shipping_last_name', instance.shipping_last_name)
         instance.shipping_country = validated_data.get('shipping_country', instance.shipping_country)
         instance.shipping_region = validated_data.get('shipping_region', instance.shipping_region)
         instance.shipping_locality = validated_data.get('shipping_locality', instance.shipping_locality)
