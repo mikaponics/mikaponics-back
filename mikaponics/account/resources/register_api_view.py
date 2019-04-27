@@ -22,7 +22,7 @@ from rest_framework.decorators import detail_route, list_route # See: http://www
 from rest_framework.response import Response
 
 from account.serializers import RegisterSerializer
-from account.tasks import run_send_activation_email_func
+from account.tasks import run_send_activation_email_func, run_send_user_was_created_to_staff_email_func
 
 
 class RegisterAPIView(APIView):
@@ -56,6 +56,7 @@ class RegisterAPIView(APIView):
 
         # Send our activation email to the user.
         django_rq.enqueue(run_send_activation_email_func, email=authenticated_user.email)
+        django_rq.enqueue(run_send_user_was_created_to_staff_email_func, email=authenticated_user.email)
 
         # Return a simple message indicating that the user was registered.
         return Response(data={

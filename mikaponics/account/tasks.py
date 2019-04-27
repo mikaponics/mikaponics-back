@@ -13,3 +13,7 @@ def run_send_activation_email_func(email):
 
 def run_send_reset_password_email_func(email):
     call_command('send_reset_password_email', email, verbosity=0)
+
+
+def run_send_user_was_created_to_staff_email_func(email):
+    call_command('send_user_was_created_to_staff_email', email, verbosity=0)
