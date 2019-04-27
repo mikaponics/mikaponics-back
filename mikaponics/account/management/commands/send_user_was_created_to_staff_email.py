@@ -46,7 +46,7 @@ class Command(BaseCommand):
         staff_email_addresses = get_staff_email_addresses()
 
         # Generate the data.
-        # url = settings.MIKAPONICS_FRONTEND_HTTP_PROTOCOL+settings.MIKAPONICS_FRONTEND_HTTP_DOMAIN+"/activate/"+str(pr_access_code)
+        url = settings.MIKAPONICS_BACKEND_HTTP_PROTOCOL+settings.MIKAPONICS_BACKEND_HTTP_DOMAIN+"/en/admin/foundation/user/"+str(user.id)+"/change/"
         web_view_url = reverse_with_full_domain(
             reverse_url_id='mikaponics_user_was_created_email',
             resolve_url_args=[user.id]
@@ -54,7 +54,7 @@ class Command(BaseCommand):
         subject = "New user to Mikaponics!"
         param = {
             'user': user,
-            # 'url': url,
+            'url': url,
             'web_view_url': web_view_url,
             'constants': constants
         }

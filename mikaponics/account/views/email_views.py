@@ -99,12 +99,14 @@ def user_was_created_email_page(request, user_id):
         raise PermissionDenied(_('Wrong user ID.'))
 
     # Generate the data.
+    url = settings.MIKAPONICS_BACKEND_HTTP_PROTOCOL+settings.MIKAPONICS_BACKEND_HTTP_DOMAIN+"/en/admin/foundation/user/"+str(user_id)+"/change/"
     web_view_url = reverse_with_full_domain(
         reverse_url_id='mikaponics_user_was_created_email',
         resolve_url_args=[user.id]
     )
     param = {
         'constants': constants,
+        'url': url,
         'web_view_url': web_view_url,
         'user': user
     }
