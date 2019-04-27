@@ -15,6 +15,10 @@ urlpatterns = (
         views.reset_password_email_page,
         name='mikaponics_reset_password_email'
     ),
+    url(r'^user-was-created-email/(.*)/$',
+        views.user_was_created_email_page,
+        name='mikaponics_user_was_created_email'
+    ),
     ############################################################################
     # Authentication.
     url(r'^api/activate$', resources.ActivateAPIView.as_view(), name='mikaponics_activate_api_endpoint'),

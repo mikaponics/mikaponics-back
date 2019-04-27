@@ -88,3 +88,30 @@ def user_activation_email_page(request, pr_access_code=None):
     # - https://templates.mailchimp.com/resources/inline-css/
 
     return render(request, 'account/email/user_activation_email_view.html', param)
+
+
+def user_was_created_email_page(request, user_id):
+    # Find the user or error.
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        logger.info("Wrong access code.")
+        raise PermissionDenied(_('Wrong user ID.'))
+
+    # Generate the data.
+    web_view_url = reverse_with_full_domain(
+        reverse_url_id='mikaponics_user_was_created_email',
+        resolve_url_args=[user.id]
+    )
+    param = {
+        'constants': constants,
+        'web_view_url': web_view_url,
+        'user': user
+    }
+
+    # DEVELOPERS NOTE:
+    # - When copying the "Sunday" open source email theme into our code, we will
+    #   need to use a formatter to inline the CSS.
+    # - https://templates.mailchimp.com/resources/inline-css/
+
+    return render(request, 'account/email/user_was_created_email.html', param)
