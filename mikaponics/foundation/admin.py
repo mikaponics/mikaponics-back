@@ -175,7 +175,7 @@ admin.site.register(InstrumentAnalysis, InstrumentAnalysisAdmin)
 
 class InstrumentSimulatorAdmin(admin.ModelAdmin):
     list_display = [
-        'id', 'instrument', 'is_running'
+        'instrument', 'is_running'
 
     ]
     list_filter = ['is_running',]

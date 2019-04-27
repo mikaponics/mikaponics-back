@@ -38,12 +38,16 @@ class TimeSeriesDatumManager(models.Manager):
         previous = None
         for dt in reversed(dt_array):
             # Create the current record.
-            data = TimeSeriesDatum.objects.create(
+            data, was_created = TimeSeriesDatum.objects.get_or_create(
                 instrument = instrument,
-                value = faker.pyfloat(left_digits=2, right_digits=2, positive=True),
-                time_step = time_step,
                 timestamp = dt,
-                previous = previous
+                defaults = {
+                    'instrument': instrument,
+                    'timestamp': dt,
+                    'value': faker.pyfloat(left_digits=2, right_digits=2, positive=True),
+                    'time_step': time_step,
+                    'previous':  previous,
+                }
             )
             results.append(data)
 

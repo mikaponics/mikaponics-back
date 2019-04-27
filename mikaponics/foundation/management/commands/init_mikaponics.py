@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Example:
-python manage.py setup_resource_server_authorization "bart@mikasoftware.com"
-"""
 import logging
 import os
 import sys

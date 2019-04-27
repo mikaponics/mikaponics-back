@@ -17,3 +17,10 @@ def run_instruments_handling_func():
 
     for instrument in Instrument.objects.iterator(chunk_size=250):
         call_command('compute_instrument_statistics', instrument.id, verbosity=0)
+
+
+def run_instrument_simulators_func():
+    from foundation.models import InstrumentSimulator
+
+    for simulator in InstrumentSimulator.objects.filter(is_running=True).iterator(chunk_size=250):
+        call_command('instrument_simulator_tick', simulator.id, verbosity=0)

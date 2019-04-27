@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import pytz
-from statistics import mean, median, mode, stdev, variance, StatisticsError  # https://docs.python.org/3/library/statistics.html
 from datetime import date, datetime, timedelta
 from django.conf import settings
 from django.contrib.auth.models import Group
@@ -11,7 +10,13 @@ from django.db.models import Q, Prefetch
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-from dateutil.parser import *
+from oauth2_provider.models import (
+    Application,
+    AbstractApplication,
+    AbstractAccessToken,
+    AccessToken,
+    RefreshToken
+)
 
 from foundation import constants
 from foundation.models import InstrumentSimulator, TimeSeriesDatum
@@ -46,7 +51,29 @@ class Command(BaseCommand):
             simulator = InstrumentSimulator.objects.select_for_update().get(id=instrument_id)
             self.process_simulator(simulator)
         except InstrumentSimulator.DoesNotExist:
-            raise CommandError(_('Instrument was not found.'))
+            raise CommandError(_('Instrument simulator was not found.'))
+
+        self.stdout.write(
+            self.style.SUCCESS(_('%(dt)s | IST | Finished running for instrument simulator #%(id)s.') % {
+                'dt': str(timezone.now()),
+                'id': instrument_id
+            })
+        )
 
     def process_simulator(self, simulator):
-        pass
+        try:
+            latest_datum = TimeSeriesDatum.objects.filter(instrument=simulator.instrument).latest('timestamp')
+        except TimeSeriesDatum.DoesNotExist:
+            latest_datum = None
+
+        # CASE 1 OF 2:
+        # DOES THERE ALREADY EXIST TIME-SERIES DATA AND IF SO THEN RUN THE
+        # FOLLOWING BLOCK OF CODE.
+        if latest_datum:
+            TimeSeriesDatum.objects.seed(simulator.instrument, 1)
+            return
+
+        # CASE 2 OF 2:
+        # ELSE THERE DOES NOT EXIST ANY TIME SERIES DATA SO WE MUST CREATE IT IN
+        # THE FOLLOWING BLOCK OF CODE.
+        TimeSeriesDatum.objects.seed(simulator.instrument, 1)

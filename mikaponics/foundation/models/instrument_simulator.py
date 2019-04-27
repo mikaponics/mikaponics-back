@@ -74,7 +74,6 @@ class InstrumentSimulator(models.Model):
         help_text=_('Controls whether the simulator is running or not.'),
         default=False,
         blank=True,
-        editable=False,
     )
 
     #
