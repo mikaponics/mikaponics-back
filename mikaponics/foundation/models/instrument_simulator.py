@@ -2,23 +2,24 @@
 import pytz
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
+from django.db import IntegrityError
 from django.db import models
+from django.template.defaultfilters import slugify
 from django.urls import reverse
+from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
 
-class DeviceReportManager(models.Manager):
+class InstrumentSimulatorManager(models.Manager):
     def delete_all(self):
-        items = DeviceReport.objects.all()
+        items = InstrumentSimulator.objects.all()
         for item in items.all():
             item.delete()
 
 
-class DeviceReport(models.Model):
+class InstrumentSimulator(models.Model):
     """
-    The model used to store all our computations based on our device. These
-    computations will contain analysis, aggregation and various computations
-    that will make up a report that is consumable by the `user`.
+    Model used simulate the instrument data creation.
     """
 
     '''
@@ -26,10 +27,9 @@ class DeviceReport(models.Model):
     '''
     class Meta:
         app_label = 'foundation'
-        db_table = 'mika_device_reports'
-        verbose_name = _('Device Report')
-        verbose_name_plural = _('Device Reports')
-        unique_together = ("device", "label", "start_dt", "finish_dt")
+        db_table = 'mika_instrument_simulators'
+        verbose_name = _('Instrument Simulator')
+        verbose_name_plural = _('Instrument Simulators')
         default_permissions = ()
         permissions = (
             # ("can_get_opening_hours_specifications", "Can get opening hours specifications"),
@@ -47,42 +47,40 @@ class DeviceReport(models.Model):
     '''
     Object Managers
     '''
-    objects = DeviceReportManager()
+    objects = InstrumentSimulatorManager()
 
     '''
     Fields
     '''
+
+    #
+    # Generic fields.
+    #
+
     id = models.BigAutoField(
         _("ID"),
         primary_key=True,
     )
-    device = models.ForeignKey(
-        "Device",
-        help_text=_('The device which this report is based on.'),
+    instrument = models.OneToOneField(
+        "Instrument",
+        help_text=_('The instrument that this simulator will run for.'),
         blank=False,
         null=False,
-        related_name="reports",
+        related_name="simulator",
         on_delete=models.CASCADE
     )
-    label = models.CharField(
-        _("Label"),
-        max_length=31,
-        help_text=_('The text label to briefly describe this device report.'),
-        blank=False,
-        null=False,
+    is_running = models.BooleanField(
+        _("Is Running"),
+        help_text=_('Controls whether the simulator is running or not.'),
+        default=False,
+        blank=True,
+        editable=False,
     )
-    start_dt = models.DateTimeField(
-        _("Start Datetime"),
-        help_text=_('The start date and time to base this report on.'),
-        blank=False,
-        null=False,
-    )
-    finish_dt = models.DateTimeField(
-        _("Finish Datetime"),
-        help_text=_('The end date and time to base this report on.'),
-        blank=False,
-        null=False,
-    )
+
+    #
+    # System fields.
+    #
+
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified_at = models.DateTimeField(auto_now=True)
 

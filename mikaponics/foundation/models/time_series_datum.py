@@ -3,6 +3,7 @@ import pytz
 from datetime import datetime, timedelta
 from faker import Faker
 from django.contrib.auth import get_user_model
+from django.contrib.gis.db.models import PointField
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -24,6 +25,10 @@ class TimeSeriesDatumManager(models.Manager):
             dt = dt.replace(second=0, microsecond=0)
             dt_array.append(dt)
 
+        # Create the `time_step` we will be using.
+        time_step = timezone.now() - timedelta(minutes=i)
+        time_step = time_step.replace(hour=0, minute=1, second=0, microsecond=0)
+
         # Generate our time-series data. We will iterate through our
         # timestamps array in reverse so the OLDEST records get created FIRST
         # until the NEWEST records are created LAST; therefore, our time-series
@@ -36,6 +41,7 @@ class TimeSeriesDatumManager(models.Manager):
             data = TimeSeriesDatum.objects.create(
                 instrument = instrument,
                 value = faker.pyfloat(left_digits=2, right_digits=2, positive=True),
+                time_step = time_step,
                 timestamp = dt,
                 previous = previous
             )
@@ -93,7 +99,6 @@ class TimeSeriesDatum(models.Model):
     id = models.BigAutoField(
         _("ID"),
         primary_key=True,
-        auto_created=True,
     )
     instrument = models.ForeignKey(
         "Instrument",
@@ -109,11 +114,39 @@ class TimeSeriesDatum(models.Model):
         blank=False,
         null=False,
     )
+    time_step = models.TimeField(
+        _("Time Step"),
+        help_text=_('The time difference between the previous time series datum to this time-series datum.'),
+        blank=False,
+        null=False,
+    )
     value = models.FloatField(
         _("Value"),
         help_text=_('The value of the datum.'),
         blank=True,
         null=True,
+    )
+    location = PointField(
+        _("Location"),
+        help_text=_('A longitude and latitude coordinates of this time-series datum.'),
+        null=True,
+        blank=True,
+        srid=4326,
+        db_index=True
+    )
+    image = models.ImageField(
+        _("Image"),
+        help_text=_('The image file of the time-series datum.'),
+        blank=True,
+        null=True,
+        upload_to='uploads/time-series-data/%Y/%m/%d/'
+    )
+    file = models.FileField(
+        _("File"),
+        help_text=_('The generic file of the time-series datum.'),
+        blank=True,
+        null=True,
+        upload_to='uploads/time-series-data/%Y/%m/%d/'
     )
 
     #

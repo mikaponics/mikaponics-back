@@ -171,3 +171,22 @@ class InstrumentAnalysisAdmin(admin.ModelAdmin):
     #     return False
 
 admin.site.register(InstrumentAnalysis, InstrumentAnalysisAdmin)
+
+
+class InstrumentSimulatorAdmin(admin.ModelAdmin):
+    list_display = [
+        'id', 'instrument', 'is_running'
+
+    ]
+    list_filter = ['is_running',]
+    ordering = ['-id',]
+    raw_id_fields = ['instrument',]
+    readonly_fields = ['id',]
+
+    # def has_add_permission(self, request, obj=None):
+    #     return False
+    #
+    # def has_delete_permission(self, request, obj=None):
+    #     return False
+
+admin.site.register(InstrumentSimulator, InstrumentSimulatorAdmin)

@@ -34,7 +34,6 @@ class InvoiceItem(models.Model):
     id = models.BigAutoField(
         _("ID"),
         primary_key=True,
-        auto_created=True,
     )
     invoice = models.ForeignKey(
         "Invoice",

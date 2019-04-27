@@ -82,7 +82,6 @@ class InstrumentAlert(models.Model):
     id = models.BigAutoField(
         _("ID"),
         primary_key=True,
-        auto_created=True,
     )
     slug = models.SlugField(
         _("Slug"),

@@ -27,6 +27,7 @@ class TimeSeriesDatumCreateSerializer(serializers.Serializer):
     instrument_uuid = serializers.UUIDField(required=True, write_only=True)
     value = serializers.FloatField(required=True)
     unix_timestamp = serializers.CharField(required=True, allow_blank=False)
+    time_step = serializers.TimeField(required=True)
 
     # Debugging information fields.
     # These fieldsa re useful for backend developers whom need to diagnose
@@ -41,6 +42,7 @@ class TimeSeriesDatumCreateSerializer(serializers.Serializer):
             'type_of',
             'value',
             'unix_timestamp',
+            'time_step',
             'utc_datetime',
             'local_datetime',
             'local_timezone',
@@ -88,6 +90,7 @@ class TimeSeriesDatumCreateSerializer(serializers.Serializer):
         instrument_uuid = validated_data.get('instrument_uuid')
         value = validated_data.get('value')
         ts = int(validated_data.get('unix_timestamp'))
+        time_step = validated_data.get('time_step')
 
         '''
         Convert UTC to local timezone aware datetime.
@@ -106,12 +109,23 @@ class TimeSeriesDatumCreateSerializer(serializers.Serializer):
         '''
         Create datum object in database and update device & instrument.
         '''
+        # Get our previous record.
+        previous_time_series_datum = TimeSeriesDatum.objects.filter(instrument=instrument).latest('timestamp')
+
         # Create our record.
         time_series_datum = TimeSeriesDatum.objects.create(
             instrument=instrument,
             value=value,
-            timestamp=local_aware_dt
+            timestamp=local_aware_dt,
+            time_step=time_step
         )
+
+        # Link to our chain-link data structure.
+        previous_time_series_datum.next = time_series_datum
+        previous_time_series_datum.save()
+        if previous_time_series_datum:
+            time_series_datum.previous = previous_time_series_datum
+            time_series_datum.save()
 
         # Update our device / instrument with our latest record.
         instrument.last_measured_value = time_series_datum.value

@@ -61,7 +61,6 @@ class InstrumentAnalysis(models.Model):
     id = models.BigAutoField(
         _("ID"),
         primary_key=True,
-        auto_created=True,
     )
     instrument = models.ForeignKey(
         "Instrument",
