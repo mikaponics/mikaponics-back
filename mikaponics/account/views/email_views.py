@@ -91,6 +91,12 @@ def user_activation_email_page(request, pr_access_code=None):
 
 
 def user_was_created_email_page(request, user_id):
+    # Defensive Code: Make sure the user information are protected.
+    if request.user.is_authenticated == False:
+        raise PermissionDenied(_('You are not authenticated.'))
+    if request.user.is_staff == False:
+        raise PermissionDenied(_('You are not a staff member.'))
+
     # Find the user or error.
     try:
         user = User.objects.get(id=user_id)
