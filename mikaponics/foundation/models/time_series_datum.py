@@ -74,6 +74,7 @@ class TimeSeriesDatum(models.Model):
         verbose_name = _('Time-Series Datum')
         verbose_name_plural = _('Time-Series Data')
         default_permissions = ()
+        unique_together = ("instrument", "timestamp")
         permissions = (
             # ("can_get_opening_hours_specifications", "Can get opening hours specifications"),
             # ("can_get_opening_hours_specification", "Can get opening hours specifications"),
