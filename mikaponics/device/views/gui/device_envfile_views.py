@@ -83,6 +83,8 @@ class DeviceEnvironmentVariablesFileView(LoginRequiredMixin, MikaponicsDetailVie
         modified_context['SETUP_INSTRUMENTS_OPERATION_SLEEP_INTERVAL_IN_SECONDS'] = 1
         modified_context['DATA_UPLOADER_OPERATION_SLEEP_INTERVAL_IN_SECONDS'] = 1
         modified_context['LOCAL_TIMEZONE_NAME'] = "America/Toronto"
+        modified_context['TIME_SERIES_DATA_TIME_STEP_VALUE'] = "00:01:00" # 1 Minute
+
 
         #----------------------#
         # DEVICE CONFIGURATION #
