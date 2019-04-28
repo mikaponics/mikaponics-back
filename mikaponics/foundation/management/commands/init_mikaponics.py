@@ -14,7 +14,7 @@ from djmoney.money import Money
 from oauthlib.common import generate_token
 
 from foundation.constants import *
-from foundation.models import Store, Product, Shipper, SubscriptionPlan
+from foundation.models import Store, Product, Shipper
 from foundation.models import User
 
 
@@ -81,21 +81,6 @@ class Command(BaseCommand):
                 'store': store,
                 'name': "Data Feed",
                 "price": Money(0, 'CAD')
-            }
-        )
-
-        '''
-        Create the default subscription plan.
-        '''
-        SubscriptionPlan.objects.update_or_create(
-            id=MIKAPONICS_DEFAULT_SUBSCRIPTION_ID,
-            store=store,
-            defaults={
-                'id': MIKAPONICS_DEFAULT_SUBSCRIPTION_ID,
-                'store': store,
-                'name': 'Monthly Subscription',
-                "amount": Money(15, 'CAD'),
-                "interval": SubscriptionPlan.INTERVAL_STATE.MONTHLY
             }
         )
 

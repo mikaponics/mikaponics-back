@@ -39,10 +39,10 @@ class UserAdmin(BaseUserAdmin):
 
         ('E-Ecommerce', {'fields': (
             'was_onboarded',
-            'customer_id','customer_data', 'subscription_plan', 'subscription_status',
+            'customer_id','customer_data', 'subscription_status',
         )}),
     )
-    readonly_fields = ['subscription_status', 'subscription_plan',]
+    readonly_fields = ['subscription_status',]
 
     search_fields =  ['email',]
     ordering = ['email',]

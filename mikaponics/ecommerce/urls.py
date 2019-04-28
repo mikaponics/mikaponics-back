@@ -11,18 +11,6 @@ urlpatterns = (
     ),
     ############################################################################
     # --- ONBOARDING ---
-    path('api/onboarding/validation',
-        views.OnboardingValidatorFuncAPIView.as_view(),
-        name='mikaponics_onboarding_validator_func_api_endpoint'
-    ),
-    path('api/onboarding/calculator',
-        views.OnboardingCalculatorFuncAPIView.as_view(),
-        name='mikaponics_onboarding_calculator_func_api_endpoint'
-    ),
-    path('api/onboarding/submission',
-        views.OnboardingSubmissionFuncAPIView.as_view(),
-        name='mikaponics_onboarding_submission_func_api_endpoint'
-    ),
     path('api/onboarding',
         views.OnboardingAPIView.as_view(),
         name='mikaponics_onboard_invoice_api_endpoint'

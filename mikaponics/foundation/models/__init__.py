@@ -9,7 +9,6 @@ from foundation.models.instrument_simulator import InstrumentSimulator
 
 from foundation.models.store import Store
 from foundation.models.product import Product
-from foundation.models.subscription_plan import SubscriptionPlan
 from foundation.models.shipper import Shipper
 from foundation.models.invoice import Invoice
 from foundation.models.invoice_item import InvoiceItem

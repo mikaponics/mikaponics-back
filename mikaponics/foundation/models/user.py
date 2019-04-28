@@ -489,15 +489,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=SUBSCRIPTION_STATUS.NOT_INTERESTED,
         choices=SUBSCRIPTION_STATUS_CHOICES,
     )
-    subscription_plan = models.ForeignKey(
-        "SubscriptionPlan",
-        help_text=_('The subscription plan this user is enrolled in.'),
-        blank=True,
-        null=True,
-        related_name="users",
-        on_delete=models.SET_NULL,
-        editable=False, # Only device or web-app can change this state, not admin user!
-    )
     subscription_data = JSONField(
         _("Subscription Data"),
         help_text=_('The subscription details from the payment merchant.'),

@@ -19,17 +19,10 @@ from foundation.constants import (
     MIKAPONICS_DEFAULT_SUBSCRIPTION_ID,
     MIKAPONICS_DEFAULT_SHIPPER_ID
 )
-from foundation.models import User, Product, SubscriptionPlan, Shipper, Invoice, InvoiceItem
+from foundation.models import User, Product, Shipper, Invoice, InvoiceItem
 
 logger = logging.getLogger(__name__)
-
-
 stripe.api_key = settings.STRIPE_SECRET_KEY
-
-
-def get_todays_date_plus_days(days=0):
-    """Returns the current date plus paramter number of days."""
-    return timezone.now() + timedelta(days=days)
 
 
 class OnboardingRetrieveSerializer(serializers.Serializer):
@@ -347,10 +340,6 @@ class OnboardingUpdateSerializer(serializers.Serializer):
 
         # Get our user object from the context.
         user = self.context['authenticated_by']
-
-        # Update our user to be enrolled in the subscription plan.
-        user.subscription_plan = default_subscription
-        user.save()
 
         # Add or update our purchase.
         item, was_created = InvoiceItem.objects.update_or_create(

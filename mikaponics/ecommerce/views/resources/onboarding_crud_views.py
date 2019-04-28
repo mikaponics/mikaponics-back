@@ -16,7 +16,7 @@ from foundation.constants import (
     MIKAPONICS_DEFAULT_SUBSCRIPTION_ID,
     MIKAPONICS_DEFAULT_SHIPPER_ID
 )
-from foundation.models import Product, SubscriptionPlan, Shipper, Invoice, InvoiceItem
+from foundation.models import Product, Shipper, Invoice, InvoiceItem
 from ecommerce.serializers import (
     OnboardingRetrieveSerializer,
     OnboardingUpdateSerializer
@@ -45,7 +45,6 @@ class OnboardingAPIView(generics.RetrieveUpdateDestroyAPIView):
         # the onboarding purchase.
         default_product = Product.objects.get(id=MIKAPONICS_DEFAULT_PRODUCT_ID)
         default_shipper = Shipper.objects.get(id=MIKAPONICS_DEFAULT_SHIPPER_ID)
-        default_subscription = SubscriptionPlan.objects.get(id=MIKAPONICS_DEFAULT_SUBSCRIPTION_ID)
 
         serializer = OnboardingRetrieveSerializer(draft_invoice, many=False, context={
             'authenticated_by': request.user,
@@ -72,7 +71,6 @@ class OnboardingAPIView(generics.RetrieveUpdateDestroyAPIView):
         # the onboarding purchase.
         default_product = Product.objects.get(id=MIKAPONICS_DEFAULT_PRODUCT_ID)
         default_shipper = Shipper.objects.get(id=MIKAPONICS_DEFAULT_SHIPPER_ID)
-        default_subscription = SubscriptionPlan.objects.get(id=MIKAPONICS_DEFAULT_SUBSCRIPTION_ID)
 
         serializer = OnboardingUpdateSerializer(draft_invoice, data=request.data, many=False, context={
             'authenticated_by': request.user,
