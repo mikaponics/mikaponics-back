@@ -7,6 +7,7 @@ from ecommerce.views.resources.invoice_views import (
     InvoiceRetrieveUpdateBillingAddressAPIView,
     InvoiceRetrieveUpdateShippingAddressAPIView
 )
+from ecommerce.views.resources.onboarding_crud_views import OnboardingAPIView
 from ecommerce.views.resources.onboarding_calculator_func_views import OnboardingCalculatorFuncAPIView
 from ecommerce.views.resources.onboarding_submission_func_views import OnboardingSubmissionFuncAPIView
 from ecommerce.views.resources.onboarding_validator_func_views import OnboardingValidatorFuncAPIView;

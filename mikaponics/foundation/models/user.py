@@ -655,8 +655,39 @@ class User(AbstractBaseUser, PermissionsMixin):
                 user=self,
                 state=Invoice.ORDER_STATE.DRAFT,
                 shipper=Shipper.objects.all().first(),
-                slug=None
+                slug=None,
+                billing_given_name = self.billing_given_name,
+                billing_last_name = self.billing_last_name,
+                billing_email = self.billing_email,
+                is_shipping_same_as_billing = self.is_shipping_same_as_billing,
+                shipping_given_name = self.shipping_given_name,
+                shipping_last_name = self.shipping_last_name,
+                shipping_email= self.shipping_email,
             )
+            if self.billing_telephone:
+                invoice.billing_telephone = self.billing_telephone
+            if self.billing_country:
+                invoice.billing_country = self.billing_country
+            if self.billing_locality:
+                invoice.billing_locality = self.billing_locality
+            if self.billing_region:
+                invoice.billing_region = self.billing_region
+            if self.billing_postal_code:
+                invoice.billing_postal_code = self.billing_postal_code
+            if self.billing_street_address:
+                invoice.billing_street_address = self.billing_street_address
+            if self.shipping_telephone:
+                invoice.shipping_telephone = self.shipping_telephone
+            if self.shipping_country:
+                invoice.shipping_country = self.shipping_country
+            if self.shipping_locality:
+                invoice.shipping_locality = self.shipping_locality
+            if self.shipping_region:
+                invoice.shipping_region = self.shipping_region
+            if self.shipping_postal_code:
+                invoice.shipping_postal_code = self.shipping_postal_code
+            if self.shipping_street_address:
+                invoice.shipping_street_address = self.shipping_street_address
         return invoice
 
     def invalidate(self, method_name):

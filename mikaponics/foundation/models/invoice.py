@@ -178,6 +178,8 @@ class Invoice(models.Model):
     tax_percent = models.FloatField(
         _("Tax Percent"),
         help_text=_('The tax percent that was for calculating this invoices tax.'),
+        default=0.0,
+        blank=True,
     )
     tax = MoneyField(
         _("Tax"),
@@ -467,6 +469,8 @@ class Invoice(models.Model):
             tax_rate = tax_percent / Decimal(100.00)
             tax = self.total_before_tax.amount * tax_rate
             self.tax = Money(amount=tax, currency=self.store.currency)
+        else:
+            tax_percent = 0.00
         self.tax_percent = tax_percent
         self.total_after_tax = self.total_before_tax + self.tax
 

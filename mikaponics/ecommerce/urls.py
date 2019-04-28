@@ -23,6 +23,10 @@ urlpatterns = (
         views.OnboardingSubmissionFuncAPIView.as_view(),
         name='mikaponics_onboarding_submission_func_api_endpoint'
     ),
+    path('api/onboarding',
+        views.OnboardingAPIView.as_view(),
+        name='mikaponics_onboard_invoice_api_endpoint'
+    ),
 
     # --- INVOICE ---
     path('api/invoices',

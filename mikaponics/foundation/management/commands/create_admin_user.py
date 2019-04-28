@@ -45,6 +45,12 @@ class Command(BaseCommand):
             is_staff=True,
             was_email_activated=True,
             was_onboarded=True,
+            billing_given_name = first_name,
+            billing_last_name = last_name,
+            billing_email = email,
+            shipping_given_name = first_name,
+            shipping_last_name = last_name,
+            shipping_email = email
         )
 
         # Generate and assign the password.

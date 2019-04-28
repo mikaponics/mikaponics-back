@@ -66,7 +66,7 @@ class Command(BaseCommand):
                 'store': store,
                 'name': "Mikapod",
                 'description': 'Mikapod aquaponics/hydroponics telemetry device',
-                "price": Money(10, 'CAD')
+                "price": Money(249.99, 'CAD')
             }
         )
 

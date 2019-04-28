@@ -12,3 +12,7 @@ from ecommerce.serializers.invoice_retrieve_update_destroy_serializers import (
     InvoiceRetrieveUpdateShippingAddressSerializer
 )
 from ecommerce.serializers.stripe_event_serializers import PaymentEventSerializer
+from ecommerce.serializers.onboarding_crud_serializers import (
+    OnboardingRetrieveSerializer,
+    OnboardingUpdateSerializer
+)

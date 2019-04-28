@@ -51,7 +51,7 @@ admin.site.register(Shipper, ShipperAdmin)
 
 class InvoiceAdmin(admin.ModelAdmin):
     list_display = [
-        'number', 'state', 'user', 'created_at', 'last_modified_at',
+        'slug', 'number', 'state', 'user', 'created_at', 'last_modified_at',
     ]
     list_filter = []
     # search_fields = ['device_id',]

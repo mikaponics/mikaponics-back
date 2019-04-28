@@ -29,6 +29,14 @@ class UserAdmin(BaseUserAdmin):
             {'fields': ('was_email_activated', 'pr_access_code', 'pr_expiry_date')}
         ),
 
+        ('Billing Information',
+            {'fields': ('billing_given_name', 'billing_last_name', 'billing_email')}
+        ),
+
+        ('Shipping Information',
+            {'fields': ('shipping_given_name', 'shipping_last_name', 'shipping_email')}
+        ),
+
         ('E-Ecommerce', {'fields': (
             'was_onboarded',
             'customer_id','customer_data', 'subscription_plan', 'subscription_status',
