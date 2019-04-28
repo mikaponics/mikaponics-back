@@ -441,8 +441,8 @@ class OnboardingUpdateSerializer(serializers.Serializer):
 
         # # Update our invoice.
         draft_invoice.state = Invoice.ORDER_STATE.PURCHASE_SUCCEEDED
-        draft_invoice.stripe_receipt_id = str(charge.id)
-        draft_invoice.stripe_receipt_data = charge
+        draft_invoice.payment_merchant_receipt_id = str(charge.id)
+        draft_invoice.payment_merchant_receipt_data = charge
         draft_invoice.save()
 
         # Return our validated data.

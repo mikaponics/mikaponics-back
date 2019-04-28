@@ -149,19 +149,19 @@ class Invoice(models.Model):
     # Stripe Fields
     #
 
-    stripe_receipt_id = models.CharField(
-        _("Stripe Receipt ID"),
-        help_text=_('The ID returned from <a href="https://stripe.com">stripe</a> for the charge transaction.'),
+    payment_merchant_receipt_id = models.CharField(
+        _("Payment Merchant Receipt ID"),
+        help_text=_('The ID returned from the payment merchant for the charge transaction.'),
         blank=True,
         null=True,
-        max_length=127,
+        max_length=255,
     )
-    stripe_receipt_data = JSONField(
-        _("Stripe Receipt Data"),
-        help_text=_('The receipt json data returned from <a href="https://stripe.com">stripe</a> for the charge transaction.'),
+    payment_merchant_receipt_data = JSONField(
+        _("Payment Merchant Data"),
+        help_text=_('The receipt json data returned from payment merchant for the charge transaction.'),
         blank=True,
         null=True,
-        max_length=127,
+        max_length=511,
     )
 
     #

@@ -61,7 +61,7 @@ class InvoiceAdmin(admin.ModelAdmin):
         'number', 'created_at', 'created_by', 'created_from',
         'created_from_is_public', 'last_modified_at', 'last_modified_by',
         'last_modified_from', 'last_modified_from_is_public',
-        'stripe_receipt_id', 'stripe_receipt_data',
+        'payment_merchant_receipt_id', 'payment_merchant_receipt_data',
     ]
 
     def save_model(self, request, obj, form, change):
