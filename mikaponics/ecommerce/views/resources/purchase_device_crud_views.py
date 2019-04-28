@@ -20,13 +20,13 @@ from foundation.constants import (
 )
 from foundation.models import Product, Shipper, Invoice, InvoiceItem
 from ecommerce.serializers import (
-    DevicePurchaseRetrieveSerializer,
-    DevicePurchaseUpdateSerializer
+    PurchaseDeviceRetrieveSerializer,
+    PurchaseDeviceUpdateSerializer
 )
 
 
-class DevicePurchaseAPIView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = DevicePurchaseRetrieveSerializer
+class PurchaseDeviceAPIView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = PurchaseDeviceRetrieveSerializer
     permission_classes = (
         permissions.IsAuthenticated,
         # IsAuthenticatedAndIsActivePermission,
@@ -48,7 +48,7 @@ class DevicePurchaseAPIView(generics.RetrieveUpdateDestroyAPIView):
         default_product = Product.objects.get(id=MIKAPONICS_DEFAULT_PRODUCT_ID)
         default_shipper = Shipper.objects.get(id=MIKAPONICS_DEFAULT_SHIPPER_ID)
 
-        serializer = DevicePurchaseRetrieveSerializer(draft_invoice, many=False, context={
+        serializer = PurchaseDeviceRetrieveSerializer(draft_invoice, many=False, context={
             'authenticated_by': request.user,
             'authenticated_from': client_ip,
             'authenticated_from_is_public': is_routable,
@@ -77,7 +77,7 @@ class DevicePurchaseAPIView(generics.RetrieveUpdateDestroyAPIView):
         default_product = Product.objects.get(id=MIKAPONICS_DEFAULT_PRODUCT_ID)
         default_shipper = Shipper.objects.get(id=MIKAPONICS_DEFAULT_SHIPPER_ID)
 
-        serializer = DevicePurchaseUpdateSerializer(draft_invoice, data=request.data, many=False, context={
+        serializer = PurchaseDeviceUpdateSerializer(draft_invoice, data=request.data, many=False, context={
             'authenticated_by': request.user,
             'authenticated_from': client_ip,
             'authenticated_from_is_public': is_routable,
@@ -92,7 +92,7 @@ class DevicePurchaseAPIView(generics.RetrieveUpdateDestroyAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        serializer = DevicePurchaseRetrieveSerializer(draft_invoice, many=False, context={
+        serializer = PurchaseDeviceRetrieveSerializer(draft_invoice, many=False, context={
             'authenticated_by': request.user,
             'authenticated_from': client_ip,
             'authenticated_from_is_public': is_routable,

@@ -17,9 +17,9 @@ urlpatterns = (
     ),
 
     # --- DEVICE PURCHASE ---
-    path('api/device-purchase',
-        views.DevicePurchaseAPIView.as_view(),
-        name='mikaponics_device_purchase_api_endpoint'
+    path('api/purchase-device',
+        views.PurchaseDeviceAPIView.as_view(),
+        name='mikaponics_purchase_device_api_endpoint'
     ),
 
     # --- INVOICE ---

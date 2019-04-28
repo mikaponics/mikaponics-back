@@ -12,7 +12,7 @@ from ecommerce.serializers.onboarding_crud_serializers import (
     OnboardingRetrieveSerializer,
     OnboardingUpdateSerializer
 )
-from ecommerce.serializers.device_purchase_crud_serializers import (
-    DevicePurchaseRetrieveSerializer,
-    DevicePurchaseUpdateSerializer
+from ecommerce.serializers.purchase_device_crud_serializers import (
+    PurchaseDeviceRetrieveSerializer,
+    PurchaseDeviceUpdateSerializer
 )

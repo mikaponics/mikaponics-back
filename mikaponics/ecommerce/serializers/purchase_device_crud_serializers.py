@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
-class DevicePurchaseRetrieveSerializer(serializers.Serializer):
+class PurchaseDeviceRetrieveSerializer(serializers.Serializer):
     # PURCHASE QUANTITY
     quantity = serializers.SerializerMethodField()
 
@@ -67,7 +67,6 @@ class DevicePurchaseRetrieveSerializer(serializers.Serializer):
     shipping = serializers.CharField(read_only=True)
     credit = serializers.CharField(read_only=True)
     grand_total = serializers.CharField(read_only=True)
-    calculation = serializers.SerializerMethodField()
 
     # Meta Information.
     class Meta:
@@ -122,7 +121,6 @@ class DevicePurchaseRetrieveSerializer(serializers.Serializer):
             # 'description',
             # 'unit_price',
             # 'total_price'
-            'calculation',
         )
 
     def get_quantity(self, obj):
@@ -136,38 +134,12 @@ class DevicePurchaseRetrieveSerializer(serializers.Serializer):
             print("Exception:", e)
             return None
 
-    def get_calculation(self, obj):
-        # Generate our calculation based on the invoice variables set.
-        total_calc = obj.total;
-
-        # Fetch the default product & subscription which we will apply to
-        # the onboarding purchase.
-        default_product = self.context['default_product']
-        # default_shipper = self.context['default_shipper']
-        default_subscription = self.context['default_subscription']
-        default_subscription_amount = default_subscription['amount']
-
-        # Create our calculation output.
-        return {
-            'description': default_product.description,
-            'monthlyFee': str(default_subscription_amount),
-            'quantity':self.get_quantity(obj),
-            'pricePerDevice': str(default_product.price),
-            'totalBeforeTax': str(obj.total_before_tax),
-            'tax': str(obj.tax),
-            'totalAfterTax': str(obj.total_after_tax),
-            'shipping': str(obj.shipping),
-            'credit': str(obj.credit),
-            'grandTotal': str(obj.grand_total),
-            'grandTotalInCents': int(total_calc['grand_total_in_cents']),
-        };
-
     def get_monthly_fee(self, obj):
         default_subscription = self.context['default_subscription']
         return str(default_subscription.amount)
 
 
-class DevicePurchaseUpdateSerializer(serializers.Serializer):
+class PurchaseDeviceUpdateSerializer(serializers.Serializer):
     # PURCHASE QUANTITY
     quantity = serializers.IntegerField(required=True, write_only=True)
 
