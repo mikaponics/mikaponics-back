@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import stripe
 import logging
+from djmoney.money import Money
 from datetime import datetime, timedelta
 from dateutil import tz
 from django.conf import settings
@@ -20,6 +21,25 @@ from foundation.models import User, Product, Shipper, Invoice, InvoiceItem
 logger = logging.getLogger(__name__)
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
+
+class PurchaseDeviceInvoiceListSerializer(serializers.ModelSerializer):
+    # absolute_url = serializers.ReadOnlyField(source='get_absolute_url')
+    # absolute_parent_url = serializers.ReadOnlyField(source='get_absolute_parent_url')
+    # unit_of_measure = serializers.ReadOnlyField(source='get_unit_of_measure')
+    # state = serializers.ReadOnlyField(source='get_pretty_state')
+    description = serializers.CharField(read_only=True, allow_null=True, allow_blank=True)
+    quantity = serializers.IntegerField(read_only=True)
+    unit_price = serializers.CharField(read_only=True, allow_null=True)
+    total_price = serializers.CharField(read_only=True, allow_null=True)
+
+    class Meta:
+        model = InvoiceItem
+        fields = (
+            'description',
+            'quantity',
+            'unit_price',
+            'total_price',
+        )
 
 class PurchaseDeviceRetrieveSerializer(serializers.Serializer):
     # PURCHASE QUANTITY
@@ -67,6 +87,7 @@ class PurchaseDeviceRetrieveSerializer(serializers.Serializer):
     shipping = serializers.CharField(read_only=True)
     credit = serializers.CharField(read_only=True)
     grand_total = serializers.CharField(read_only=True)
+    invoice_items = serializers.SerializerMethodField()
 
     # Meta Information.
     class Meta:
@@ -121,6 +142,7 @@ class PurchaseDeviceRetrieveSerializer(serializers.Serializer):
             # 'description',
             # 'unit_price',
             # 'total_price'
+            'invoice_items',
         )
 
     def get_quantity(self, obj):
@@ -135,8 +157,43 @@ class PurchaseDeviceRetrieveSerializer(serializers.Serializer):
             return None
 
     def get_monthly_fee(self, obj):
-        default_subscription = self.context['default_subscription']
-        return str(default_subscription.amount)
+        try:
+            default_subscription = self.context['default_subscription']
+            return str(default_subscription.amount)
+        except Exception as e:
+            print("Exception", e)
+            return None
+
+    def get_invoice_items(self, obj):
+        try:
+            # STEP 1 OF 3: Retrieve all the invoice items for the invoice.
+            invoice_items = obj.invoice_items
+
+            # STEP 2 OF 3: If no invoice items have been created then we must
+            #              create the invoice item immediately.
+            if invoice_items.count() == 0:
+                default_product = self.context['default_product']
+                invoice_item = InvoiceItem.objects.create(
+                    invoice=obj,
+                    product=default_product,
+                    description=default_product.description,
+                    quantity=0,
+                    unit_price=default_product.price,
+                    total_price=Money(0, settings.MIKAPONICS_BACKEND_DEFAULT_MONEY_CURRENCY),
+                )
+
+                # Update from database so we get the latest data.
+                obj.refresh_from_db()
+
+                # Retrieve (again) all our invoice items.
+                invoice_items = obj.invoice_items
+
+            # STEP 3 OF 3: Render our invoice items.
+            s = PurchaseDeviceInvoiceListSerializer(invoice_items, many=True)
+            return s.data
+        except Exception as e:
+            print(e)
+            return None
 
 
 class PurchaseDeviceUpdateSerializer(serializers.Serializer):
