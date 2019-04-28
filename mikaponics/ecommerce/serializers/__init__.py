@@ -1,4 +1,3 @@
-from ecommerce.serializers.purchase_validator_func_serializers import PurchaseValidatorFuncSerializer
 from ecommerce.serializers.invoice_list_create_serializers import InvoiceListCreateSerializer
 from ecommerce.serializers.invoice_item_retrieve_update_destroy_serializers import (
     InvoiceItemRetrieveUpdateDestroySerializer,
@@ -12,4 +11,8 @@ from ecommerce.serializers.stripe_event_serializers import PaymentEventSerialize
 from ecommerce.serializers.onboarding_crud_serializers import (
     OnboardingRetrieveSerializer,
     OnboardingUpdateSerializer
+)
+from ecommerce.serializers.device_purchase_crud_serializers import (
+    DevicePurchaseRetrieveSerializer,
+    DevicePurchaseUpdateSerializer
 )

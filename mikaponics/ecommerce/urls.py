@@ -16,6 +16,12 @@ urlpatterns = (
         name='mikaponics_onboard_invoice_api_endpoint'
     ),
 
+    # --- DEVICE PURCHASE ---
+    path('api/device-purchase',
+        views.DevicePurchaseAPIView.as_view(),
+        name='mikaponics_device_purchase_api_endpoint'
+    ),
+
     # --- INVOICE ---
     path('api/invoices',
         views.InvoiceListCreateAPIView.as_view(),
@@ -24,14 +30,6 @@ urlpatterns = (
     path('api/invoice/<str:slug>',
         views.InvoiceRetrieveDestroyAPIView.as_view(),
         name='mikaponics_invoices_retrieve_update_destroy_api_endpoint'
-    ),
-    path('api/purchase-validation',
-        views.PurchaseValidatorFuncAPIView.as_view(),
-        name='mikaponics_purchase_validator_func_api_endpoint'
-    ),
-    path('api/invoice/<int:pk>/calculate',
-        views.InvoiceCalculationFuncView.as_view(),
-        name='mikaponics_purchase_validator_func_api_endpoint'
     ),
     path('api/invoice/<int:pk>/shipping-address',
         views.InvoiceRetrieveUpdateShippingAddressAPIView.as_view(),
