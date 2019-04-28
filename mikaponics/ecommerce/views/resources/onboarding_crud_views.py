@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import django_filters
+from djmoney.money import Money
 from ipware import get_client_ip
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasScope
+from django.conf import settings
 from django.db import transaction
 from django.http import Http404
 from django_filters import rest_framework as filters
@@ -53,7 +55,10 @@ class OnboardingAPIView(generics.RetrieveUpdateDestroyAPIView):
             'draft_invoice': draft_invoice,
             'default_product': default_product,
             'default_shipper': default_shipper,
-            'default_subscription': default_subscription
+            'default_subscription': {
+                'amount': Money(settings.STRIPE_MONTHLY_PLAN_AMOUNT, settings.STRIPE_MONTHLY_PLAN_CURRENCY),
+                'id': settings.STRIPE_MONTHLY_PLAN_ID
+            }
         })
         return Response(serializer.data)
 
@@ -79,7 +84,10 @@ class OnboardingAPIView(generics.RetrieveUpdateDestroyAPIView):
             'draft_invoice': draft_invoice,
             'default_product': default_product,
             'default_shipper': default_shipper,
-            'default_subscription': default_subscription
+            'default_subscription': {
+                'amount': Money(settings.STRIPE_MONTHLY_PLAN_AMOUNT, settings.STRIPE_MONTHLY_PLAN_CURRENCY),
+                'id': settings.STRIPE_MONTHLY_PLAN_ID
+            }
         })
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -90,7 +98,9 @@ class OnboardingAPIView(generics.RetrieveUpdateDestroyAPIView):
             'authenticated_from_is_public': is_routable,
             'draft_invoice': draft_invoice,
             'default_product': default_product,
-            'default_shipper': default_shipper,
-            'default_subscription': default_subscription
+            'default_subscription': {
+                'amount': Money(settings.STRIPE_MONTHLY_PLAN_AMOUNT, settings.STRIPE_MONTHLY_PLAN_CURRENCY),
+                'id': settings.STRIPE_MONTHLY_PLAN_ID
+            }
         })
         return Response(serializer.data)

@@ -141,31 +141,29 @@ class OnboardingRetrieveSerializer(serializers.Serializer):
             return None
 
     def get_calculation(self, obj):
-        try:
-            # Generate our calculation based on the invoice variables set.
-            total_calc = obj.total;
+        # Generate our calculation based on the invoice variables set.
+        total_calc = obj.total;
 
-            # Fetch the default product & subscription which we will apply to
-            # the onboarding purchase.
-            default_product = self.context['default_product']
-            default_shipper = self.context['default_shipper']
-            default_subscription = self.context['default_subscription']
+        # Fetch the default product & subscription which we will apply to
+        # the onboarding purchase.
+        default_product = self.context['default_product']
+        # default_shipper = self.context['default_shipper']
+        default_subscription = self.context['default_subscription']
+        default_subscription_amount = default_subscription['amount']
 
-            # Create our calculation output.
-            return {
-                'monthlyFee': str(default_subscription.amount),
-                'quantity':self.get_quantity(obj),
-                'pricePerDevice': str(default_product.price),
-                'totalBeforeTax': str(obj.total_before_tax),
-                'tax': str(obj.tax),
-                'totalAfterTax': str(obj.total_after_tax),
-                'shipping': str(obj.shipping),
-                'credit': str(obj.credit),
-                'grandTotal': str(obj.grand_total),
-                'grandTotalInCents': int(total_calc['grand_total_in_cents']),
-            };
-        except Exception as e:
-            return {}
+        # Create our calculation output.
+        return {
+            'monthlyFee': str(default_subscription_amount),
+            'quantity':self.get_quantity(obj),
+            'pricePerDevice': str(default_product.price),
+            'totalBeforeTax': str(obj.total_before_tax),
+            'tax': str(obj.tax),
+            'totalAfterTax': str(obj.total_after_tax),
+            'shipping': str(obj.shipping),
+            'credit': str(obj.credit),
+            'grandTotal': str(obj.grand_total),
+            'grandTotalInCents': int(total_calc['grand_total_in_cents']),
+        };
 
     def get_monthly_fee(self, obj):
         default_subscription = self.context['default_subscription']
@@ -456,6 +454,7 @@ class OnboardingUpdateSerializer(serializers.Serializer):
         user.refresh_from_db()
 
         default_product = self.context['default_product']
+        default_subscription = self.context['default_subscription']
 
         # If user has not been subscribed, then proceed to do so now.
         if user.subscription_status != User.SUBSCRIPTION_STATUS.ACTIVE:
@@ -463,7 +462,7 @@ class OnboardingUpdateSerializer(serializers.Serializer):
             result = stripe.Subscription.create(
                 customer=user.customer_id,
                 items=[{
-                    "plan": settings.STRIPE_MONTHLY_PLAN,
+                    "plan": default_subscription.id,
                     "quantity": 1,
                 },],
             )
