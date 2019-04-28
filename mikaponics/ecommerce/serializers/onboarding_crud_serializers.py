@@ -14,11 +14,7 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
-from foundation.constants import (
-    MIKAPONICS_DEFAULT_PRODUCT_ID,
-    MIKAPONICS_DEFAULT_SUBSCRIPTION_ID,
-    MIKAPONICS_DEFAULT_SHIPPER_ID
-)
+from foundation.utils import get_timestamp_of_first_date_for_next_month
 from foundation.models import User, Product, Shipper, Invoice, InvoiceItem
 
 logger = logging.getLogger(__name__)
@@ -153,6 +149,7 @@ class OnboardingRetrieveSerializer(serializers.Serializer):
 
         # Create our calculation output.
         return {
+            'description': default_product.description,
             'monthlyFee': str(default_subscription_amount),
             'quantity':self.get_quantity(obj),
             'pricePerDevice': str(default_product.price),
@@ -359,8 +356,8 @@ class OnboardingUpdateSerializer(serializers.Serializer):
         # PAYMENT MERCHANT
         token = validated_data.get('payment_token', None)
         if token:
-            # validated_data = self.process_customer(validated_data, self.context)
-            # validated_data = self.process_product_purchase(validated_data, self.context)
+            validated_data = self.process_customer(validated_data, self.context)
+            validated_data = self.process_product_purchase(validated_data, self.context)
             validated_data = self.process_subscription(validated_data, self.context)
 
         # Return our validated data.
@@ -456,17 +453,22 @@ class OnboardingUpdateSerializer(serializers.Serializer):
         default_product = self.context['default_product']
         default_subscription = self.context['default_subscription']
 
+        # Special thanks:
+        # (1) https://stripe.com/docs/billing/subscriptions/billing-cycle
+        # (2) https://stripe.com/docs/billing/subscriptions/trials#combine-trial-anchor
+
         # If user has not been subscribed, then proceed to do so now.
         if user.subscription_status != User.SUBSCRIPTION_STATUS.ACTIVE:
             # Submit to the payment merchant our subscription request.
             result = stripe.Subscription.create(
                 customer=user.customer_id,
                 items=[{
-                    "plan": default_subscription.id,
+                    "plan": default_subscription['id'],
                     "quantity": 1,
                 },],
+                billing_cycle_anchor=get_timestamp_of_first_date_for_next_month()
             )
-            print(result)
+            print("PAYMENT MERCHANT SUBSCRIPTION RESULTS\n", result) # For debugging purposes only.
 
             # Update our model object to be saved.
             user.subscription_status = User.SUBSCRIPTION_STATUS.ACTIVE;

@@ -2,8 +2,10 @@
 import base64
 import hashlib
 import string
+import math
 import re # Regex
 from datetime import date, timedelta, datetime, time
+from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.core.signing import Signer
@@ -88,6 +90,15 @@ def get_unique_username_from_email(email):
     return hashed_email[:30]
 
 
+def get_first_date_for_next_month():   #TODO: UNIT TEST
+    """Utility funciton will return last day of this month."""
+    # Note: https://www.pkimber.net/howto/python/modules/dateutil.html
+    return timezone.now() + relativedelta(months=+1, day=1)
+
+def get_timestamp_of_first_date_for_next_month():
+    first_of_next_month_dt = get_first_date_for_next_month()
+    first_of_next_month_dt = first_of_next_month_dt.timestamp()
+    return math.trunc(first_of_next_month_dt)
 
 
 def int_or_none(value):
