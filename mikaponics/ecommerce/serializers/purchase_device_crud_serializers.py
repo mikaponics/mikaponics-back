@@ -23,10 +23,6 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class PurchaseDeviceInvoiceListSerializer(serializers.ModelSerializer):
-    # absolute_url = serializers.ReadOnlyField(source='get_absolute_url')
-    # absolute_parent_url = serializers.ReadOnlyField(source='get_absolute_parent_url')
-    # unit_of_measure = serializers.ReadOnlyField(source='get_unit_of_measure')
-    # state = serializers.ReadOnlyField(source='get_pretty_state')
     description = serializers.CharField(read_only=True, allow_null=True, allow_blank=True)
     quantity = serializers.IntegerField(read_only=True)
     unit_price = serializers.CharField(read_only=True, allow_null=True)
@@ -40,6 +36,7 @@ class PurchaseDeviceInvoiceListSerializer(serializers.ModelSerializer):
             'unit_price',
             'total_price',
         )
+
 
 class PurchaseDeviceRetrieveSerializer(serializers.Serializer):
     # PURCHASE QUANTITY
@@ -87,7 +84,11 @@ class PurchaseDeviceRetrieveSerializer(serializers.Serializer):
     shipping = serializers.CharField(read_only=True)
     credit = serializers.CharField(read_only=True)
     grand_total = serializers.CharField(read_only=True)
+    grand_total_in_cents = serializers.CharField(read_only=True, source="get_grand_total_in_pennies")
     invoice_items = serializers.SerializerMethodField()
+
+    # MISC
+    slug = serializers.SlugField(read_only=True)
 
     # Meta Information.
     class Meta:
@@ -143,6 +144,9 @@ class PurchaseDeviceRetrieveSerializer(serializers.Serializer):
             # 'unit_price',
             # 'total_price'
             'invoice_items',
+
+            # MISC
+            'slug',
         )
 
     def get_quantity(self, obj):
@@ -226,23 +230,6 @@ class PurchaseDeviceUpdateSerializer(serializers.Serializer):
     shipping_email = serializers.CharField(required=True,allow_blank=False,)
     shipping_telephone = serializers.CharField(required=True,allow_blank=False,)
 
-    # CHECKOUT FINANCIAL INFORMATION
-    state = serializers.CharField(read_only=True, source="get_pretty_state")
-    slug = serializers.SlugField(read_only=True)
-    absolute_url = serializers.ReadOnlyField(source="get_absolute_url")
-    purchased_at = serializers.DateTimeField(read_only=True)
-    created_at = serializers.DateTimeField(read_only=True)
-    last_modified_at = serializers.DateTimeField(read_only=True)
-    due_at = serializers.DateTimeField(read_only=True)
-    number = serializers.IntegerField(read_only=True)
-    total_before_tax = serializers.CharField(read_only=True)
-    tax = serializers.CharField(read_only=True)
-    tax_percent = serializers.FloatField(read_only=True)
-    total_after_tax = serializers.CharField(read_only=True)
-    shipping = serializers.CharField(read_only=True)
-    credit = serializers.CharField(read_only=True)
-    grand_total = serializers.CharField(read_only=True)
-
     # PAYMENT MERCHANT
     payment_token = serializers.CharField(required=False, allow_blank=True,)
     payment_created_at = serializers.IntegerField(required=False)
@@ -281,26 +268,6 @@ class PurchaseDeviceUpdateSerializer(serializers.Serializer):
             'shipping_post_office_box_number',
             'shipping_email',
             'shipping_telephone',
-
-            # CHECKOUT FINANCIAL INFORMATION
-            'state',
-            'slug',
-            'absolute_url',
-            'purchased_at',
-            'created_at',
-            'last_modified_at',
-            'number',
-            'total_before_tax',
-            'tax_percent',
-            'tax',
-            'total_after_tax',
-            'shipping',
-            'credit',
-            'grand_total',
-            # 'description',
-            # 'unit_price',
-            # 'total_price'
-
 
             # PAYMENT MERCHANT
             'payment_token',
@@ -385,44 +352,7 @@ class PurchaseDeviceUpdateSerializer(serializers.Serializer):
         # PAYMENT MERCHANT
         token = validated_data.get('payment_token', None)
         if token:
-            validated_data = self.process_customer(validated_data, self.context)
             validated_data = self.process_product_purchase(validated_data, self.context)
-            validated_data = self.process_subscription(validated_data, self.context)
-
-        # Return our validated data.
-        return validated_data
-
-    def process_customer(self, validated_data, context):
-        """
-        Function will create a customer account on the payment merchant if there
-        has no account created previously.
-        """
-        # print(validated_data) # For debugging purposes only.
-
-        # Get our variables.
-        token = validated_data['payment_token']
-        user = context['authenticated_by']
-
-        # Get the stripe customer ID if we have it.
-        customer_id = user.customer_id
-
-        # If we don't have it then create our account now.
-        try:
-            if customer_id is None:
-                customer = stripe.Customer.create(
-                    source=token,
-                    email=user.email,
-                )
-                user.customer_id = customer.id
-                user.customer_data = customer
-                user.save()
-        except Exception as e:
-            raise exceptions.ValidationError({
-                'non_field_errors': [
-                    str(e),
-                ]
-            })
-
 
         # Return our validated data.
         return validated_data
@@ -433,6 +363,7 @@ class PurchaseDeviceUpdateSerializer(serializers.Serializer):
         # Get variables.
         user = context['authenticated_by']
         payment_token = validated_data['payment_token']
+        default_product = self.context['default_product']
 
         # Get our open invoice.
         draft_invoice = user.draft_invoice
@@ -447,8 +378,8 @@ class PurchaseDeviceUpdateSerializer(serializers.Serializer):
         charge = stripe.Charge.create(
             amount=grand_total_in_pennies, # Written in pennies!
             currency=draft_invoice.store.currency,
-            description='A Django charge', #TODO: CHANGE NAME.
-            customer=user.customer_id,
+            description=default_product.description,
+            customer=user.customer_id, # This value gets set in the onboarding process.
             shipping={
                 "address":{
                     "city": draft_invoice.shipping_locality,
@@ -470,38 +401,4 @@ class PurchaseDeviceUpdateSerializer(serializers.Serializer):
         draft_invoice.save()
 
         # Return our validated data.
-        return validated_data
-
-    def process_subscription(self, validated_data, context):
-        # Get variables.
-        user = context['authenticated_by']
-
-        # Refresh the latest data from the database.
-        user.refresh_from_db()
-
-        default_product = self.context['default_product']
-        default_subscription = self.context['default_subscription']
-
-        # Special thanks:
-        # (1) https://stripe.com/docs/billing/subscriptions/billing-cycle
-        # (2) https://stripe.com/docs/billing/subscriptions/trials#combine-trial-anchor
-
-        # If user has not been subscribed, then proceed to do so now.
-        if user.subscription_status != User.SUBSCRIPTION_STATUS.ACTIVE:
-            # Submit to the payment merchant our subscription request.
-            result = stripe.Subscription.create(
-                customer=user.customer_id,
-                items=[{
-                    "plan": default_subscription['id'],
-                    "quantity": 1,
-                },],
-                billing_cycle_anchor=get_timestamp_of_first_date_for_next_month()
-            )
-            print("PAYMENT MERCHANT SUBSCRIPTION RESULTS\n", result) # For debugging purposes only.
-
-            # Update our model object to be saved.
-            user.subscription_status = User.SUBSCRIPTION_STATUS.ACTIVE;
-            user.subscription_data = result;
-            user.save()
-
         return validated_data
