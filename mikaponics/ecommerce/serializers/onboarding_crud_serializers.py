@@ -70,6 +70,9 @@ class OnboardingRetrieveSerializer(serializers.Serializer):
     grand_total = serializers.CharField(read_only=True)
     calculation = serializers.SerializerMethodField()
 
+    # MISC
+    authenticated_user_email = serializers.SerializerMethodField()  # Used for debugging purposes only!
+
     # Meta Information.
     class Meta:
         fields = (
@@ -124,6 +127,9 @@ class OnboardingRetrieveSerializer(serializers.Serializer):
             # 'unit_price',
             # 'total_price'
             'calculation',
+
+            # MISC
+            'authenticated_user_email'
         )
 
     def get_quantity(self, obj):
@@ -135,7 +141,7 @@ class OnboardingRetrieveSerializer(serializers.Serializer):
             return item.quantity
         except Exception as e:
             print("OnboardingRetrieveSerializer - get_quantity - exception:", e)
-            return Money(0, settings.MIKAPONICS_BACKEND_DEFAULT_MONEY_CURRENCY)
+            return 0
 
     def get_calculation(self, obj):
         try:
@@ -174,6 +180,16 @@ class OnboardingRetrieveSerializer(serializers.Serializer):
         except Exception as e:
             print("OnboardingRetrieveSerializer - get_monthly_fee - exception:", e)
             return Money(0, settings.MIKAPONICS_BACKEND_DEFAULT_MONEY_CURRENCY)
+
+    def get_authenticated_user_email(self, obj):
+        """
+        Used for debugging purposes only!
+        """
+        try:
+            return self.context['authenticated_by'].email
+        except Exception as e:
+            print("OnboardingRetrieveSerializer - get_authenticated_user_email - exception:", e)
+            return None
 
 
 class OnboardingUpdateSerializer(serializers.Serializer):
