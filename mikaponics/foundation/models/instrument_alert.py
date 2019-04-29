@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytz
 from django.contrib.auth import get_user_model
-from django.db import IntegrityError
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
@@ -144,11 +143,15 @@ class InstrumentAlert(models.Model):
             if self.instrument.device.user:
                 count = InstrumentAlert.objects.filter(instrument__device__user=self.instrument.device.user).count()
                 count += 1
-                try:
-                    self.slug = slugify(self.instrument.device.user)+"-instrument-alert-"+str(count)
-                except IntegrityError as e:
-                    if 'unique constraint' in e.message:
-                        self.slug = slugify(self.user)+"-instrument-alert-"+str(count)+"-"+get_random_string(length=5)
+
+                # Generate our slug.
+                self.slug = slugify(self.instrument.device.user)+"-instrument-alert-"+str(count)
+
+                # If a unique slug was not found then we will keep searching
+                # through the various slugs until a unique slug is found.
+                while Device.objects.filter(slug=self.slug).exists():
+                    self.slug = slugify(self.instrument.device.user)+"-instrument-alert-"+str(count)+"-"+get_random_string(length=8)
+
             # CASE 2 OF 2: DOES NOT HAVE USER.
             else:
                 self.slug = "instrument-alert-"+get_random_string(length=32)

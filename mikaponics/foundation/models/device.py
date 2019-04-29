@@ -6,7 +6,6 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.db.models import PointField
 from django.contrib.postgres.fields import JSONField
-from django.db import IntegrityError
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
@@ -382,11 +381,15 @@ class Device(models.Model):
             if self.user:
                 count = Device.objects.filter(user=self.user).count()
                 count += 1
-                try:
-                    self.slug = slugify(self.user)+"-device-"+str(count)
-                except IntegrityError as e:
-                    if 'unique constraint' in e.message:
-                        self.slug = slugify(self.user)+"-device-"+str(count)+"-"+get_random_string(length=5)
+
+                # Generate our slug.
+                self.slug = slugify(self.user)+"-device-"+str(count)
+
+                # If a unique slug was not found then we will keep searching
+                # through the various slugs until a unique slug is found.
+                while Device.objects.filter(slug=self.slug).exists():
+                    self.slug = slugify(self.user)+"-device-"+str(count)+"-"+get_random_string(length=8)
+
             # CASE 2 OF 2: DOES NOT HAVE USER.
             else:
                 self.slug = "device-"+get_random_string(length=32)

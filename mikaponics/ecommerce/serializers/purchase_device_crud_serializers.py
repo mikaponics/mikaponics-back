@@ -157,16 +157,16 @@ class PurchaseDeviceRetrieveSerializer(serializers.Serializer):
             )
             return item.quantity
         except Exception as e:
-            print("Exception:", e)
-            return None
+            print("PurchaseDeviceRetrieveSerializer - get_quantity - exception:", e)
+            return Money(0, settings.MIKAPONICS_BACKEND_DEFAULT_MONEY_CURRENCY)
 
     def get_monthly_fee(self, obj):
         try:
             default_subscription = self.context['default_subscription']
             return str(default_subscription.amount)
         except Exception as e:
-            print("Exception", e)
-            return None
+            print("PurchaseDeviceRetrieveSerializer - get_monthly_fee - Exception", e)
+            return Money(0, settings.MIKAPONICS_BACKEND_DEFAULT_MONEY_CURRENCY)
 
     def get_invoice_items(self, obj):
         try:
@@ -197,7 +197,7 @@ class PurchaseDeviceRetrieveSerializer(serializers.Serializer):
             return s.data
         except Exception as e:
             print(e)
-            return None
+            return []
 
 
 class PurchaseDeviceUpdateSerializer(serializers.Serializer):

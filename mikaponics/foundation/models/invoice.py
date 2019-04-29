@@ -430,11 +430,15 @@ class Invoice(models.Model):
             if self.user:
                 count = Invoice.objects.filter(user=self.user).count()
                 count += 1
-                try:
-                    self.slug = slugify(self.user)+"-order-"+str(count)
-                except IntegrityError as e:
-                    if 'unique constraint' in e.message:
-                        self.slug = slugify(self.user)+"-order-"+str(count)+"-"+get_random_string(length=5)
+
+                # Generate our slug.
+                self.slug = slugify(self.user)+"-order-"+str(count)
+
+                # If a unique slug was not found then we will keep searching
+                # through the various slugs until a unique slug is found.
+                while Invoice.objects.filter(slug=self.slug).exists():
+                    self.slug = slugify(self.user)+"-order-"+str(count)+"-"+get_random_string(length=8)
+
             # CASE 2 OF 2: DOES NOT HAVE USER.
             else:
                 self.slug = "order-"+get_random_string(length=32)

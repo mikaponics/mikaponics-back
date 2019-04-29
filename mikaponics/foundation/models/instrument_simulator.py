@@ -2,7 +2,6 @@
 import pytz
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
-from django.db import IntegrityError
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse

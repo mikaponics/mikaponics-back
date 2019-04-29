@@ -4,7 +4,6 @@ import pytz
 from datetime import date, datetime, timedelta
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
-from django.db import IntegrityError
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils import timezone
@@ -430,11 +429,15 @@ class Instrument(models.Model):
             if self.device.user:
                 count = Instrument.objects.filter(device=self.device).count()
                 count += 1
-                try:
-                    self.slug = self.device.slug+"-instrument-"+str(count)
-                except IntegrityError as e:
-                    if 'unique constraint' in e.message:
-                        self.slug = self.device.slug+"-instrument-"+str(count)+"-"+get_random_string(length=5)
+
+                # Generate our slug.
+                self.slug = self.device.slug+"-instrument-"+str(count)
+
+                # If a unique slug was not found then we will keep searching
+                # through the various slugs until a unique slug is found.
+                while Instrument.objects.filter(slug=self.slug).exists():
+                    self.slug = self.device.slug+"-instrument-"+str(count)+"-"+get_random_string(length=8)
+
             # CASE 2 OF 2: DOES NOT HAVE USER.
             else:
                 self.slug = "instrument-"+get_random_string(length=32)

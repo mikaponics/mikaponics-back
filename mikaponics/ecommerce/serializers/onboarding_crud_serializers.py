@@ -3,6 +3,7 @@ import stripe
 import logging
 from datetime import datetime, timedelta
 from dateutil import tz
+from djmoney.money import Money
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate
@@ -133,38 +134,46 @@ class OnboardingRetrieveSerializer(serializers.Serializer):
             )
             return item.quantity
         except Exception as e:
-            print("Exception:", e)
-            return None
+            print("OnboardingRetrieveSerializer - get_quantity - exception:", e)
+            return Money(0, settings.MIKAPONICS_BACKEND_DEFAULT_MONEY_CURRENCY)
 
     def get_calculation(self, obj):
-        # Generate our calculation based on the invoice variables set.
-        total_calc = obj.total;
+        try:
+            # Generate our calculation based on the invoice variables set.
+            total_calc = obj.total;
 
-        # Fetch the default product & subscription which we will apply to
-        # the onboarding purchase.
-        default_product = self.context['default_product']
-        # default_shipper = self.context['default_shipper']
-        default_subscription = self.context['default_subscription']
-        default_subscription_amount = default_subscription['amount']
+            # Fetch the default product & subscription which we will apply to
+            # the onboarding purchase.
+            default_product = self.context['default_product']
+            # default_shipper = self.context['default_shipper']
+            default_subscription = self.context['default_subscription']
+            default_subscription_amount = default_subscription['amount']
 
-        # Create our calculation output.
-        return {
-            'description': default_product.description,
-            'monthlyFee': str(default_subscription_amount),
-            'quantity':self.get_quantity(obj),
-            'pricePerDevice': str(default_product.price),
-            'totalBeforeTax': str(obj.total_before_tax),
-            'tax': str(obj.tax),
-            'totalAfterTax': str(obj.total_after_tax),
-            'shipping': str(obj.shipping),
-            'credit': str(obj.credit),
-            'grandTotal': str(obj.grand_total),
-            'grandTotalInCents': int(total_calc['grand_total_in_cents']),
-        };
+            # Create our calculation output.
+            return {
+                'description': default_product.description,
+                'monthlyFee': str(default_subscription_amount),
+                'quantity':self.get_quantity(obj),
+                'pricePerDevice': str(default_product.price),
+                'totalBeforeTax': str(obj.total_before_tax),
+                'tax': str(obj.tax),
+                'totalAfterTax': str(obj.total_after_tax),
+                'shipping': str(obj.shipping),
+                'credit': str(obj.credit),
+                'grandTotal': str(obj.grand_total),
+                'grandTotalInCents': int(total_calc['grand_total_in_cents']),
+            };
+        except Exception as e:
+            print("OnboardingRetrieveSerializer - get_calculation - exception:", e)
+            return None
 
     def get_monthly_fee(self, obj):
-        default_subscription = self.context['default_subscription']
-        return str(default_subscription.amount)
+        try:
+            default_subscription = self.context['default_subscription']
+            return str(default_subscription.amount)
+        except Exception as e:
+            print("OnboardingRetrieveSerializer - get_monthly_fee - exception:", e)
+            return Money(0, settings.MIKAPONICS_BACKEND_DEFAULT_MONEY_CURRENCY)
 
 
 class OnboardingUpdateSerializer(serializers.Serializer):
