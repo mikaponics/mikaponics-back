@@ -116,7 +116,6 @@ class Invoice(models.Model):
         null=False,
         default=ORDER_STATE.DRAFT,
         choices=ORDER_STATE_CHOICES,
-        editable=False, # Only device or web-app can change this state, not admin user!
     )
     purchased_at = models.DateTimeField(
         _("Purchased at"),
