@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
@@ -21,10 +22,7 @@ def receipt_email_page(request, pk=None):
         raise PermissionDenied(_('Does not exist.'))
 
     # Generate the data.
-    url = reverse_with_full_domain(
-        reverse_url_id='mikaponics_invoice_detail',
-        resolve_url_args=[invoice.id]
-    )
+    url = settings.MIKAPONICS_FRONTEND_HTTP_PROTOCOL+settings.MIKAPONICS_FRONTEND_HTTP_DOMAIN+"/invoice/"+invoice.slug;
     web_view_url = reverse_with_full_domain(
         reverse_url_id='mikaponics_invoice_receipt_email',
         resolve_url_args=[invoice.id]

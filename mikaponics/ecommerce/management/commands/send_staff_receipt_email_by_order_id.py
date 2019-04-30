@@ -13,12 +13,13 @@ from django.template.loader import render_to_string    # HTML to TXT
 from foundation.models import Invoice
 from foundation import constants
 from foundation.utils import reverse_with_full_domain
+from foundation.model_resources import get_staff_email_addresses
 
 
 class Command(BaseCommand):
     """
     Example:
-    python manage.py send_receipt_email_by_invoice_id 1
+    python manage.py send_customer_receipt_email_by_order_id 1
     """
     help = _('Command will send an receipt email to the user based on the invoice ID.')
 
@@ -39,11 +40,11 @@ class Command(BaseCommand):
         )
 
     def begin_processing(self, invoice):
+        # Get staff email addresses.
+        staff_email_addresses = get_staff_email_addresses()
+
         # Generate the data.
-        url = reverse_with_full_domain(
-            reverse_url_id='mikaponics_invoice_detail',
-            resolve_url_args=[invoice.id]
-        )
+        url = settings.MIKAPONICS_BACKEND_HTTP_PROTOCOL+settings.MIKAPONICS_BACKEND_HTTP_DOMAIN+"/en/admin/foundation/user/"+str(user.id)+"/change/"
         web_view_url = reverse_with_full_domain(
             reverse_url_id='mikaponics_invoice_receipt_email',
             resolve_url_args=[invoice.id]
@@ -65,7 +66,7 @@ class Command(BaseCommand):
 
         # Generate our address.
         from_email = settings.DEFAULT_FROM_EMAIL
-        to = [invoice.user.email]
+        to = [staff_email_addresses]
 
         # Send the email.
         msg = EmailMultiAlternatives(subject, text_content, from_email, to)
