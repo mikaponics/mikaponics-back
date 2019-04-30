@@ -9,6 +9,10 @@ urlpatterns = (
         views.receipt_email_page,
         name='mikaponics_invoice_receipt_email'
     ),
+    path('onboarded-email/<int:pk>',
+        views.onboarded_email_page,
+        name='mikaponics_onboarded_email'
+    ),
     ############################################################################
     # --- ONBOARDING ---
     path('api/onboarding',

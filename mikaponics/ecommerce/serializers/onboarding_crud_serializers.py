@@ -18,7 +18,8 @@ from rest_framework.validators import UniqueValidator
 
 from ecommerce.tasks import (
     run_send_customer_receipt_email_by_invoice_id_func,
-    run_send_staff_receipt_email_by_invoice_id_func
+    run_send_staff_receipt_email_by_invoice_id_func,
+    run_send_staff_user_onboarded_email_by_user_id_func
 )
 from foundation.utils import get_timestamp_of_first_date_for_next_month
 from foundation.models import User, Product, Shipper, Invoice, InvoiceItem
@@ -473,6 +474,7 @@ class OnboardingUpdateSerializer(serializers.Serializer):
         # Send our activation email to the user.
         django_rq.enqueue(run_send_customer_receipt_email_by_invoice_id_func, invoice_id=draft_invoice.id)
         django_rq.enqueue(run_send_staff_receipt_email_by_invoice_id_func, invoice_id=draft_invoice.id)
+        django_rq.enqueue(run_send_staff_user_onboarded_email_by_user_id_func, user_id=user.id)
 
         # Return our validated data.
         return validated_data
