@@ -24,12 +24,15 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('invoice_id' , nargs='+', type=int)
+        parser.add_argument('override_email' , nargs='+', type=str)
+
 
     def handle(self, *args, **options):
         try:
-            for invoice_id in options['invoice_id']:
-                invoice = Invoice.objects.get(id=invoice_id)
-                self.begin_processing(invoice)
+            invoice_id = options['invoice_id'][0]
+            override_email = options['override_email'][0]
+            invoice = Invoice.objects.get(id=invoice_id)
+            self.begin_processing(invoice, override_email)
         except Invoice.DoesNotExist:
             raise CommandError(_('Invoice ID does not exist.'))
 
@@ -38,7 +41,7 @@ class Command(BaseCommand):
             self.style.SUCCESS(_('MIKAPONICS: Activation email was sent successfully.'))
         )
 
-    def begin_processing(self, invoice):
+    def begin_processing(self, invoice, override_email):
         # Generate the data.
         url = settings.MIKAPONICS_FRONTEND_HTTP_PROTOCOL+settings.MIKAPONICS_FRONTEND_HTTP_DOMAIN+"/invoice/"+invoice.slug;
         web_view_url = reverse_with_full_domain(
@@ -63,6 +66,10 @@ class Command(BaseCommand):
         # Generate our address.
         from_email = settings.DEFAULT_FROM_EMAIL
         to = [invoice.user.email]
+
+        # Override the destination email if we have to.
+        if '@' not in override_email:
+            to = [override_email,]
 
         # Send the email.
         msg = EmailMultiAlternatives(subject, text_content, from_email, to)

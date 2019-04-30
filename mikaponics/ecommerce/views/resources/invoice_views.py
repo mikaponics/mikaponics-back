@@ -16,7 +16,8 @@ from ecommerce.serializers import (
     InvoiceListCreateSerializer,
     InvoiceRetrieveUpdateSerializer,
     InvoiceRetrieveUpdateBillingAddressSerializer,
-    InvoiceRetrieveUpdateShippingAddressSerializer
+    InvoiceRetrieveUpdateShippingAddressSerializer,
+    InvoiceSendEmailSerializer
 )
 
 
@@ -117,7 +118,7 @@ class InvoiceRetrieveDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 class InvoiceRetrieveUpdateBillingAddressAPIView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes= (OAuth2Authentication,)
-    serializer_class = InvoiceRetrieveUpdateBillingAddressSerializer
+    serializer_class = InvoiceSendEmailSerializer
     # pagination_class = StandardResultsSetPagination
     permission_classes = (
         permissions.IsAuthenticated,
@@ -178,6 +179,45 @@ class InvoiceRetrieveUpdateShippingAddressAPIView(generics.RetrieveUpdateDestroy
         client_ip, is_routable = get_client_ip(self.request)
         self.check_object_permissions(request, obj)  # Validate permissions.
         serializer = InvoiceRetrieveUpdateShippingAddressSerializer(obj, data=request.data, context={
+            'authenticated_by': request.user,
+            'authenticated_from': client_ip,
+            'authenticated_from_is_public': is_routable,
+        })
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class InvoiceSendEmailAPIView(generics.UpdateAPIView):
+    authentication_classes= (OAuth2Authentication,)
+    serializer_class = InvoiceRetrieveUpdateSerializer
+    # pagination_class = StandardResultsSetPagination
+    permission_classes = (
+        permissions.IsAuthenticated,
+        # IsAuthenticatedAndIsActivePermission,
+        # CanRetrieveUpdateDestroyInvoicePermission
+    )
+    parser_classes = (
+        parsers.FormParser,
+        parsers.MultiPartParser,
+        parsers.JSONParser,
+    )
+    renderer_classes = (renderers.JSONRenderer,)
+
+    @transaction.atomic
+    def put(self, request, slug=None):
+        """
+        Update
+        """
+        obj = Invoice.objects.select_for_update().filter(slug=slug).first()
+        if obj is None:
+            raise Http404()
+
+        client_ip, is_routable = get_client_ip(self.request)
+        self.check_object_permissions(request, obj)  # Validate permissions.
+
+        serializer = InvoiceSendEmailSerializer(obj, data=request.data, context={
+            'invoice': obj,
             'authenticated_by': request.user,
             'authenticated_from': client_ip,
             'authenticated_from_is_public': is_routable,

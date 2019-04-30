@@ -5,7 +5,8 @@ from ecommerce.views.resources.invoice_views import (
     InvoiceListCreateAPIView,
     InvoiceRetrieveDestroyAPIView,
     InvoiceRetrieveUpdateBillingAddressAPIView,
-    InvoiceRetrieveUpdateShippingAddressAPIView
+    InvoiceRetrieveUpdateShippingAddressAPIView,
+    InvoiceSendEmailAPIView
 )
 from ecommerce.views.resources.onboarding_crud_views import OnboardingAPIView
 from ecommerce.views.resources.purchase_device_crud_views import PurchaseDeviceAPIView

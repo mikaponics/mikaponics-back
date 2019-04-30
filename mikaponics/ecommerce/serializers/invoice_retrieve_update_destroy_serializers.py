@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import django_rq
 from datetime import datetime, timedelta
 from dateutil import tz
 from django.conf import settings
@@ -13,9 +14,9 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
+from ecommerce.tasks import run_send_customer_receipt_email_by_invoice_id_func
 from ecommerce.serializers.invoice_item_retrieve_update_destroy_serializers import InvoiceItemRetrieveUpdateDestroySerializer
 from foundation.models import Invoice, Product
-
 
 logger = logging.getLogger(__name__)
 
@@ -239,4 +240,23 @@ class InvoiceRetrieveUpdateShippingAddressSerializer(serializers.Serializer):
         instance.shipping_email = validated_data.get('shipping_email', instance.shipping_email)
         instance.shipping_telephone = validated_data.get('shipping_telephone', instance.shipping_telephone)
         instance.save()
+        return validated_data
+
+
+class InvoiceSendEmailSerializer(serializers.Serializer):
+    email = serializers.CharField(required=True,allow_blank=False,)
+
+    # Meta Information.
+    class Meta:
+        fields = (
+            'email',
+        )
+
+    def update(self, instance, validated_data):
+        """
+        Override this function to include extra functionality.
+        """
+        email = validated_data.get('email', None)
+        invoice = self.context['invoice']
+        django_rq.enqueue(run_send_customer_receipt_email_by_invoice_id_func, invoice_id=invoice.id, override_email=email)
         return validated_data

@@ -35,6 +35,10 @@ urlpatterns = (
         views.InvoiceRetrieveDestroyAPIView.as_view(),
         name='mikaponics_invoices_retrieve_update_destroy_api_endpoint'
     ),
+    path('api/invoice-send-email/<str:slug>',
+        views.InvoiceSendEmailAPIView.as_view(),
+        name='mikaponics_invoice_send_email_api_endpoint'
+    ),
     path('api/invoice/<int:pk>/shipping-address',
         views.InvoiceRetrieveUpdateShippingAddressAPIView.as_view(),
         name='mikaponics_invoice_item_retrieve_update_shipping_address_destroy_api_endpoint'

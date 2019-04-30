@@ -5,7 +5,8 @@ from ecommerce.serializers.invoice_item_retrieve_update_destroy_serializers impo
 from ecommerce.serializers.invoice_retrieve_update_destroy_serializers import (
     InvoiceRetrieveUpdateSerializer,
     InvoiceRetrieveUpdateBillingAddressSerializer,
-    InvoiceRetrieveUpdateShippingAddressSerializer
+    InvoiceRetrieveUpdateShippingAddressSerializer,
+    InvoiceSendEmailSerializer
 )
 from ecommerce.serializers.stripe_event_serializers import PaymentEventSerializer
 from ecommerce.serializers.onboarding_crud_serializers import (
