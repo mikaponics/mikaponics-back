@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
 from foundation.models import Invoice, Product
-
+from ecommerce.serializers.invoice_list_create_serializers import InvoiceListCreateSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -81,6 +81,7 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
     was_onboarded = serializers.ReadOnlyField()
     onboarding_survey_data = serializers.ReadOnlyField()
     dashboard_path = serializers.CharField(read_only=True, source="get_dashboard_path",)
+    latest_invoice = InvoiceListCreateSerializer(read_only=True, many=False)
 
     # Meta Information.
     class Meta:
@@ -105,6 +106,7 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
             'last_modified_at',
             'dashboard_path',
             'timezone',
+            'latest_invoice',
 
             # --- Billing ---
             'billing_given_name',

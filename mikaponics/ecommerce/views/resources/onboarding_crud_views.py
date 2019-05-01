@@ -40,19 +40,21 @@ class OnboardingAPIView(generics.RetrieveUpdateDestroyAPIView):
         # Get the user's IP address.
         client_ip, is_routable = get_client_ip(self.request)
 
-        # Get or create the draft invoice of the user.
-        draft_invoice = request.user.draft_invoice
+        # Get existing onboarding or create the draft invoice of the user.
+        invoice = Invoice.objects.filter(user=request.user).earliest('created_at')
+        if invoice is None:
+            invoice = request.user.draft_invoice
 
         # Fetch the default product & subscription which we will apply to
         # the onboarding purchase.
         default_product = Product.objects.get(id=MIKAPONICS_DEFAULT_PRODUCT_ID)
         default_shipper = Shipper.objects.get(id=MIKAPONICS_DEFAULT_SHIPPER_ID)
 
-        serializer = OnboardingRetrieveSerializer(draft_invoice, many=False, context={
+        serializer = OnboardingRetrieveSerializer(invoice, many=False, context={
             'authenticated_by': request.user,
             'authenticated_from': client_ip,
             'authenticated_from_is_public': is_routable,
-            'draft_invoice': draft_invoice,
+            'draft_invoice': invoice,
             'default_product': default_product,
             'default_shipper': default_shipper,
             'default_subscription': {
@@ -69,19 +71,21 @@ class OnboardingAPIView(generics.RetrieveUpdateDestroyAPIView):
         # Get the user's IP address.
         client_ip, is_routable = get_client_ip(self.request)
 
-        # Get or create the draft invoice of the user.
-        draft_invoice = request.user.draft_invoice
+        # Get existing onboarding or create the draft invoice of the user.
+        invoice = Invoice.objects.filter(user=request.user).earliest('created_at')
+        if invoice is None:
+            invoice = request.user.draft_invoice
 
         # Fetch the default product & subscription which we will apply to
         # the onboarding purchase.
         default_product = Product.objects.get(id=MIKAPONICS_DEFAULT_PRODUCT_ID)
         default_shipper = Shipper.objects.get(id=MIKAPONICS_DEFAULT_SHIPPER_ID)
 
-        serializer = OnboardingUpdateSerializer(draft_invoice, data=request.data, many=False, context={
+        serializer = OnboardingUpdateSerializer(invoice, data=request.data, many=False, context={
             'authenticated_by': request.user,
             'authenticated_from': client_ip,
             'authenticated_from_is_public': is_routable,
-            'draft_invoice': draft_invoice,
+            'draft_invoice': invoice,
             'default_product': default_product,
             'default_shipper': default_shipper,
             'default_subscription': {

@@ -684,6 +684,21 @@ class User(AbstractBaseUser, PermissionsMixin):
             return "/onboard"
 
     @cached_property
+    def latest_invoice(self):
+        """
+        Returns the most recent invoice created by the user. If no invoice was
+        previously created this method will return `None`.
+        """
+        from foundation.models.invoice import Invoice
+        from foundation.models.store import Store
+        store = Store.objects.default_store
+        invoice = Invoice.objects.filter(
+            store=store,
+            user=self
+        ).latest('created_at')
+        return invoice
+
+    @cached_property
     def draft_invoice(self):
         """
         Returns a single invoice which has been opened and is ready for the
@@ -710,6 +725,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         # If our attempt failed then we generate our invoice here, else we
         # return the invoice we originally found.
         if invoice is None:
+            self.invalidate('latest_invoice')
             invoice = Invoice.objects.create(
                 store=store,
                 user=self,
@@ -757,6 +773,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         try:
             if method_name == 'draft_invoice':
                 del self.draft_invoice
+            elif method_name == 'latest_invoice':
+                del self.latest_invoice
             else:
                 raise Exception("Method name not found.")
         except AttributeError:
