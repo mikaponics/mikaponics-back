@@ -37,10 +37,16 @@ class UserAdmin(BaseUserAdmin):
             {'fields': ('shipping_given_name', 'shipping_last_name', 'shipping_email')}
         ),
 
-        ('E-Ecommerce', {'fields': (
-            'was_onboarded',
-            'customer_id','customer_data', 'subscription_status',
-        )}),
+        ('E-Ecommerce',
+            {'fields': (
+                'was_onboarded',
+                'customer_id','customer_data', 'subscription_status',)
+            }
+        ),
+
+        ('Terms of Service',
+            {'fields': ('has_signed_tos', 'tos_agreement', 'tos_signed_on')}
+        ),
     )
     readonly_fields = ['subscription_status',]
 

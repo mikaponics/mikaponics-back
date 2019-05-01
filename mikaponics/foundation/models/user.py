@@ -18,6 +18,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.gis.db.models import PointField
 from django.contrib.postgres.fields import JSONField
+from django.utils import crypto
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
@@ -497,6 +498,34 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True,
     )
 
+    #
+    #  Referral Program
+    #
+
+    referral_code = models.CharField(
+        _("Referral Code"),
+        help_text=_('The referral code which can be given out to other users.'),
+        max_length=31,
+        blank=True,
+        null=True,
+        db_index=True,
+        unique=True,
+        default=crypto.get_random_string(
+            length=31,
+            allowed_chars='abcdefghijkmnpqrstuvwxyz'
+                          'ABCDEFGHIJKLMNPQRSTUVWXYZ'
+                          '23456789'
+        )
+    )
+    referred_by = models.ForeignKey(
+        "self",
+        help_text=_('The user whom referred this user into our system.'),
+        blank=True,
+        null=True,
+        related_name="referrals",
+        on_delete=models.SET_NULL
+    )
+
 
     #
     # EMAIL ACTIVATION FIELD
@@ -544,7 +573,38 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=get_expiry_date,
     )
 
+    #
+    #  Terms of Service Legal Agreement
+    #
+
+    has_signed_tos = models.BooleanField(
+        _("Has signed terms of service"),
+        default=False,
+        help_text=_('Boolean indicates whether has agreed to the terms of service.'),
+        blank=True,
+    )
+    tos_agreement = models.TextField(
+        _("Terms of service agreement"),
+        help_text=_('The actual terms of service agreement the user agreed to when they signed.'),
+        blank=True,
+        null=True,
+    )
+    tos_signed_on = models.DateTimeField(
+        _('Terms of service signed on'),
+        help_text=_('The date where the access code expires and no longer works.'),
+        blank=True,
+        null=True,
+    )
+
+    '''
+    Object Manager
+    '''
+
     objects = UserManager()
+
+    '''
+    User field objects
+    '''
 
     # DEVELOPERS NOTE:
     # WE WILL BE USING "EMAIL" AND "ACADEMY" AS THE UNIQUE PAIR THAT WILL
@@ -558,6 +618,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         'is_superuser',
     ]
 
+    '''
+    Metadata
+    '''
+
     class Meta:
         app_label = 'foundation'
         db_table = 'mika_users'
@@ -565,6 +629,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _('Users')
         default_permissions = ()
         permissions = ()
+
+    '''
+    Functions
+    '''
 
     def get_full_name(self):
         '''

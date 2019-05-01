@@ -2,6 +2,8 @@
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand, CommandError
+from django.template.loader import render_to_string  # HTML / TXT
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from starterkit.utils import (
     get_random_string,
@@ -35,6 +37,10 @@ class Command(BaseCommand):
         if User.objects.filter(email=email).exists():
             raise CommandError(_('Email already exists, please pick another email.'))
 
+        # Open up the current "terms of agreement" file and extract the text
+        # context which we will save with the user account.
+        tos_agreement = render_to_string('account/terms_of_service/2019_05_01.txt', {})
+
         # Create the user.
         user = User.objects.create(
             first_name=first_name,
@@ -50,7 +56,10 @@ class Command(BaseCommand):
             billing_email = email,
             shipping_given_name = first_name,
             shipping_last_name = last_name,
-            shipping_email = email
+            shipping_email = email,
+            has_signed_tos = True,
+            tos_agreement = tos_agreement,
+            tos_signed_on = timezone.now()
         )
 
         # Generate and assign the password.

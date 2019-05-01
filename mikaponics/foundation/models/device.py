@@ -166,6 +166,13 @@ class Device(models.Model):
         unique=True,
         editable=False,
     )
+    version = models.PositiveSmallIntegerField(
+        _("Version"),
+        help_text=_('The version number this device is. This field controls what features a device has access to.'),
+        blank=True,
+        null=False,
+        default=1,
+    )
 
     #
     # Real-time operation fields.

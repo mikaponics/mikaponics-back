@@ -164,6 +164,18 @@ class Invoice(models.Model):
     )
 
     #
+    #  Referral Program
+    #
+
+    referral_code = models.CharField(
+        _("Referral Code"),
+        help_text=_('The referral code which can be associated with this invoice.'),
+        max_length=31,
+        blank=True,
+        null=True,
+    )
+
+    #
     # Auto-calculated Fields
     #
 
@@ -210,11 +222,11 @@ class Invoice(models.Model):
     )
     coupon = models.ForeignKey(
         "foundation.Coupon",
-        help_text=_('The coupon associated with this coupon.'),
-        blank=False,
-        null=False,
+        help_text=_('The coupon used by this coupon.'),
+        blank=True,
+        null=True,
         related_name="invoices",
-        on_delete=models.CASCADE
+        on_delete=models.SET_NULL
     )
     grand_total = MoneyField(
         _("Grand Total"),
