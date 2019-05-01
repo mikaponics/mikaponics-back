@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import pytz
 from datetime import datetime
 from ipware import get_client_ip
 from django.conf.urls import url, include
@@ -59,9 +60,7 @@ class LogoutAPIView(APIView):
         access_token = serializer.validated_data['access_token']
 
         # Invalidate the token.
-        aware_dt = timezone.now()
-        expires_now_dt = aware_dt.replace(aware_dt.day - 1)
-        access_token.expires = expires_now_dt
+        access_token.expires = pytz.utc.localize(datetime(1985, 1, 1, 00, 00))
         access_token.save()
 
         return Response(data={'detail': 'You are now logged off.'}, status=status.HTTP_200_OK)
