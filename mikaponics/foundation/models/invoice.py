@@ -460,7 +460,7 @@ class Invoice(models.Model):
         in JSON format.
         """
         # Calculate the total.
-        self.total_before_tax.amount = 0
+        self.total_before_tax.amount = Decimal(0.00)
         for item in self.invoice_items.all():
             self.total_before_tax += (item.unit_price * item.quantity)
 
@@ -473,7 +473,7 @@ class Invoice(models.Model):
             tax = self.total_before_tax.amount * tax_rate
             self.tax = Money(amount=tax, currency=self.store.currency)
         else:
-            tax_percent = 0.00
+            tax_percent = Decimal(0.00)
         self.tax_percent = tax_percent
         self.total_after_tax = self.total_before_tax + self.tax
 
