@@ -61,6 +61,7 @@ class PurchaseDeviceRetrieveSerializer(serializers.Serializer):
     billing_telephone = serializers.CharField(required=True,allow_blank=False,)
 
     # SHIPPING INFORMATION
+    is_shipping_different_then_billing = serializers.BooleanField(required=False)
     shipping_given_name = serializers.CharField(required=True,allow_blank=False,)
     shipping_last_name = serializers.CharField(required=True,allow_blank=False,)
     shipping_country = serializers.CharField(required=True,allow_blank=False,)

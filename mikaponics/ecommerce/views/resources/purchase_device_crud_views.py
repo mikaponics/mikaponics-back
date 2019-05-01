@@ -87,7 +87,8 @@ class PurchaseDeviceAPIView(generics.RetrieveUpdateDestroyAPIView):
             'default_subscription': {
                 'amount': Money(settings.STRIPE_MONTHLY_PLAN_AMOUNT, settings.STRIPE_MONTHLY_PLAN_CURRENCY),
                 'id': settings.STRIPE_MONTHLY_PLAN_ID
-            }
+            },
+            'is_shipping_different_then_billing': request.data.get('is_shipping_different_then_billing', False)
         })
         serializer.is_valid(raise_exception=True)
         serializer.save()
