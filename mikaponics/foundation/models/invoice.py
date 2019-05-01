@@ -309,7 +309,7 @@ class Invoice(models.Model):
     # Shipping Address Fields
     #
 
-    is_shipping_same_as_billing = models.BooleanField(
+    is_shipping_different_then_billing = models.BooleanField(
         _("Is shipping information same as billing information"),
         default=False,
         help_text=_('Boolean indicates whether the shipping information is the same as the billing information.'),

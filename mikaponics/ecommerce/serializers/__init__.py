@@ -9,10 +9,8 @@ from ecommerce.serializers.invoice_retrieve_update_destroy_serializers import (
     InvoiceSendEmailSerializer
 )
 from ecommerce.serializers.stripe_event_serializers import PaymentEventSerializer
-from ecommerce.serializers.onboarding_crud_serializers import (
-    OnboardingRetrieveSerializer,
-    OnboardingUpdateSerializer
-)
+from ecommerce.serializers.onboarding_retrieve_serializers import OnboardingRetrieveSerializer
+from ecommerce.serializers.onboarding_update_serializers import OnboardingUpdateSerializer
 from ecommerce.serializers.purchase_device_crud_serializers import (
     PurchaseDeviceRetrieveSerializer,
     PurchaseDeviceUpdateSerializer

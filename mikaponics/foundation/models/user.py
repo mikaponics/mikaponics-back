@@ -101,7 +101,7 @@ class UserManager(BaseUserManager):
                     billing_postal_code = faker.postalcode(),
                     billing_street_address = faker.street_address(),
                     # billing_street_address_extra = faker.
-                    is_shipping_same_as_billing = False,
+                    is_shipping_different_then_billing = False,
                     shipping_given_name = first_name,
                     shipping_last_name = last_name,
                     shipping_email = faker.safe_email(),
@@ -307,7 +307,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # Shipping Address Fields
     #
 
-    is_shipping_same_as_billing = models.BooleanField(
+    is_shipping_different_then_billing = models.BooleanField(
         _("Is shipping information same as billing information"),
         default=False,
         help_text=_('Boolean indicates whether the shipping information is the same as the billing information.'),
@@ -719,7 +719,7 @@ class User(AbstractBaseUser, PermissionsMixin):
                 billing_given_name = self.billing_given_name,
                 billing_last_name = self.billing_last_name,
                 billing_email = self.billing_email,
-                is_shipping_same_as_billing = self.is_shipping_same_as_billing,
+                is_shipping_different_then_billing = self.is_shipping_different_then_billing,
                 shipping_given_name = self.shipping_given_name,
                 shipping_last_name = self.shipping_last_name,
                 shipping_email= self.shipping_email,

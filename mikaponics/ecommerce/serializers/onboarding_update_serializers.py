@@ -28,176 +28,6 @@ logger = logging.getLogger(__name__)
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
-class OnboardingRetrieveSerializer(serializers.Serializer):
-    # PURCHASE QUANTITY
-    quantity = serializers.SerializerMethodField()
-
-    # BILLING INFORMATION
-    billing_given_name = serializers.CharField(required=True,allow_blank=False,)
-    billing_last_name = serializers.CharField(required=True,allow_blank=False,)
-    billing_country = serializers.CharField(required=True,allow_blank=False,)
-    billing_region = serializers.CharField(required=True,allow_blank=False,)
-    billing_locality = serializers.CharField(required=True,allow_blank=False,)
-    billing_postal_code = serializers.CharField(required=True,allow_blank=False,)
-    billing_street_address = serializers.CharField(required=True,allow_blank=False,)
-    billing_postal_code = serializers.CharField(required=True,allow_blank=False,)
-    billing_post_office_box_number = serializers.CharField(required=False,allow_blank=True,)
-    billing_email = serializers.CharField(required=True,allow_blank=False,)
-    billing_telephone = serializers.CharField(required=True,allow_blank=False,)
-
-    # SHIPPING INFORMATION
-    shipping_given_name = serializers.CharField(required=True,allow_blank=False,)
-    shipping_last_name = serializers.CharField(required=True,allow_blank=False,)
-    shipping_country = serializers.CharField(required=True,allow_blank=False,)
-    shipping_region = serializers.CharField(required=True,allow_blank=False,)
-    shipping_locality = serializers.CharField(required=True,allow_blank=False,)
-    shipping_postal_code = serializers.CharField(required=True,allow_blank=False,)
-    shipping_street_address = serializers.CharField(required=True,allow_blank=False,)
-    shipping_postal_code = serializers.CharField(required=True,allow_blank=False,)
-    shipping_post_office_box_number = serializers.CharField(required=False,allow_blank=True,)
-    shipping_email = serializers.CharField(required=True,allow_blank=False,)
-    shipping_telephone = serializers.CharField(required=True,allow_blank=False,)
-
-    # CHECKOUT FINANCIAL INFORMATION
-    state = serializers.CharField(read_only=True, source="get_pretty_state")
-    slug = serializers.SlugField(read_only=True)
-    absolute_url = serializers.ReadOnlyField(source="get_absolute_url")
-    purchased_at = serializers.DateTimeField(read_only=True)
-    created_at = serializers.DateTimeField(read_only=True)
-    last_modified_at = serializers.DateTimeField(read_only=True)
-    due_at = serializers.DateTimeField(read_only=True)
-    number = serializers.IntegerField(read_only=True)
-    total_before_tax = serializers.CharField(read_only=True)
-    tax = serializers.CharField(read_only=True)
-    tax_percent = serializers.FloatField(read_only=True)
-    total_after_tax = serializers.CharField(read_only=True)
-    shipping = serializers.CharField(read_only=True)
-    credit = serializers.CharField(read_only=True)
-    grand_total = serializers.CharField(read_only=True)
-    calculation = serializers.SerializerMethodField()
-
-    # MISC
-    authenticated_user_email = serializers.SerializerMethodField()  # Used for debugging purposes only!
-
-    # Meta Information.
-    class Meta:
-        fields = (
-            # # 'invoice',
-            # # 'product',
-
-            # PURCHASE QUANTITY
-            'quantity',
-
-            # BILLING INFORMATION
-            'billing_given_name',
-            'billing_last_name',
-            'billing_country',
-            'billing_region',
-            'billing_locality',
-            'billing_postal_code',
-            'billing_street_address',
-            'billing_postal_code',
-            'billing_post_office_box_number',
-            'billing_email',
-            'billing_telephone',
-
-            # SHIPPING INFORMATION
-            'shipping_given_name',
-            'shipping_last_name',
-            'shipping_country',
-            'shipping_region',
-            'shipping_locality',
-            'shipping_postal_code',
-            'shipping_street_address',
-            'shipping_postal_code',
-            'shipping_post_office_box_number',
-            'shipping_email',
-            'shipping_telephone',
-
-            # CHECKOUT FINANCIAL INFORMATION
-            'state',
-            'slug',
-            'absolute_url',
-            'purchased_at',
-            'created_at',
-            'last_modified_at',
-            'number',
-            'total_before_tax',
-            'tax_percent',
-            'tax',
-            'total_after_tax',
-            'shipping',
-            'credit',
-            'grand_total',
-            # 'description',
-            # 'unit_price',
-            # 'total_price'
-            'calculation',
-
-            # MISC
-            'authenticated_user_email'
-        )
-
-    def get_quantity(self, obj):
-        try:
-            item = InvoiceItem.objects.get(
-                invoice=self.context['draft_invoice'],
-                product=self.context['default_product']
-            )
-            return item.quantity
-        except Exception as e:
-            print("OnboardingRetrieveSerializer - get_quantity - exception:", e)
-            return 0
-
-    def get_calculation(self, obj):
-        try:
-            # Generate our calculation based on the invoice variables set.
-            total_calc = obj.total;
-
-            # Fetch the default product & subscription which we will apply to
-            # the onboarding purchase.
-            default_product = self.context['default_product']
-            # default_shipper = self.context['default_shipper']
-            default_subscription = self.context['default_subscription']
-            default_subscription_amount = default_subscription['amount']
-
-            # Create our calculation output.
-            return {
-                'description': default_product.description,
-                'monthlyFee': str(default_subscription_amount),
-                'quantity':self.get_quantity(obj),
-                'pricePerDevice': str(default_product.price),
-                'totalBeforeTax': str(obj.total_before_tax),
-                'tax': str(obj.tax),
-                'totalAfterTax': str(obj.total_after_tax),
-                'shipping': str(obj.shipping),
-                'credit': str(obj.credit),
-                'grandTotal': str(obj.grand_total),
-                'grandTotalInCents': int(total_calc['grand_total_in_cents']),
-            };
-        except Exception as e:
-            print("OnboardingRetrieveSerializer - get_calculation - exception:", e)
-            return None
-
-    def get_monthly_fee(self, obj):
-        try:
-            default_subscription = self.context['default_subscription']
-            return str(default_subscription.amount)
-        except Exception as e:
-            print("OnboardingRetrieveSerializer - get_monthly_fee - exception:", e)
-            return Money(0, settings.MIKAPONICS_BACKEND_DEFAULT_MONEY_CURRENCY)
-
-    def get_authenticated_user_email(self, obj):
-        """
-        Used for debugging purposes only!
-        """
-        try:
-            return self.context['authenticated_by'].email
-        except Exception as e:
-            print("OnboardingRetrieveSerializer - get_authenticated_user_email - exception:", e)
-            return None
-
-
 class OnboardingUpdateSerializer(serializers.Serializer):
     # PURCHASE QUANTITY
     quantity = serializers.IntegerField(required=True, write_only=True)
@@ -216,17 +46,18 @@ class OnboardingUpdateSerializer(serializers.Serializer):
     billing_telephone = serializers.CharField(required=True,allow_blank=False,)
 
     # SHIPPING INFORMATION
-    shipping_given_name = serializers.CharField(required=True,allow_blank=False,)
-    shipping_last_name = serializers.CharField(required=True,allow_blank=False,)
-    shipping_country = serializers.CharField(required=True,allow_blank=False,)
-    shipping_region = serializers.CharField(required=True,allow_blank=False,)
-    shipping_locality = serializers.CharField(required=True,allow_blank=False,)
-    shipping_postal_code = serializers.CharField(required=True,allow_blank=False,)
-    shipping_street_address = serializers.CharField(required=True,allow_blank=False,)
-    shipping_postal_code = serializers.CharField(required=True,allow_blank=False,)
-    shipping_post_office_box_number = serializers.CharField(required=False,allow_blank=True, allow_null=True)
-    shipping_email = serializers.CharField(required=True,allow_blank=False,)
-    shipping_telephone = serializers.CharField(required=True,allow_blank=False,)
+    is_shipping_different_then_billing = serializers.BooleanField(required=False, allow_null=True, )
+    shipping_given_name = serializers.CharField(required=False, allow_null=True, allow_blank=True,)
+    shipping_last_name = serializers.CharField(required=False, allow_null=True, allow_blank=True,)
+    shipping_country = serializers.CharField(required=False, allow_null=True, allow_blank=True,)
+    shipping_region = serializers.CharField(required=False, allow_null=True, allow_blank=True,)
+    shipping_locality = serializers.CharField(required=False, allow_null=True, allow_blank=True,)
+    shipping_postal_code = serializers.CharField(required=False, allow_null=True, allow_blank=True,)
+    shipping_street_address = serializers.CharField(required=False, allow_null=True, allow_blank=True,)
+    shipping_postal_code = serializers.CharField(required=False, allow_null=True, allow_blank=True,)
+    shipping_post_office_box_number = serializers.CharField(required=False, allow_null=True,  allow_blank=True,)
+    shipping_email = serializers.CharField(required=False, allow_null=True, allow_blank=True,)
+    shipping_telephone = serializers.CharField(required=False, allow_null=True, allow_blank=True,)
 
     # CHECKOUT FINANCIAL INFORMATION
     state = serializers.CharField(read_only=True, source="get_pretty_state")
@@ -272,6 +103,7 @@ class OnboardingUpdateSerializer(serializers.Serializer):
             'billing_telephone',
 
             # SHIPPING INFORMATION
+            'is_shipping_different_then_billing',
             'shipping_given_name',
             'shipping_last_name',
             'shipping_country',
@@ -316,6 +148,72 @@ class OnboardingUpdateSerializer(serializers.Serializer):
             raise exceptions.ValidationError(_("Please pick number greater then zero."))
         return data
 
+    def validate_shipping_given_name(self, value):
+        if self.context['is_shipping_different_then_billing']:
+            if value is None or value == '':
+                raise exceptions.ValidationError(_("This value cannot be left blank."))
+        return value
+
+    def validate_shipping_last_name(self, value):
+        if self.context['is_shipping_different_then_billing']:
+            if value is None or value == '':
+                raise exceptions.ValidationError(_("This value cannot be left blank."))
+        return value
+
+    def validate_shipping_country(self, value):
+        if self.context['is_shipping_different_then_billing']:
+            if value is None or value == '':
+                raise exceptions.ValidationError(_("This value cannot be left blank."))
+        return value
+
+    def validate_shipping_region(self, value):
+        if self.context['is_shipping_different_then_billing']:
+            if value is None or value == '':
+                raise exceptions.ValidationError(_("This value cannot be left blank."))
+        return value
+
+    def validate_shipping_locality(self, value):
+        if self.context['is_shipping_different_then_billing']:
+            if value is None or value == '':
+                raise exceptions.ValidationError(_("This value cannot be left blank."))
+        return value
+
+    def validate_shipping_postal_code(self, value):
+        if self.context['is_shipping_different_then_billing']:
+            if value is None or value == '':
+                raise exceptions.ValidationError(_("This value cannot be left blank."))
+        return value
+
+    def validate_shipping_street_address(self, value):
+        if self.context['is_shipping_different_then_billing']:
+            if value is None or value == '':
+                raise exceptions.ValidationError(_("This value cannot be left blank."))
+        return value
+
+    def validate_shipping_postal_code(self, value):
+        if self.context['is_shipping_different_then_billing']:
+            if value is None or value == '':
+                raise exceptions.ValidationError(_("This value cannot be left blank."))
+        return value
+
+    def validate_shipping_post_office_box_number(self, value):
+        if self.context['is_shipping_different_then_billing']:
+            if value is None or value == '':
+                raise exceptions.ValidationError(_("This value cannot be left blank."))
+        return value
+
+    def validate_shipping_email(self, value):
+        if self.context['is_shipping_different_then_billing']:
+            if value is None or value == '':
+                raise exceptions.ValidationError(_("This value cannot be left blank."))
+        return value
+
+    def validate_shipping_telephon(eself, value):
+        if self.context['is_shipping_different_then_billing']:
+            if value is None or value == '':
+                raise exceptions.ValidationError(_("This value cannot be left blank."))
+        return value
+
     def update(self, instance, validated_data):
         """
         Override this function to include extra functionality.
@@ -346,17 +244,32 @@ class OnboardingUpdateSerializer(serializers.Serializer):
         instance.billing_telephone = validated_data.get('billing_telephone', instance.billing_telephone)
 
         # SHIPPING INFORMATION
-        instance.shipping_given_name = validated_data.get('shipping_given_name', instance.shipping_given_name)
-        instance.shipping_last_name = validated_data.get('shipping_last_name', instance.shipping_last_name)
-        instance.shipping_country = validated_data.get('shipping_country', instance.shipping_country)
-        instance.shipping_region = validated_data.get('shipping_region', instance.shipping_region)
-        instance.shipping_locality = validated_data.get('shipping_locality', instance.shipping_locality)
-        instance.shipping_postal_code = validated_data.get('shipping_postal_code', instance.shipping_postal_code)
-        instance.shipping_street_address = validated_data.get('shipping_street_address', instance.shipping_street_address)
-        instance.shipping_postal_code = validated_data.get('shipping_postal_code', instance.shipping_postal_code)
-        instance.shipping_post_office_box_number = validated_data.get('shipping_post_office_box_number', instance.shipping_post_office_box_number)
-        instance.shipping_email = validated_data.get('shipping_email', instance.shipping_email)
-        instance.shipping_telephone = validated_data.get('shipping_telephone', instance.shipping_telephone)
+        is_shipping_different_then_billing = self.context['is_shipping_different_then_billing']
+        if is_shipping_different_then_billing:
+            instance.shipping_given_name = validated_data.get('shipping_given_name', instance.shipping_given_name)
+            instance.shipping_last_name = validated_data.get('shipping_last_name', instance.shipping_last_name)
+            instance.shipping_country = validated_data.get('shipping_country', instance.shipping_country)
+            instance.shipping_region = validated_data.get('shipping_region', instance.shipping_region)
+            instance.shipping_locality = validated_data.get('shipping_locality', instance.shipping_locality)
+            instance.shipping_postal_code = validated_data.get('shipping_postal_code', instance.shipping_postal_code)
+            instance.shipping_street_address = validated_data.get('shipping_street_address', instance.shipping_street_address)
+            instance.shipping_postal_code = validated_data.get('shipping_postal_code', instance.shipping_postal_code)
+            instance.shipping_post_office_box_number = validated_data.get('shipping_post_office_box_number', instance.shipping_post_office_box_number)
+            instance.shipping_email = validated_data.get('shipping_email', instance.shipping_email)
+            instance.shipping_telephone = validated_data.get('shipping_telephone', instance.shipping_telephone)
+        else:
+            instance.shipping_given_name = validated_data.get('billing_given_name', instance.billing_given_name)
+            instance.shipping_last_name = validated_data.get('billing_last_name', instance.billing_last_name)
+            instance.shipping_country = validated_data.get('billing_country', instance.billing_country)
+            instance.shipping_region = validated_data.get('billing_region', instance.billing_region)
+            instance.shipping_locality = validated_data.get('billing_locality', instance.billing_locality)
+            instance.shipping_postal_code = validated_data.get('billing_postal_code', instance.billing_postal_code)
+            instance.shipping_street_address = validated_data.get('billing_street_address', instance.billing_street_address)
+            instance.shipping_postal_code = validated_data.get('billing_postal_code', instance.billing_postal_code)
+            instance.shipping_post_office_box_number = validated_data.get('billing_post_office_box_number', instance.billing_post_office_box_number)
+            instance.shipping_email = validated_data.get('billing_email', instance.billing_email)
+            instance.shipping_telephone = validated_data.get('billing_telephone', instance.billing_telephone)
+        instance.is_shipping_different_then_billing = is_shipping_different_then_billing
 
         # Update our open invoice with our default shipper.
         instance.shipper = default_shipper

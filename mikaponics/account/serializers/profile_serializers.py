@@ -61,7 +61,7 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
     billing_telephone = serializers.CharField(required=True,allow_blank=False,)
 
     # --- Shipping ---
-    is_shipping_same_as_billing = serializers.BooleanField(required=True,)
+    is_shipping_different_then_billing = serializers.BooleanField(required=True,)
     shipping_given_name = serializers.CharField(required=True,allow_blank=False,)
     shipping_last_name = serializers.CharField(required=True,allow_blank=False,)
     shipping_country = serializers.CharField(required=True,allow_blank=False,)
@@ -121,7 +121,7 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
             'billing_telephone',
 
             # --- Shipping ---
-            'is_shipping_same_as_billing',
+            'is_shipping_different_then_billing',
             'shipping_given_name',
             'shipping_last_name',
             'shipping_country',
@@ -161,7 +161,7 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
         instance.billing_telephone = validated_data.get('billing_telephone', instance.billing_telephone)
 
         # --- Shipping ---
-        instance.is_shipping_same_as_billing = validated_data.get('is_shipping_same_as_billing', instance.is_shipping_same_as_billing)
+        instance.is_shipping_different_then_billing = validated_data.get('is_shipping_different_then_billing', instance.is_shipping_different_then_billing)
         instance.shipping_given_name = validated_data.get('shipping_given_name', instance.shipping_given_name)
         instance.shipping_last_name = validated_data.get('shipping_last_name', instance.shipping_last_name)
         instance.shipping_country = validated_data.get('shipping_country', instance.shipping_country)
