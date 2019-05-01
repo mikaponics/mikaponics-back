@@ -10,6 +10,7 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 
 from foundation.models import User
+from foundation.model_resources import grant_referral_program_coupons
 
 
 class RegisterSerializer(serializers.Serializer):
@@ -101,6 +102,15 @@ class RegisterSerializer(serializers.Serializer):
 
         # Refresh our object.
         user.refresh_from_db()
+
+        # The following code will generate the two (one-time usage) coupons to
+        # the referee (the new user in the system) and the referrer (the user
+        # whom referred this newly registered user).
+        if referral_code:
+            grant_referral_program_coupons(
+                referrer=referred_by_user,
+                referee=user
+            )
 
         # Update our validated data.
         validated_data['client_id'] = user.id

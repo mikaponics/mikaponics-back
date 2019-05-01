@@ -5,3 +5,4 @@ from foundation.model_resources.instrument_alert_resources import (
     instrument_find_alarming_datum_in_system
 )
 from foundation.model_resources.user_resources import get_staff_email_addresses
+from foundation.model_resources.coupon_resources import grant_referral_program_coupons

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
 from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.indexes import BrinIndex
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -30,6 +31,12 @@ class PaymentEvent(models.Model):
             # ("can_post_opening_hours_specification", "Can create opening hours specifications"),
             # ("can_put_opening_hours_specification", "Can update opening hours specifications"),
             # ("can_delete_opening_hours_specification", "Can delete opening hours specifications"),
+        )
+        indexes = (
+            BrinIndex(
+                fields=['created_at'],
+                autosummarize=True,
+            ),
         )
 
     objects = PaymentEventLogManager()
@@ -134,7 +141,7 @@ class PaymentEvent(models.Model):
     # Audit detail fields
     #
 
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     created_from = models.GenericIPAddressField(
         _("Created from IP"),
         help_text=_('The IP address of the creator.'),

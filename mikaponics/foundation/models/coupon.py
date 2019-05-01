@@ -1,8 +1,18 @@
 # -*- coding: utf-8 -*-
-import uuid
 from django.db import models
+from django.utils import crypto
 from django.utils.translation import ugettext_lazy as _
 from djmoney.models.fields import MoneyField
+
+
+
+def get_random_code():
+    return crypto.get_random_string(
+        length=31,
+        allowed_chars='abcdefghijkmnpqrstuvwxyz'
+                      'ABCDEFGHIJKLMNPQRSTUVWXYZ'
+                      '23456789'
+    )
 
 
 class CouponManager(models.Manager):
@@ -50,8 +60,10 @@ class Coupon(models.Model):
     Object Managers
     '''
     objects = CouponManager()
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.BigAutoField(
+        _("ID"),
+        primary_key=True,
+    )
     state = models.PositiveSmallIntegerField(
         _("State"),
         help_text=_('The state of coupon.'),
@@ -62,7 +74,7 @@ class Coupon(models.Model):
     )
     expires_at = models.DateTimeField(
         _("Expires At"),
-        help_text=_('The datatime this coupon will expire.'),
+        help_text=_('The datatime this coupon will expire. If nothing is set then this coupon will never expire.'),
         blank=True,
         null=True,
     )
@@ -72,15 +84,40 @@ class Coupon(models.Model):
         max_digits=14,
         decimal_places=2,
         default_currency='CAD',
+        blank=False,
+        null=False,
+    )
+    belongs_to = models.ForeignKey(
+        "foundation.User",
+        help_text=_('The user whom can only access this coupon. If no user is set then this coupon is open to everyone who knows the coupon code.'),
+        related_name="belonging_coupons",
+        on_delete=models.SET_NULL,
         blank=True,
         null=True,
+    )
+    usage_limit = models.PositiveSmallIntegerField(
+        _("Usage Limit"),
+        help_text=_('The number of times this coupon can be used before it is no longer active. If no usage limit was set then this coupon can be used an unlimited number of times.'),
+        blank=False,
+        null=False,
+        default=1
+    )
+    code = models.CharField(
+        _("Code"),
+        help_text=_('The coupon code which can be given out.'),
+        max_length=31,
+        blank=True,
+        null=True,
+        db_index=True,
+        unique=True,
+        default=get_random_code
     )
 
     #
     # Audit detail fields
     #
 
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         "foundation.User",
         help_text=_('The user whom created this coupon.'),

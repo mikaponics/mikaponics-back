@@ -131,10 +131,10 @@ admin.site.register(PaymentEvent, PaymentEventAdmin)
 
 class CouponAdmin(admin.ModelAdmin):
 
-    list_display = ['created_by',]
+    list_display = ['id', 'credit', 'belongs_to', 'state',  'expires_at', 'created_at',]
     list_filter = []
     # search_fields = ['device_id',]
-    raw_id_fields = []
+    raw_id_fields = ['belongs_to',]
     ordering = ['id']
     readonly_fields = [
         'id',

@@ -83,6 +83,24 @@ class Store(models.Model):
         blank=True,
         null=False,
     )
+    referrer_credit = MoneyField(
+        _("Referrer Credit"),
+        help_text=_('The credit amount that will be granted to device purchases for users whom referred new users to our store.'),
+        max_digits=14,
+        decimal_places=2,
+        default_currency='CAD',
+        blank=True,
+        null=True,
+    )
+    referee_credit = MoneyField(
+        _("Referee Credit"),
+        help_text=_('The credit amount that will be granted to device purchases for users whom where referred to our store by existing users.'),
+        max_digits=14,
+        decimal_places=2,
+        default_currency='CAD',
+        blank=True,
+        null=True,
+    )
 
     def __str__(self):
         return str(self.name)

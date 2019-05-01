@@ -63,7 +63,6 @@ class InvoiceItem(models.Model):
         help_text=_('The number of `Products` this invoice item holds.'),
         default=1,
         blank=True,
-        db_index=False,
     )
     unit_price = MoneyField(
         _("Unit Price"),

@@ -39,6 +39,15 @@ def get_expiry_date(days=2):
     return timezone.now() + timedelta(days=days)
 
 
+def get_referral_code():
+    return crypto.get_random_string(
+        length=31,
+        allowed_chars='abcdefghijkmnpqrstuvwxyz'
+                      'ABCDEFGHIJKLMNPQRSTUVWXYZ'
+                      '23456789'
+    )
+
+
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -510,12 +519,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True,
         db_index=True,
         unique=True,
-        default=crypto.get_random_string(
-            length=31,
-            allowed_chars='abcdefghijkmnpqrstuvwxyz'
-                          'ABCDEFGHIJKLMNPQRSTUVWXYZ'
-                          '23456789'
-        )
+        default=get_referral_code
     )
     referred_by = models.ForeignKey(
         "self",
@@ -695,7 +699,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         invoice = Invoice.objects.filter(
             store=store,
             user=self
-        ).order_by('created').first()
+        ).order_by('created_at').first()
         return invoice
 
     @cached_property

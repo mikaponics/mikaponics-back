@@ -48,8 +48,10 @@ class Command(BaseCommand):
                         'NT': 5,       # Northwest Territories
                         'NU': 5,       # Nunavut
                     },
-                    'international': 13
-                }
+                    'international': 13,
+                },
+                'referrer_credit':  Money(10, 'CAD'),
+                'referee_credit': Money(5, 'CAD'),
             }
         )
 
