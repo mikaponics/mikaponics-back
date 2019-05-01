@@ -3,7 +3,7 @@ chardet==3.0.4
 Click==7.0
 croniter==0.3.27
 defusedxml==0.5.0
-Django==2.1.7
+Django==2.2.1
 django-anymail==6.0
 django-cors-headers==2.5.1
 django-environ==0.4.5
@@ -33,6 +33,7 @@ rq-scheduler==0.9
 six==1.12.0
 social-auth-app-django==3.1.0
 social-auth-core==3.1.0
+sqlparse==0.3.0
 stripe==2.27.0
 text-unidecode==1.2
-urllib3==1.24.1
+urllib3==1.24.2
