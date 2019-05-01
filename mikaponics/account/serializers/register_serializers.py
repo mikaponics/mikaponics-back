@@ -20,6 +20,7 @@ class RegisterSerializer(serializers.Serializer):
     last_name = serializers.CharField(required=True, allow_blank=False)
     timezone = serializers.CharField(required=True, allow_blank=False)
     has_signed_tos = serializers.BooleanField(required=True)
+    referral_code = serializers.CharField(required=False, allow_blank=True, allow_null=True,)
 
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
@@ -30,6 +31,12 @@ class RegisterSerializer(serializers.Serializer):
         if value is False or value == False:
             raise exceptions.ValidationError(_('Please sign the terms of service before submitting.'))
         return value
+
+    def validate_referral_code(self, value):
+        if User.objects.filter(referral_code=value).exists():
+            return value
+        else:
+            raise exceptions.ValidationError(_('Please enter a correct referral code.'))
 
     def validate(self, attrs):
         email = attrs.get('email', None)
@@ -57,10 +64,14 @@ class RegisterSerializer(serializers.Serializer):
         last_name = validated_data.get('last_name', None)
         timezone_name = validated_data.get('timezone', None)
         has_signed_tos = validated_data.get('has_signed_tos', False)
+        referral_code = validated_data.get('referral_code', None)
 
         # Open up the current "terms of agreement" file and extract the text
         # context which we will save with the user account.
         tos_agreement = render_to_string('account/terms_of_service/2019_05_01.txt', {})
+
+        # Attempt to lookup the referee of this user.
+        referred_by_user = User.objects.filter(referral_code=referral_code).first()
 
         # Create the user.
         user = User.objects.create(
@@ -80,7 +91,8 @@ class RegisterSerializer(serializers.Serializer):
             shipping_email = email,
             has_signed_tos = has_signed_tos,
             tos_agreement = tos_agreement,
-            tos_signed_on = timezone.now()
+            tos_signed_on = timezone.now(),
+            referred_by = referred_by_user,
         )
 
         # Generate and assign the password.

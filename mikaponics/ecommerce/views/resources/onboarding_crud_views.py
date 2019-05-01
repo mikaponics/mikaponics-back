@@ -41,7 +41,7 @@ class OnboardingAPIView(generics.RetrieveUpdateDestroyAPIView):
         client_ip, is_routable = get_client_ip(self.request)
 
         # Get existing onboarding or create the draft invoice of the user.
-        invoice = Invoice.objects.filter(user=request.user).earliest('created_at')
+        invoice = Invoice.objects.filter(user=request.user).order_by('created_at').first()
         if invoice is None:
             invoice = request.user.draft_invoice
 

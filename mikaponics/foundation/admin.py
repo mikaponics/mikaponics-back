@@ -9,8 +9,9 @@ from foundation.models import *
 
 # Define a new User admin
 class UserAdmin(BaseUserAdmin):
-    list_display = ['email', 'is_staff', 'is_active', 'was_email_activated', 'was_onboarded',]
-    list_filter = ('is_staff',)
+    raw_id_fields = ['referred_by',]
+    list_display = ['email', 'is_staff', 'is_active', 'was_email_activated', 'was_onboarded', 'referred_by',]
+    list_filter = ('is_staff',  'is_active', 'was_email_activated', 'was_onboarded', )
 
     fieldsets = (
         (None,
@@ -38,9 +39,11 @@ class UserAdmin(BaseUserAdmin):
         ),
 
         ('E-Ecommerce',
-            {'fields': (
-                'was_onboarded',
-                'customer_id','customer_data', 'subscription_status',)
+            {'fields':
+                (
+                'was_onboarded', 'customer_id','customer_data',
+                'subscription_status', 'referral_code', 'referred_by',
+                )
             }
         ),
 

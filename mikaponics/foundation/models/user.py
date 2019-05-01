@@ -695,7 +695,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         invoice = Invoice.objects.filter(
             store=store,
             user=self
-        ).latest('created_at')
+        ).order_by('created').first()
         return invoice
 
     @cached_property
