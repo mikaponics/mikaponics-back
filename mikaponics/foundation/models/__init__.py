@@ -13,3 +13,4 @@ from foundation.models.shipper import Shipper
 from foundation.models.invoice import Invoice
 from foundation.models.invoice_item import InvoiceItem
 from foundation.models.payment_event import PaymentEvent
+from foundation.models.coupon import Coupon

@@ -208,6 +208,14 @@ class Invoice(models.Model):
         decimal_places=2,
         default_currency='CAD'
     )
+    coupon = models.ForeignKey(
+        "foundation.Coupon",
+        help_text=_('The coupon associated with this coupon.'),
+        blank=False,
+        null=False,
+        related_name="invoices",
+        on_delete=models.CASCADE
+    )
     grand_total = MoneyField(
         _("Grand Total"),
         help_text=_('The grand total after tax, shipping and discounts were applied.'),

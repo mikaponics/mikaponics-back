@@ -8,6 +8,7 @@ TODO
 """
 from __future__ import unicode_literals
 import stripe
+import uuid
 from datetime import date, datetime, timedelta
 from django.db import models
 from django.core.mail import send_mail
@@ -464,7 +465,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_modified_at = models.DateTimeField(auto_now=True)
 
     #
-    # STRIPE FIELDS
+    # PAYMENT MERCHANT FIELDS
     #
 
     customer_id = models.CharField(

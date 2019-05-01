@@ -7,8 +7,6 @@ from django.contrib.auth.models import Group
 from foundation.models import *
 
 
-
-
 class StoreAdmin(admin.ModelAdmin):
     """
     Admin instance which is restriected to forbid deletion and creation of
@@ -45,8 +43,6 @@ class ShipperAdmin(admin.ModelAdmin):
     ]
 
 admin.site.register(Shipper, ShipperAdmin)
-
-
 
 
 class InvoiceAdmin(admin.ModelAdmin):
@@ -115,7 +111,6 @@ class ProductAdmin(admin.ModelAdmin):
 admin.site.register(Product, ProductAdmin)
 
 
-
 class PaymentEventAdmin(admin.ModelAdmin):
 
     list_display = ['id', 'event_id', 'type', 'created', 'livemode',]
@@ -132,3 +127,17 @@ class PaymentEventAdmin(admin.ModelAdmin):
     ]
 
 admin.site.register(PaymentEvent, PaymentEventAdmin)
+
+
+class CouponAdmin(admin.ModelAdmin):
+
+    list_display = ['created_by',]
+    list_filter = []
+    # search_fields = ['device_id',]
+    raw_id_fields = []
+    ordering = ['id']
+    readonly_fields = [
+        'id',
+    ]
+
+admin.site.register(Coupon, CouponAdmin)
