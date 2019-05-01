@@ -326,6 +326,9 @@ class OnboardingUpdateSerializer(serializers.Serializer):
         default_shipper = self.context['default_shipper']
         default_subscription = self.context['default_subscription']
 
+        # CLEAR FINANCIAL CALCULATION CACHED_PROPERTY.
+        instance.invalidate('total')
+
         # PURCHASE QUANTITY
         quantity = validated_data.get('quantity')
 
