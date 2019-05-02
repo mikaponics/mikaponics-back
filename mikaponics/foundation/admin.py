@@ -26,10 +26,6 @@ class UserAdmin(BaseUserAdmin):
             {'fields': ('is_staff',)}
         ),
 
-        ('Email Activation / Password Reset',
-            {'fields': ('was_email_activated', 'pr_access_code', 'pr_expiry_date')}
-        ),
-
         ('Billing Information',
             {'fields': ('billing_given_name', 'billing_last_name', 'billing_email')}
         ),
@@ -45,6 +41,10 @@ class UserAdmin(BaseUserAdmin):
                 'subscription_status', 'referral_code', 'referred_by',
                 )
             }
+        ),
+
+        ('Email Activation / Password Reset',
+            {'fields': ('was_email_activated', 'pr_access_code', 'pr_expiry_date')}
         ),
 
         ('Terms of Service',

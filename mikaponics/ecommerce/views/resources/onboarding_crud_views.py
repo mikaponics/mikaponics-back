@@ -45,6 +45,16 @@ class OnboardingAPIView(generics.RetrieveUpdateDestroyAPIView):
         if invoice is None:
             invoice = request.user.draft_invoice
 
+        # #-----------------------------------------------------------------------
+        # # FOR DEBUGGING PURPOSES ONLY
+        # #-----------------------------------------------------------------------
+        # invoice.invalidate("total")
+        # total = invoice.total
+        # print("--------------------------------------------------------------")
+        # print(total)
+        # print("--------------------------------------------------------------")
+        # #-----------------------------------------------------------------------
+
         # Fetch the default product & subscription which we will apply to
         # the onboarding purchase.
         default_product = Product.objects.get(id=MIKAPONICS_DEFAULT_PRODUCT_ID)
@@ -97,11 +107,11 @@ class OnboardingAPIView(generics.RetrieveUpdateDestroyAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        serializer = OnboardingRetrieveSerializer(draft_invoice, many=False, context={
+        serializer = OnboardingRetrieveSerializer(invoice, many=False, context={
             'authenticated_by': request.user,
             'authenticated_from': client_ip,
             'authenticated_from_is_public': is_routable,
-            'draft_invoice': draft_invoice,
+            'draft_invoice': invoice,
             'default_product': default_product,
             'default_subscription': {
                 'amount': Money(settings.STRIPE_MONTHLY_PLAN_AMOUNT, settings.STRIPE_MONTHLY_PLAN_CURRENCY),

@@ -10,6 +10,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.functional import cached_property
 from djmoney.models.fields import MoneyField
 
+from foundation.model_resources import find_usable_coupon_for_user
+
 
 class InvoiceManager(models.Manager):
     def delete_all(self):
@@ -506,6 +508,12 @@ class Invoice(models.Model):
 
         # Calculate grand total
         self.grand_total = self.total_after_tax
+
+        # Calculate the credit.
+        coupon = find_usable_coupon_for_user(self.user)
+        if coupon:
+            self.coupon = coupon
+            self.credit = coupon.credit
 
         # Step 1: Apply the credit.
         if self.credit:

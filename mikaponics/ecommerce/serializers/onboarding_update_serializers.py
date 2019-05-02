@@ -381,11 +381,15 @@ class OnboardingUpdateSerializer(serializers.Serializer):
             }
         )
 
-        # # Update our invoice.
+        # Update our invoice.
         draft_invoice.state = Invoice.ORDER_STATE.PURCHASE_SUCCEEDED
         draft_invoice.payment_merchant_receipt_id = str(charge.id)
         draft_invoice.payment_merchant_receipt_data = charge
         draft_invoice.save()
+
+        # Claim our coupon if there was one used.
+        if draft_invoice.coupon:
+            draft_invoice.coupon.claim()
 
         # Send our activation email to the user.
         django_rq.enqueue(run_send_customer_receipt_email_by_invoice_id_func, invoice_id=draft_invoice.id)

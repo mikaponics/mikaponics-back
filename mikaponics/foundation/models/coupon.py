@@ -168,3 +168,10 @@ class Coupon(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+    def claim(self, invoice=None):
+        if self.usage_limit == 1:
+            self.state = self.COUPON_STATE.CONSUMED
+        else:
+            self.usage_limit = self.usage_limit - 1
+        self.save()

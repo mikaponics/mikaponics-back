@@ -1,4 +1,5 @@
-from foundation.models import User, Store, Coupon
+from foundation.models import User, Store
+from foundation.models.coupon import Coupon
 
 
 def grant_referral_program_coupons(referrer=None, referee=None):
@@ -33,3 +34,14 @@ def grant_referral_program_coupons(referrer=None, referee=None):
             referee.latest_invoice.invalidate('total')
             referee.invalidate('draft_invoice')
             referee.invalidate('latest_invoice')
+
+
+def find_usable_coupon_for_user(user):
+    """
+    Returns the next available (earliest) coupon to use.
+    """
+    return Coupon.objects.filter(
+       belongs_to=user,
+       state=Coupon.COUPON_STATE.ACTIVE,
+       usage_limit__gte=1
+    ).order_by('id').first()
