@@ -82,6 +82,7 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
     onboarding_survey_data = serializers.ReadOnlyField()
     dashboard_path = serializers.CharField(read_only=True, source="get_dashboard_path",)
     latest_invoice = InvoiceListCreateSerializer(read_only=True, many=False)
+    referral_link = serializers.SerializerMethodField()
 
     # Meta Information.
     class Meta:
@@ -107,6 +108,7 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
             'dashboard_path',
             'timezone',
             'latest_invoice',
+            'referral_link',
 
             # --- Billing ---
             'billing_given_name',
@@ -143,6 +145,9 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
 
     def get_scope(self, obj):
         return self.context.get('scope', None)
+
+    def get_referral_link(self, obj):
+        return settings.MIKAPONICS_FRONTEND_HTTP_PROTOCOL + settings.MIKAPONICS_FRONTEND_HTTP_DOMAIN + "/register/"+str(obj.referral_code)
 
     def update(self, instance, validated_data):
         """
