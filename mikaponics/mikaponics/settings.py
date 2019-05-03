@@ -91,6 +91,7 @@ INSTALLED_APPS = [
     'foundation',
     'ecommerce',
     'alert',
+    'production',
 ]
 
 AUTH_USER_MODEL = 'foundation.User'

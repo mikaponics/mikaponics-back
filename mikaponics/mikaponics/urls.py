@@ -16,6 +16,7 @@ urlpatterns = ([
     path('', include('ecommerce.urls')),
     path('', include('alert.urls')),
     path('', include('foundation.urls')),
+    path('', include('production.urls')),
 ])
 
 # Add support for language specific context URLs.
@@ -28,5 +29,6 @@ urlpatterns += i18n_patterns(
     path('', include('ecommerce.urls')),
     path('', include('alert.urls')),
     path('', include('foundation.urls')),
+    path('', include('production.urls')),
     prefix_default_language=True
 )

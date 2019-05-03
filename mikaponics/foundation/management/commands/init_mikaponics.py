@@ -14,11 +14,15 @@ from djmoney.money import Money
 from oauthlib.common import generate_token
 
 from foundation.constants import *
-from foundation.models import Store, Product, Shipper
-from foundation.models import User
+from foundation.models import Store, Product, Shipper, User
 
 
 class Command(BaseCommand):
+    """
+    EXAMPLE:
+    python manage.py init_mikaponics
+    """
+
     help = _('Sets up the web-application for the first time.')
 
     def handle(self, *args, **options):

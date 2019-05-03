@@ -60,6 +60,11 @@ class Coupon(models.Model):
     Object Managers
     '''
     objects = CouponManager()
+
+    '''
+    Fields
+    '''
+
     id = models.BigAutoField(
         _("ID"),
         primary_key=True,
