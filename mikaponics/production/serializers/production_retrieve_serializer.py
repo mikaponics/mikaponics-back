@@ -10,6 +10,7 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 
 from foundation.models import Production
+from production.serializers.production_crop_list_serializer import ProductionCropListSerializer
 
 
 class ProductionRetrieveSerializer(serializers.ModelSerializer):
@@ -18,6 +19,7 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
     pretty_type_of = serializers.CharField(required=True, allow_blank=False, source="get_pretty_type_of")
     pretty_grow_system = serializers.CharField(required=True, allow_blank=False, source="get_pretty_grow_system")
     absoluteURL = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url")
+    crops = serializers.SerializerMethodField()
 
     class Meta:
         model = Production
@@ -35,5 +37,15 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
             'grow_system_other',
             'started_at',
             'finished_at',
+            'crops',
             'absoluteURL',
         )
+
+    def get_crops(self, obj):
+        try:
+            crops = obj.crops.all()
+            s = ProductionCropListSerializer(crops, many=True)
+            return s.data;
+        except Exception as e:
+            print("ProductionRetrieveSerializer | get_crops |", e)
+            return []

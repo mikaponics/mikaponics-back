@@ -296,3 +296,6 @@ class ProductionCrop(models.Model):
 
     def __str__(self):
         return str(self.slug)
+
+    def get_absolute_url(self):
+        return "/production-crop/"+self.slug
