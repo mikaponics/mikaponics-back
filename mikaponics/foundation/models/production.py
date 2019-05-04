@@ -334,3 +334,19 @@ class Production(models.Model):
 
     def __str__(self):
         return str(self.slug)
+
+    def get_pretty_state(self):
+        result = dict(self.PRODUCTION_STATE_CHOICES).get(self.state)
+        return str(result)
+
+    def get_pretty_environment(self):
+        result = dict(self.ENVIRONMENT_CHOICES).get(self.environment)
+        return str(result)
+
+    def get_pretty_type_of(self):
+        result = dict(self.TYPE_OF_CHOICES).get(self.type_of)
+        return str(result)
+
+    def get_pretty_system(self):
+        result = dict(self.SYSTEM_CHOICES).get(self.system)
+        return str(result)

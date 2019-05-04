@@ -1,11 +1,11 @@
 from django.urls import path
 
-from foundation import views
+from production.views.resource_views import *
 
 
 urlpatterns = (
-    # path('',
-    #     views.index_view,
-    #     name='mikaponics_index_view'
-    # ),
+    path('api/productions',
+        ProductionListCreateAPIView.as_view(),
+        name='mikaponics_production_list_create_api_endpoint'
+    ),
 )
