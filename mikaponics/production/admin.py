@@ -59,8 +59,8 @@ class ProductionAdmin(admin.ModelAdmin):
         ProductionInspectionInline
     ]
     raw_id_fields = ['user', ]
-    list_filter = ['state', 'started_at', 'finished_at', 'system',]
-    list_display = ['slug', 'user', 'started_at', 'finished_at', 'state', 'system']
+    list_filter = ['state', 'started_at', 'finished_at', 'grow_system',]
+    list_display = ['slug', 'user', 'started_at', 'finished_at', 'state', 'grow_system']
     ordering = ['-id',]
     readonly_fields = [
         'id', 'created_at', 'created_by', 'created_from',

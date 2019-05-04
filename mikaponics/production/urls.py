@@ -8,4 +8,8 @@ urlpatterns = (
         ProductionListCreateAPIView.as_view(),
         name='mikaponics_production_list_create_api_endpoint'
     ),
+    path('api/production/<str:slug>',
+        ProductionRetrieveUpdateAPIView.as_view(),
+        name='mikaponics_production_retrieve_update_api_endpoint'
+    ),
 )

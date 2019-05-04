@@ -13,26 +13,27 @@ from foundation.models import Production
 
 
 class ProductionRetrieveSerializer(serializers.ModelSerializer):
-    # state = serializers.CharField(required=True, allow_blank=False)
-    # password_repeat = serializers.CharField(required=True, allow_blank=False)
-    # first_name = serializers.CharField(required=True, allow_blank=False)
-    # last_name = serializers.CharField(required=True, allow_blank=False)
-    # timezone = serializers.CharField(required=True, allow_blank=False)
-    # has_signed_tos = serializers.BooleanField(required=True)
-    # referral_code = serializers.CharField(required=False, allow_blank=True, allow_null=True,)
+    pretty_state = serializers.CharField(required=True, allow_blank=False, source="get_pretty_state")
+    pretty_environment = serializers.CharField(required=True, allow_blank=False, source="get_pretty_environment")
+    pretty_type_of = serializers.CharField(required=True, allow_blank=False, source="get_pretty_type_of")
+    pretty_grow_system = serializers.CharField(required=True, allow_blank=False, source="get_pretty_grow_system")
+    absoluteURL = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url")
 
     class Meta:
         model = Production
         fields = (
             'state',
-            # 'red_above_value',
-            # 'orange_above_value',
-            # 'yellow_above_value',
-            # 'yellow_below_value',
-            # 'orange_below_value',
-            # 'red_below_value',
-            # 'red_alert_delay_in_seconds',
-            # 'orange_alert_delay_in_seconds',
-            # 'yellow_alert_delay_in_seconds',
-            # 'min_value',
+            'pretty_state',
+            'slug',
+            'is_commercial',
+            'environment',
+            'pretty_environment',
+            'type_of',
+            'pretty_type_of',
+            'grow_system',
+            'pretty_grow_system',
+            'grow_system_other',
+            'started_at',
+            'finished_at',
+            'absoluteURL',
         )

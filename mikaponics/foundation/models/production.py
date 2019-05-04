@@ -112,7 +112,7 @@ class Production(models.Model):
         (TYPE_OF.AQUACULTURE, _('Aquaculture')),
     )
 
-    class SYSTEM:
+    class GROW_SYSTEM:
         WICK_SYSTEM = 1
         DEEP_WATER_CULTURE_SYSTEM = 2
         EBB_AND_FLOW_SYSTEM = 3
@@ -122,15 +122,15 @@ class Production(models.Model):
         VERTICAL_TOWER_SYSTEM = 7
         OTHER_SYSTEM = 8
 
-    SYSTEM_CHOICES = (
-        (SYSTEM.WICK_SYSTEM, _('Wick System')),
-        (SYSTEM.DEEP_WATER_CULTURE_SYSTEM, _('Deep Water Culture System')),
-        (SYSTEM.EBB_AND_FLOW_SYSTEM, _('Ebb & Flow System')),
-        (SYSTEM.NFT_SYSTEM, _('Nutrient Film Technique System')),
-        (SYSTEM.DRIP_SYSTEM, _('Drip System')),
-        (SYSTEM.AEROPONIC_SYSTEM, _('Aeroponic System')),
-        (SYSTEM.VERTICAL_TOWER_SYSTEM, _('Vertical Tower System')),
-        (SYSTEM.OTHER_SYSTEM, _('Other (Please specify)')),
+    GROW_SYSTEM_CHOICES = (
+        (GROW_SYSTEM.WICK_SYSTEM, _('Wick System')),
+        (GROW_SYSTEM.DEEP_WATER_CULTURE_SYSTEM, _('Deep Water Culture System')),
+        (GROW_SYSTEM.EBB_AND_FLOW_SYSTEM, _('Ebb & Flow System')),
+        (GROW_SYSTEM.NFT_SYSTEM, _('Nutrient Film Technique System')),
+        (GROW_SYSTEM.DRIP_SYSTEM, _('Drip System')),
+        (GROW_SYSTEM.AEROPONIC_SYSTEM, _('Aeroponic System')),
+        (GROW_SYSTEM.VERTICAL_TOWER_SYSTEM, _('Vertical Tower System')),
+        (GROW_SYSTEM.OTHER_SYSTEM, _('Other (Please specify)')),
     )
 
 
@@ -218,16 +218,16 @@ class Production(models.Model):
         null=False,
         choices=TYPE_OF_CHOICES,
     )
-    system = models.PositiveSmallIntegerField(
-        _("System"),
-        help_text=_('The system being used for production.'),
+    grow_system = models.PositiveSmallIntegerField(
+        _("Grow System"),
+        help_text=_('The growth system being used for crop production.'),
         blank=False,
         null=False,
-        choices=SYSTEM_CHOICES,
+        choices=GROW_SYSTEM_CHOICES,
     )
-    system_other = models.CharField(
-        _("System (Other)"),
-        help_text=_('The description of the other system.'),
+    grow_system_other = models.CharField(
+        _("Grow System (Other)"),
+        help_text=_('The description of the other growth system.'),
         blank=True,
         null=True,
         max_length=63,
@@ -347,6 +347,9 @@ class Production(models.Model):
         result = dict(self.TYPE_OF_CHOICES).get(self.type_of)
         return str(result)
 
-    def get_pretty_system(self):
-        result = dict(self.SYSTEM_CHOICES).get(self.system)
+    def get_pretty_grow_system(self):
+        result = dict(self.GROW_SYSTEM_CHOICES).get(self.grow_system)
         return str(result)
+
+    def get_absolute_url(self):
+        return "/production/"+self.slug

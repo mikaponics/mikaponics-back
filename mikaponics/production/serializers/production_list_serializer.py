@@ -16,7 +16,8 @@ class ProductionListSerializer(serializers.ModelSerializer):
     pretty_state = serializers.CharField(required=True, allow_blank=False, source="get_pretty_state")
     pretty_environment = serializers.CharField(required=True, allow_blank=False, source="get_pretty_environment")
     pretty_type_of = serializers.CharField(required=True, allow_blank=False, source="get_pretty_type_of")
-    # pretty_system serializers.CharField(required=True, allow_blank=False, source="get_pretty_system")
+    pretty_grow_system = serializers.CharField(required=True, allow_blank=False, source="get_pretty_grow_system")
+    absoluteURL = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url")
 
     class Meta:
         model = Production
@@ -29,9 +30,10 @@ class ProductionListSerializer(serializers.ModelSerializer):
             'pretty_environment',
             'type_of',
             'pretty_type_of',
-            'system',
-            # 'pretty_system',
-            'system_other',
+            'grow_system',
+            'pretty_grow_system',
+            'grow_system_other',
             'started_at',
             'finished_at',
+            'absoluteURL',
         )
