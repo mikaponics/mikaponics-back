@@ -198,6 +198,20 @@ class Production(models.Model):
     # Beginning of Lifecycle Fields
     #
 
+    name = models.CharField(
+        _("Name"),
+        max_length=255,
+        help_text=_('The name of the crop production.'),
+        blank=False,
+        null=False,
+    )
+    description = models.TextField(
+        _("Description"),
+        help_text=_('A description of the crop production.'),
+        blank=False,
+        null=True,
+        default='',
+    )
     environment = models.PositiveSmallIntegerField(
         _("Environment"),
         help_text=_('The type of environment the production is taking place in.'),

@@ -24,17 +24,17 @@ class ProductionCreateSerializer(serializers.Serializer):
     class Meta:
         model = Production
         fields = (
+            'name',
+            'description',
             'state',
-            # 'red_above_value',
-            # 'orange_above_value',
-            # 'yellow_above_value',
-            # 'yellow_below_value',
-            # 'orange_below_value',
-            # 'red_below_value',
-            # 'red_alert_delay_in_seconds',
-            # 'orange_alert_delay_in_seconds',
-            # 'yellow_alert_delay_in_seconds',
-            # 'min_value',
+            'previous',
+            'device',
+            'environment',
+            'is_commercial',
+            'type_of',
+            'grow_system',
+            'grow_system_other',
+            'started_at',
         )
 
     # def validate_email(self, value):

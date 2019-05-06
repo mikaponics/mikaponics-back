@@ -22,6 +22,8 @@ class ProductionListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Production
         fields = (
+            'name',
+            'description',
             'state',
             'pretty_state',
             'slug',

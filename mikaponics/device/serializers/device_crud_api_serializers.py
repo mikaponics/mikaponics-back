@@ -33,6 +33,7 @@ class DeviceListCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Device
         fields = (
+            'slug',
             'name',
             'description',
             'uuid',

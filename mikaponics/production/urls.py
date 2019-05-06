@@ -1,7 +1,7 @@
 from django.urls import path
 
 from production.views.resource_views import *
-
+# from production.views.resource_views.crop_list_view import *
 
 urlpatterns = (
     path('api/productions',
