@@ -44,9 +44,18 @@ class CropSubstrate(models.Model):
     '''
 
     objects = CropSubstrateManager()
+    slug = models.SlugField(
+        _("Slug"),
+        help_text=_('The unique slug used for this crop substrate when accessing the details page.'),
+        max_length=127,
+        blank=True,
+        null=False,
+        db_index=True,
+        unique=True,
+    )
     name = models.CharField(
         _("Name"),
-        max_length=31,
+        max_length=63,
         help_text=_('The name of the crop substrate.'),
         blank=False,
         null=False,

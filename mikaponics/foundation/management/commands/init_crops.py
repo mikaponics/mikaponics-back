@@ -31,31 +31,32 @@ class Command(BaseCommand):
         '''
         # SUBSTRATE
         #-----------------------------------------------------------------------
-        CropSubstrate.objects.update_or_create(id=1, defaults={'order_number': 10000, 'name': "Other (Please specify)"})
-        CropSubstrate.objects.update_or_create(id=2, defaults={'order_number': 1,     'name': "Clay Pebbles"})
-        CropSubstrate.objects.update_or_create(id=3, defaults={'order_number': 2,     'name': "River Rock"})
-        CropSubstrate.objects.update_or_create(id=4, defaults={'order_number': 3,     'name': "Perlite"})
-        CropSubstrate.objects.update_or_create(id=5, defaults={'order_number': 4,     'name': "Rockwool"})
-        CropSubstrate.objects.update_or_create(id=6, defaults={'order_number': 5,     'name': "Coco coir"})
-        CropSubstrate.objects.update_or_create(id=7, defaults={'order_number': 6,     'name': "Vermiculite"})
-        CropSubstrate.objects.update_or_create(id=8, defaults={'order_number': 7,     'name': "Oasis Cubes"})
-        CropSubstrate.objects.update_or_create(id=9, defaults={'order_number': 8,     'name': "Floral Foam"})
-        CropSubstrate.objects.update_or_create(id=10, defaults={'order_number': 9,    'name': "Pine Shaving"})
-        CropSubstrate.objects.update_or_create(id=11, defaults={'order_number': 10,   'name': "Sand"})
-        CropSubstrate.objects.update_or_create(id=12, defaults={'order_number': 11,   'name': "Rice Hulls"})
-        CropSubstrate.objects.update_or_create(id=13, defaults={'order_number': 12,   'name': "Peat Moss"})
-        CropSubstrate.objects.update_or_create(id=14, defaults={'order_number': 13,   'name': "Gravel"})
-        CropSubstrate.objects.update_or_create(id=15, defaults={'order_number': 14,   'name': "Diatomite"})
-        CropSubstrate.objects.update_or_create(id=16, defaults={'order_number': 15,   'name': "Glass"})
-        CropSubstrate.objects.update_or_create(id=17, defaults={'order_number': 16,   'name': "Composted and aged Pine bark"})
-        CropSubstrate.objects.update_or_create(id=18, defaults={'order_number': 17,   'name': "Polyurethane foam insulation"})
-        CropSubstrate.objects.update_or_create(id=19, defaults={'order_number': 18,   'name': "Water absorbing crystals"})
+        CropSubstrate.objects.update_or_create(id=1, defaults={'order_number': 10000, 'name': "Other (Please specify)",       'slug': 'other',})
+        CropSubstrate.objects.update_or_create(id=2, defaults={'order_number': 1,     'name': "Clay Pebbles",                 'slug': 'clay-pebbles',})
+        CropSubstrate.objects.update_or_create(id=3, defaults={'order_number': 2,     'name': "River Rock",                   'slug': 'river-rock',})
+        CropSubstrate.objects.update_or_create(id=4, defaults={'order_number': 3,     'name': "Perlite",                      'slug': 'perlite',})
+        CropSubstrate.objects.update_or_create(id=5, defaults={'order_number': 4,     'name': "Rockwool",                     'slug': 'rockwool',})
+        CropSubstrate.objects.update_or_create(id=6, defaults={'order_number': 5,     'name': "Coco coir",                    'slug': 'coco-coir',})
+        CropSubstrate.objects.update_or_create(id=7, defaults={'order_number': 6,     'name': "Vermiculite",                  'slug': 'vermiculite',})
+        CropSubstrate.objects.update_or_create(id=8, defaults={'order_number': 7,     'name': "Oasis Cubes",                  'slug': 'oasis-cubes',})
+        CropSubstrate.objects.update_or_create(id=9, defaults={'order_number': 8,     'name': "Floral Foam",                  'slug': 'floral-foam',})
+        CropSubstrate.objects.update_or_create(id=10, defaults={'order_number': 9,    'name': "Pine Shaving",                 'slug': 'pine-shaving',})
+        CropSubstrate.objects.update_or_create(id=11, defaults={'order_number': 10,   'name': "Sand",                         'slug': 'sand',})
+        CropSubstrate.objects.update_or_create(id=12, defaults={'order_number': 11,   'name': "Rice Hulls",                   'slug': 'rice-hulls',})
+        CropSubstrate.objects.update_or_create(id=13, defaults={'order_number': 12,   'name': "Peat Moss",                    'slug': 'peat-moss',})
+        CropSubstrate.objects.update_or_create(id=14, defaults={'order_number': 13,   'name': "Gravel",                       'slug': 'gravel',})
+        CropSubstrate.objects.update_or_create(id=15, defaults={'order_number': 14,   'name': "Diatomite",                    'slug': 'diatomite',})
+        CropSubstrate.objects.update_or_create(id=16, defaults={'order_number': 15,   'name': "Glass",                        'slug': 'glass',})
+        CropSubstrate.objects.update_or_create(id=17, defaults={'order_number': 16,   'name': "Composted and aged Pine bark", 'slug': 'composted-and-aged-pine-bark',})
+        CropSubstrate.objects.update_or_create(id=18, defaults={'order_number': 17,   'name': "Polyurethane foam insulation", 'slug': 'polyurethane-foam-insulation',})
+        CropSubstrate.objects.update_or_create(id=19, defaults={'order_number': 18,   'name': "Water absorbing crystals",     'slug': 'water-absorbing-crystals',})
 
         # DEFAULT OPTION
         #-----------------------------------------------------------------------
         Crop.objects.update_or_create(
            id=1,
            defaults={
+               'slug': 'other',
                'order_number': 10000,
                'type_of': Crop.TYPE_OF.PLANT,
                'name': "Other",
@@ -68,6 +69,7 @@ class Command(BaseCommand):
         Crop.objects.update_or_create(
            id=2,
            defaults={
+               'slug': 'cannabis',
                'order_number': 1,
                'type_of': Crop.TYPE_OF.PLANT,
                'name': "Cannabis",
@@ -84,6 +86,7 @@ class Command(BaseCommand):
         Crop.objects.update_or_create(
            id=3,
            defaults={
+               'slug': 'tomato',
                'order_number': 2,
                'type_of': Crop.TYPE_OF.PLANT,
                'name': "Tomato",
@@ -100,6 +103,7 @@ class Command(BaseCommand):
         Crop.objects.update_or_create(
            id=4,
            defaults={
+               'slug': 'tomato-kumato',
                'order_number': 3,
                'type_of': Crop.TYPE_OF.PLANT,
                'name': "Tomato (Kumato)",
@@ -119,6 +123,7 @@ class Command(BaseCommand):
         Crop.objects.update_or_create(
            id=1000,
            defaults={
+               'slug': 'goldfish',
                'order_number': 1000,
                'type_of': Crop.TYPE_OF.FISHSTOCK,
                'name': "Goldfish",
@@ -135,6 +140,7 @@ class Command(BaseCommand):
         Crop.objects.update_or_create(
            id=1001,
            defaults={
+               'slug': 'tilapia',
                'order_number': 1001,
                'type_of': Crop.TYPE_OF.FISHSTOCK,
                'name': "Tilapia",

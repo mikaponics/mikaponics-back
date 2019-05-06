@@ -25,8 +25,8 @@ class Crop(models.Model):
 
     class TYPE_OF:
         PLANT = 1
-        ANIMALSTOCK = 2
-        FISHSTOCK = 3
+        FISHSTOCK = 2
+        ANIMALSTOCK = 3
 
     TYPE_OF_CHOICES = (
         (TYPE_OF.PLANT, _('Plant')),
@@ -57,9 +57,18 @@ class Crop(models.Model):
     '''
 
     objects = CropManager()
+    slug = models.SlugField(
+        _("Slug"),
+        help_text=_('The unique slug used for this crop when accessing the details page.'),
+        max_length=255,
+        blank=True,
+        null=False,
+        db_index=True,
+        unique=True,
+    )
     name = models.CharField(
         _("Name"),
-        max_length=31,
+        max_length=63,
         help_text=_('The name of the crop.'),
         blank=False,
         null=False,

@@ -17,4 +17,6 @@ class CropListSerializer(serializers.ModelSerializer):
         model = Production
         fields = (
             'name',
+            'type_of',
+            'slug',
         )

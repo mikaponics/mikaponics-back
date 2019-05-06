@@ -15,10 +15,10 @@ from rest_framework import authentication, viewsets, permissions, status,  parse
 from rest_framework.response import Response
 
 from production.serializers.crop_list_serializer import CropListSerializer
-from foundation.models import Production
+from foundation.models import Crop
 
 
-class CropListCreateAPIView(generics.ListCreateAPIView):
+class CropListAPIView(generics.ListAPIView):
     authentication_classes= (OAuth2Authentication,)
     serializer_class = CropListSerializer
     # pagination_class = StandardResultsSetPagination
@@ -38,7 +38,5 @@ class CropListCreateAPIView(generics.ListCreateAPIView):
         """
         Get list data.
         """
-        queryset = Production.objects.filter(
-            user=self.request.user,
-        ).order_by('-created_at')
+        queryset = Crop.objects.order_by('-order_number')
         return queryset
