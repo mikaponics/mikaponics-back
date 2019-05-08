@@ -3,6 +3,7 @@ import django_filters
 from ipware import get_client_ip
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasScope
 from django.conf import settings
+from django.db.models import Q
 from django.db import transaction
 from django.http import Http404
 from django_filters import rest_framework as filters
@@ -19,11 +20,22 @@ from foundation.models import Crop
 
 
 class CropFilter(filters.FilterSet):
-    type_of = filters.NumberFilter(field_name="type_of")
+    def enhanced_type_of_filter(self, name, value):
+        """
+        Filter method used to INCLUDE the "other" option along with the filtered
+        option to filter by. This is important because we want the "Other"
+        option to always be listed regardless of time being filtered.
+        """
+        return self.filter(
+            Q(type_of=Crop.TYPE_OF.NONE)|
+            Q(type_of=value)
+        )
+
+    type_of = filters.NumberFilter(method=enhanced_type_of_filter)
 
     class Meta:
         model = Crop
-        fields = ['type_of']
+        fields = ['type_of',]
 
 
 class CropListAPIView(generics.ListAPIView):

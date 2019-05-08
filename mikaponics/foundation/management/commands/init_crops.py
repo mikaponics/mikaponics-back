@@ -58,7 +58,7 @@ class Command(BaseCommand):
            defaults={
                'slug': 'other',
                'order_number': 10000,
-               'type_of': Crop.TYPE_OF.PLANT,
+               'type_of': Crop.TYPE_OF.NONE,
                'name': "Other",
                'stages': []
            }

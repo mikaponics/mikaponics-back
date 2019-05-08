@@ -27,10 +27,13 @@ class Crop(models.Model):
         PLANT = 1
         FISHSTOCK = 2
         ANIMALSTOCK = 3
+        NONE = 0
 
     TYPE_OF_CHOICES = (
         (TYPE_OF.PLANT, _('Plant')),
         (TYPE_OF.FISHSTOCK, _('Fishstock')),
+        (TYPE_OF.ANIMALSTOCK, _('Animalstock')),
+        (TYPE_OF.NONE, _('None')),
     )
 
 
