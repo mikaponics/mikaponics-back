@@ -21,6 +21,19 @@ class CropSubstrate(models.Model):
     Constants & Choices
     '''
 
+    class TYPE_OF:
+        PLANT = 1
+        FISHSTOCK = 2
+        ANIMALSTOCK = 3
+        NONE = 0
+
+    TYPE_OF_CHOICES = (
+        (TYPE_OF.PLANT, _('Plant')),
+        (TYPE_OF.FISHSTOCK, _('Fishstock')),
+        (TYPE_OF.ANIMALSTOCK, _('Animalstock')),
+        (TYPE_OF.NONE, _('None')),
+    )
+
     '''
     Metadata
     '''
@@ -61,6 +74,13 @@ class CropSubstrate(models.Model):
         null=False,
         unique=True,
         db_index=True,
+    )
+    type_of = models.PositiveSmallIntegerField(
+        _("Type of"),
+        help_text=_('The type of crop being grown in production.'),
+        blank=False,
+        null=False,
+        choices=TYPE_OF_CHOICES,
     )
     order_number = models.PositiveSmallIntegerField(
         _("Order #"),
