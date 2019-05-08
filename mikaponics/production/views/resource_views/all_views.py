@@ -23,49 +23,6 @@ from production.serializers.production_crop_retrieve_serializer import Productio
 from foundation.models import Production
 
 
-class ProductionListCreateAPIView(generics.ListCreateAPIView):
-    authentication_classes= (OAuth2Authentication,)
-    serializer_class = ProductionListSerializer
-    # pagination_class = StandardResultsSetPagination
-    permission_classes = (
-        permissions.IsAuthenticated,
-        # IsAuthenticatedAndIsActivePermission,
-        # CanRetrieveUpdateDestroyInvoicePermission
-    )
-    parser_classes = (
-        parsers.FormParser,
-        parsers.MultiPartParser,
-        parsers.JSONParser,
-    )
-    renderer_classes = (renderers.JSONRenderer,)
-
-    def get_queryset(self):
-        """
-        Get list data.
-        """
-        queryset = Production.objects.filter(
-            user=self.request.user,
-        ).order_by('-created_at')
-        return queryset
-
-    @transaction.atomic
-    def post(self, request):
-        """
-        Update
-        """
-        client_ip, is_routable = get_client_ip(self.request)
-        self.check_object_permissions(request, request.user)  # Validate permissions.
-
-        serializer = ProductionCreateSerializer(request.user, data=request.data, context={
-            'authenticated_by': request.user,
-            'authenticated_from': client_ip,
-            'authenticated_from_is_public': is_routable,
-        })
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
 class ProductionRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = ProductionRetrieveSerializer
     # pagination_class = StandardResultsSetPagination

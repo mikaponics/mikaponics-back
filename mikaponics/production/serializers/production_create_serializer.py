@@ -13,7 +13,9 @@ from foundation.models import Production
 
 
 class ProductionCreateSerializer(serializers.Serializer):
-    # state = serializers.CharField(required=True, allow_blank=False)
+    name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
+    description = serializers.CharField(required=True, allow_blank=False, allow_null=False)
+    device_slug = serializers.SlugField(required=True, allow_blank=False, allow_null=False)
     # password_repeat = serializers.CharField(required=True, allow_blank=False)
     # first_name = serializers.CharField(required=True, allow_blank=False)
     # last_name = serializers.CharField(required=True, allow_blank=False)
@@ -26,15 +28,15 @@ class ProductionCreateSerializer(serializers.Serializer):
         fields = (
             'name',
             'description',
-            'state',
-            'previous',
-            'device',
-            'environment',
-            'is_commercial',
-            'type_of',
-            'grow_system',
-            'grow_system_other',
-            'started_at',
+            # 'state',
+            # 'previous',
+            # 'device',
+            # 'environment',
+            # 'is_commercial',
+            # 'type_of',
+            # 'grow_system',
+            # 'grow_system_other',
+            # 'started_at',
         )
 
     # def validate_email(self, value):
@@ -73,62 +75,17 @@ class ProductionCreateSerializer(serializers.Serializer):
     #     return attrs
 
     def create(self, validated_data):
-        # email = validated_data.get('email', None)
-        # password = validated_data.get('password', None)
-        # first_name = validated_data.get('first_name', None)
-        # last_name = validated_data.get('last_name', None)
-        # timezone_name = validated_data.get('timezone', None)
-        # has_signed_tos = validated_data.get('has_signed_tos', False)
-        # referral_code = validated_data.get('referral_code', None)
-        #
-        # # Open up the current "terms of agreement" file and extract the text
-        # # context which we will save with the user account.
-        # tos_agreement = render_to_string('account/terms_of_service/2019_05_01.txt', {})
-        #
-        # # Attempt to lookup the referee of this user.
-        # referred_by_user = User.objects.filter(referral_code=referral_code).first()
-        #
-        # # Create the user.
-        # user = User.objects.create(
-        #     first_name=first_name,
-        #     last_name=last_name,
-        #     email=email,
-        #     is_active=True,
-        #     is_superuser=False,
-        #     is_staff=False,
-        #     was_email_activated=False, # User email must be activated before usage.
-        #     timezone=timezone_name,
-        #     billing_given_name = first_name,
-        #     billing_last_name = last_name,
-        #     billing_email = email,
-        #     shipping_given_name = first_name,
-        #     shipping_last_name = last_name,
-        #     shipping_email = email,
-        #     has_signed_tos = has_signed_tos,
-        #     tos_agreement = tos_agreement,
-        #     tos_signed_on = timezone.now(),
-        #     referred_by = referred_by_user,
-        # )
-        #
-        # # Generate and assign the password.
-        # user.set_password(password)
-        # user.save()
-        #
-        # # Refresh our object.
-        # user.refresh_from_db()
-        #
-        # # The following code will generate the two (one-time usage) coupons to
-        # # the referee (the new user in the system) and the referrer (the user
-        # # whom referred this newly registered user).
-        # if referral_code:
-        #     grant_referral_program_coupons(
-        #         referrer=referred_by_user,
-        #         referee=user
-        #     )
-        #
-        # # Update our validated data.
-        # validated_data['client_id'] = user.id
-        # validated_data['user'] = user
+        # Get our validated data and context data.
+        name = validated_data.get('name', None)
+        description = validated_data.get('description', None)
+        device_slug = validated_data.get('device_slug', None)
+        user = self.context['authenticated_by']
+
+        Production.objects.create(
+            name=name,
+            description=description,
+            user=user,
+        )
 
         # Return our output
         return validated_data

@@ -2,6 +2,7 @@ from django.urls import path
 
 from production.views.resource_views.all_views import *
 from production.views.resource_views.crop_list_view import *
+from production.views.resource_views.production_list_create_view import *
 
 urlpatterns = (
     path('api/crops',
