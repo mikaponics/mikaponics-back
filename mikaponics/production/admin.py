@@ -91,7 +91,7 @@ admin.site.register(Production, ProductionAdmin)
 class ProductionCropAdmin(admin.ModelAdmin):
     raw_id_fields = ['production', ]
     list_filter = ['crop', 'substrate',]
-    list_display = ['slug', 'crop', 'substrate', 'production']
+    list_display = ['slug', 'crop', 'crop_other', 'substrate', 'substrate_other', 'production']
     ordering = ['-id',]
     readonly_fields = [
         'id', 'created_at', 'created_by', 'created_from',

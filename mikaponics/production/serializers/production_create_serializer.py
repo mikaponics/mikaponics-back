@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 
-from foundation.models import Device, Production
+from foundation.models import Crop, Device, Production, ProductionCrop
 
 
 class ProductionCreateSerializer(serializers.Serializer):
@@ -21,6 +21,8 @@ class ProductionCreateSerializer(serializers.Serializer):
     type_of = serializers.IntegerField(required=True)
     grow_system = serializers.IntegerField(required=True)
     grow_system_other = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    plants_array = serializers.JSONField(required=True)
+    fish_array = serializers.JSONField(required=True)
 
 
     class Meta:
@@ -34,7 +36,8 @@ class ProductionCreateSerializer(serializers.Serializer):
             'type_of',
             'grow_system',
             'grow_system_other',
-            # 'started_at',
+            'plants_array',
+            'fish_array'
         )
 
     def validate_device_slug(self, value):
@@ -47,31 +50,6 @@ class ProductionCreateSerializer(serializers.Serializer):
             if value == None or value == '':
                 raise exceptions.ValidationError(_('Please fill in this field.'))
         return value
-
-    # def validate_referral_code(self, value):
-    #     if User.objects.filter(referral_code=value).exists():
-    #         return value
-    #     else:
-    #         raise exceptions.ValidationError(_('Please enter a correct referral code.'))
-    #
-    # def validate(self, attrs):
-    #     email = attrs.get('email', None)
-    #     password = attrs.get('password', None)
-    #     password_repeat = attrs.get('password_repeat', None)
-    #     first_name = attrs.get('first_name', None)
-    #     last_name = attrs.get('last_name', None)
-    #     timezone_name = attrs.get('timezone', None)
-    #
-    #     # Defensive Code: Prevent continuing if the email already exists.
-    #     if User.objects.filter(email=email).exists():
-    #         raise exceptions.ValidationError(_('Email already exists, please pick another email.'))
-    #
-    #     # Confirm passwords match.
-    #     if password != password_repeat:
-    #         raise exceptions.ValidationError(_('Passwords do not match.'))
-    #
-    #     # Return our validated data.
-    #     return attrs
 
     def create(self, validated_data):
         # Get our validated data and context data.
@@ -86,10 +64,12 @@ class ProductionCreateSerializer(serializers.Serializer):
         type_of = validated_data.get('type_of', None)
         grow_system = validated_data.get('grow_system', None)
         grow_system_other = validated_data.get('grow_system_other', None)
+        plants_array = validated_data.get('plants_array', [])
+        fish_array = validated_data.get('fish_array', [])
 
         device = Device.objects.get(slug=device_slug)
 
-        Production.objects.create(
+        production = Production.objects.create(
             user=authenticated_by,
             device=device,
             name=name,
@@ -108,6 +88,26 @@ class ProductionCreateSerializer(serializers.Serializer):
             last_modified_from=authenticated_from,
             last_modified_from_is_public=authenticated_from_is_public,
         )
+
+        for plant in plants_array:
+            crop = Crop.objects.filter(slug=plant['slug']).first()
+            print(plant)
+            production_crop = ProductionCrop.objects.create(
+                production=production,
+                crop=crop,
+                crop_other=plant.get('name_other', None),
+                quantity=plant['quantity'],
+                substrate=None,
+                substrate_other=None,
+            )
+
+        for fish in fish_array:
+            print(fish)
+            # production_crop = ProductionCrop.objects.create(
+            #     production=production
+            # )
+
+
 
         # Return our output
         return validated_data
