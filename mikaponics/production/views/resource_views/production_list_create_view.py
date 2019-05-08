@@ -55,11 +55,12 @@ class ProductionListCreateAPIView(generics.ListCreateAPIView):
         """
         client_ip, is_routable = get_client_ip(self.request)
         self.check_object_permissions(request, request.user)  # Validate permissions.
-        print("INPUT >", request.data)
+        grow_system = request.data.get("grow_system")
         write_serializer = ProductionCreateSerializer(data=request.data, context={
             'authenticated_by': request.user,
             'authenticated_from': client_ip,
             'authenticated_from_is_public': is_routable,
+            'grow_system': grow_system,
         })
         write_serializer.is_valid(raise_exception=True)
         production = write_serializer.save()

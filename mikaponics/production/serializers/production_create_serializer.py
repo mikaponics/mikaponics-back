@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 
-from foundation.models import Production
+from foundation.models import Device, Production
 
 
 class ProductionCreateSerializer(serializers.Serializer):
@@ -20,6 +20,7 @@ class ProductionCreateSerializer(serializers.Serializer):
     environment = serializers.IntegerField(required=True)
     type_of = serializers.IntegerField(required=True)
     grow_system = serializers.IntegerField(required=True)
+    grow_system_other = serializers.CharField(required=False, allow_blank=True, allow_null=True)
 
 
     class Meta:
@@ -32,20 +33,21 @@ class ProductionCreateSerializer(serializers.Serializer):
             'environment',
             'type_of',
             'grow_system',
-            # 'grow_system_other',
+            'grow_system_other',
             # 'started_at',
         )
 
-    # def validate_email(self, value):
-    #     if User.objects.filter(email=value).exists():
-    #         raise exceptions.ValidationError(_('Email already exists, pick another email.'))
-    #     return value
-    #
-    # def validate_has_signed_tos(self, value):
-    #     if value is False or value == False:
-    #         raise exceptions.ValidationError(_('Please sign the terms of service before submitting.'))
-    #     return value
-    #
+    def validate_device_slug(self, value):
+        if not Device.objects.filter(slug=value, user=self.context['authenticated_by']).exists():
+            raise exceptions.ValidationError(_('Device does not exist for this device.'))
+        return value
+
+    def validate_grow_system_other(self, value):
+        if self.context['grow_system'] == Production.GROW_SYSTEM.OTHER_SYSTEM:
+            if value == None or value == '':
+                raise exceptions.ValidationError(_('Please fill in this field.'))
+        return value
+
     # def validate_referral_code(self, value):
     #     if User.objects.filter(referral_code=value).exists():
     #         return value
@@ -75,21 +77,36 @@ class ProductionCreateSerializer(serializers.Serializer):
         # Get our validated data and context data.
         name = validated_data.get('name', None)
         description = validated_data.get('description', None)
-        is_commercial = validated_data.get('is_commercial', false)
+        is_commercial = validated_data.get('is_commercial', False)
         device_slug = validated_data.get('device_slug', None)
-        user = self.context['authenticated_by']
+        authenticated_by = self.context['authenticated_by']
+        authenticated_from = self.context['authenticated_from']
+        authenticated_from_is_public = self.context['authenticated_from_is_public']
         environment = validated_data.get('environment', None)
         type_of = validated_data.get('type_of', None)
         grow_system = validated_data.get('grow_system', None)
+        grow_system_other = validated_data.get('grow_system_other', None)
+
+        device = Device.objects.get(slug=device_slug)
 
         Production.objects.create(
+            user=authenticated_by,
+            device=device,
             name=name,
             description=description,
-            user=user,
             is_commercial=is_commercial,
             environment=environment,
             type_of=type_of,
-            grow_system=grow_system
+            grow_system=grow_system,
+            grow_system_other=grow_system_other,
+            started_at=timezone.now(),
+            state=Production.PRODUCTION_STATE.OPERATING,
+            created_by=authenticated_by,
+            created_from=authenticated_from,
+            created_from_is_public=authenticated_from_is_public,
+            last_modified_by=authenticated_by,
+            last_modified_from=authenticated_from,
+            last_modified_from_is_public=authenticated_from_is_public,
         )
 
         # Return our output
