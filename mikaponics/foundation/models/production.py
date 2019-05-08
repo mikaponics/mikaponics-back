@@ -113,14 +113,14 @@ class Production(models.Model):
     )
 
     class GROW_SYSTEM:
-        WICK_SYSTEM = 1
-        DEEP_WATER_CULTURE_SYSTEM = 2
-        EBB_AND_FLOW_SYSTEM = 3
-        NFT_SYSTEM = 4 # Nutrient Film Technique
-        DRIP_SYSTEM = 5
-        AEROPONIC_SYSTEM = 6
-        VERTICAL_TOWER_SYSTEM = 7
-        OTHER_SYSTEM = 8
+        WICK_SYSTEM = 2
+        DEEP_WATER_CULTURE_SYSTEM = 3
+        EBB_AND_FLOW_SYSTEM = 4
+        NFT_SYSTEM = 5 # Nutrient Film Technique
+        DRIP_SYSTEM = 6
+        AEROPONIC_SYSTEM = 7
+        VERTICAL_TOWER_SYSTEM = 8
+        OTHER_SYSTEM = 1
 
     GROW_SYSTEM_CHOICES = (
         (GROW_SYSTEM.WICK_SYSTEM, _('Wick System')),

@@ -15,26 +15,23 @@ from foundation.models import Production
 class ProductionCreateSerializer(serializers.Serializer):
     name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
     description = serializers.CharField(required=True, allow_blank=False, allow_null=False)
+    is_commercial = serializers.BooleanField(required=False)
     device_slug = serializers.SlugField(required=True, allow_blank=False, allow_null=False)
-    # password_repeat = serializers.CharField(required=True, allow_blank=False)
-    # first_name = serializers.CharField(required=True, allow_blank=False)
-    # last_name = serializers.CharField(required=True, allow_blank=False)
-    # timezone = serializers.CharField(required=True, allow_blank=False)
-    # has_signed_tos = serializers.BooleanField(required=True)
-    # referral_code = serializers.CharField(required=False, allow_blank=True, allow_null=True,)
+    environment = serializers.IntegerField(required=True)
+    type_of = serializers.IntegerField(required=True)
+    grow_system = serializers.IntegerField(required=True)
+
 
     class Meta:
         model = Production
         fields = (
             'name',
             'description',
-            # 'state',
-            # 'previous',
-            # 'device',
-            # 'environment',
-            # 'is_commercial',
-            # 'type_of',
-            # 'grow_system',
+            'is_commercial',
+            'device_slug',
+            'environment',
+            'type_of',
+            'grow_system',
             # 'grow_system_other',
             # 'started_at',
         )
@@ -78,13 +75,21 @@ class ProductionCreateSerializer(serializers.Serializer):
         # Get our validated data and context data.
         name = validated_data.get('name', None)
         description = validated_data.get('description', None)
+        is_commercial = validated_data.get('is_commercial', false)
         device_slug = validated_data.get('device_slug', None)
         user = self.context['authenticated_by']
+        environment = validated_data.get('environment', None)
+        type_of = validated_data.get('type_of', None)
+        grow_system = validated_data.get('grow_system', None)
 
         Production.objects.create(
             name=name,
             description=description,
             user=user,
+            is_commercial=is_commercial,
+            environment=environment,
+            type_of=type_of,
+            grow_system=grow_system
         )
 
         # Return our output
