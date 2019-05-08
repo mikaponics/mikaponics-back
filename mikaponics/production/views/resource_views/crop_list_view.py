@@ -18,6 +18,14 @@ from production.serializers.crop_list_serializer import CropListSerializer
 from foundation.models import Crop
 
 
+class CropFilter(filters.FilterSet):
+    type_of = filters.NumberFilter(field_name="type_of")
+
+    class Meta:
+        model = Crop
+        fields = ['type_of']
+
+
 class CropListAPIView(generics.ListAPIView):
     authentication_classes= (OAuth2Authentication,)
     serializer_class = CropListSerializer
@@ -33,10 +41,12 @@ class CropListAPIView(generics.ListAPIView):
         parsers.JSONParser,
     )
     renderer_classes = (renderers.JSONRenderer,)
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = CropFilter
 
     def get_queryset(self):
         """
         Get list data.
         """
-        queryset = Crop.objects.order_by('-order_number')
+        queryset = Crop.objects.order_by('order_number')
         return queryset
