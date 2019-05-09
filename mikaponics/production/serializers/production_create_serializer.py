@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 
-from foundation.models import Crop, Device, Production, ProductionCrop
+from foundation.models import Crop, CropSubstrate, Device, Production, ProductionCrop
 
 
 class ProductionCreateSerializer(serializers.Serializer):
@@ -92,13 +92,14 @@ class ProductionCreateSerializer(serializers.Serializer):
         for plant in plants_array:
             print(plant)
             crop = Crop.objects.filter(slug=plant['plant_slug']).first()
+            substrate = CropSubstrate.objects.filter(slug=plant['substrate_slug']).first()
             production_crop = ProductionCrop.objects.create(
                 production=production,
                 crop=crop,
                 crop_other=plant.get('plant_other', None),
                 quantity=plant['quantity'],
-                substrate=None,
-                substrate_other=None,
+                substrate=substrate,
+                substrate_other=plant.get('substrate_other', None),
             )
 
         for fish in fish_array:
