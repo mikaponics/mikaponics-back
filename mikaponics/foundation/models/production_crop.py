@@ -188,18 +188,30 @@ class ProductionCrop(models.Model):
         null=True,
         choices=CROP_STATE_AT_FINISH_CHOICES,
     )
+    state_failure_reason_at_finish = models.TextField(
+        _("Failure reason at finish"),
+        help_text=_('Th failure reason of the crop when the production has finished.'),
+        blank=True,
+        null=True,
+    )
     notes_at_finish = models.TextField(
         _("Comments at finish"),
         help_text=_('Any notes or notes of the crop when the production has finished.'),
         blank=True,
         null=True,
     )
-    harvest_review_at_finish = models.PositiveSmallIntegerField(
+    harvest_at_finish = models.PositiveSmallIntegerField(
         verbose_name=_('Harvest review at finish'),
         help_text=_('The harvest review made by the user when the production has finished.'),
         blank=True,
         null=True,
         choices=HARVEST_REVIEW_CHOICES,
+    )
+    harvest_failure_reason_at_finish = models.TextField(
+        _("Harvest failure at finish"),
+        help_text=_('Th harvest failure reason of the crop when the production has finished.'),
+        blank=True,
+        null=True,
     )
     harvest_notes_at_finish = models.TextField(
         _("Harvest notes at finish"),

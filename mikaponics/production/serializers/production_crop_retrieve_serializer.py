@@ -13,15 +13,30 @@ from foundation.models import ProductionCrop
 
 
 class ProductionCropRetrieveSerializer(serializers.ModelSerializer):
-    # crop = serializers.CharField(required=True, allow_blank=False, source="crop.name")
-    # absoluteURL = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url")
+    crop = serializers.CharField(required=True, allow_blank=False, source="crop.name")
+    crop_slug = serializers.CharField(required=True, allow_blank=False, source="crop.slug")
+    substrate = serializers.CharField(required=True, allow_blank=False, source="substrate.name")
+    substrate_slug = serializers.CharField(required=True, allow_blank=False, source="substrate.slug")
+    absoluteURL = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url")
 
     class Meta:
         model = ProductionCrop
         fields = (
-            # 'crop',
-            # 'crop_other',
-            # 'quantity',
+            'crop',
+            'crop_other',
+            'crop_slug',
+            'quantity',
+            'substrate',
+            'substrate_other',
+            'substrate_slug',
+            'state_at_finish',
+            'state_failure_reason_at_finish',
+            'notes_at_finish',
+            'harvest_at_finish',
+            'harvest_failure_reason_at_finish',
+            'harvest_notes_at_finish',
+            'created_at',
+            'last_modified_at',
             'slug',
-            # 'absoluteURL',
+            'absoluteURL',
         )
