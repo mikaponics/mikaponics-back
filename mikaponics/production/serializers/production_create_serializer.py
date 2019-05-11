@@ -113,7 +113,10 @@ class ProductionCreateSerializer(serializers.Serializer):
                 substrate_other=fish.get('substrate_other', None),
             )
 
-
-
-        # Return our output
+        # DEVELOPERS NOTES:
+        # (1) This is  a "Serializer" and not "ModelSerializer" as a result we
+        #     will attach the object we created in this serializer.
+        # (2) In the output, you can get the object we created.
+        validated_data['slug'] = production.slug
+        validated_data['production'] = production # ATTACH OBJECT WE CREATED IN THIS SERIALIZER.
         return validated_data

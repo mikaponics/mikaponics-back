@@ -63,12 +63,11 @@ class ProductionListCreateAPIView(generics.ListCreateAPIView):
             'grow_system': grow_system,
         })
         write_serializer.is_valid(raise_exception=True)
-        production = write_serializer.save()
-        if production:
-            read_serializer = ProductionCropRetrieveSerializer(production, many=False, context={
-                'authenticated_by': request.user,
-                'authenticated_from': client_ip,
-                'authenticated_from_is_public': is_routable,
-            })
-            return Response(read_serializer.data, status=status.HTTP_201_CREATED)
-        return Response(data={'errors': {'t': 't'}}, status=status.HTTP_400_BAD_REQUEST)
+        validated_data = write_serializer.save()
+        production = validated_data['production']
+        read_serializer = ProductionRetrieveSerializer(production, many=False, context={
+            'authenticated_by': request.user,
+            'authenticated_from': client_ip,
+            'authenticated_from_is_public': is_routable,
+        })
+        return Response(read_serializer.data, status=status.HTTP_201_CREATED)
