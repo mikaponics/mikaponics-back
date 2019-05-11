@@ -21,6 +21,7 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
     absoluteURL = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url")
     plants = serializers.SerializerMethodField()
     fish = serializers.SerializerMethodField()
+    crops = serializers.SerializerMethodField()
 
     class Meta:
         model = Production
@@ -42,12 +43,16 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
             'finished_at',
             'plants',
             'fish',
+            'crops',
             'absoluteURL',
         )
 
     def get_plants(self, obj):
         try:
-            plants = obj.crops.filter(crop__type_of=Crop.TYPE_OF.PLANT)
+            plants = obj.crops.filter(
+                Q(crop__type_of=Crop.TYPE_OF.PLANT)|
+                Q(crop__type_of=Crop.TYPE_OF.NONE)
+            ).order_by('id')
             s = ProductionCropRetrieveSerializer(plants, many=True)
             return s.data;
         except Exception as e:
@@ -56,9 +61,21 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
 
     def get_fish(self, obj):
         try:
-            fish = obj.crops.filter(crop__type_of=Crop.TYPE_OF.FISHSTOCK)
+            fish = obj.crops.filter(
+                Q(crop__type_of=Crop.TYPE_OF.PLANT)|
+                Q(crop__type_of=Crop.TYPE_OF.NONE)
+            ).order_by('id')
             s = ProductionCropRetrieveSerializer(fish, many=True)
             return s.data;
         except Exception as e:
             print("ProductionRetrieveSerializer | get_fish |", e)
+            return []
+
+    def get_crops(self, obj):
+        try:
+            crops = obj.crops.order_by('id')
+            s = ProductionCropRetrieveSerializer(crops, many=True)
+            return s.data;
+        except Exception as e:
+            print("ProductionRetrieveSerializer | get_crops |", e)
             return []

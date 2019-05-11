@@ -1,10 +1,11 @@
 from django.urls import path
 
-from production.views.resource_views.all_views import *
+from production.views.resource_views.production_retrieve_update_view import *
 from production.views.resource_views.crop_list_view import *
 from production.views.resource_views.crop_substrate_list_view import *
 from production.views.resource_views.production_list_create_view import *
-from production.views.resource_views.production_termination_view import *
+# from production.views.resource_views.production_termination_view import *
+from production.views.resource_views.production_crop_retrieve_update_views import *
 
 
 urlpatterns = (
@@ -24,8 +25,12 @@ urlpatterns = (
         ProductionRetrieveUpdateAPIView.as_view(),
         name='mikaponics_production_retrieve_update_api_endpoint'
     ),
-    path('api/production-termination/<str:slug>',
-        ProductionTerminationAPIView.as_view(),
-        name='mikaponics_production_termination_api_endpoint'
+    path('api/production-crop/<str:slug>',
+        ProductionCropRetrieveUpdateAPIView.as_view(),
+        name='mikaponics_production_retrieve_update_api_endpoint'
     ),
+    # path('api/production-termination/<str:slug>',
+    #     ProductionTerminationAPIView.as_view(),
+    #     name='mikaponics_production_termination_api_endpoint'
+    # ),
 )
