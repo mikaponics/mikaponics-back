@@ -209,7 +209,7 @@ class ProductionCrop(models.Model):
     )
     harvest_failure_reason_at_finish = models.TextField(
         _("Harvest failure at finish"),
-        help_text=_('Th harvest failure reason of the crop when the production has finished.'),
+        help_text=_('The harvest failure reason of the crop when the production has finished.'),
         blank=True,
         null=True,
     )

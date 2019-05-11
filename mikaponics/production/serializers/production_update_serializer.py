@@ -27,7 +27,7 @@ class ProductionUpdateSerializer(serializers.ModelSerializer):
             'grow_system_other',
             'started_at',
             'finished_at',
-            # 'plants',
-            # 'fish',
-            # 'crops',
+            'was_success_at_finish',
+            'failure_reason_at_finish',
+            'notes_at_finish',
         )

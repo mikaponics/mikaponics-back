@@ -48,9 +48,9 @@ class ProductionManager(models.Manager):
 
 class Production(models.Model):
     """
-    The class represents the production of food through a (1) hydroponics
+    The class represents the production of crop through a (1) hydroponics
     (2) aquaponics or (3) aquaculture system. Class will track the plants and
-    aquatic livestock in the current food production and attach a single
+    aquatic livestock in the current crop production and attach a single
     Mikaponics device with it.
 
     The beginning of a production is defined when a plant has been placed
@@ -161,7 +161,7 @@ class Production(models.Model):
     )
     previous = models.ForeignKey(
         "self",
-        help_text=_('The previous production of food that this production is related to. General this happens with fruit bearing plants / trees.'),
+        help_text=_('The previous production of crop that this production is related to. General this happens with fruit bearing plants / trees.'),
         blank=True,
         null=True,
         related_name="previous_productions",
@@ -169,7 +169,7 @@ class Production(models.Model):
     )
     slug = models.SlugField(
         _("Slug"),
-        help_text=_('The unique slug used for this food production when accessing details page.'),
+        help_text=_('The unique slug used for this crop production when accessing details page.'),
         max_length=127,
         blank=True,
         null=False,
@@ -179,7 +179,7 @@ class Production(models.Model):
     )
     device = models.ForeignKey(
         "Device",
-        help_text=_('The device which is responsible for monitoring this food production.'),
+        help_text=_('The device which is responsible for monitoring this crop production.'),
         blank=False,
         null=False,
         related_name="productions",
@@ -187,7 +187,7 @@ class Production(models.Model):
     )
     user = models.ForeignKey(
         "foundation.User",
-        help_text=_('The user whom this food production invoice belongs to.'),
+        help_text=_('The user whom this crop production invoice belongs to.'),
         blank=False,
         null=False,
         related_name="productions",
@@ -264,6 +264,24 @@ class Production(models.Model):
         blank=True,
         null=True,
     )
+    was_success_at_finish = models.BooleanField(
+        _("Was this crop production a success upon completion?"),
+        help_text=_('Indicates if this crop production was considered a success to the user or a failure.'),
+        default=False,
+        blank=True,
+    )
+    failure_reason_at_finish = models.TextField(
+        _("Failure reason at finish"),
+        help_text=_('The reason why this crop production was overall considered a failure by the user.'),
+        blank=True,
+        null=True,
+    )
+    notes_at_finish = models.TextField(
+        _("Comments at finish"),
+        help_text=_('Any notes to add upon the completion of the crop production.'),
+        blank=True,
+        null=True,
+    )
 
     #
     # Audit detail fields
@@ -272,7 +290,7 @@ class Production(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         "foundation.User",
-        help_text=_('The user whom created this food production.'),
+        help_text=_('The user whom created this crop production.'),
         related_name="created_productions",
         on_delete=models.SET_NULL,
         blank=True,
@@ -296,7 +314,7 @@ class Production(models.Model):
     last_modified_at = models.DateTimeField(auto_now=True)
     last_modified_by = models.ForeignKey(
         "foundation.User",
-        help_text=_('The user whom last modified this food production.'),
+        help_text=_('The user whom last modified this crop production.'),
         related_name="last_modified_productions",
         on_delete=models.SET_NULL,
         blank=True,
