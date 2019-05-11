@@ -13,36 +13,32 @@ from foundation.models import Crop, Production
 from production.serializers.production_crop_list_serializer import ProductionCropListSerializer
 
 
-class ProductionTerminationRetrieveSerializer(serializers.ModelSerializer):
-    absoluteURL = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url")
-    plants = serializers.SerializerMethodField()
-    fish = serializers.SerializerMethodField()
+class ProductionTerminationSerializer(serializers.ModelSerializer):
+
+    plants = serializers.JSONField(required=True, allow_null=True,)
+    fish = serializers.JSONField(required=True, allow_null=True,)
 
     class Meta:
         model = Production
         fields = (
-            'state',
-            'pretty_state',
-            'slug',
             'plants',
             'fish',
-            'absoluteURL',
         )
 
-    def get_plants(self, obj):
-        try:
-            plants = obj.crops.filter(crop__type_of=Crop.TYPE_OF.PLANT)
-            s = ProductionCropListSerializer(plants, many=True)
-            return s.data;
-        except Exception as e:
-            print("ProductionRetrieveSerializer | get_plants |", e)
-            return []
+    def update(self, instance, validated_data):
+        """
+        Override this function to include extra functionality.
+        """
+        # Get our context data.
+        authenticated_user = self.context['authenticated_by']
+        authenticated_user_from = self.context['authenticated_from']
+        authenticated_user_from_is_public = self.context['authenticated_from_is_public']
 
-    def get_fish(self, obj):
-        try:
-            fish = obj.crops.filter(crop__type_of=Crop.TYPE_OF.FISHSTOCK)
-            s = ProductionCropListSerializer(fish, many=True)
-            return s.data;
-        except Exception as e:
-            print("ProductionRetrieveSerializer | get_fish |", e)
-            return []
+        # Get our inputted data.
+        plants = validated_data.get('plants', None)
+        fish = validated_data.get('fish', None)
+
+        #TODO: IMPLEMENT...
+
+        # instance.invoice.invalidate('total')
+        return validated_data

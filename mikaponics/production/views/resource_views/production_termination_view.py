@@ -14,54 +14,39 @@ from rest_framework import generics
 from rest_framework import authentication, viewsets, permissions, status,  parsers, renderers
 from rest_framework.response import Response
 
-# from production.serializers.production_crop_retrieve_serializer import ProductionCropRetrieveSerializer
-# from production.serializers.production_crop_update_serializer import ProductionCropUpdateSerializer
-from foundation.models import ProductionCrop
+from production.serializers.production_retrieve_serializer import ProductionRetrieveSerializer
+from production.serializers.production_termination_serializer import ProductionTerminationSerializer
+from foundation.models import Production
 
 
 class ProductionTerminationAPIView(generics.RetrieveUpdateAPIView):
     # serializer_class = ProductionCropRetrieveSerializer
     # pagination_class = StandardResultsSetPagination
     permission_classes = (
-        # permissions.IsAuthenticated,
+        permissions.IsAuthenticated,
         # IsAuthenticatedAndIsActivePermission,
         # CanRetrieveUpdateDestroyProductionCropPermission
     )
-
-    # # @transaction.atomic
-    # def get(self, request, slug=None):
-    #     """
-    #     Retrieve
-    #     """
-    #     client_ip, is_routable = get_client_ip(self.request)
-    #     object = get_object_or_404(ProductionCrop, slug=slug)
-    #     self.check_object_permissions(request, object)  # Validate permissions.
-    #     serializer = ProductionCropRetrieveSerializer(object, many=False, context={
-    #         'authenticated_by': request.user,
-    #         'authenticated_from': client_ip,
-    #         'authenticated_from_is_public': is_routable,
-    #     })
-    #     return Response(
-    #         data=serializer.data,
-    #         status=status.HTTP_200_OK
-    #     )
 
     @transaction.atomic
     def put(self, request, slug=None):
         """
         Update
         """
-        # client_ip, is_routable = get_client_ip(self.request)
-        # object = get_object_or_404(ProductionCrop, slug=slug)
-        # self.check_object_permissions(request, object)  # Validate permissions.
-        # write_serializer = ProductionCropUpdateSerializer(object, data=request.data)
-        # write_serializer.is_valid(raise_exception=True)
-        # write_serializer.save()
-        # production_crop = write_serializer.save()
-        # read_serializer = ProductionCropUpdateSerializer(production_crop, many=False, context={
-        #     'authenticated_by': request.user,
-        #     'authenticated_from': client_ip,
-        #     'authenticated_from_is_public': is_routable,
-        # })
-        # return Response(read_serializer.data, status=status.HTTP_201_CREATED)
-        return Response(data={}, status=status.HTTP_201_CREATED)
+        client_ip, is_routable = get_client_ip(self.request)
+        object = get_object_or_404(Production, slug=slug)
+        self.check_object_permissions(request, object)  # Validate permissions.
+        write_serializer = ProductionTerminationSerializer(object, data=request.data, context={
+            'authenticated_by': request.user,
+            'authenticated_from': client_ip,
+            'authenticated_from_is_public': is_routable,
+        })
+        write_serializer.is_valid(raise_exception=True)
+        write_serializer.save()
+        object.refresh_from_db()
+        read_serializer = ProductionRetrieveSerializer(object, many=False, context={
+            'authenticated_by': request.user,
+            'authenticated_from': client_ip,
+            'authenticated_from_is_public': is_routable,
+        })
+        return Response(read_serializer.data, status=status.HTTP_200_OK)
