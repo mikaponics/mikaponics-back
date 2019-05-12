@@ -18,7 +18,7 @@ class ProductionCropUpdateSerializer(serializers.ModelSerializer):
     crop_slug = serializers.CharField(required=True, allow_blank=False, source="crop.slug")
     # substrate = serializers.CharField(required=True, allow_blank=False, source="substrate.name")
     # substrate_slug = serializers.CharField(required=True, allow_blank=False, source="substrate.slug")
-    state_at_finish = serializers.IntegerField(required=True,)
+    state_at_finish = serializers.IntegerField(required=True, allow_null=False,)
     state_failure_reason_at_finish = serializers.CharField(required=False, allow_blank=True, allow_null=True,)
     notes_at_finish = serializers.CharField(required=False, allow_blank=True, allow_null=True,)
     harvest_at_finish = serializers.IntegerField(required=True,)
@@ -36,7 +36,12 @@ class ProductionCropUpdateSerializer(serializers.ModelSerializer):
             'harvest_at_finish',
             'harvest_failure_reason_at_finish',
             'harvest_notes_at_finish',
+            # 'will_close',
         )
+
+    def validate_state_at_finish(self, value):
+        print("validate_state_at_finish | state_at_finish ->", value)
+        return value
 
     def validate_state_failure_reason_at_finish(self, value):
         state_at_finish = self.context['state_at_finish']
@@ -72,4 +77,5 @@ class ProductionCropUpdateSerializer(serializers.ModelSerializer):
         instance.harvest_failure_reason_at_finish = harvest_failure_reason_at_finish
         instance.harvest_notes_at_finish = harvest_notes_at_finish
         instance.save()
+        validated_data['production_crop'] = instance
         return validated_data
