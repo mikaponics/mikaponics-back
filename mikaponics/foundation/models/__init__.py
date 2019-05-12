@@ -18,4 +18,4 @@ from foundation.models.crop import Crop
 from foundation.models.crop_substrate import CropSubstrate
 from foundation.models.production import Production
 from foundation.models.production_crop import ProductionCrop
-from foundation.models.production_inspection import ProductionInspection
+from foundation.models.production_crop_inspection import ProductionCropInspection

@@ -26,9 +26,9 @@ from oauth2_provider.models import (
 from foundation.constants import *
 
 
-class ProductionInspectionManager(models.Manager):
+class ProductionCropInspectionManager(models.Manager):
     def delete_all(self):
-        items = ProductionInspection.objects.all()
+        items = ProductionCropInspection.objects.all()
         for item in items.all():
             item.delete()
 
@@ -36,7 +36,7 @@ class ProductionInspectionManager(models.Manager):
     #     results = []
     #     faker = Faker('en_CA')
     #     for i in range(0,length):
-    #         farm = ProductionInspection.objects.create(
+    #         farm = ProductionCropInspection.objects.create(
     #             name = faker.domain_word(),
     #             description = faker.sentence(nb_words=6, variable_nb_words=True, ext_word_list=None),
     #             user = user,
@@ -46,7 +46,7 @@ class ProductionInspectionManager(models.Manager):
     #     return results
 
 
-class ProductionInspection(models.Model):
+class ProductionCropInspection(models.Model):
     """
     Class represents a single quality assurance inspection of a running crop
     production operation in a point in date and time.
@@ -100,7 +100,7 @@ class ProductionInspection(models.Model):
     '''
     Object Managers
     '''
-    objects = ProductionInspectionManager()
+    objects = ProductionCropInspectionManager()
 
     '''
     Fields
@@ -137,14 +137,6 @@ class ProductionInspection(models.Model):
     # Quality Assurance Inspection Fields
     #
 
-    production = models.ForeignKey(
-        "Production",
-        help_text=_('The crop production operation this quality assurance inspection is for.'),
-        blank=True,
-        null=True,
-        related_name="inspections",
-        on_delete=models.SET_NULL
-    )
     production_crop = models.ForeignKey(
         "ProductionCrop",
         verbose_name=_('Production Crop'),
@@ -242,23 +234,25 @@ class ProductionInspection(models.Model):
         """
         if not self.slug:
             # CASE 1 OF 2: HAS USER.
-            if self.production.user:
-                count = ProductionInspection.objects.filter(production__user=self.production.user).count()
+            if self.production_crop.production.user:
+                count = ProductionCropInspection.objects.filter(
+                    production_crop__production__user=self.production_crop.production.user
+                ).count()
                 count += 1
 
                 # Generate our slug.
-                self.slug = self.production.slug+"-inspection-"+str(count)
+                self.slug = self.production_crop.slug+"-inspection-"+str(count)
 
                 # If a unique slug was not found then we will keep searching
                 # through the various slugs until a unique slug is found.
-                while ProductionInspection.objects.filter(slug=self.slug).exists():
-                    self.slug =  self.production.slug+"-inspection-"+str(count)+"-"+get_random_string(length=8)
+                while ProductionCropInspection.objects.filter(slug=self.slug).exists():
+                    self.slug =  self.production_crop.slug+"-inspection-"+str(count)+"-"+get_random_string(length=8)
 
             # CASE 2 OF 2: DOES NOT HAVE USER.
             else:
-                self.slug = self.production.slug+"-inspection-"+get_random_string(length=32)
+                self.slug = self.production_crop.slug+"-inspection-"+get_random_string(length=32)
 
-        super(ProductionInspection, self).save(*args, **kwargs)
+        super(ProductionCropInspection, self).save(*args, **kwargs)
 
     def __str__(self):
         return str(self.slug)

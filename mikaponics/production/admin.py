@@ -49,14 +49,9 @@ class ProductionCropInline(admin.TabularInline):
     model = ProductionCrop
 
 
-class ProductionInspectionInline(admin.TabularInline):
-    model = ProductionInspection
-
-
 class ProductionAdmin(admin.ModelAdmin):
     inlines = [
         ProductionCropInline,
-        ProductionInspectionInline
     ]
     raw_id_fields = ['user', ]
     list_filter = ['state', 'started_at', 'finished_at', 'grow_system',]
@@ -88,7 +83,14 @@ class ProductionAdmin(admin.ModelAdmin):
 admin.site.register(Production, ProductionAdmin)
 
 
+class ProductionCropInspectionInline(admin.TabularInline):
+    model = ProductionCropInspection
+
+
 class ProductionCropAdmin(admin.ModelAdmin):
+    inlines = [
+        ProductionCropInspectionInline
+    ]
     raw_id_fields = ['production', ]
     list_filter = ['crop', 'substrate',]
     list_display = ['slug', 'crop', 'crop_other', 'quantity', 'substrate', 'substrate_other', 'production']
@@ -119,10 +121,10 @@ class ProductionCropAdmin(admin.ModelAdmin):
 admin.site.register(ProductionCrop, ProductionCropAdmin)
 
 
-class ProductionInspectionAdmin(admin.ModelAdmin):
-    raw_id_fields = ['production', 'production_crop',]
+class ProductionCropInspectionAdmin(admin.ModelAdmin):
+    raw_id_fields = ['production_crop',]
     list_filter = []
-    list_display = ['slug', 'production']
+    list_display = ['slug', 'production_crop']
     ordering = ['-id',]
     readonly_fields = [
         'id', 'created_at', 'created_by', 'created_from',
@@ -147,4 +149,4 @@ class ProductionInspectionAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-admin.site.register(ProductionInspection, ProductionInspectionAdmin)
+admin.site.register(ProductionCropInspection, ProductionCropInspectionAdmin)
