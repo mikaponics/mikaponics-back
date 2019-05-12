@@ -13,6 +13,8 @@ from foundation.models import ProductionCrop
 
 
 class ProductionCropRetrieveSerializer(serializers.ModelSerializer):
+    pretty_name = serializers.ReadOnlyField(source="get_pretty_name")
+    pretty_state_at_finish = serializers.ReadOnlyField(source="get_pretty_state_at_finish")
     crop = serializers.CharField(required=True, allow_blank=False, source="crop.name")
     crop_slug = serializers.CharField(required=True, allow_blank=False, source="crop.slug")
     substrate = serializers.CharField(required=True, allow_blank=False, source="substrate.name")
@@ -22,6 +24,8 @@ class ProductionCropRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductionCrop
         fields = (
+            'pretty_name',
+            'pretty_state_at_finish',
             'crop',
             'crop_other',
             'crop_slug',

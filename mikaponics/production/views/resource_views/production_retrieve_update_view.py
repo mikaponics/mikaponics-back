@@ -35,11 +35,16 @@ class ProductionRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
         """
         Retrieve
         """
+        client_ip, is_routable = get_client_ip(self.request)
         object = get_object_or_404(Production, slug=slug)
         self.check_object_permissions(request, object)  # Validate permissions.
-        serializer = ProductionRetrieveSerializer(object, many=False)
+        read_serializer = ProductionRetrieveSerializer(object, many=False, context={
+            'authenticated_by': request.user,
+            'authenticated_from': client_ip,
+            'authenticated_from_is_public': is_routable,
+        })
         return Response(
-            data=serializer.data,
+            data=read_serializer.data,
             status=status.HTTP_200_OK
         )
 
@@ -60,7 +65,7 @@ class ProductionRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
         write_serializer.is_valid(raise_exception=True)
         write_serializer.save()
         object.refresh_from_db()
-        read_serializer = ProductionUpdateSerializer(object, many=False, context={
+        read_serializer = ProductionRetrieveSerializer(object, many=False, context={
             'authenticated_by': request.user,
             'authenticated_from': client_ip,
             'authenticated_from_is_public': is_routable,

@@ -306,6 +306,16 @@ class ProductionCrop(models.Model):
 
         super(ProductionCrop, self).save(*args, **kwargs)
 
+    def get_pretty_name(self):
+        if self.crop_other:
+            return self.crop_other
+        else:
+            return self.crop.name
+
+    def get_pretty_state_at_finish(self):
+        result = dict(self.CROP_STATE_AT_FINISH_CHOICES).get(self.state_at_finish)
+        return str(result)
+
     def __str__(self):
         return str(self.slug)
 
