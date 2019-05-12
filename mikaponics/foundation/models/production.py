@@ -270,8 +270,8 @@ class Production(models.Model):
         default=None,
         blank=True,
     )
-    failure_reason_at_finish = models.TextField(
-        _("Failure reason at finish"),
+    failure_reason = models.TextField(
+        _("Failure Reason"),
         help_text=_('The reason why this crop production was overall considered a failure by the user.'),
         blank=True,
         null=True,

@@ -38,6 +38,24 @@ class ProductionCropUpdateSerializer(serializers.ModelSerializer):
             'harvest_notes_at_finish',
         )
 
+    def validate_state_failure_reason_at_finish(self, value):
+        state_at_finish = self.context['state_at_finish']
+        # print("validate_state_failure_reason_at_finish | state_at_finish ->", state_at_finish)
+        # print("validate_state_failure_reason_at_finish | failure_reason ->", value)
+        if state_at_finish in [ProductionCrop.CROP_STATE_AT_FINISH.CROPS_DIED, ProductionCrop.CROP_STATE_AT_FINISH.CROPS_WERE_TERMINATED]:
+            if value == None or value == '' or value == 'None':
+                raise exceptions.ValidationError(_('Please fill in this field.'))
+        return value
+
+    def validate_harvest_failure_reason_at_finish(self, value):
+        harvest_at_finish = self.context['harvest_at_finish']
+        # print("validate_state_failure_reason_at_finish | harvest_at_finish ->", harvest_at_finish)
+        # print("validate_state_failure_reason_at_finish | failure_reason ->", value)
+        if harvest_at_finish in [ProductionCrop.HARVEST_REVIEW.TERRIBLE, ProductionCrop.HARVEST_REVIEW.BAD]:
+            if value == None or value == '' or value == 'None':
+                raise exceptions.ValidationError(_('Please fill in this field.'))
+        return value
+
     def update(self, instance, validated_data):
         slug = validated_data.get('slug', None)
         crop_slug = validated_data.get('crop_slug', None)

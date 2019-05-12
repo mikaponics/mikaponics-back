@@ -36,9 +36,14 @@ class ProductionCropRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
         """
         Retrieve
         """
+        client_ip, is_routable = get_client_ip(self.request)
         object = get_object_or_404(ProductionCrop, slug=slug)
         self.check_object_permissions(request, object)  # Validate permissions.
-        serializer = ProductionCropRetrieveSerializer(object, many=False)
+        serializer = ProductionCropRetrieveSerializer(object, many=False, context={
+            'authenticated_by': request.user,
+            'authenticated_from': client_ip,
+            'authenticated_from_is_public': is_routable
+        })
         return Response(
             data=serializer.data,
             status=status.HTTP_200_OK
@@ -49,9 +54,16 @@ class ProductionCropRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
         """
         Update
         """
+        client_ip, is_routable = get_client_ip(self.request)
         object = get_object_or_404(ProductionCrop, slug=slug)
         self.check_object_permissions(request, object)  # Validate permissions.
-        serializer = ProductionCropUpdateSerializer(object, data=request.data)
+        serializer = ProductionCropUpdateSerializer(object, data=request.data, context={
+            'authenticated_by': request.user,
+            'authenticated_from': client_ip,
+            'authenticated_from_is_public': is_routable,
+            'state_at_finish': request.data.get('state_at_finish', None),
+            'harvest_at_finish': request.data.get('harvest_at_finish', None),
+        })
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
