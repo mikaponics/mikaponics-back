@@ -264,10 +264,10 @@ class Production(models.Model):
         blank=True,
         null=True,
     )
-    was_success_at_finish = models.BooleanField(
+    was_success_at_finish = models.NullBooleanField(
         _("Was this crop production a success upon completion?"),
         help_text=_('Indicates if this crop production was considered a success to the user or a failure.'),
-        default=False,
+        default=None,
         blank=True,
     )
     failure_reason_at_finish = models.TextField(

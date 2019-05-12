@@ -31,3 +31,12 @@ class ProductionUpdateSerializer(serializers.ModelSerializer):
             'failure_reason_at_finish',
             'notes_at_finish',
         )
+
+    def validate_failure_reason_at_finish(self, value):
+        was_success_at_finish = self.context['was_success_at_finish']
+        print("was_success_at_finish", was_success_at_finish)
+        print("failure_reason_at_finish", value)
+        if was_success_at_finish == False or value == 'false' or value == 'False':
+            if value == None or value == '':
+                raise exceptions.ValidationError(_('Please fill in this field.'))
+        return value

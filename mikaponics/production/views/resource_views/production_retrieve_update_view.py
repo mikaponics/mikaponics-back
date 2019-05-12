@@ -48,9 +48,6 @@ class ProductionRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
         """
         Update
         """
-        """
-        Update
-        """
         client_ip, is_routable = get_client_ip(self.request)
         object = get_object_or_404(Production, slug=slug)
         self.check_object_permissions(request, object)  # Validate permissions.
@@ -58,6 +55,7 @@ class ProductionRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
             'authenticated_by': request.user,
             'authenticated_from': client_ip,
             'authenticated_from_is_public': is_routable,
+            'was_success_at_finish': request.data.get('was_success_at_finish', None)
         })
         write_serializer.is_valid(raise_exception=True)
         write_serializer.save()
