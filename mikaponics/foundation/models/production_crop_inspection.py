@@ -141,7 +141,7 @@ class ProductionCropInspection(models.Model):
         "ProductionCrop",
         verbose_name=_('Production Crop'),
         help_text=_("The plants or fish that we are evaluating for this quality assurance inspection."),
-        blank=True,
+        blank=False,
         null=False,
         related_name="inspections",
         on_delete=models.CASCADE
