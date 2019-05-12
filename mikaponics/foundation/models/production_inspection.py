@@ -48,7 +48,7 @@ class ProductionInspectionManager(models.Manager):
 
 class ProductionInspection(models.Model):
     """
-    Class represents a single quality assurance inspection of a running food
+    Class represents a single quality assurance inspection of a running crop
     production operation in a point in date and time.
     """
 
@@ -88,6 +88,14 @@ class ProductionInspection(models.Model):
         (REVIEW.TERRIBLE, _('Excellent')),
     )
 
+    class STATE:
+        DRAFT = 1
+        SUBMITTED = 2
+
+    STATE_CHOICES = (
+        (STATE.DRAFT, _('Draft')),
+        (STATE.SUBMITTED, _('Submitted')),
+    )
 
     '''
     Object Managers
@@ -108,13 +116,21 @@ class ProductionInspection(models.Model):
     )
     slug = models.SlugField(
         _("Slug"),
-        help_text=_('The unique slug used for this food production inspection when accessing details page.'),
+        help_text=_('The unique slug used for this crop production inspection when accessing details page.'),
         max_length=127,
         blank=True,
         null=False,
         db_index=True,
         unique=True,
         editable=False,
+    )
+    state = models.PositiveSmallIntegerField(
+        _("State"),
+        help_text=_('The state of inspection.'),
+        blank=False,
+        null=False,
+        default=STATE.DRAFT,
+        choices=STATE_CHOICES,
     )
 
     #
@@ -123,7 +139,7 @@ class ProductionInspection(models.Model):
 
     production = models.ForeignKey(
         "Production",
-        help_text=_('The food production operation this quality assurance inspection is for.'),
+        help_text=_('The crop production operation this quality assurance inspection is for.'),
         blank=True,
         null=True,
         related_name="inspections",
@@ -166,7 +182,7 @@ class ProductionInspection(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         "foundation.User",
-        help_text=_('The user whom created this food production inspections.'),
+        help_text=_('The user whom created this crop production inspections.'),
         related_name="created_production_inspections",
         on_delete=models.SET_NULL,
         blank=True,
@@ -190,7 +206,7 @@ class ProductionInspection(models.Model):
     last_modified_at = models.DateTimeField(auto_now=True)
     last_modified_by = models.ForeignKey(
         "foundation.User",
-        help_text=_('The user whom last modified this food production inspection.'),
+        help_text=_('The user whom last modified this crop production inspection.'),
         related_name="last_modified_production_inspections",
         on_delete=models.SET_NULL,
         blank=True,
