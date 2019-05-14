@@ -17,9 +17,11 @@ class ProductionCropInspectionRetrieveSerializer(serializers.ModelSerializer):
     production_crop_name = serializers.CharField(required=True, allow_blank=False, source="production_crop.get_pretty_name")
     production_crop_quantity = serializers.IntegerField(required=True, source="production_crop.quantity")
     production_crop_substrate = serializers.CharField(required=True, allow_blank=False, source="production_crop.get_pretty_substrate_name")
+    production_crop_stages = serializers.ReadOnlyField(source="production_crop.crop.stages")
     production_crop_slug = serializers.SlugField(required=True, allow_blank=False, source="production_crop.slug")
     production_crop_absolute_url = serializers.CharField(required=True, allow_blank=False, source="production_crop.get_absolute_url")
     # absolute_url = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url") #TODO: IMPL.
+    stage = serializers.IntegerField(required=True, allow_null=True)
 
     class Meta:
         model = ProductionCropInspection
@@ -27,6 +29,7 @@ class ProductionCropInspectionRetrieveSerializer(serializers.ModelSerializer):
             'production_crop_name',
             'production_crop_quantity',
             'production_crop_substrate',
+            'production_crop_stages',
             'production_crop_slug',
             'production_crop_absolute_url',
             'state',
@@ -35,6 +38,7 @@ class ProductionCropInspectionRetrieveSerializer(serializers.ModelSerializer):
             # 'absolute_url', #TODO: IMPL.
             'review',
             'failure_reason',
+            'stage',
             'notes',
             'created_at',
             'last_modified_at'
