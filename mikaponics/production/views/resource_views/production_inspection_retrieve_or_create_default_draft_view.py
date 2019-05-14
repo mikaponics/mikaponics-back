@@ -9,6 +9,7 @@ from django_filters import rest_framework as filters
 from django.conf.urls import url, include
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from oauth2_provider.models import Application, AbstractApplication, AbstractAccessToken, AccessToken, RefreshToken
 from rest_framework import generics
 from rest_framework import exceptions
@@ -71,7 +72,7 @@ class ProductionInspectionRetrieveOrCreateDefaultDraftAPIView(generics.RetrieveA
         # If we created our default inspection then we need to create the
         # accompanying individual crop inspection objects.
         if was_created:
-            for production_crop in production.crops.all():
+            for production_crop in production.crops.all().order_by('crop__type_of'):
                 ProductionCropInspection.objects.create(
                     production_inspection=default_draft_inspection,
                     production_crop=production_crop,
