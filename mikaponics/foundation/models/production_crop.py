@@ -312,6 +312,12 @@ class ProductionCrop(models.Model):
         else:
             return self.crop.name
 
+    def get_pretty_substrate_name(self):
+        if self.substrate_other:
+            return self.substrate_other
+        else:
+            return str(self.substrate.name)
+
     def get_pretty_state_at_finish(self):
         result = dict(self.CROP_STATE_AT_FINISH_CHOICES).get(self.state_at_finish)
         return str(result)

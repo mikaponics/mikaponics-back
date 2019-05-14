@@ -46,10 +46,10 @@ class ProductionCropInspectionManager(models.Manager):
     #     return results
 
 
-class ProductionCropInspection(models.Model):
+class ProductionInspection(models.Model):
     """
-    Class represents a single quality assurance inspection of a crop in a point
-    in date and time within a system.
+    Class represents a single quality assurance inspection of the production
+    sytem (ie. hydropnics system) in a point in date and time.
     """
 
     '''
@@ -57,9 +57,9 @@ class ProductionCropInspection(models.Model):
     '''
     class Meta:
         app_label = 'foundation'
-        db_table = 'mika_production_crop_inspections'
-        verbose_name = _('Production Crop Inspection')
-        verbose_name_plural = _('Production Crop Inspections')
+        db_table = 'mika_production_inspections'
+        verbose_name = _('Production Inspection')
+        verbose_name_plural = _('Production Inspections')
         default_permissions = ()
         permissions = (
             # ("can_get_opening_hours_specifications", "Can get opening hours specifications"),
@@ -137,19 +137,10 @@ class ProductionCropInspection(models.Model):
     # Quality Assurance Inspection Fields
     #
 
-    production_inspection = models.ForeignKey(
-        "ProductionInspection",
-        verbose_name=_('Production Inspection'),
-        help_text=_("The production we are evaluating for this quality assurance crop inspection."),
-        blank=False,
-        null=False,
-        related_name="crop_inspections",
-        on_delete=models.CASCADE
-    )
-    production_crop = models.ForeignKey(
-        "ProductionCrop",
-        verbose_name=_('Production Crop'),
-        help_text=_("The plants or fish that we are evaluating for this quality assurance inspection."),
+    production = models.ForeignKey(
+        "Production",
+        verbose_name=_('Production'),
+        help_text=_("The crop production we are inspecting."),
         blank=False,
         null=False,
         related_name="inspections",
@@ -164,19 +155,13 @@ class ProductionCropInspection(models.Model):
     )
     failure_reason = models.TextField(
         _("Failure Reason"),
-        help_text=_('The reason why this crop inspection was considered a failure during inspection.'),
-        blank=True,
-        null=True,
-    )
-    stage = models.PositiveSmallIntegerField(
-        _("Life Cycle Stage"),
-        help_text=_('The observed stage in the life cycle by the user.'),
+        help_text=_('The reason why this inspection was considered a failure during inspection.'),
         blank=True,
         null=True,
     )
     notes = models.TextField(
         _("Notes"),
-        help_text=_('Any notes for this inspection.'),
+        help_text=_('Any notes for this crop production inspection.'),
         blank=True,
         null=True,
     )
@@ -190,7 +175,7 @@ class ProductionCropInspection(models.Model):
     created_by = models.ForeignKey(
         "foundation.User",
         help_text=_('The user whom created this crop production inspections.'),
-        related_name="created_production_crop_inspections",
+        related_name="created_production_inspections",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
@@ -214,7 +199,7 @@ class ProductionCropInspection(models.Model):
     last_modified_by = models.ForeignKey(
         "foundation.User",
         help_text=_('The user whom last modified this crop production inspection.'),
-        related_name="last_modified_production_crop_inspections",
+        related_name="last_modified_production_inspections",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
@@ -248,20 +233,18 @@ class ProductionCropInspection(models.Model):
         (b) Else generate slug with random string.
         """
         if not self.slug:
-            count = ProductionCropInspection.objects.filter(
-                production_inspection=self.production_inspection
-            ).count()
+            count = ProductionInspection.objects.filter(created_by=self.created_by).count()
             count += 1
 
             # Generate our slug.
-            self.slug = self.production_inspection.slug+"-crop-"+str(count)
+            self.slug = self.production.slug+"-inspection-"+str(count)
 
             # If a unique slug was not found then we will keep searching
             # through the various slugs until a unique slug is found.
-            while ProductionCropInspection.objects.filter(slug=self.slug).exists():
-                self.slug = self.production_inspection.slug+"-crop-"+str(count)+"-"+get_random_string(length=16)
+            while ProductionInspection.objects.filter(slug=self.slug).exists():
+                self.slug = sself.production.slug+"-inspection-"+str(count)+"-"+get_random_string(length=16)
 
-        super(ProductionCropInspection, self).save(*args, **kwargs)
+        super(ProductionInspection, self).save(*args, **kwargs)
 
     def __str__(self):
         return str(self.slug)
@@ -271,4 +254,7 @@ class ProductionCropInspection(models.Model):
         return str(result)
 
     def get_absolute_url(self):
-        return "/production-crop-inspection/"+self.slug
+        if self.state == ProductionInspection.STATE.DRAFT:
+            return "/production/"+self.production.slug+"/create-inspection/start"
+        else:
+            return "/production-inspection/"+self.slug
