@@ -146,12 +146,11 @@ class ProductionInspection(models.Model):
         related_name="inspections",
         on_delete=models.CASCADE
     )
-    review = models.PositiveSmallIntegerField(
-        _("Review"),
-        help_text=_('The review of the user for this crop at this time.'),
+    did_pass = models.NullBooleanField(
+        _("Did pass?"),
+        help_text=_('Indicates if the evaulation of the system resulted in a passing score.'),
+        default=None,
         blank=True,
-        null=True,
-        choices=REVIEW_CHOICES,
     )
     failure_reason = models.TextField(
         _("Failure Reason"),

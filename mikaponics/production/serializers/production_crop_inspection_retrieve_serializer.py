@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 
-from foundation.models import ProductionInspection
+from foundation.models import ProductionCropInspection
 
 
 class ProductionCropInspectionRetrieveSerializer(serializers.ModelSerializer):
@@ -22,7 +22,7 @@ class ProductionCropInspectionRetrieveSerializer(serializers.ModelSerializer):
     # absolute_url = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url") #TODO: IMPL.
 
     class Meta:
-        model = ProductionInspection
+        model = ProductionCropInspection
         fields = (
             'production_crop_name',
             'production_crop_quantity',

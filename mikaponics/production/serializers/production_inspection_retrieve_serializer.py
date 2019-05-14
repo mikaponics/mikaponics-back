@@ -29,7 +29,7 @@ class ProductionInspectionRetrieveSerializer(serializers.ModelSerializer):
             'pretty_state',
             'slug',
             'absolute_url',
-            'review',
+            'did_pass',
             'failure_reason',
             'notes',
             'created_at',
