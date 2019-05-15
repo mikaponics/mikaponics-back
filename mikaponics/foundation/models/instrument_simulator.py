@@ -2,6 +2,7 @@
 import pytz
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.indexes import BrinIndex
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
@@ -36,6 +37,12 @@ class InstrumentSimulator(models.Model):
             # ("can_post_opening_hours_specification", "Can create opening hours specifications"),
             # ("can_put_opening_hours_specification", "Can update opening hours specifications"),
             # ("can_delete_opening_hours_specification", "Can delete opening hours specifications"),
+        )
+        indexes = (
+            BrinIndex(
+                fields=['created_at', 'last_modified_at'],
+                autosummarize=True,
+            ),
         )
 
     '''
