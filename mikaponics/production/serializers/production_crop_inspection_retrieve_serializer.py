@@ -14,6 +14,8 @@ from foundation.models import ProductionCropInspection
 
 class ProductionCropInspectionRetrieveSerializer(serializers.ModelSerializer):
     pretty_state = serializers.ReadOnlyField(source="get_pretty_state")
+    pretty_review = serializers.ReadOnlyField(source="get_pretty_review")
+    pretty_stage = serializers.ReadOnlyField(source="get_pretty_stage")
     production_crop_name = serializers.CharField(required=True, allow_blank=False, source="production_crop.get_pretty_name")
     production_crop_quantity = serializers.IntegerField(required=True, source="production_crop.quantity")
     production_crop_substrate = serializers.CharField(required=True, allow_blank=False, source="production_crop.get_pretty_substrate_name")
@@ -34,6 +36,8 @@ class ProductionCropInspectionRetrieveSerializer(serializers.ModelSerializer):
             'production_crop_absolute_url',
             'state',
             'pretty_state',
+            'pretty_review',
+            'pretty_stage',
             'slug',
             # 'absolute_url', #TODO: IMPL.
             'review',

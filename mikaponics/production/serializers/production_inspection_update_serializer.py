@@ -34,15 +34,31 @@ class ProductionInspectionUpdateSerializer(serializers.ModelSerializer):
         return value;
 
     def update(self, instance, validated_data):
+        authenticated_by = self.context['authenticated_by']
+        authenticated_from = self.context['authenticated_from']
+        authenticated_from_is_public = self.context['authenticated_from_is_public']
+
         state = validated_data.get('state', None)
         if state is not None:
+            # STEP 1:
             instance.state = state
+
+            # STEP 2:
+            for crop_inspection in instance.crop_inspections.all():
+                crop_inspection.state = state
+                crop_inspection.last_modified_by = authenticated_by
+                crop_inspection.last_modified_from = authenticated_from
+                crop_inspection.last_modified_from_is_public = authenticated_from_is_public
+                crop_inspection.save()
 
         did_pass = validated_data.get('did_pass', False)
 
         instance.did_pass = did_pass
         instance.failure_reason = validated_data.get('failure_reason', None)
         instance.notes = validated_data.get('notes', None)
+        instance.last_modified_by = authenticated_by
+        instance.last_modified_from = authenticated_from
+        instance.last_modified_from_is_public = authenticated_from_is_public
         instance.save()
 
         return validated_data
