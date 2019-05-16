@@ -14,7 +14,7 @@ from foundation.models import ProductionCrop
 
 class ProductionCropListSerializer(serializers.ModelSerializer):
     crop = serializers.CharField(required=True, allow_blank=False, source="crop.name")
-    absoluteURL = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url")
+    absolute_url = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url")
 
     class Meta:
         model = ProductionCrop
@@ -23,5 +23,5 @@ class ProductionCropListSerializer(serializers.ModelSerializer):
             'crop_other',
             'quantity',
             'slug',
-            'absoluteURL',
+            'absolute_url',
         )

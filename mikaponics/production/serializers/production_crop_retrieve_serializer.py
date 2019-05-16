@@ -19,7 +19,7 @@ class ProductionCropRetrieveSerializer(serializers.ModelSerializer):
     crop_slug = serializers.CharField(required=True, allow_blank=False, source="crop.slug")
     substrate = serializers.CharField(required=True, allow_blank=False, source="substrate.name")
     substrate_slug = serializers.CharField(required=True, allow_blank=False, source="substrate.slug")
-    absoluteURL = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url")
+    absolute_url = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url")
 
     class Meta:
         model = ProductionCrop
@@ -42,5 +42,5 @@ class ProductionCropRetrieveSerializer(serializers.ModelSerializer):
             'created_at',
             'last_modified_at',
             'slug',
-            'absoluteURL',
+            'absolute_url',
         )

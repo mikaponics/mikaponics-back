@@ -11,6 +11,7 @@ from rest_framework.response import Response
 
 from foundation.models import Crop, Production
 from production.serializers.production_crop_retrieve_serializer import ProductionCropRetrieveSerializer
+from device.serializers.device_crud_api_serializers import DeviceRetrieveUpdateDestroySerializer
 
 
 class ProductionRetrieveSerializer(serializers.ModelSerializer):
@@ -18,10 +19,11 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
     pretty_environment = serializers.CharField(required=True, allow_blank=False, source="get_pretty_environment")
     pretty_type_of = serializers.CharField(required=True, allow_blank=False, source="get_pretty_type_of")
     pretty_grow_system = serializers.CharField(required=True, allow_blank=False, source="get_pretty_grow_system")
-    absoluteURL = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url")
+    absolute_url = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url")
     plants = serializers.SerializerMethodField()
     fish = serializers.SerializerMethodField()
     crops = serializers.SerializerMethodField()
+    device = DeviceRetrieveUpdateDestroySerializer(many=False, required=True)
 
     class Meta:
         model = Production
@@ -47,7 +49,8 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
             'plants',
             'fish',
             'crops',
-            'absoluteURL',
+            'device',
+            'absolute_url',
         )
 
     def get_plants(self, obj):
@@ -65,7 +68,7 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
     def get_fish(self, obj):
         try:
             fish = obj.crops.filter(
-                Q(crop__type_of=Crop.TYPE_OF.PLANT)|
+                Q(crop__type_of=Crop.TYPE_OF.FISHSTOCK)|
                 Q(crop__type_of=Crop.TYPE_OF.NONE)
             ).order_by('id')
             s = ProductionCropRetrieveSerializer(fish, many=True)
