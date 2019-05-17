@@ -54,10 +54,36 @@ class Instrument(models.Model):
     class INSTRUMENT_TYPE:
         HUMIDITY = 1
         TEMPERATURE = 2
+        TVOC = 3
+        CO2 = 4
+        AIR_PRESSURE = 5
+        ALTITUDE = 6
+        WATER_LEVEL = 7
+        POWER_USAGE = 8
+        PH = 9
+        EC = 10
+        ORP = 11
+        CAMERA = 12
+        HEAT_VISION = 13
+        UV_LIGHT = 14
+        TRIAD_SPECTROSCOPY = 15
 
     INSTRUMENT_TYPE_OF_CHOICES = (
         (INSTRUMENT_TYPE.HUMIDITY, _('Humidity')),
         (INSTRUMENT_TYPE.TEMPERATURE, _('Temperature')),
+        (INSTRUMENT_TYPE.TVOC, _('Total Volatile Organic Compound')),
+        (INSTRUMENT_TYPE.CO2, _('Carbon Dioxide')),
+        (INSTRUMENT_TYPE.AIR_PRESSURE, _('Air Pressure')),
+        (INSTRUMENT_TYPE.ALTITUDE, _('Altitude')),
+        (INSTRUMENT_TYPE.WATER_LEVEL, _('Water Level')),
+        (INSTRUMENT_TYPE.POWER_USAGE, _('Power Usage')),
+        (INSTRUMENT_TYPE.PH, _('pH')),
+        (INSTRUMENT_TYPE.EC, _('Electrical Conductivity')),
+        (INSTRUMENT_TYPE.ORP, _('Oxidation-Reduction Potential')),
+        (INSTRUMENT_TYPE.CAMERA, _('Camera')),
+        (INSTRUMENT_TYPE.HEAT_VISION, _('Heat Vision')),
+        (INSTRUMENT_TYPE.UV_LIGHT, _('UV_LIGHT')),
+        (INSTRUMENT_TYPE.TRIAD_SPECTROSCOPY, _('Triad Spectroscopy')),
     )
 
     class INSTRUMENT_STATE:
