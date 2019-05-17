@@ -447,8 +447,57 @@ class Device(models.Model):
                 del self.humidity_instrument
             elif method_name == 'temperature_instrument':
                 del self.temperature_instrument
+            elif method_name == 'tvoc_instrument':
+                del self.tvoc_instrument
+            elif method_name == 'co2_instrument':
+                del self.co2_instrument
+            elif method_name == 'air_pressure_instrument':
+                del self.air_pressure_instrument
+            elif method_name == 'altitude_instrument':
+                del self.altitude_instrument
+            elif method_name == 'water_level_instrument':
+                del self.water_level_instrument
+            elif method_name == 'power_usage_instrument':
+                del self.temperature_instrument
+            elif method_name == 'ph_instrument':
+                del self.temperature_instrument
+            elif method_name == 'ec_instrument':
+                del self.temperature_instrument
+            elif method_name == 'orp_instrument':
+                del self.temperature_instrument
+            elif method_name == 'camera_instrument':
+                del self.camera_instrument
+            elif method_name == 'heat_vision_instrument':
+                del self.heat_vision_instrument
+            elif method_name == 'uv_light_instrument':
+                del self.uv_light_instrument
+            elif method_name == 'triad_spectroscopy_instrument':
+                del self.triad_spectroscopy_instrument
             else:
                 raise Exception("Method name not found.")
+        except AttributeError:
+            pass
+
+    def invalidate_all(self):
+        """
+        Function used to clear *all* the cache for the cached property functions.
+        """
+        try:
+            self.invalidate('humidity_instrument')
+            self.invalidate('temperature_instrument')
+            self.invalidate('tvoc_instrument')
+            self.invalidate('co2_instrument')
+            self.invalidate('air_pressure_instrument')
+            self.invalidate('altitude_instrument')
+            self.invalidate('water_level_instrument')
+            self.invalidate('power_usage_instrument')
+            self.invalidate('ph_instrument')
+            self.invalidate('ec_instrument')
+            self.invalidate('orp_instrument')
+            self.invalidate('camera_instrument')
+            self.invalidate('heat_vision_instrument')
+            self.invalidate('uv_light_instrument')
+            self.invalidate('triad_spectroscopy_instrument')
         except AttributeError:
             pass
 
@@ -466,6 +515,97 @@ class Device(models.Model):
             return self.instruments.filter(type_of=Instrument.INSTRUMENT_TYPE.TEMPERATURE).first()
         return None
 
+    @cached_property
+    def tvoc_instrument(self):
+        if self.instruments:
+            from foundation.models.instrument import Instrument
+            return self.instruments.filter(type_of=Instrument.INSTRUMENT_TYPE.TVOC).first()
+        return None
+
+    @cached_property
+    def co2_instrument(self):
+        if self.instruments:
+            from foundation.models.instrument import Instrument
+            return self.instruments.filter(type_of=Instrument.INSTRUMENT_TYPE.CO2).first()
+        return None
+
+    @cached_property
+    def air_pressure_instrument(self):
+        if self.instruments:
+            from foundation.models.instrument import Instrument
+            return self.instruments.filter(type_of=Instrument.INSTRUMENT_TYPE.AIR_PRESSURE).first()
+        return None
+
+    @cached_property
+    def altitude_instrument(self):
+        if self.instruments:
+            from foundation.models.instrument import Instrument
+            return self.instruments.filter(type_of=Instrument.INSTRUMENT_TYPE.ALTITUDE).first()
+        return None
+
+    @cached_property
+    def water_level_instrument(self):
+        if self.instruments:
+            from foundation.models.instrument import Instrument
+            return self.instruments.filter(type_of=Instrument.INSTRUMENT_TYPE.WATER_LEVEL).first()
+        return None
+
+    @cached_property
+    def power_usage_instrument(self):
+        if self.instruments:
+            from foundation.models.instrument import Instrument
+            return self.instruments.filter(type_of=Instrument.INSTRUMENT_TYPE.POWER_USAGE).first()
+        return None
+
+    @cached_property
+    def ph_instrument(self):
+        if self.instruments:
+            from foundation.models.instrument import Instrument
+            return self.instruments.filter(type_of=Instrument.INSTRUMENT_TYPE.PH).first()
+        return None
+
+    @cached_property
+    def ec_instrument(self):
+        if self.instruments:
+            from foundation.models.instrument import Instrument
+            return self.instruments.filter(type_of=Instrument.INSTRUMENT_TYPE.EC).first()
+        return None
+
+    @cached_property
+    def orp_instrument(self):
+        if self.instruments:
+            from foundation.models.instrument import Instrument
+            return self.instruments.filter(type_of=Instrument.INSTRUMENT_TYPE.ORP).first()
+        return None
+
+    @cached_property
+    def camera_instrument(self):
+        if self.instruments:
+            from foundation.models.instrument import Instrument
+            return self.instruments.filter(type_of=Instrument.INSTRUMENT_TYPE.CAMERA).first()
+        return None
+
+    @cached_property
+    def heat_vision_instrument(self):
+        if self.instruments:
+            from foundation.models.instrument import Instrument
+            return self.instruments.filter(type_of=Instrument.INSTRUMENT_TYPE.HEAT_VISION).first()
+        return None
+
+    @cached_property
+    def uv_light_instrument(self):
+        if self.instruments:
+            from foundation.models.instrument import Instrument
+            return self.instruments.filter(type_of=Instrument.INSTRUMENT_TYPE.UV_LIGHT).first()
+        return None
+
+    @cached_property
+    def triad_spectroscopy_instrument(self):
+        if self.instruments:
+            from foundation.models.instrument import Instrument
+            return self.instruments.filter(type_of=Instrument.INSTRUMENT_TYPE.TRIAD_SPECTROSCOPY).first()
+        return None
+
     def set_last_recorded_datum(self, datum):
         # Update our value.
         self.last_measured_value = datum.value
@@ -474,5 +614,4 @@ class Device(models.Model):
         self.save()
 
         # Clear our cache of previously saved values.
-        self.invalidate('humidity_instrument')
-        self.invalidate('temperature_instrument')
+        self.invalidate_all()

@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from django.apps import AppConfig
 from django.conf import settings
 from django.core.management import call_command
+from django.db.models import Q, Prefetch
 
 
 def run_instruments_handling_func():
@@ -20,7 +21,26 @@ def run_instruments_handling_func():
 
 
 def run_instrument_simulators_func():
-    from foundation.models import InstrumentSimulator
+    """
+    Function used to simulate instruments in our system.
+    """
+    from foundation.models import Instrument, InstrumentSimulator
 
-    for simulator in InstrumentSimulator.objects.filter(is_running=True).iterator(chunk_size=250):
+    for simulator in InstrumentSimulator.objects.filter(
+        Q(is_running=True)&
+        ~Q(instrument__type_of=Instrument.INSTRUMENT_TYPE.POWER_USAGE)
+    ).iterator(chunk_size=250):
+        call_command('instrument_simulator_tick', simulator.id, verbosity=0)
+
+
+def run_power_usage_instrument_simulators_func():
+    """
+    Function used to simulate "power usage" instrument.
+    """
+    from foundation.models import Instrument, InstrumentSimulator
+
+    for simulator in InstrumentSimulator.objects.filter(
+        Q(is_running=True)&
+        Q(instrument__type_of=Instrument.INSTRUMENT_TYPE.POWER_USAGE)
+    ).iterator(chunk_size=250):
         call_command('instrument_simulator_tick', simulator.id, verbosity=0)

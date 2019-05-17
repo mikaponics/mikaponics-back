@@ -82,7 +82,7 @@ class Instrument(models.Model):
         (INSTRUMENT_TYPE.ORP, _('Oxidation-Reduction Potential')),
         (INSTRUMENT_TYPE.CAMERA, _('Camera')),
         (INSTRUMENT_TYPE.HEAT_VISION, _('Heat Vision')),
-        (INSTRUMENT_TYPE.UV_LIGHT, _('UV_LIGHT')),
+        (INSTRUMENT_TYPE.UV_LIGHT, _('UV Light')),
         (INSTRUMENT_TYPE.TRIAD_SPECTROSCOPY, _('Triad Spectroscopy')),
     )
 
@@ -476,7 +476,7 @@ class Instrument(models.Model):
                 self.slug = "instrument-"+get_random_string(length=32)
 
             # Attach the instrument type to the slug.
-            self.slug = self.slug +"-"+self.get_pretty_instrument_type_of()
+            self.slug = self.slug +"-"+slugify(self.get_pretty_instrument_type_of())
             self.slug = self.slug.lower()
 
         # Call the parent class and load the default the save functionality.
@@ -524,6 +524,46 @@ class Instrument(models.Model):
             return "tint"
         elif self.type_of == Instrument.INSTRUMENT_TYPE.TEMPERATURE:
             return "thermometer-three-quarters"
+
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.TVOC:
+            return "ravelry"
+
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.CO2:
+            return "ravelry"
+
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.AIR_PRESSURE:
+            return "ravelry"
+
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.ALTITUDE:
+            return "ravelry"
+
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.WATER_LEVEL:
+            return "ravelry"
+
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.POWER_USAGE:
+            return "plug"
+
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.PH:
+            return "flask"
+
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.EC:
+            return "flask"
+
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.ORP:
+            return "orp"
+
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.CAMERA:
+            return "camera"
+
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.HEAT_VISION:
+            return "fire"
+
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.UV_LIGHT:
+            return "sun"
+
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.TRIAD_SPECTROSCOPY:
+            return "sun"
+
         return ""
 
     def get_pretty_instrument_type_of(self):

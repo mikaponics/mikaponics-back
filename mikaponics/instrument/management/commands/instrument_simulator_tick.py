@@ -77,3 +77,6 @@ class Command(BaseCommand):
         # ELSE THERE DOES NOT EXIST ANY TIME SERIES DATA SO WE MUST CREATE IT IN
         # THE FOLLOWING BLOCK OF CODE.
         TimeSeriesDatum.objects.seed(simulator.instrument, 1)
+
+        # Reset the device's cached items.
+        simulator.instrument.device.invalidate_all()
