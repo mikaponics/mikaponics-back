@@ -58,7 +58,7 @@ class ProductionCrop(models.Model):
     class Meta:
         app_label = 'foundation'
         db_table = 'mika_production_crops'
-        verbose_name = _('Production CropDataSheet')
+        verbose_name = _('Production Crop')
         verbose_name_plural = _('Production Crops')
         default_permissions = ()
         permissions = (
