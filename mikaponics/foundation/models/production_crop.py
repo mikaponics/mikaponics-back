@@ -317,7 +317,7 @@ class ProductionCrop(models.Model):
         if self.data_sheet_other:
             return self.data_sheet_other
         else:
-            return self.crop.name
+            return self.data_sheet.name
 
     def get_pretty_substrate_name(self):
         if self.substrate_other:

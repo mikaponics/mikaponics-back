@@ -56,8 +56,8 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
     def get_plants(self, obj):
         try:
             plants = obj.crops.filter(
-                Q(crop__type_of=CropDataSheet.TYPE_OF.PLANT)|
-                Q(crop__type_of=CropDataSheet.TYPE_OF.NONE)
+                Q(data_sheet__type_of=CropDataSheet.TYPE_OF.PLANT)|
+                Q(data_sheet__type_of=CropDataSheet.TYPE_OF.NONE)
             ).order_by('id')
             s = ProductionCropRetrieveSerializer(plants, many=True)
             return s.data;
@@ -68,8 +68,8 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
     def get_fish(self, obj):
         try:
             fish = obj.crops.filter(
-                Q(crop__type_of=CropDataSheet.TYPE_OF.FISHSTOCK)|
-                Q(crop__type_of=CropDataSheet.TYPE_OF.NONE)
+                Q(data_sheet__type_of=CropDataSheet.TYPE_OF.FISHSTOCK)|
+                Q(data_sheet__type_of=CropDataSheet.TYPE_OF.NONE)
             ).order_by('id')
             s = ProductionCropRetrieveSerializer(fish, many=True)
             return s.data;
