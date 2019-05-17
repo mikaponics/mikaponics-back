@@ -59,8 +59,8 @@ class ProductionCropInspection(models.Model):
     class Meta:
         app_label = 'foundation'
         db_table = 'mika_production_crop_inspections'
-        verbose_name = _('Production CropDataSheet Inspection')
-        verbose_name_plural = _('Production CropDataSheet Inspections')
+        verbose_name = _('Production Crop Inspection')
+        verbose_name_plural = _('Production Crop Inspections')
         default_permissions = ()
         permissions = (
             # ("can_get_opening_hours_specifications", "Can get opening hours specifications"),
