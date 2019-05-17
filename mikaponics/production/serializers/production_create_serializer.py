@@ -90,24 +90,24 @@ class ProductionCreateSerializer(serializers.Serializer):
         )
 
         for plant in plants_array:
-            crop = CropDataSheet.objects.filter(slug=plant['plant_slug']).first()
+            data_sheet = CropDataSheet.objects.filter(slug=plant['plant_slug']).first()
             substrate = CropSubstrate.objects.filter(slug=plant['substrate_slug']).first()
             production_crop = ProductionCrop.objects.create(
                 production=production,
-                crop=crop,
-                crop_other=plant.get('plant_other', None),
+                data_sheet=data_sheet,
+                data_sheet_other=plant.get('plant_other', None),
                 quantity=plant['quantity'],
                 substrate=substrate,
                 substrate_other=plant.get('substrate_other', None),
             )
 
         for fish in fish_array:
-            crop = CropDataSheet.objects.filter(slug=fish['fish_slug']).first()
+            data_sheet = CropDataSheet.objects.filter(slug=fish['fish_slug']).first()
             substrate = CropSubstrate.objects.filter(slug=fish['substrate_slug']).first()
             production_crop = ProductionCrop.objects.create(
                 production=production,
-                crop=crop,
-                crop_other=fish.get('fish_other', None),
+                data_sheet=data_sheet,
+                data_sheet_other=fish.get('fish_other', None),
                 quantity=fish['quantity'],
                 substrate=substrate,
                 substrate_other=fish.get('substrate_other', None),

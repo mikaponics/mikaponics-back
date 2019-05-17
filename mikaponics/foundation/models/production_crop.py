@@ -151,7 +151,7 @@ class ProductionCrop(models.Model):
         related_name="crops",
         on_delete=models.CASCADE,
     )
-    crop = models.ForeignKey(
+    data_sheet = models.ForeignKey(
         "CropDataSheet",
         verbose_name=_('CropDataSheet'),
         help_text=_("The plants or fish that we are growing in production."),
@@ -160,8 +160,8 @@ class ProductionCrop(models.Model):
         related_name="production_crops",
         on_delete=models.CASCADE,
     )
-    crop_other = models.CharField(
-        _("CropDataSheet (Other)"),
+    data_sheet_other = models.CharField(
+        _("Crop Data Sheet (Other)"),
         help_text=_('The name of crop the user is producing in production that is not in our system.'),
         blank=True,
         null=True,
@@ -314,8 +314,8 @@ class ProductionCrop(models.Model):
         super(ProductionCrop, self).save(*args, **kwargs)
 
     def get_pretty_name(self):
-        if self.crop_other:
-            return self.crop_other
+        if self.data_sheet_other:
+            return self.data_sheet_other
         else:
             return self.crop.name
 

@@ -13,14 +13,14 @@ from foundation.models import ProductionCrop
 
 
 class ProductionCropCreateSerializer(serializers.ModelSerializer):
-    crop = serializers.CharField(required=True, allow_blank=False, source="crop.name")
+    data_sheet = serializers.CharField(required=True, allow_blank=False, source="data_sheet.name")
     absolute_url = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url")
 
     class Meta:
         model = ProductionCrop
         fields = (
-            'crop',
-            'crop_other',
+            'data_sheet',
+            'data_sheet_other',
             'quantity',
             'slug',
             'absolute_url',

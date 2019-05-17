@@ -14,8 +14,8 @@ from production.serializers.production_crop_list_serializer import ProductionCro
 
 
 class ProductionCropUpdateSerializer(serializers.ModelSerializer):
-    # crop = serializers.CharField(required=True, allow_blank=False, source="crop.name")
-    crop_slug = serializers.CharField(required=True, allow_blank=False, source="crop.slug")
+    # data_sheet = serializers.CharField(required=True, allow_blank=False, source="data_sheet.name")
+    crop_slug = serializers.CharField(required=True, allow_blank=False, source="data_sheet.slug")
     # substrate = serializers.CharField(required=True, allow_blank=False, source="substrate.name")
     # substrate_slug = serializers.CharField(required=True, allow_blank=False, source="substrate.slug")
     state_at_finish = serializers.IntegerField(required=True, allow_null=False,)

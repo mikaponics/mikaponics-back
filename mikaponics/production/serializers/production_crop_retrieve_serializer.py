@@ -15,8 +15,8 @@ from foundation.models import ProductionCrop
 class ProductionCropRetrieveSerializer(serializers.ModelSerializer):
     pretty_name = serializers.ReadOnlyField(source="get_pretty_name")
     pretty_state_at_finish = serializers.ReadOnlyField(source="get_pretty_state_at_finish")
-    crop = serializers.CharField(required=True, allow_blank=False, source="crop.name")
-    crop_slug = serializers.CharField(required=True, allow_blank=False, source="crop.slug")
+    data_sheet = serializers.CharField(required=True, allow_blank=False, source="data_sheet.name")
+    crop_slug = serializers.CharField(required=True, allow_blank=False, source="data_sheet.slug")
     substrate = serializers.CharField(required=True, allow_blank=False, source="substrate.name")
     substrate_slug = serializers.CharField(required=True, allow_blank=False, source="substrate.slug")
     absolute_url = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url")
@@ -26,8 +26,8 @@ class ProductionCropRetrieveSerializer(serializers.ModelSerializer):
         fields = (
             'pretty_name',
             'pretty_state_at_finish',
-            'crop',
-            'crop_other',
+            'data_sheet',
+            'data_sheet_other',
             'crop_slug',
             'quantity',
             'substrate',
