@@ -94,7 +94,7 @@ class CropDataSheet(models.Model):
         blank=False,
         null=False,
     )
-    stages = JSONField(
+    stages_dict = JSONField(
         _("Life Cycle Stages"),
         help_text=_('Stages of development this crop has in their lifespan.'),
         blank=False,

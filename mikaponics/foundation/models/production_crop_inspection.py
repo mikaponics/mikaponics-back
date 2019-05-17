@@ -284,8 +284,8 @@ class ProductionCropInspection(models.Model):
     def get_pretty_stage(self):
         if self.production_crop:
             if self.production_crop.crop:
-                stages = self.production_crop.crop.stages
-                for stage in stages:
+                stages_dict = self.production_crop.crop.stages_dict
+                for stage in stages_dict:
                     if stage['id'] == self.stage:
                         return stage['value'];
         return None

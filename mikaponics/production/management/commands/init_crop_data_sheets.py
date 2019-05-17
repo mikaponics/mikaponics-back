@@ -62,7 +62,8 @@ class Command(BaseCommand):
                'order_number': 10000,
                'type_of': CropDataSheet.TYPE_OF.NONE,
                'name': "Other",
-               'stages': []
+               'stages_dict': [],
+               'life_dict': {}
            }
         )
 
@@ -75,14 +76,15 @@ class Command(BaseCommand):
                'order_number': 1,
                'type_of': CropDataSheet.TYPE_OF.PLANT,
                'name': "Cannabis",
-               'stages': [
+               'stages_dict': [
                    {'id': 1, 'value': 'Germinating'},
                    {'id': 2, 'value': 'Growing'},
                    {'id': 3, 'value': 'Flowering'},
                    {'id': 4, 'value': 'Fruiting'},
                    {'id': 5, 'value': 'Seeding'},
                    {'id': 6, 'value': 'Dying'},
-               ]
+               ],
+               'life_dict': {}
            }
         )
         CropDataSheet.objects.update_or_create(
@@ -92,14 +94,15 @@ class Command(BaseCommand):
                'order_number': 2,
                'type_of': CropDataSheet.TYPE_OF.PLANT,
                'name': "Tomato",
-               'stages': [
+               'stages_dict': [
                    {'id': 1, 'value': 'Germinating'},
                    {'id': 2, 'value': 'Growing'},
                    {'id': 3, 'value': 'Flowering'},
                    {'id': 4, 'value': 'Fruiting'},
                    {'id': 5, 'value': 'Seeding'},
                    {'id': 6, 'value': 'Dying'},
-               ]
+               ],
+               'life_dict': {}
            }
         )
         CropDataSheet.objects.update_or_create(
@@ -109,14 +112,15 @@ class Command(BaseCommand):
                'order_number': 3,
                'type_of': CropDataSheet.TYPE_OF.PLANT,
                'name': "Tomato (Kumato)",
-               'stages': [
+               'stages_dict': [
                    {'id': 1, 'value': 'Germinating'},
                    {'id': 2, 'value': 'Growing'},
                    {'id': 3, 'value': 'Flowering'},
                    {'id': 4, 'value': 'Fruiting'},
                    {'id': 5, 'value': 'Seeding'},
                    {'id': 6, 'value': 'Dying'},
-               ]
+               ],
+               'life_dict': {}
            }
         )
 
@@ -129,14 +133,15 @@ class Command(BaseCommand):
                'order_number': 1000,
                'type_of': CropDataSheet.TYPE_OF.FISHSTOCK,
                'name': "Goldfish",
-               'stages': [
+               'stages_dict': [
                    {'id': 1, 'value': 'Eggs'},
                    {'id': 2, 'value': 'Embryo'},
                    {'id': 3, 'value': 'Larva'},
                    {'id': 4, 'value': 'Fry'},
                    {'id': 5, 'value': 'Fingerling'},
                    {'id': 6, 'value': 'Adult Fish'},
-               ]
+               ],
+               'life_dict': {}
            }
         )
         CropDataSheet.objects.update_or_create(
@@ -146,13 +151,14 @@ class Command(BaseCommand):
                'order_number': 1001,
                'type_of': CropDataSheet.TYPE_OF.FISHSTOCK,
                'name': "Tilapia",
-               'stages': [
+               'stages_dict': [
                    {'id': 1, 'value': 'Eggs'},
                    {'id': 2, 'value': 'Embryo'},
                    {'id': 3, 'value': 'Larva'},
                    {'id': 4, 'value': 'Fry'},
                    {'id': 5, 'value': 'Fingerling'},
                    {'id': 6, 'value': 'Adult Fish'},
-               ]
+               ],
+               'life_dict': {}
            }
         )
