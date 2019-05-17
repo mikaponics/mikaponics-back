@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'anymail',
     'djmoney',
     # 'social_django',
+    'prettyjson',
 
     # Our Apps
     'account',

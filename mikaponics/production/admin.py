@@ -1,6 +1,7 @@
 from ipware import get_client_ip
+from prettyjson import PrettyJSONWidget
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.postgres.fields import JSONField
 from django.contrib.auth.models import Group
 # from django.contrib.auth.admin import UserAdmin
 
@@ -16,6 +17,9 @@ class CropDataSheetAdmin(admin.ModelAdmin):
     ordering = ['order_number',]
     raw_id_fields = []
     readonly_fields = ['id',]
+    formfield_overrides = {
+        JSONField: {'widget': PrettyJSONWidget }
+    }
 
     # def has_add_permission(self, request, obj=None):
     #     return False

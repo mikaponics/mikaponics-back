@@ -1,6 +1,8 @@
 from ipware import get_client_ip
+from prettyjson import PrettyJSONWidget
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.postgres.fields import JSONField
 from django.contrib.auth.models import Group
 # from django.contrib.auth.admin import UserAdmin
 
@@ -112,7 +114,9 @@ admin.site.register(Product, ProductAdmin)
 
 
 class PaymentEventAdmin(admin.ModelAdmin):
-
+    formfield_overrides = {
+        JSONField: {'widget': PrettyJSONWidget }
+    }
     list_display = ['id', 'event_id', 'type', 'created', 'livemode',]
     list_filter = ['type', 'livemode', 'object', 'pending_webhooks', 'api_version',]
     search_fields = ['data', 'event_id', 'request',]

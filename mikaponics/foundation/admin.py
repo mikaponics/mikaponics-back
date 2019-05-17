@@ -1,5 +1,7 @@
 from ipware import get_client_ip
+from prettyjson import PrettyJSONWidget
 from django.contrib import admin
+from django.contrib.postgres.fields import JSONField
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
 # from django.contrib.auth.admin import UserAdmin
@@ -74,6 +76,9 @@ class DeviceAdmin(admin.ModelAdmin):
         'last_measured_value', 'last_measured_at',
         'last_measured_unit_of_measure', 'get_environment_variables_file_url',
     ]
+    formfield_overrides = {
+        JSONField: {'widget': PrettyJSONWidget }
+    }
 
     def save_model(self, request, obj, form, change):
         """
@@ -107,6 +112,9 @@ class InstrumentAdmin(admin.ModelAdmin):
         'last_modified_from', 'last_modified_from_is_public',
         'last_measured_value', 'last_measured_at',
     ]
+    formfield_overrides = {
+        JSONField: {'widget': PrettyJSONWidget }
+    }
 
     def save_model(self, request, obj, form, change):
         """
