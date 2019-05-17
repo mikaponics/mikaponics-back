@@ -84,7 +84,9 @@ class Command(BaseCommand):
                    {'id': 5, 'value': 'Seeding'},
                    {'id': 6, 'value': 'Dying'},
                ],
-               'life_dict': {}
+               'life_dict': {
+                   'default': {}
+               }
            }
         )
         CropDataSheet.objects.update_or_create(
@@ -103,36 +105,38 @@ class Command(BaseCommand):
                    {'id': 6, 'value': 'Dying'},
                ],
                'life_dict': {                                              # (1)
-                    'ph': {
-                        'max': 6.5,
-                        'min': 5.5,
-                        'value': 'ph'
-                    },
-                    "spacing": {
-                        'min': 16,
-                        'max': 24,
-                        'unit': 'inch'
-                    },
-                    'growth_time': {
-                        'min': 50,
-                        'max': 70,
-                        'unit': 'days'
-                    },
-                    'temperature': {
-                        'night_max': 16,
-                        'night_min': 13,
-                        'day_max': 30,
-                        'day_min': 22,
-                        'unit': '°C'
-                    },
-                    'size': {
-                        'width_max': 24,
-                        'width_min': 32,
-                        'height_max': 24,
-                        'height_min': 72,
-                        'unit': 'inch'
-                    },
-                    'stocking_density': 'high'
+                    'default': {
+                        'ph': {
+                            'max': 6.5,
+                            'min': 5.5,
+                            'value': 'ph'
+                        },
+                        "spacing": {
+                            'min': 16,
+                            'max': 24,
+                            'unit': 'inch'
+                        },
+                        'growth_time': {
+                            'min': 50,
+                            'max': 70,
+                            'unit': 'days'
+                        },
+                        'temperature': {
+                            'night_max': 16,
+                            'night_min': 13,
+                            'day_max': 30,
+                            'day_min': 22,
+                            'unit': '°C'
+                        },
+                        'size': {
+                            'width_max': 24,
+                            'width_min': 32,
+                            'height_max': 24,
+                            'height_min': 72,
+                            'unit': 'inch'
+                        },
+                        'stocking_density': 'high'
+                    }
                }
            }
         )
@@ -152,36 +156,38 @@ class Command(BaseCommand):
                    {'id': 6, 'value': 'Dying'},
                ],
                'life_dict': {
-                    'ph': {
-                        'max': 6.5,
-                        'min': 5.5,
-                        'value': 'ph'
-                    },
-                    "spacing": {
-                        'min': 16,
-                        'max': 24,
-                        'unit': 'inch'
-                    },
-                    'growth_time': {
-                        'min': 50,
-                        'max': 70,
-                        'unit': 'days'
-                    },
-                    'temperature': {
-                        'night_max': 16,
-                        'night_min': 13,
-                        'day_max': 30,
-                        'day_min': 22,
-                        'unit': '°C'
-                    },
-                    'size': {
-                        'width_max': 24,
-                        'width_min': 32,
-                        'height_max': 24,
-                        'height_min': 72,
-                        'unit': 'inch'
-                    },
-                    'stocking_density': 'high'
+                    'default': {
+                        'ph': {
+                            'max': 6.5,
+                            'min': 5.5,
+                            'value': 'ph'
+                        },
+                        "spacing": {
+                            'min': 16,
+                            'max': 24,
+                            'unit': 'inch'
+                        },
+                        'growth_time': {
+                            'min': 50,
+                            'max': 70,
+                            'unit': 'days'
+                        },
+                        'temperature': {
+                            'night_max': 16,
+                            'night_min': 13,
+                            'day_max': 30,
+                            'day_min': 22,
+                            'unit': '°C'
+                        },
+                        'size': {
+                            'width_max': 24,
+                            'width_min': 32,
+                            'height_max': 24,
+                            'height_min': 72,
+                            'unit': 'inch'
+                        },
+                        'stocking_density': 'high'
+                    }
                }
            }
         )
@@ -204,24 +210,26 @@ class Command(BaseCommand):
                    {'id': 6, 'value': 'Adult Fish'},
                ],
                'life_dict': {                                              # (1)
-                   'temperature': {
-                       'max': 32,
-                       'min': 2,
-                       'unit': '°C'
-                   },
-                   'optimal_temperature': {
-                       'max': 32,
-                       'min': 18,
-                       'unit': '°C'
-                   },
-                   'type': 'Omnivore',
-                   'mature_size': {},
-                   'maturity_time': {
-                       'min': 3,
-                       'max': 3,
-                       'unit': 'years'
-                   },
-                   'oxygen_needs': 'low'
+                   'default': {  # THIS REPRESENTS FOR ALL THE STAGES OF GROWTH.
+                        'temperature': {
+                            'max': 32,
+                            'min': 2,
+                            'unit': '°C'
+                        },
+                        'optimal_temperature': {
+                            'max': 32,
+                            'min': 18,
+                            'unit': '°C'
+                        },
+                        'type': 'Omnivore',
+                        'mature_size': {},
+                        'maturity_time': {
+                            'min': 3,
+                            'max': 3,
+                            'unit': 'years'
+                        },
+                        'oxygen_needs': 'low'
+                   }
                }
            }
         )
@@ -241,27 +249,29 @@ class Command(BaseCommand):
                    {'id': 6, 'value': 'Adult Fish'},
                ],
                'life_dict': {                                              # (1)
-                    'temperature': {
-                        'max': 32,
-                        'min': 15,
-                        'unit': '°C'
-                    },
-                    'optimal_temperature': {
-                        'max': 27,
-                        'min': 23,
-                        'unit': '°C'
-                    },
-                    'type': 'Omnivore',
-                    'mature_size': {
-                        'weight': 1.5,
-                        'unit': 'lb.'
-                    },
-                    'maturity_time': {
-                        'min': 9,
-                        'max': 12,
-                        'unit': 'months'
-                    },
-                    'oxygen_needs': 'low'
+                    'default': { # THIS REPRESENTS FOR ALL THE STAGES OF GROWTH.
+                        'temperature': {
+                            'max': 32,
+                            'min': 15,
+                            'unit': '°C'
+                        },
+                        'optimal_temperature': {
+                            'max': 27,
+                            'min': 23,
+                            'unit': '°C'
+                        },
+                        'type': 'Omnivore',
+                        'mature_size': {
+                            'weight': 1.5,
+                            'unit': 'lb.'
+                        },
+                        'maturity_time': {
+                            'min': 9,
+                            'max': 12,
+                            'unit': 'months'
+                        },
+                        'oxygen_needs': 'low'
+                    }
                }
            }
         )
