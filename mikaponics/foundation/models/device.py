@@ -180,6 +180,12 @@ class Device(models.Model):
         null=False,
         default=1,
     )
+    power_consumption_in_kilowatts_per_hour = models.FloatField(
+        _("Power consumption in kilowatts per hour"),
+        help_text=_('The amount of energy consumed by this device, and all the attached instruments, per kilowatt hours.'),
+        blank=True,
+        null=True,
+    )
 
     #
     # Real-time operation fields.
