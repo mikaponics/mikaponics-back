@@ -14,7 +14,7 @@ from djmoney.money import Money
 from oauthlib.common import generate_token
 
 from foundation.constants import *
-from foundation.models import Store, Product, Shipper, User, Crop, CropSubstrate
+from foundation.models import Store, Product, Shipper, User, CropDataSheet, CropSubstrate
 
 
 class Command(BaseCommand):
@@ -55,12 +55,12 @@ class Command(BaseCommand):
 
         # DEFAULT OPTION
         #-----------------------------------------------------------------------
-        Crop.objects.update_or_create(
+        CropDataSheet.objects.update_or_create(
            id=1,
            defaults={
                'slug': 'other',
                'order_number': 10000,
-               'type_of': Crop.TYPE_OF.NONE,
+               'type_of': CropDataSheet.TYPE_OF.NONE,
                'name': "Other",
                'stages': []
            }
@@ -68,12 +68,12 @@ class Command(BaseCommand):
 
         # PLANTS
         #-----------------------------------------------------------------------
-        Crop.objects.update_or_create(
+        CropDataSheet.objects.update_or_create(
            id=2,
            defaults={
                'slug': 'cannabis',
                'order_number': 1,
-               'type_of': Crop.TYPE_OF.PLANT,
+               'type_of': CropDataSheet.TYPE_OF.PLANT,
                'name': "Cannabis",
                'stages': [
                    {'id': 1, 'value': 'Germinating'},
@@ -85,12 +85,12 @@ class Command(BaseCommand):
                ]
            }
         )
-        Crop.objects.update_or_create(
+        CropDataSheet.objects.update_or_create(
            id=3,
            defaults={
                'slug': 'tomato',
                'order_number': 2,
-               'type_of': Crop.TYPE_OF.PLANT,
+               'type_of': CropDataSheet.TYPE_OF.PLANT,
                'name': "Tomato",
                'stages': [
                    {'id': 1, 'value': 'Germinating'},
@@ -102,12 +102,12 @@ class Command(BaseCommand):
                ]
            }
         )
-        Crop.objects.update_or_create(
+        CropDataSheet.objects.update_or_create(
            id=4,
            defaults={
                'slug': 'tomato-kumato',
                'order_number': 3,
-               'type_of': Crop.TYPE_OF.PLANT,
+               'type_of': CropDataSheet.TYPE_OF.PLANT,
                'name': "Tomato (Kumato)",
                'stages': [
                    {'id': 1, 'value': 'Germinating'},
@@ -122,12 +122,12 @@ class Command(BaseCommand):
 
         # FISHSTOCK
         #-----------------------------------------------------------------------
-        Crop.objects.update_or_create(
+        CropDataSheet.objects.update_or_create(
            id=1000,
            defaults={
                'slug': 'goldfish',
                'order_number': 1000,
-               'type_of': Crop.TYPE_OF.FISHSTOCK,
+               'type_of': CropDataSheet.TYPE_OF.FISHSTOCK,
                'name': "Goldfish",
                'stages': [
                    {'id': 1, 'value': 'Eggs'},
@@ -139,12 +139,12 @@ class Command(BaseCommand):
                ]
            }
         )
-        Crop.objects.update_or_create(
+        CropDataSheet.objects.update_or_create(
            id=1001,
            defaults={
                'slug': 'tilapia',
                'order_number': 1001,
-               'type_of': Crop.TYPE_OF.FISHSTOCK,
+               'type_of': CropDataSheet.TYPE_OF.FISHSTOCK,
                'name': "Tilapia",
                'stages': [
                    {'id': 1, 'value': 'Eggs'},

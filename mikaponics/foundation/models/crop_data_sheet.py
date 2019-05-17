@@ -1,22 +1,25 @@
 # -*- coding: utf-8 -*-
 import uuid
-from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.fields import JSONField, DecimalRangeField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from djmoney.models.fields import MoneyField
 
 
-class CropManager(models.Manager):
+class CropDataSheetManager(models.Manager):
     def delete_all(self):
-        items = Crop.objects.all()
+        items = CropDataSheet.objects.all()
         for item in items.all():
             item.delete()
 
 
-class Crop(models.Model):
+class CropDataSheet(models.Model):
     """
     Class represents a plant, tree fruit or animal product that can be grown
     and harvested extensively for profit or subsistence.
+
+    The purpose of this class is to maintain various data on how-to-grow this
+    particular crop, this includes humidity / temperature / pH / etc ranges.
     """
 
     '''
@@ -43,9 +46,9 @@ class Crop(models.Model):
 
     class Meta:
         app_label = 'foundation'
-        db_table = 'mika_crops'
-        verbose_name = _('Crop')
-        verbose_name_plural = _('Crop')
+        db_table = 'mika_crop_data_sheets'
+        verbose_name = _('CropDataSheet Data Sheet')
+        verbose_name_plural = _('CropDataSheet Data Sheet')
         default_permissions = ()
         permissions = (
             # ("can_get_opening_hours_specifications", "Can get opening hours specifications"),
@@ -59,7 +62,7 @@ class Crop(models.Model):
     Object Manager
     '''
 
-    objects = CropManager()
+    objects = CropDataSheetManager()
     slug = models.SlugField(
         _("Slug"),
         help_text=_('The unique slug used for this crop when accessing the details page.'),
@@ -97,6 +100,13 @@ class Crop(models.Model):
         blank=False,
         null=False,
     )
+    life_dict = JSONField(
+        _("Life-Support System Requirements"),
+        help_text=_('The grow data for this crop used for optimal growth and baseline life-support requirements.'),
+        blank=False,
+        null=False,
+    )
+
 
     '''
     Method

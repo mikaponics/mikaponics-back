@@ -59,8 +59,8 @@ class ProductionCropInspection(models.Model):
     class Meta:
         app_label = 'foundation'
         db_table = 'mika_production_crop_inspections'
-        verbose_name = _('Production Crop Inspection')
-        verbose_name_plural = _('Production Crop Inspections')
+        verbose_name = _('Production CropDataSheet Inspection')
+        verbose_name_plural = _('Production CropDataSheet Inspections')
         default_permissions = ()
         permissions = (
             # ("can_get_opening_hours_specifications", "Can get opening hours specifications"),
@@ -155,7 +155,7 @@ class ProductionCropInspection(models.Model):
     )
     production_crop = models.ForeignKey(
         "ProductionCrop",
-        verbose_name=_('Production Crop'),
+        verbose_name=_('Production CropDataSheet'),
         help_text=_("The plants or fish that we are evaluating for this quality assurance inspection."),
         blank=False,
         null=False,

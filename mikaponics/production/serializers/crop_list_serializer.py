@@ -9,12 +9,12 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 
-from foundation.models import Production
+from foundation.models import CropDataSheet
 
 
-class CropListSerializer(serializers.ModelSerializer):
+class CropDataSheetListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Production
+        model = CropDataSheet
         fields = (
             'name',
             'type_of',

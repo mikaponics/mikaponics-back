@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 
-from foundation.models import Crop, Production
+from foundation.models import CropDataSheet, Production
 from production.serializers.production_crop_retrieve_serializer import ProductionCropRetrieveSerializer
 from device.serializers.device_crud_api_serializers import DeviceRetrieveUpdateDestroySerializer
 
@@ -56,8 +56,8 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
     def get_plants(self, obj):
         try:
             plants = obj.crops.filter(
-                Q(crop__type_of=Crop.TYPE_OF.PLANT)|
-                Q(crop__type_of=Crop.TYPE_OF.NONE)
+                Q(crop__type_of=CropDataSheet.TYPE_OF.PLANT)|
+                Q(crop__type_of=CropDataSheet.TYPE_OF.NONE)
             ).order_by('id')
             s = ProductionCropRetrieveSerializer(plants, many=True)
             return s.data;
@@ -68,8 +68,8 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
     def get_fish(self, obj):
         try:
             fish = obj.crops.filter(
-                Q(crop__type_of=Crop.TYPE_OF.FISHSTOCK)|
-                Q(crop__type_of=Crop.TYPE_OF.NONE)
+                Q(crop__type_of=CropDataSheet.TYPE_OF.FISHSTOCK)|
+                Q(crop__type_of=CropDataSheet.TYPE_OF.NONE)
             ).order_by('id')
             s = ProductionCropRetrieveSerializer(fish, many=True)
             return s.data;

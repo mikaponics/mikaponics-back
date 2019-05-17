@@ -41,8 +41,8 @@ class CropSubstrate(models.Model):
     class Meta:
         app_label = 'foundation'
         db_table = 'mika_crop_substrates'
-        verbose_name = _('Crop Substrate')
-        verbose_name_plural = _('Crop Substrates')
+        verbose_name = _('CropDataSheet Substrate')
+        verbose_name_plural = _('CropDataSheet Substrates')
         default_permissions = ()
         permissions = (
             # ("can_get_opening_hours_specifications", "Can get opening hours specifications"),

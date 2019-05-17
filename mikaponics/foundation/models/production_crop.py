@@ -58,7 +58,7 @@ class ProductionCrop(models.Model):
     class Meta:
         app_label = 'foundation'
         db_table = 'mika_production_crops'
-        verbose_name = _('Production Crop')
+        verbose_name = _('Production CropDataSheet')
         verbose_name_plural = _('Production Crops')
         default_permissions = ()
         permissions = (
@@ -152,8 +152,8 @@ class ProductionCrop(models.Model):
         on_delete=models.CASCADE,
     )
     crop = models.ForeignKey(
-        "Crop",
-        verbose_name=_('Crop'),
+        "CropDataSheet",
+        verbose_name=_('CropDataSheet'),
         help_text=_("The plants or fish that we are growing in production."),
         blank=False,
         null=False,
@@ -161,7 +161,7 @@ class ProductionCrop(models.Model):
         on_delete=models.CASCADE,
     )
     crop_other = models.CharField(
-        _("Crop (Other)"),
+        _("CropDataSheet (Other)"),
         help_text=_('The name of crop the user is producing in production that is not in our system.'),
         blank=True,
         null=True,

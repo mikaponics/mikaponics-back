@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 
-from foundation.models import Crop, Production, ProductionCrop
+from foundation.models import CropDataSheet, Production, ProductionCrop
 from production.serializers.production_crop_list_serializer import ProductionCropListSerializer
 
 

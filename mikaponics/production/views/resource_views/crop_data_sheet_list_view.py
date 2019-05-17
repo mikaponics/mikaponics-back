@@ -15,11 +15,11 @@ from rest_framework import generics
 from rest_framework import authentication, viewsets, permissions, status,  parsers, renderers
 from rest_framework.response import Response
 
-from production.serializers.crop_list_serializer import CropListSerializer
-from foundation.models import Crop
+from production.serializers.crop_list_serializer import CropDataSheetListSerializer
+from foundation.models import CropDataSheet
 
 
-class CropFilter(filters.FilterSet):
+class CropDataSheetFilter(filters.FilterSet):
     def enhanced_type_of_filter(self, name, value):
         """
         Filter method used to INCLUDE the "other" option along with the filtered
@@ -27,20 +27,20 @@ class CropFilter(filters.FilterSet):
         option to always be listed regardless of time being filtered.
         """
         return self.filter(
-            Q(type_of=Crop.TYPE_OF.NONE)|
+            Q(type_of=CropDataSheet.TYPE_OF.NONE)|
             Q(type_of=value)
         )
 
     type_of = filters.NumberFilter(method=enhanced_type_of_filter)
 
     class Meta:
-        model = Crop
+        model = CropDataSheet
         fields = ['type_of',]
 
 
-class CropListAPIView(generics.ListAPIView):
+class CropDataSheetListAPIView(generics.ListAPIView):
     authentication_classes= (OAuth2Authentication,)
-    serializer_class = CropListSerializer
+    serializer_class = CropDataSheetListSerializer
     # pagination_class = StandardResultsSetPagination
     permission_classes = (
         permissions.IsAuthenticated,
@@ -54,11 +54,11 @@ class CropListAPIView(generics.ListAPIView):
     )
     renderer_classes = (renderers.JSONRenderer,)
     filter_backends = (filters.DjangoFilterBackend,)
-    filterset_class = CropFilter
+    filterset_class = CropDataSheetFilter
 
     def get_queryset(self):
         """
         Get list data.
         """
-        queryset = Crop.objects.order_by('order_number')
+        queryset = CropDataSheet.objects.order_by('order_number')
         return queryset

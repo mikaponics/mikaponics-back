@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group
 from foundation.models import *
 
 
-class CropAdmin(admin.ModelAdmin):
+class CropDataSheetAdmin(admin.ModelAdmin):
     list_display = [
         'name', 'type_of'
 
@@ -23,7 +23,7 @@ class CropAdmin(admin.ModelAdmin):
     # def has_delete_permission(self, request, obj=None):
     #     return False
 
-admin.site.register(Crop, CropAdmin)
+admin.site.register(CropDataSheet, CropDataSheetAdmin)
 
 
 
