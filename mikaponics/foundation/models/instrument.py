@@ -550,7 +550,7 @@ class Instrument(models.Model):
             return "flask"
 
         elif self.type_of == Instrument.INSTRUMENT_TYPE.ORP:
-            return "orp"
+            return "flask"
 
         elif self.type_of == Instrument.INSTRUMENT_TYPE.CAMERA:
             return "camera"
