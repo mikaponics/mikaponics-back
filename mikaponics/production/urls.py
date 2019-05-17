@@ -13,7 +13,7 @@ from production.views.resource_views.production_inspection_list_create_view impo
 
 
 urlpatterns = (
-    path('api/crops',
+    path('api/crop-data-sheets',
         CropDataSheetListAPIView.as_view(),
         name='mikaponics_crop_list_api_endpoint'
     ),

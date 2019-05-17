@@ -47,8 +47,8 @@ class CropDataSheet(models.Model):
     class Meta:
         app_label = 'foundation'
         db_table = 'mika_crop_data_sheets'
-        verbose_name = _('CropDataSheet Data Sheet')
-        verbose_name_plural = _('CropDataSheet Data Sheet')
+        verbose_name = _('Cropt Data Sheet')
+        verbose_name_plural = _('Crop Data Sheets')
         default_permissions = ()
         permissions = (
             # ("can_get_opening_hours_specifications", "Can get opening hours specifications"),
