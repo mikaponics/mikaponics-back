@@ -102,13 +102,44 @@ class Command(BaseCommand):
                    {'id': 5, 'value': 'Seeding'},
                    {'id': 6, 'value': 'Dying'},
                ],
-               'life_dict': {}
+               'life_dict': {                                              # (1)
+                    'ph': {
+                        'max': 6.5,
+                        'min': 5.5,
+                        'value': 'ph'
+                    },
+                    "spacing": {
+                        'min': 16,
+                        'max': 24,
+                        'unit': 'inch'
+                    },
+                    'growth_time': {
+                        'min': 50,
+                        'max': 70,
+                        'unit': 'days'
+                    },
+                    'temperature': {
+                        'night_max': 16,
+                        'night_min': 13,
+                        'day_max': 30,
+                        'day_min': 22,
+                        'unit': '°C'
+                    },
+                    'size': {
+                        'width_max': 24,
+                        'width_min': 32,
+                        'height_max': 24,
+                        'height_min': 72,
+                        'unit': 'inch'
+                    },
+                    'stocking_density': 'high'
+               }
            }
         )
         CropDataSheet.objects.update_or_create(
            id=4,
            defaults={
-               'slug': 'tomato-kumato',
+               'slug': 'tomato-kumato',                                    # (1)
                'order_number': 3,
                'type_of': CropDataSheet.TYPE_OF.PLANT,
                'name': "Tomato (Kumato)",
@@ -120,7 +151,38 @@ class Command(BaseCommand):
                    {'id': 5, 'value': 'Seeding'},
                    {'id': 6, 'value': 'Dying'},
                ],
-               'life_dict': {}
+               'life_dict': {
+                    'ph': {
+                        'max': 6.5,
+                        'min': 5.5,
+                        'value': 'ph'
+                    },
+                    "spacing": {
+                        'min': 16,
+                        'max': 24,
+                        'unit': 'inch'
+                    },
+                    'growth_time': {
+                        'min': 50,
+                        'max': 70,
+                        'unit': 'days'
+                    },
+                    'temperature': {
+                        'night_max': 16,
+                        'night_min': 13,
+                        'day_max': 30,
+                        'day_min': 22,
+                        'unit': '°C'
+                    },
+                    'size': {
+                        'width_max': 24,
+                        'width_min': 32,
+                        'height_max': 24,
+                        'height_min': 72,
+                        'unit': 'inch'
+                    },
+                    'stocking_density': 'high'
+               }
            }
         )
 
@@ -141,7 +203,26 @@ class Command(BaseCommand):
                    {'id': 5, 'value': 'Fingerling'},
                    {'id': 6, 'value': 'Adult Fish'},
                ],
-               'life_dict': {}
+               'life_dict': {                                              # (1)
+                   'temperature': {
+                       'max': 32,
+                       'min': 2,
+                       'unit': '°C'
+                   },
+                   'optimal_temperature': {
+                       'max': 32,
+                       'min': 18,
+                       'unit': '°C'
+                   },
+                   'type': 'Omnivore',
+                   'mature_size': {},
+                   'maturity_time': {
+                       'min': 3,
+                       'max': 3,
+                       'unit': 'years'
+                   },
+                   'oxygen_needs': 'low'
+               }
            }
         )
         CropDataSheet.objects.update_or_create(
@@ -159,6 +240,31 @@ class Command(BaseCommand):
                    {'id': 5, 'value': 'Fingerling'},
                    {'id': 6, 'value': 'Adult Fish'},
                ],
-               'life_dict': {}
+               'life_dict': {                                              # (1)
+                    'temperature': {
+                        'max': 32,
+                        'min': 15,
+                        'unit': '°C'
+                    },
+                    'optimal_temperature': {
+                        'max': 27,
+                        'min': 23,
+                        'unit': '°C'
+                    },
+                    'type': 'Omnivore',
+                    'mature_size': {
+                        'weight': 1.5,
+                        'unit': 'lb.'
+                    },
+                    'maturity_time': {
+                        'min': 9,
+                        'max': 12,
+                        'unit': 'months'
+                    },
+                    'oxygen_needs': 'low'
+               }
            }
         )
+
+        # DEVELOPER NOTES:
+        # (1) HLA-6721-7 - Adapted from Appendix 1 of Somerville, C., and et. Al. 2014. Small-scale aquaponic food production. Integrated fish and plant farming. FAO Fisheries and Aquaculture Technical Paper No. 589. VIA http://pods.dasnr.okstate.edu/docushare/dsweb/Get/Document-10035/HLA-6721web.pdf by Aquaponics - OSU Fact Sheets - Oklahoma State University.
