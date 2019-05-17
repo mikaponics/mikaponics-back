@@ -20,10 +20,10 @@ from foundation.models import Store, Product, Shipper, User, CropDataSheet, Crop
 class Command(BaseCommand):
     """
     EXAMPLE:
-    python manage.py init_crops
+    python manage.py init_crop_data_sheets
     """
 
-    help = _('Sets up the web-application for the first time.')
+    help = _('Sets up the crop data sheet objects in our system.')
 
     def handle(self, *args, **options):
         '''
