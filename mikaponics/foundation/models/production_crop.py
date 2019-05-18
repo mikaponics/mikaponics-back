@@ -138,6 +138,13 @@ class ProductionCrop(models.Model):
         unique=True,
         editable=False,
     )
+    current_stage = models.PositiveSmallIntegerField(
+        verbose_name=_('Currnet Life Cycle Stage'),
+        help_text=_('The life cycle stage this crop is currently in. The only acceptable values are the values which are available in the `stages` data-sheet for the crop.'),
+        blank=True,
+        default=1,
+
+    )
 
     #
     # Core Fields
@@ -238,6 +245,12 @@ class ProductionCrop(models.Model):
         blank=True,
         null=True,
         validators=[MinValueValidator(0.0), MaxValueValidator(100)],
+    )
+    is_evaluation_score_indeterminate = models.BooleanField(
+        _("Is evaluation score indeterminate?"),
+        help_text=_('Value determines if the crop score can be computed or not. If this is `true`, the reason is because the user is growing a `other` crop which our system does not have a record of.'),
+        default=False,
+        blank=True,
     )
     evaluation_dict = JSONField(
         _("Evaluation Dictionary"),
@@ -355,6 +368,8 @@ class ProductionCrop(models.Model):
         return "/production-crop/"+self.slug
 
     def get_evaluation_letter(self):
+        if self.is_evaluation_score_indeterminate:
+            return "Indeterminate"
         if self.evaluation_score is None:
             return "Not evaluated yet"
         if self.evaluation_score < 50:

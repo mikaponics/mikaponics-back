@@ -2,6 +2,7 @@
 import logging
 import os
 import sys
+from freezegun import freeze_time
 from decimal import *
 from django.db.models import Sum
 from django.conf import settings
@@ -14,7 +15,7 @@ from djmoney.money import Money
 from oauthlib.common import generate_token
 
 from foundation.constants import *
-from foundation.models import Production
+from foundation.models import Production, ProductionCrop, CropDataSheet
 
 
 class Command(BaseCommand):
@@ -40,8 +41,8 @@ class Command(BaseCommand):
 
         try:
             for id in options['id']:
-                alert = Production.objects.get(id=id)
-                self.begin_processing(alert)
+                production = Production.objects.get(id=id)
+                self.begin_processing(production)
 
         except Production.DoesNotExist:
             # For debugging purposes only.
@@ -57,8 +58,30 @@ class Command(BaseCommand):
         )
 
     def begin_processing(self, production):
+        # Iterate through all the production crops and lock the last modified
+        # time as is so we don't affect it based on the evaluation.
         for production_crop in production.crops.all():
-            self.begin_processing_production_crop(production_crop)
+            with freeze_time(production_crop.last_modified_at):
+                self.begin_processing_production_crop(production_crop)
 
     def begin_processing_production_crop(self, production_crop):
-        print("TODO:", production_crop)
+        production_crop = self.process_is_indterminate(production_crop)
+
+    def process_is_indterminate(self, production_crop):
+        # CASE 1 OF 2:
+        # The user selected the "Other" option in the data sheet.
+        if production_crop.data_sheet.type_of == CropDataSheet.TYPE_OF.NONE:
+            production_crop.is_evaluation_score_indeterminate = True
+            production_crop.save()
+            self.stdout.write(
+                self.style.SUCCESS(_('%(dt)s | EVALUATION | Production crop %(slug)s has become evaluation score is indterminate.') % {
+                    'dt': str(timezone.now()),
+                    'slug': production_crop.slug
+                })
+            )
+        # CASE 2 OF 2:
+        # The user selected a non "Other" option in the data sheet.
+        else:
+            production_crop.is_evaluation_score_indeterminate = False
+            production_crop.save()
+        return production_crop

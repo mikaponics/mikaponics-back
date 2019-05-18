@@ -27,4 +27,5 @@ pip install social-auth-app-django        # Social Auth Library
 pip install Faker                         # Library that generates fake data for you.
 pip install stripe                        # Stripe payment merchant library
 pip install django-prettyjson             # Pretty JSON viewer in Django forms, admin, or templates.
+pip install freezegun                     # Python datetime override library
 ```
