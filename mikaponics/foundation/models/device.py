@@ -198,7 +198,6 @@ class Device(models.Model):
         null=False,
         default=DEVICE_STATE.NEW,
         choices=DEVICE_STATE_CHOICES,
-        editable=False, # Only device or web-app can change this state, not admin user!
     )
     last_measured_value = models.FloatField(
         _("Last measured value"),

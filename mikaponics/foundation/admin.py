@@ -66,8 +66,8 @@ admin.site.unregister(Group)
 
 class DeviceAdmin(admin.ModelAdmin):
     raw_id_fields = ['user', 'invoice',]
-    list_filter = ['product',]
-    list_display = ['slug', 'id', 'user_id', 'product',]
+    list_filter = ['product', 'state',]
+    list_display = ['slug', 'id', 'user_id', 'product', 'state',]
     ordering = ['-id',]
     readonly_fields = [
         'uuid', 'created_at', 'created_by', 'created_from',

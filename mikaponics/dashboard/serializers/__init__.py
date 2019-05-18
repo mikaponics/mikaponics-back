@@ -1,0 +1,4 @@
+from dashboard.serializers.dashboard_device_serializer import DashboardDeviceListSerializer
+from dashboard.serializers.dashboard_production_serializer import DashboardProductionListSerializer
+from dashboard.serializers.dashboard_production_crop_serializer import DashboardProductionCropListSerializer
+from dashboard.serializers.dashboard_serializers import DashboardSerializer

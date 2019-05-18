@@ -39,17 +39,3 @@ class DashboardDeviceListSerializer(serializers.ModelSerializer):
             'last_measured_unit_of_measure',
             'absolute_url',
         )
-
-
-class DashboardSerializer(serializers.Serializer):
-    timestamp = serializers.SerializerMethodField()
-    devices = DashboardDeviceListSerializer(many=True)
-
-    # Meta Information.
-    class Meta:
-        fields = (
-            'devices',
-        )
-
-    def get_timestamp(self, obj):
-        return datetime.now(tz=pytz.utc).timestamp()

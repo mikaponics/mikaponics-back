@@ -19,7 +19,7 @@ from oauth2_provider.models import (
 )
 
 from foundation import constants
-from foundation.models import InstrumentSimulator, TimeSeriesDatum
+from foundation.models import Device, InstrumentSimulator, TimeSeriesDatum
 
 
 class Command(BaseCommand):
@@ -65,6 +65,10 @@ class Command(BaseCommand):
             latest_datum = TimeSeriesDatum.objects.filter(instrument=simulator.instrument).latest('timestamp')
         except TimeSeriesDatum.DoesNotExist:
             latest_datum = None
+
+        # Make sure the device is active.
+        simulator.instrument.device.state = Device.DEVICE_STATE.ONLINE
+        simulator.instrument.device.save()
 
         # CASE 1 OF 2:
         # DOES THERE ALREADY EXIST TIME-SERIES DATA AND IF SO THEN RUN THE
