@@ -16,16 +16,6 @@ from foundation.models import Instrument
 
 
 class InstrumentListAPIView(generics.ListAPIView):
-    """
-    LIST EXAMPLE:
-    http get 127.0.0.1:8000/api/devices page==1 \
-        Authorization:"Bearer NJKcqxrc7JeuwV87Pm4qa3fn1vc9Gl"
-
-    CREATE EXAMPLE:
-    http post 127.0.0.1:8000/api/devices \
-        Authorization:"Bearer NJKcqxrc7JeuwV87Pm4qa3fn1vc9Gl" \
-        data_interval_in_seconds="1
-    """
     # filter_class = InstrumentFilter
     serializer_class = InstrumentListSerializer
     # pagination_class = StandardResultsSetPagination
