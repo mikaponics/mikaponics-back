@@ -2,6 +2,7 @@ from django.urls import path
 
 from production.views.resource_views.production_retrieve_update_view import *
 from production.views.resource_views.crop_data_sheet_list_view import *
+from production.views.resource_views.crop_life_cycle_stage_list_view import *
 from production.views.resource_views.crop_substrate_list_view import *
 from production.views.resource_views.production_list_create_view import *
 # from production.views.resource_views.production_termination_view import *
@@ -13,9 +14,13 @@ from production.views.resource_views.production_inspection_list_create_view impo
 
 
 urlpatterns = (
+    path('api/crop-life-cycle-stages',
+        CropLifeCycleStageListAPIView.as_view(),
+        name='mikaponics_crop_life_cycle_stage_list_api_endpoint'
+    ),
     path('api/crop-data-sheets',
         CropDataSheetListAPIView.as_view(),
-        name='mikaponics_crop_list_api_endpoint'
+        name='mikaponics_crop_data_sheet_list_api_endpoint'
     ),
     path('api/crop-substrates',
         CropSubstrateListAPIView.as_view(),
