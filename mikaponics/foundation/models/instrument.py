@@ -514,6 +514,32 @@ class Instrument(models.Model):
             return "%"
         elif self.type_of == Instrument.INSTRUMENT_TYPE.TEMPERATURE:
             return "℃"
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.TVOC:
+            return "PPB"
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.CO2:
+            return "PPM"
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.AIR_PRESSURE:
+            return "Pa"
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.ALTITUDE:
+            return "ft"
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.WATER_LEVEL:
+            return "m"
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.POWER_USAGE:
+            return "kw/h"
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.PH:
+            return ""
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.EC:
+            return ""
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.ORP:
+            return ""
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.CAMERA:
+            return ""
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.HEAT_VISION:
+            return ""
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.UV_LIGHT:
+            return ""
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.TRIAD_SPECTROSCOPY:
+            return ""
         return ""
 
     def get_icon(self):

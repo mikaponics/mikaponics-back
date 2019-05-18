@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from faker import Faker
 from django.contrib.auth import get_user_model
 from django.contrib.gis.db.models import PointField
+from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.indexes import BrinIndex
 from django.db import models
 from django.urls import reverse
@@ -135,6 +136,12 @@ class TimeSeriesDatum(models.Model):
     value = models.FloatField(
         _("Value"),
         help_text=_('The value of the datum.'),
+        blank=True,
+        null=True,
+    )
+    values = JSONField(
+        _("Values"),
+        help_text=_('The values for this datum.'),
         blank=True,
         null=True,
     )
