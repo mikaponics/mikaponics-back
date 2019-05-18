@@ -72,7 +72,7 @@ class ProductionInspectionRetrieveOrCreateDefaultDraftAPIView(generics.RetrieveA
         # If we created our default inspection then we need to create the
         # accompanying individual crop inspection objects.
         if was_created:
-            for production_crop in production.crops.all().order_by('crop__type_of'):
+            for production_crop in production.crops.all().order_by('data_sheet__type_of'):
                 ProductionCropInspection.objects.create(
                     production_inspection=default_draft_inspection,
                     production_crop=production_crop,

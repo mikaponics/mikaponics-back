@@ -281,14 +281,5 @@ class ProductionCropInspection(models.Model):
         result = dict(self.REVIEW_CHOICES).get(self.review)
         return str(result)
 
-    def get_pretty_stage(self):
-        if self.production_crop:
-            if self.production_crop.crop:
-                stages_dict = self.production_crop.crop.stages_dict
-                for stage in stages_dict:
-                    if stage['id'] == self.stage:
-                        return stage['value'];
-        return None
-
     def get_absolute_url(self):
         return "/production-crop-inspection/"+self.slug
