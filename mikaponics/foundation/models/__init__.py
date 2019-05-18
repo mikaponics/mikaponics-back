@@ -14,6 +14,7 @@ from foundation.models.invoice import Invoice
 from foundation.models.invoice_item import InvoiceItem
 from foundation.models.payment_event import PaymentEvent
 from foundation.models.coupon import Coupon
+from foundation.models.crop_life_cycle_stage import CropLifeCycleStage
 from foundation.models.crop_data_sheet import CropDataSheet
 from foundation.models.crop_substrate import CropSubstrate
 from foundation.models.production import Production

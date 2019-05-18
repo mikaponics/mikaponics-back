@@ -6,20 +6,17 @@ from django.utils.translation import ugettext_lazy as _
 from djmoney.models.fields import MoneyField
 
 
-class CropDataSheetManager(models.Manager):
+class CropLifeCycleStageManager(models.Manager):
     def delete_all(self):
-        items = CropDataSheet.objects.all()
+        items = CropLifeCycleStage.objects.all()
         for item in items.all():
             item.delete()
 
 
-class CropDataSheet(models.Model):
+class CropLifeCycleStage(models.Model):
     """
-    Class represents a plant, tree fruit or animal product that can be grown
-    and harvested extensively for profit or subsistence.
-
-    The purpose of this class is to maintain various data on how-to-grow this
-    particular crop, this includes humidity / temperature / pH / etc ranges.
+    Class represents a stage in the life cycle of a crop. For example:
+    Growing, Flowering, Seeding, etc.
     """
 
     '''
@@ -46,9 +43,9 @@ class CropDataSheet(models.Model):
 
     class Meta:
         app_label = 'foundation'
-        db_table = 'mika_crop_data_sheets'
-        verbose_name = _('Cropt Data Sheet')
-        verbose_name_plural = _('Crop Data Sheets')
+        db_table = 'mika_crop_life_cycle_stages'
+        verbose_name = _('Crop Life Cycle Stage')
+        verbose_name_plural = _('Crop Life Cycle Stages')
         default_permissions = ()
         permissions = (
             # ("can_get_opening_hours_specifications", "Can get opening hours specifications"),
@@ -62,10 +59,10 @@ class CropDataSheet(models.Model):
     Object Manager
     '''
 
-    objects = CropDataSheetManager()
+    objects = CropLifeCycleStageManager()
     slug = models.SlugField(
         _("Slug"),
-        help_text=_('The unique slug used for this crop when accessing the details page.'),
+        help_text=_('The unique slug used for this stage when accessing the details page.'),
         max_length=255,
         blank=True,
         null=False,
@@ -75,7 +72,7 @@ class CropDataSheet(models.Model):
     name = models.CharField(
         _("Name"),
         max_length=63,
-        help_text=_('The name of the crop.'),
+        help_text=_('The name of the stage.'),
         blank=False,
         null=False,
         unique=True,
@@ -83,26 +80,14 @@ class CropDataSheet(models.Model):
     )
     type_of = models.PositiveSmallIntegerField(
         _("Type of"),
-        help_text=_('The type of crop being grown in production.'),
+        help_text=_('The type of crop this stage belongs to.'),
         blank=False,
         null=False,
         choices=TYPE_OF_CHOICES,
     )
     order_number = models.PositiveSmallIntegerField(
         _("Order #"),
-        help_text=_('The order number to list this crop in.'),
-        blank=False,
-        null=False,
-    )
-    stages = models.ManyToManyField(
-        "CropLifeCycleStage",
-        help_text=_('Stages of development this crop has in their lifespan.'),
-        blank=True,
-        related_name="data_sheets"
-    )
-    life_dict = JSONField(
-        _("Life-Support System Requirements"),
-        help_text=_('The grow data for this crop used for optimal growth and baseline life-support requirements.'),
+        help_text=_('The order number to list this stage in.'),
         blank=False,
         null=False,
     )

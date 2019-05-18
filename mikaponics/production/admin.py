@@ -8,6 +8,28 @@ from django.contrib.auth.models import Group
 from foundation.models import *
 
 
+class CropLifeCycleStageAdmin(admin.ModelAdmin):
+    list_display = [
+        'name', 'type_of'
+
+    ]
+    list_filter = ['type_of',]
+    ordering = ['order_number',]
+    raw_id_fields = []
+    readonly_fields = ['id',]
+    formfield_overrides = {
+        JSONField: {'widget': PrettyJSONWidget }
+    }
+
+    # def has_add_permission(self, request, obj=None):
+    #     return False
+    #
+    # def has_delete_permission(self, request, obj=None):
+    #     return False
+
+admin.site.register(CropLifeCycleStage, CropLifeCycleStageAdmin)
+
+
 class CropDataSheetAdmin(admin.ModelAdmin):
     list_display = [
         'name', 'type_of'

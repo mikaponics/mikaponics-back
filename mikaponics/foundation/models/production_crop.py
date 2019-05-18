@@ -196,6 +196,19 @@ class ProductionCrop(models.Model):
         null=True,
         max_length=255,
     )
+
+    #
+    # At Finish Fields
+    #
+    stage = models.ForeignKey(
+        "CropLifeCycleStage",
+        verbose_name=_('Stage'),
+        help_text=_("The current stge of the life-cycle that this crop is at."),
+        blank=False,
+        null=False,
+        related_name="production_crops",
+        on_delete=models.CASCADE,
+    )
     state_at_finish = models.PositiveSmallIntegerField(
         verbose_name=_('State at finish'),
         help_text=_('The state of the crop when the production has finished.'),

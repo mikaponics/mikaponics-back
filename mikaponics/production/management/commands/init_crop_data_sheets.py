@@ -14,7 +14,7 @@ from djmoney.money import Money
 from oauthlib.common import generate_token
 
 from foundation.constants import *
-from foundation.models import Store, Product, Shipper, User, CropDataSheet, CropSubstrate
+from foundation.models import Store, Product, Shipper, User, CropLifeCycleStage, CropDataSheet, CropSubstrate
 
 
 class Command(BaseCommand):
@@ -29,6 +29,22 @@ class Command(BaseCommand):
         '''
         Create our data for crops.
         '''
+        # LIFE CYCLE STAGES
+        #-----------------------------------------------------------------------
+        CropLifeCycleStage.objects.update_or_create(id=1,  defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.PLANT,     'order_number': 1,  'name': "Germinating",       'slug': 'germinating',})
+        CropLifeCycleStage.objects.update_or_create(id=2,  defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.PLANT,     'order_number': 2,  'name': "Growing",           'slug': 'growing',})
+        CropLifeCycleStage.objects.update_or_create(id=3,  defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.PLANT,     'order_number': 3,  'name': "Flowering",         'slug': 'flowering',})
+        CropLifeCycleStage.objects.update_or_create(id=4,  defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.PLANT,     'order_number': 4,  'name': "Fruiting",          'slug': 'fruiting',})
+        CropLifeCycleStage.objects.update_or_create(id=5,  defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.PLANT,     'order_number': 5,  'name': "Seeding",           'slug': 'seeding',})
+        CropLifeCycleStage.objects.update_or_create(id=6,  defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.PLANT,     'order_number': 6,  'name': "Dying",             'slug': 'dying',})
+        CropLifeCycleStage.objects.update_or_create(id=7,  defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.FISHSTOCK, 'order_number': 7,  'name': "Eggs",              'slug': 'eggs',})
+        CropLifeCycleStage.objects.update_or_create(id=8,  defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.FISHSTOCK, 'order_number': 8,  'name': "Embryo",            'slug': 'embryo',})
+        CropLifeCycleStage.objects.update_or_create(id=9,  defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.FISHSTOCK, 'order_number': 9,  'name': "Larva",             'slug': 'larva',})
+        CropLifeCycleStage.objects.update_or_create(id=10, defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.FISHSTOCK, 'order_number': 10, 'name': "Fry",               'slug': 'fry',})
+        CropLifeCycleStage.objects.update_or_create(id=11, defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.FISHSTOCK, 'order_number': 11, 'name': "Fingerling",        'slug': 'fingerling',})
+        CropLifeCycleStage.objects.update_or_create(id=12, defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.FISHSTOCK, 'order_number': 12, 'name': "Adult Fish",        'slug': 'adult-fish',})
+        CropLifeCycleStage.objects.update_or_create(id=13, defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.FISHSTOCK, 'order_number': 13, 'name': "Death",             'slug': 'death',})
+
         # SUBSTRATE
         #-----------------------------------------------------------------------
         CropSubstrate.objects.update_or_create(id=1, defaults={ 'type_of': 1, 'order_number': 10000, 'name': "Other (Please specify)",       'slug': 'other',})
@@ -62,48 +78,33 @@ class Command(BaseCommand):
                'order_number': 10000,
                'type_of': CropDataSheet.TYPE_OF.NONE,
                'name': "Other",
-               'stages_dict': [],
                'life_dict': {}
            }
         )
 
         # PLANTS
         #-----------------------------------------------------------------------
-        CropDataSheet.objects.update_or_create(
+        crop, was_created = CropDataSheet.objects.update_or_create(
            id=2,
            defaults={
                'slug': 'cannabis',
                'order_number': 1,
                'type_of': CropDataSheet.TYPE_OF.PLANT,
                'name': "Cannabis",
-               'stages_dict': [
-                   {'id': 1, 'value': 'Germinating'},
-                   {'id': 2, 'value': 'Growing'},
-                   {'id': 3, 'value': 'Flowering'},
-                   {'id': 4, 'value': 'Fruiting'},
-                   {'id': 5, 'value': 'Seeding'},
-                   {'id': 6, 'value': 'Dying'},
-               ],
                'life_dict': {
                    'default': {}
                }
            }
         )
-        CropDataSheet.objects.update_or_create(
+        crop.stages.set([1,2,3,4,5,6])
+
+        crop, was_created = CropDataSheet.objects.update_or_create(
            id=3,
            defaults={
                'slug': 'tomato',
                'order_number': 2,
                'type_of': CropDataSheet.TYPE_OF.PLANT,
                'name': "Tomato",
-               'stages_dict': [
-                   {'id': 1, 'value': 'Germinating'},
-                   {'id': 2, 'value': 'Growing'},
-                   {'id': 3, 'value': 'Flowering'},
-                   {'id': 4, 'value': 'Fruiting'},
-                   {'id': 5, 'value': 'Seeding'},
-                   {'id': 6, 'value': 'Dying'},
-               ],
                'life_dict': {                                              # (1)
                     'default': {
                         'ph': {
@@ -140,21 +141,15 @@ class Command(BaseCommand):
                }
            }
         )
-        CropDataSheet.objects.update_or_create(
+        crop.stages.set([1,2,3,4,5,6])
+
+        crop, was_created = CropDataSheet.objects.update_or_create(
            id=4,
            defaults={
                'slug': 'tomato-kumato',                                    # (1)
                'order_number': 3,
                'type_of': CropDataSheet.TYPE_OF.PLANT,
                'name': "Tomato (Kumato)",
-               'stages_dict': [
-                   {'id': 1, 'value': 'Germinating'},
-                   {'id': 2, 'value': 'Growing'},
-                   {'id': 3, 'value': 'Flowering'},
-                   {'id': 4, 'value': 'Fruiting'},
-                   {'id': 5, 'value': 'Seeding'},
-                   {'id': 6, 'value': 'Dying'},
-               ],
                'life_dict': {
                     'default': {
                         'ph': {
@@ -191,24 +186,17 @@ class Command(BaseCommand):
                }
            }
         )
+        crop.stages.set([1,2,3,4,5,6])
 
         # FISHSTOCK
         #-----------------------------------------------------------------------
-        CropDataSheet.objects.update_or_create(
+        crop, was_created = CropDataSheet.objects.update_or_create(
            id=1000,
            defaults={
                'slug': 'goldfish',
                'order_number': 1000,
                'type_of': CropDataSheet.TYPE_OF.FISHSTOCK,
                'name': "Goldfish",
-               'stages_dict': [
-                   {'id': 1, 'value': 'Eggs'},
-                   {'id': 2, 'value': 'Embryo'},
-                   {'id': 3, 'value': 'Larva'},
-                   {'id': 4, 'value': 'Fry'},
-                   {'id': 5, 'value': 'Fingerling'},
-                   {'id': 6, 'value': 'Adult Fish'},
-               ],
                'life_dict': {                                              # (1)
                    'default': {  # THIS REPRESENTS FOR ALL THE STAGES OF GROWTH.
                         'temperature': {
@@ -233,21 +221,15 @@ class Command(BaseCommand):
                }
            }
         )
-        CropDataSheet.objects.update_or_create(
+        crop.stages.set([7,8,9,10,11,12,13])
+
+        crop, was_created = CropDataSheet.objects.update_or_create(
            id=1001,
            defaults={
                'slug': 'tilapia',
                'order_number': 1001,
                'type_of': CropDataSheet.TYPE_OF.FISHSTOCK,
                'name': "Tilapia",
-               'stages_dict': [
-                   {'id': 1, 'value': 'Eggs'},
-                   {'id': 2, 'value': 'Embryo'},
-                   {'id': 3, 'value': 'Larva'},
-                   {'id': 4, 'value': 'Fry'},
-                   {'id': 5, 'value': 'Fingerling'},
-                   {'id': 6, 'value': 'Adult Fish'},
-               ],
                'life_dict': {                                              # (1)
                     'default': { # THIS REPRESENTS FOR ALL THE STAGES OF GROWTH.
                         'temperature': {
@@ -275,6 +257,7 @@ class Command(BaseCommand):
                }
            }
         )
+        crop.stages.set([7,8,9,10,11,12,13])
 
         # DEVELOPER NOTES:
         # (1) HLA-6721-7 - Adapted from Appendix 1 of Somerville, C., and et. Al. 2014. Small-scale aquaponic food production. Integrated fish and plant farming. FAO Fisheries and Aquaculture Technical Paper No. 589. VIA http://pods.dasnr.okstate.edu/docushare/dsweb/Get/Document-10035/HLA-6721web.pdf by Aquaponics - OSU Fact Sheets - Oklahoma State University.
