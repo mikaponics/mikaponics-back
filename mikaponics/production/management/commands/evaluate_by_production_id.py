@@ -20,7 +20,7 @@ from foundation.models import Production
 class Command(BaseCommand):
     """
     EXAMPLE:
-    python manage.py evaluate_production_by_id 1
+    python manage.py evaluate_by_production_id 1
     """
 
     help = _('Command evaluates the production by the inputted ID.')
