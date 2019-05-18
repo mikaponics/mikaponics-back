@@ -118,8 +118,8 @@ class ProductionCropAdmin(admin.ModelAdmin):
         ProductionCropInspectionInline
     ]
     raw_id_fields = ['production', ]
-    list_filter = ['data_sheet', 'substrate',]
-    list_display = ['slug', 'data_sheet', 'data_sheet_other', 'quantity', 'substrate', 'substrate_other', 'production']
+    list_filter = ['data_sheet', 'substrate', 'stage',]
+    list_display = ['slug', 'data_sheet', 'data_sheet_other', 'quantity', 'substrate', 'substrate_other', 'stage', 'production']
     ordering = ['-id',]
     readonly_fields = [
         'id', 'created_at', 'created_by', 'created_from',

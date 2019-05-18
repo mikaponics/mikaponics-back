@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 
-from foundation.models import CropDataSheet, CropSubstrate, Device, Production, ProductionCrop
+from foundation.models import CropLifeCycleStage, CropDataSheet, CropSubstrate, Device, Production, ProductionCrop
 
 
 class ProductionCreateSerializer(serializers.Serializer):
@@ -92,8 +92,10 @@ class ProductionCreateSerializer(serializers.Serializer):
         for plant in plants_array:
             data_sheet = CropDataSheet.objects.filter(slug=plant['plant_slug']).first()
             substrate = CropSubstrate.objects.filter(slug=plant['substrate_slug']).first()
+            stage = CropLifeCycleStage.objects.filter(slug=plant['stage_slug']).first()
             production_crop = ProductionCrop.objects.create(
                 production=production,
+                stage=stage,
                 data_sheet=data_sheet,
                 data_sheet_other=plant.get('plant_other', None),
                 quantity=plant['quantity'],
@@ -104,8 +106,10 @@ class ProductionCreateSerializer(serializers.Serializer):
         for fish in fish_array:
             data_sheet = CropDataSheet.objects.filter(slug=fish['fish_slug']).first()
             substrate = CropSubstrate.objects.filter(slug=fish['substrate_slug']).first()
+            stage = CropLifeCycleStage.objects.filter(slug=fish['stage_slug']).first()
             production_crop = ProductionCrop.objects.create(
                 production=production,
+                stage=stage,
                 data_sheet=data_sheet,
                 data_sheet_other=fish.get('fish_other', None),
                 quantity=fish['quantity'],
