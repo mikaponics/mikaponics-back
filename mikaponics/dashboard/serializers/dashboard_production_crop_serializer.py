@@ -22,11 +22,13 @@ logger = logging.getLogger(__name__)
 
 class DashboardProductionCropListSerializer(serializers.ModelSerializer):
     pretty_name = serializers.ReadOnlyField(source="get_pretty_name")
+    pretty_score = serializers.ReadOnlyField(source="get_evaluation_letter")
     absolute_url = serializers.ReadOnlyField(source='get_absolute_url')
 
     class Meta:
         model = ProductionCrop
         fields = (
             'pretty_name',
+            'pretty_score',
             'absolute_url',
         )

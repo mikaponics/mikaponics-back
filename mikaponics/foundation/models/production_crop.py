@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.gis.db.models import PointField
 from django.contrib.postgres.indexes import BrinIndex
 from django.contrib.postgres.fields import JSONField
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
@@ -227,6 +228,24 @@ class ProductionCrop(models.Model):
         null=True,
     )
 
+    #
+    # Evaluation Fields
+    #
+
+    evaluation_score = models.FloatField(
+        _("Evaluation"),
+        help_text=_('The evaluation score of the current crop in the current present date and time.'),
+        blank=True,
+        null=True,
+        validators=[MinValueValidator(0.0), MaxValueValidator(100)],
+    )
+    evaluation_dict = JSONField(
+        _("Evaluation Dictionary"),
+        help_text=_('The evaluation details for this particular score in the present date and time.'),
+        blank=True,
+        null=True,
+        max_length=511,
+    )
 
     #
     # Audit detail fields
@@ -334,3 +353,19 @@ class ProductionCrop(models.Model):
 
     def get_absolute_url(self):
         return "/production-crop/"+self.slug
+
+    def get_evaluation_letter(self):
+        if self.evaluation_score is None:
+            return "Not evaluated yet"
+        if self.evaluation_score < 50:
+            return "F"
+        elif self.evaluation_score >= 50 and self.evaluation_score < 60:
+            return "D"
+        elif self.evaluation_score >= 60 and self.evaluation_score < 70:
+            return "C"
+        elif self.evaluation_score >= 70 and self.evaluation_score < 80:
+            return "B"
+        elif self.evaluation_score >= 80 and self.evaluation_score < 90:
+            return "A"
+        elif self.evaluation_score >= 90:
+            return "A+"
