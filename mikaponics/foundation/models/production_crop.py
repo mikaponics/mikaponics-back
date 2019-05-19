@@ -80,6 +80,19 @@ class ProductionCrop(models.Model):
     Constants & Choices
     '''
 
+    class TYPE_OF:
+        PLANT = 1
+        FISHSTOCK = 2
+        ANIMALSTOCK = 3
+        NONE = 0
+
+    TYPE_OF_CHOICES = (
+        (TYPE_OF.PLANT, _('Plant')),
+        (TYPE_OF.FISHSTOCK, _('Fishstock')),
+        (TYPE_OF.ANIMALSTOCK, _('Animalstock')),
+        (TYPE_OF.NONE, _('None')),
+    )
+
     class CROP_STATE_AT_FINISH:
         CROPS_DIED = 1
         CROPS_WERE_ALIVE = 2
@@ -138,13 +151,6 @@ class ProductionCrop(models.Model):
         unique=True,
         editable=False,
     )
-    current_stage = models.PositiveSmallIntegerField(
-        verbose_name=_('Currnet Life Cycle Stage'),
-        help_text=_('The life cycle stage this crop is currently in. The only acceptable values are the values which are available in the `stages` data-sheet for the crop.'),
-        blank=True,
-        default=1,
-
-    )
 
     #
     # Core Fields
@@ -195,6 +201,13 @@ class ProductionCrop(models.Model):
         blank=True,
         null=True,
         max_length=255,
+    )
+    type_of = models.PositiveSmallIntegerField(
+        _("Type of"),
+        help_text=_('The type of production crop.'),
+        blank=False,
+        null=False,
+        choices=TYPE_OF_CHOICES,
     )
 
     #

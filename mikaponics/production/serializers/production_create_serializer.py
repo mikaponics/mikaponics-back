@@ -101,6 +101,7 @@ class ProductionCreateSerializer(serializers.Serializer):
                 quantity=plant['quantity'],
                 substrate=substrate,
                 substrate_other=plant.get('substrate_other', None),
+                type_of=ProductionCrop.TYPE_OF.PLANT
             )
 
         for fish in fish_array:
@@ -115,6 +116,7 @@ class ProductionCreateSerializer(serializers.Serializer):
                 quantity=fish['quantity'],
                 substrate=substrate,
                 substrate_other=fish.get('substrate_other', None),
+                type_of=ProductionCrop.TYPE_OF.FISHSTOCK
             )
 
         # DEVELOPERS NOTES:
