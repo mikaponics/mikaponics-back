@@ -552,31 +552,31 @@ class Instrument(models.Model):
             return "thermometer-three-quarters"
 
         elif self.type_of == Instrument.INSTRUMENT_TYPE.TVOC:
-            return "ravelry"
+            return "wind"
 
         elif self.type_of == Instrument.INSTRUMENT_TYPE.CO2:
-            return "ravelry"
+            return "wind"
 
         elif self.type_of == Instrument.INSTRUMENT_TYPE.AIR_PRESSURE:
-            return "ravelry"
+            return "wind"
 
         elif self.type_of == Instrument.INSTRUMENT_TYPE.ALTITUDE:
-            return "ravelry"
+            return "mountain"
 
         elif self.type_of == Instrument.INSTRUMENT_TYPE.WATER_LEVEL:
-            return "ravelry"
+            return "water"
 
         elif self.type_of == Instrument.INSTRUMENT_TYPE.POWER_USAGE:
             return "plug"
 
         elif self.type_of == Instrument.INSTRUMENT_TYPE.PH:
-            return "flask"
+            return "vial"
 
         elif self.type_of == Instrument.INSTRUMENT_TYPE.EC:
-            return "flask"
+            return "vial"
 
         elif self.type_of == Instrument.INSTRUMENT_TYPE.ORP:
-            return "flask"
+            return "vial"
 
         elif self.type_of == Instrument.INSTRUMENT_TYPE.CAMERA:
             return "camera"
