@@ -51,6 +51,9 @@ ALLOWED_HOSTS = ['*']
 
 SITE_ID = 1
 ADMIN_ENABLED = True
+ADMINS = (
+    ( env("ADMIN_NAME"), env("ADMIN_EMAIL") ),
+)
 # LOGIN_URL = reverse_lazy('mikaponics_login_master')
 # LOGOUT_URL = reverse_lazy('mikaponics_logout_redirector')
 # LOGIN_URL = 'login'
@@ -277,6 +280,25 @@ IGNORABLE_404_URLS = [
     re.compile(r'^/favicon\.ico$'),
     re.compile(r'^/robots\.txt$'),
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    }
+}
+
 
 
 '''
