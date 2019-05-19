@@ -49,6 +49,8 @@ class TimeSeriesDatumManager(models.Manager):
                     'value': faker.pyfloat(left_digits=2, right_digits=2, positive=True),
                     'time_step': time_step,
                     'previous':  previous,
+                    'created_from': '127.0.0.1',
+                    'created_from_is_public': False
                 }
             )
             results.append(data)
