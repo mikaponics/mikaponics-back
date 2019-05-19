@@ -117,7 +117,9 @@ class TimeSeriesDatumCreateSerializer(serializers.Serializer):
             instrument=instrument,
             value=value,
             timestamp=local_aware_dt,
-            time_step=time_step
+            time_step=time_step,
+            created_from=authenticated_user_from,
+            created_from_is_public=authenticated_user_from_is_public
         )
 
         # Link to our chain-link data structure.
