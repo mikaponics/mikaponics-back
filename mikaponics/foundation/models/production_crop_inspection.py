@@ -89,10 +89,10 @@ class ProductionCropInspection(models.Model):
 
     REVIEW_CHOICES = (
         (REVIEW.EXCELLENT, _('Excellent')),
-        (REVIEW.GOOD, _('Bad')),
-        (REVIEW.AVERAGE, _('Average')),
         (REVIEW.GOOD, _('Good')),
-        (REVIEW.TERRIBLE, _('Excellent')),
+        (REVIEW.AVERAGE, _('Average')),
+        (REVIEW.BAD, _('Bad')),
+        (REVIEW.TERRIBLE, _('Terrible')),
     )
 
     class STATE:

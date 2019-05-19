@@ -191,7 +191,7 @@ admin.site.register(ProductionInspection, ProductionInspectionAdmin)
 class ProductionCropInspectionAdmin(admin.ModelAdmin):
     raw_id_fields = ['production_crop',]
     list_filter = ['state', 'review', 'stage',]
-    list_display = ['slug', 'production_crop', 'state', 'review', 'stage',]
+    list_display = ['slug', 'state', 'review', 'stage',]
     ordering = ['-id',]
     readonly_fields = [
         'id', 'created_at', 'created_by', 'created_from',

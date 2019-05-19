@@ -51,6 +51,11 @@ class ProductionInspectionUpdateSerializer(serializers.ModelSerializer):
                 crop_inspection.last_modified_from_is_public = authenticated_from_is_public
                 crop_inspection.save()
 
+        # # For debugging purposes only.
+        # print("DID PASS:", validated_data.get('did_pass', False))
+        # print("FAILURE:", validated_data.get('failure_reason', None))
+        # print("NOTES:", validated_data.get('notes', None))
+
         instance.did_pass = validated_data.get('did_pass', False)
         instance.failure_reason = validated_data.get('failure_reason', None)
         instance.notes = validated_data.get('notes', None)

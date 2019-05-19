@@ -13,7 +13,7 @@ from foundation.models import ProductionCropInspection, CropLifeCycleStage
 
 
 class ProductionCropInspectionUpdateSerializer(serializers.ModelSerializer):
-    review = serializers.IntegerField(required=True)
+    review = serializers.IntegerField(required=True, allow_null=False,)
     stage = serializers.CharField(required=True, allow_blank=True, allow_null=True,)
 
     class Meta:
@@ -47,12 +47,14 @@ class ProductionCropInspectionUpdateSerializer(serializers.ModelSerializer):
         if state is not None:
             instance.state = state
         review = validated_data.get('review', None)
+        failure_reason = validated_data.get('failure_reason', None)
         notes = validated_data.get('notes', None)
 
         # # For debugging purposes only.
         # print("SLUG:", instance.slug)
         # print("STATE:", state)
         # print("REVIEW:", review)
+        # print("FAILURE:", failure_reason)
         # print("NOTES:", notes)
 
         # Extract the stage.
@@ -60,7 +62,7 @@ class ProductionCropInspectionUpdateSerializer(serializers.ModelSerializer):
         stage = CropLifeCycleStage.objects.get(slug=stage)
 
         instance.review = review
-        instance.failure_reason = validated_data.get('failure_reason', None)
+        instance.failure_reason = failure_reason
         instance.stage = stage
         instance.notes = notes
         instance.last_modified_by = authenticated_by
