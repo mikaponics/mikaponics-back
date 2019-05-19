@@ -465,7 +465,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     location = PointField(
         _("Location"),
-        help_text=_('A longitude and latitude coordinates of this location.'),
+        help_text=_('A longitude and latitude coordinates of this user.'),
         null=True,
         blank=True,
         srid=4326,

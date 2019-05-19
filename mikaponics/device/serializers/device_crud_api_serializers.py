@@ -22,10 +22,6 @@ class DeviceListCreateSerializer(serializers.ModelSerializer):
     )
     type_of = serializers.IntegerField(required=False, allow_null=True)
     state = serializers.IntegerField(required=False, allow_null=True)
-    data_interval_in_seconds = serializers.CharField(
-        required=True,
-        allow_blank=False,
-    )
     created_at = serializers.DateTimeField(read_only=True)
     last_modified_at = serializers.DateTimeField(read_only=True)
     absolute_url = serializers.ReadOnlyField(source='get_absolute_url')
@@ -40,7 +36,6 @@ class DeviceListCreateSerializer(serializers.ModelSerializer):
             'user',
             'type_of',
             'state',
-            'data_interval_in_seconds',
             'created_at',
             'last_modified_at',
             'absolute_url'
@@ -88,9 +83,6 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
         required=True,
         allow_blank=False,
     )
-    data_interval_in_seconds = serializers.IntegerField(
-        required=True,
-    )
     data_interval_in_minutes = serializers.SerializerMethodField()
     state = serializers.SerializerMethodField()
     slug = serializers.ReadOnlyField()
@@ -107,8 +99,6 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
             'timezone',
             'name',
             'description',
-            'data_interval_in_seconds',
-            'data_interval_in_minutes',
             'state',
             'slug',
             'absolute_url',
@@ -119,12 +109,6 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
             'last_measured_pretty_at',
             'instruments',
         )
-
-    def get_data_interval_in_minutes(self, obj):
-        try:
-            return obj.data_interval_in_seconds / 60.0
-        except Exception as e:
-            return None
 
     def get_state(self, obj):
         try:
@@ -152,7 +136,6 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
         # Save our inputted & context data.
         instance.name = validated_data.get('name', instance.name)
         instance.description = validated_data.get('description', instance.description)
-        instance.data_interval_in_seconds = validated_data.get('data_interval_in_seconds', instance.data_interval_in_seconds)
         instance.last_modified_by = authenticated_user
         instance.last_modified_from = authenticated_user_from
         instance.last_modified_from_is_public = authenticated_user_from_is_public

@@ -151,7 +151,7 @@ class Production(models.Model):
     '''
 
     #
-    # Internal Related Fields
+    # Specific production fields.
     #
 
     id = models.BigAutoField(
@@ -202,7 +202,26 @@ class Production(models.Model):
     )
 
     #
-    # Beginning of Lifecycle Fields
+    # GeoCoordinates (https://schema.org/GeoCoordinates)
+    #
+
+    elevation = models.FloatField(
+        _("Elevation"),
+        help_text=_('The elevation of a location (<a href="https://en.wikipedia.org/wiki/World_Geodetic_System">WGS 84</a>).'),
+        blank=True,
+        null=True
+    )
+    location = PointField( # Combine latitude and longitude into a single field.
+        _("Location"),
+        help_text=_('A longitude and latitude coordinates of this production. For example -81.245277,42.984924 (<a href="https://en.wikipedia.org/wiki/World_Geodetic_System">WGS 84</a>).'),
+        null=True,
+        blank=True,
+        srid=4326,
+        db_index=True
+    )
+
+    #
+    # Thing (https://schema.org/Thing)
     #
 
     name = models.CharField(
@@ -219,6 +238,18 @@ class Production(models.Model):
         null=True,
         default='',
     )
+    identifier = models.CharField(
+        _("Identifier"),
+        max_length=255,
+        help_text=_('The identifier property represents any kind of identifier for any kind of <a href="https://schema.org/Thing">Thing</a>, such as ISBNs, GTIN codes, UUIDs etc. Schema.org provides dedicated properties for representing many of these, either as textual strings or as URL (URI) links. See <a href="https://schema.org/docs/datamodel.html#identifierBg">background notes</a> for more details.'),
+        blank=True,
+        null=True,
+    )
+
+    #
+    # Beginning of Lifecycle Fields
+    #
+
     environment = models.PositiveSmallIntegerField(
         _("Environment"),
         help_text=_('The type of environment the production is taking place in.'),

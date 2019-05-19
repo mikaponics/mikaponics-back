@@ -134,13 +134,6 @@ class Device(models.Model):
         related_name="devices",
         on_delete=models.CASCADE
     )
-    data_interval_in_seconds = models.PositiveSmallIntegerField(
-        _("Data Interval (Seconds)"),
-        help_text=_('The data interval all the instruments will poll by. Interval measured in seconds.'),
-        blank=False,
-        null=False,
-        default=60, # 60 seconds is 1 minute.
-    )
     activated_at = models.DateTimeField(
         _("Activated At"),
         help_text=_('The datetime that this device first made an API call to our API web-service.'),

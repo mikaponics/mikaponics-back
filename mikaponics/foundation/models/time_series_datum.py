@@ -192,6 +192,20 @@ class TimeSeriesDatum(models.Model):
         on_delete=models.SET_NULL,
         editable=False, # Only device or web-app can change this state, not admin user!
     )
+    created_from = models.GenericIPAddressField(
+        _("Created from IP"),
+        help_text=_('The IP address of the creator.'),
+        blank=True,
+        null=True,
+        editable=False,
+    )
+    created_from_is_public = models.BooleanField(
+        _("Is created from IP public?"),
+        help_text=_('Is creator a public IP and is routable.'),
+        default=False,
+        blank=True,
+        editable=False,
+    )
 
     def __str__(self):
         return str(self.id)

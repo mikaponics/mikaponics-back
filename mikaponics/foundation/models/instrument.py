@@ -165,6 +165,13 @@ class Instrument(models.Model):
         blank=False,
         null=False,
     )
+    data_interval_in_seconds = models.PositiveSmallIntegerField(
+        _("Data Interval (Seconds)"),
+        help_text=_('The data interval this instrument will poll by. Interval measured in seconds.'),
+        blank=True,
+        null=False,
+        default=60, # 60 seconds is 1 minute.
+    )
     slug = models.SlugField(
         _("Slug"),
         help_text=_('The unique slug used for this instrument when accessing details page.'),
