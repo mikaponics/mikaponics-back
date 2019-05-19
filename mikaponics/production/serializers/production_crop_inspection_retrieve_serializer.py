@@ -42,7 +42,6 @@ class ProductionCropInspectionRetrieveSerializer(serializers.ModelSerializer):
             'absolute_url',
             'review',
             'failure_reason',
-            'stage',
             'notes',
             'created_at',
             'last_modified_at'
