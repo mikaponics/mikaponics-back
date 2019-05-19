@@ -26,7 +26,7 @@ class ProductionConfig(AppConfig):
 
         # Delete previously loaded ETLs.
         for job in scheduler.get_jobs():
-            if "instrument" in str(job): # Only delete jobs belonging to this app.
+            if "production" in str(job): # Only delete jobs belonging to this app.
                 job.delete()
 
         # Variable used to track the maximum number of minutes the ETL can

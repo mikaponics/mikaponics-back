@@ -14,6 +14,6 @@ def run_production_evaluation_handling_func():
     over all the production crops and evaluate a score.
     """
     from foundation.models import Production
-
-    for production in Production.objects.iterator(chunk_size=250):
+    for production in Production.objects.filter(state=Production.PRODUCTION_STATE.OPERATING).iterator(chunk_size=250):
         call_command('evaluate_by_production_id', production.id, verbosity=0)
+    print("")
