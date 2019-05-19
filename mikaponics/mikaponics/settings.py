@@ -51,9 +51,9 @@ ALLOWED_HOSTS = ['*']
 
 SITE_ID = 1
 ADMIN_ENABLED = True
-ADMINS = (
-    ( env("ADMIN_NAME"), env("ADMIN_EMAIL") ),
-)
+ADMINS = [
+    ( env("ADMIN_NAME"), env("ADMIN_EMAIL") )
+]
 # LOGIN_URL = reverse_lazy('mikaponics_login_master')
 # LOGOUT_URL = reverse_lazy('mikaponics_logout_redirector')
 # LOGIN_URL = 'login'
