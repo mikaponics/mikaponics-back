@@ -37,15 +37,23 @@ class ProductionCropInspectionUpdateSerializer(serializers.ModelSerializer):
         return value
 
     def update(self, instance, validated_data):
+        # Extract our context inputs.
         authenticated_by = self.context['authenticated_by']
         authenticated_from = self.context['authenticated_from']
         authenticated_from_is_public = self.context['authenticated_from_is_public']
 
-        state = validated_data.get('state', None)
+        # Extract our inputs.
+        state = validated_data.get('state', ProductionCropInspection.STATE.DRAFT)
         if state is not None:
             instance.state = state
-
         review = validated_data.get('review', None)
+        notes = validated_data.get('notes', None)
+
+        # # For debugging purposes only.
+        # print("SLUG:", instance.slug)
+        # print("STATE:", state)
+        # print("REVIEW:", review)
+        # print("NOTES:", notes)
 
         # Extract the stage.
         stage = validated_data.get('stage', None)
@@ -54,10 +62,9 @@ class ProductionCropInspectionUpdateSerializer(serializers.ModelSerializer):
         instance.review = review
         instance.failure_reason = validated_data.get('failure_reason', None)
         instance.stage = stage
-        instance.notes = validated_data.get('notes', None)
+        instance.notes = notes
         instance.last_modified_by = authenticated_by
         instance.last_modified_from = authenticated_from
         instance.last_modified_from_is_public = authenticated_from_is_public
         instance.save()
-
         return validated_data

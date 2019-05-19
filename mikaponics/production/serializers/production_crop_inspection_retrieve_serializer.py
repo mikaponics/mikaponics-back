@@ -15,7 +15,7 @@ from production.serializers.crop_life_cycle_stage_list_serializer import CropLif
 
 class ProductionCropInspectionRetrieveSerializer(serializers.ModelSerializer):
     pretty_state = serializers.ReadOnlyField(source="get_pretty_state")
-    pretty_review = serializers.ReadOnlyField(source="get_pretty_review")
+    pretty_review = serializers.ReadOnlyField(source="get_pretty_review", allow_null=False,)
     stage = CropLifeCycleStageListSerializer(many=False)
     production_crop_name = serializers.CharField(required=True, allow_blank=False, source="production_crop.get_pretty_name")
     production_crop_quantity = serializers.IntegerField(required=True, source="production_crop.quantity")

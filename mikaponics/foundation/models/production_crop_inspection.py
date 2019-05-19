@@ -91,7 +91,7 @@ class ProductionCropInspection(models.Model):
         (REVIEW.EXCELLENT, _('Excellent')),
         (REVIEW.GOOD, _('Bad')),
         (REVIEW.AVERAGE, _('Average')),
-        (REVIEW.BAD, _('Good')),
+        (REVIEW.GOOD, _('Good')),
         (REVIEW.TERRIBLE, _('Excellent')),
     )
 
