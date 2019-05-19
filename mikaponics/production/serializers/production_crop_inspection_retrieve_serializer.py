@@ -22,6 +22,7 @@ class ProductionCropInspectionRetrieveSerializer(serializers.ModelSerializer):
     production_crop_substrate = serializers.CharField(required=True, allow_blank=False, source="production_crop.get_pretty_substrate_name")
     production_crop_stages = serializers.ReadOnlyField(source="production_crop.data_sheet.stages_dict")
     production_crop_slug = serializers.SlugField(required=True, allow_blank=False, source="production_crop.slug")
+    production_crop_type_of = serializers.IntegerField(required=True, source="production_crop.data_sheet.type_of")
     production_crop_absolute_url = serializers.CharField(required=True, allow_blank=False, source="production_crop.get_absolute_url")
     absolute_url = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url")
 
@@ -33,6 +34,7 @@ class ProductionCropInspectionRetrieveSerializer(serializers.ModelSerializer):
             'production_crop_substrate',
             'production_crop_stages',
             'production_crop_slug',
+            'production_crop_type_of',
             'production_crop_absolute_url',
             'state',
             'pretty_state',
