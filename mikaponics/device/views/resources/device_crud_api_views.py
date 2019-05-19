@@ -22,7 +22,7 @@ class DeviceListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = DeviceListCreateSerializer
     # pagination_class = StandardResultsSetPagination
     permission_classes = (
-        # permissions.IsAuthenticated,
+        permissions.IsAuthenticated,
         # IsAuthenticatedAndIsActivePermission,
         # CanListCreateDevicePermission
     )
@@ -33,7 +33,7 @@ class DeviceListCreateAPIView(generics.ListCreateAPIView):
         """
         List
         """
-        queryset = Device.objects.all().order_by('-slug')
+        queryset = Device.objects.filter(user=self.request.user).order_by('-slug')
         return queryset
 
     @transaction.atomic

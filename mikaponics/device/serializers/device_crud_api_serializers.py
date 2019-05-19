@@ -83,7 +83,6 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
         required=True,
         allow_blank=False,
     )
-    data_interval_in_minutes = serializers.SerializerMethodField()
     state = serializers.SerializerMethodField()
     slug = serializers.ReadOnlyField()
     absolute_url = serializers.ReadOnlyField(source='get_absolute_url')

@@ -78,7 +78,7 @@ class InstrumentSimulator(models.Model):
     is_running = models.BooleanField(
         _("Is Running"),
         help_text=_('Controls whether the simulator is running or not.'),
-        default=False,
+        default=True,
         blank=True,
     )
 
