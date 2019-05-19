@@ -9,12 +9,12 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 
-from foundation.models import ProductionCropInspection
+from foundation.models import ProductionCropInspection, CropLifeCycleStage
 
 
 class ProductionCropInspectionUpdateSerializer(serializers.ModelSerializer):
     review = serializers.IntegerField(required=True)
-    stage = serializers.IntegerField(required=True)
+    stage = serializers.SlugField(required=True)
 
     class Meta:
         model = ProductionCropInspection
@@ -31,6 +31,11 @@ class ProductionCropInspectionUpdateSerializer(serializers.ModelSerializer):
                 raise exceptions.ValidationError(_('Please fill in this field.'))
         return value;
 
+    def validate_stage(self, value):
+        if CropLifeCycleStage.objects.filter(slug=value).exists() is False:
+            raise exceptions.ValidationError(_('Stage does not exist for the stage.'))
+        return value
+
     def update(self, instance, validated_data):
         authenticated_by = self.context['authenticated_by']
         authenticated_from = self.context['authenticated_from']
@@ -41,11 +46,14 @@ class ProductionCropInspectionUpdateSerializer(serializers.ModelSerializer):
             instance.state = state
 
         review = validated_data.get('review', None)
+
+        # Extract the stage.
         stage = validated_data.get('stage', None)
+        stage = CropLifeCycleStage.objects.get(slug=stage)
 
         instance.review = review
         instance.failure_reason = validated_data.get('failure_reason', None)
-        instance.stage = validated_data.get('stage', None)
+        instance.stage = stage
         instance.notes = validated_data.get('notes', None)
         instance.last_modified_by = authenticated_by
         instance.last_modified_from = authenticated_from
