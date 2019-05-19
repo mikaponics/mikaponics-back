@@ -17,7 +17,7 @@ from rest_framework import authentication, viewsets, permissions, status,  parse
 from rest_framework.response import Response
 
 from production.serializers.production_inspection_retrieve_serializer import ProductionInspectionRetrieveSerializer
-from foundation.models import Production, ProductionInspection, ProductionCropInspection
+from foundation.models import Production, ProductionInspection, ProductionCropInspection, CropLifeCycleStage
 
 
 class ProductionInspectionRetrieveOrCreateDefaultDraftAPIView(generics.RetrieveAPIView):
@@ -77,6 +77,7 @@ class ProductionInspectionRetrieveOrCreateDefaultDraftAPIView(generics.RetrieveA
                     production_inspection=default_draft_inspection,
                     production_crop=production_crop,
                     state=ProductionCropInspection.STATE.DRAFT,
+                    stage=production_crop.stage,
                     created_by=request.user,
                     created_from=client_ip,
                     created_from_is_public=is_routable,

@@ -120,5 +120,5 @@ This project uses the ``PostGres`` database and as a result requires setup befor
 4. If you would like to have some random test data to a specific user, feel free to run:
 
     ```
-    python manage.py seed_user "bart@mikasoftware.com" 1 5000
+    python manage.py seed_user "bart@mikasoftware.com" 1 2500
     ```

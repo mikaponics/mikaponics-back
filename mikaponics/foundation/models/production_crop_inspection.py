@@ -155,7 +155,7 @@ class ProductionCropInspection(models.Model):
     )
     production_crop = models.ForeignKey(
         "ProductionCrop",
-        verbose_name=_('Production CropDataSheet'),
+        verbose_name=_('Production Crop'),
         help_text=_("The plants or fish that we are evaluating for this quality assurance inspection."),
         blank=False,
         null=False,
@@ -175,11 +175,14 @@ class ProductionCropInspection(models.Model):
         blank=True,
         null=True,
     )
-    stage = models.PositiveSmallIntegerField(
-        _("Life Cycle Stage"),
-        help_text=_('The observed stage in the life cycle by the user.'),
-        blank=True,
-        null=True,
+    stage = models.ForeignKey(
+        "CropLifeCycleStage",
+        verbose_name=_('Stage'),
+        help_text=_('The observed stage in the crop life cycle.'),
+        blank=False,
+        null=False,
+        related_name="crop_inspections",
+        on_delete=models.CASCADE
     )
     notes = models.TextField(
         _("Notes"),

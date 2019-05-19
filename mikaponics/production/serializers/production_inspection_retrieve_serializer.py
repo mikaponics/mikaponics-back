@@ -39,8 +39,8 @@ class ProductionInspectionRetrieveSerializer(serializers.ModelSerializer):
 
     def get_crops(self, obj):
         try:
-            crops = obj.crop_inspections.order_by('id')
-            s = ProductionCropInspectionRetrieveSerializer(crops, many=True)
+            crop_inspections = obj.crop_inspections.order_by('id')
+            s = ProductionCropInspectionRetrieveSerializer(crop_inspections, many=True)
             return s.data;
         except Exception as e:
             print("ProductionInspectionRetrieveSerializer | get_crops |", e)
