@@ -79,6 +79,7 @@ This project uses the ``PostGres`` database and as a result requires setup befor
 1. Run the following. **Please change the password to your own.**
 
   ```
+  redis-cli FLUSHDB;
   python manage.py makemigrations
   python manage.py migrate
   python manage.py init_mikaponics
