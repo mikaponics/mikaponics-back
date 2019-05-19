@@ -14,7 +14,7 @@ from foundation.models import ProductionCropInspection, CropLifeCycleStage
 
 class ProductionCropInspectionUpdateSerializer(serializers.ModelSerializer):
     review = serializers.IntegerField(required=True)
-    stage = serializers.SlugField(required=True)
+    stage = serializers.CharField(required=True, allow_blank=True, allow_null=True,)
 
     class Meta:
         model = ProductionCropInspection
