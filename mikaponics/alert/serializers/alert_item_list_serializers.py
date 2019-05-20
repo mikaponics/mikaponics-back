@@ -53,6 +53,7 @@ class AlertItemListSerializer(serializers.ModelSerializer):
             'value',
             'created_at',
             'icon',
+            'slug',
             'absolute_url',
         )
 
