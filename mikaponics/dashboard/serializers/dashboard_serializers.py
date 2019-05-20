@@ -14,7 +14,7 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
-from foundation.models import Device, Invoice, Product, TaskItem
+from foundation.models import Device, Invoice, Product, TaskItem, AlertItem
 from dashboard.serializers import (
     DashboardDeviceListSerializer,
     DashboardProductionListSerializer
@@ -28,6 +28,7 @@ class DashboardSerializer(serializers.Serializer):
     timestamp = serializers.SerializerMethodField()
     devices = serializers.SerializerMethodField()
     productions = DashboardProductionListSerializer(many=True)
+    active_alert_items_count = serializers.SerializerMethodField()
     active_task_items_count = serializers.SerializerMethodField()
     # active_alerts_count = serializers.SerializerMethodField()
 
@@ -54,6 +55,14 @@ class DashboardSerializer(serializers.Serializer):
             print("DashboardSerializer | get_devices:", e)
             return None
 
+    def get_active_alert_items_count(self, obj):
+        try:
+            user = self.context['authenticated_by']
+            return AlertItem.objects.filter(user=user, state=AlertItem.ALERT_ITEM_STATE.UNREAD).count()
+        except Exception as e:
+            print("DashboardSerializer | get_active_alert_items_count:", e)
+            return None
+
     def get_active_task_items_count(self, obj):
         try:
             user = self.context['authenticated_by']
@@ -61,11 +70,3 @@ class DashboardSerializer(serializers.Serializer):
         except Exception as e:
             print("DashboardSerializer | get_active_task_items_count:", e)
             return None
-
-    # def get_active_alerts_count(self, obj):
-    #     try:
-    #         user = self.context['authenticated_by']
-    #         return TaskItem.objects.filter(user=user, is_closed=False).count()
-    #     except Exception as e:
-    #         print("DashboardSerializer | get_active_task_items_count:", e)
-    #         return None

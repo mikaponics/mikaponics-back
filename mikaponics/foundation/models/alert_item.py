@@ -58,11 +58,13 @@ class AlertItem(models.Model):
     )
 
     class ALERT_ITEM_STATE:
-        ACTIVE = 1
-        ARCHIVED = 2
+        UNREAD = 1
+        READ = 2
+        ARCHIVED = 3
 
     ALERT_ITEM_STATE_CHOICES = (
-        (ALERT_ITEM_STATE.ACTIVE, _('Active')),
+        (ALERT_ITEM_STATE.UNREAD, _('Unread')),
+        (ALERT_ITEM_STATE.READ, _('Read')),
         (ALERT_ITEM_STATE.ARCHIVED, _('Archived')),
     )
 
@@ -171,6 +173,7 @@ class AlertItem(models.Model):
         help_text=_('The state of alert.'),
         blank=False,
         null=False,
+        default=ALERT_ITEM_STATE.UNREAD,
         choices=ALERT_ITEM_STATE_CHOICES,
     )
     condition = models.PositiveSmallIntegerField(
@@ -225,7 +228,7 @@ class AlertItem(models.Model):
         return str(result)
 
     def get_pretty_state(self):
-        result = dict(self.ALERT_TYPE_OF_CHOICES).get(self.state)
+        result = dict(self.ALERT_ITEM_STATE_CHOICES).get(self.state)
         return str(result)
 
     def get_pretty_condition(self):

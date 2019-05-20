@@ -17,4 +17,8 @@ urlpatterns = (
         AlertItemRetrieveAPIView.as_view(),
         name='mikaponics_alert_item_detail_api_endpoint'
     ),
+    path('api/alert-was-viewed/<str:slug>',
+        AlertItemWasViewedFuncAPIView.as_view(),
+        name='mikaponics_alert_item_was_viewed_func_api_endpoint'
+    ),
 )

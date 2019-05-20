@@ -1,4 +1,2 @@
-from alert.serializers.alert_item_crud_serializers import (
-    AlertItemListSerializer,
-    AlertItemRetrieveSerializer
-)
+from alert.serializers.alert_item_list_serializers import AlertItemListSerializer
+from alert.serializers.alert_item_retrieve_serializers import AlertItemRetrieveSerializer

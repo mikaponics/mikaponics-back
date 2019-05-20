@@ -16,27 +16,7 @@ from alert.filters.alert_item_filter import AlertItemFilter
 from foundation.models import AlertItem
 
 
-class AlertItemsListAPIView(generics.ListAPIView):
-    serializer_class = AlertItemListSerializer
-    # pagination_class = StandardResultsSetPagination
-    permission_classes = (
-        permissions.IsAuthenticated,
-        # IsAuthenticatedAndIsActivePermission,
-        # CanListCreateInstrumentPermission
-    )
-    # TODO: https://django-oauth-toolkit.readthedocs.io/en/latest/rest-framework/permissions.html#tokenmatchesoasrequirements
-    filterset_class = AlertItemFilter
-
-    @transaction.atomic
-    def get_queryset(self):
-        queryset = AlertItem.objects.filter(user=self.request.user).order_by('-created_at')
-
-        # Take the queryset and apply the joins to increase performance.
-        s = self.get_serializer_class()
-        return s.setup_eager_loading(self, queryset)
-
-
-class AlertItemRetrieveAPIView(generics.RetrieveAPIView):
+class AlertItemWasViewedFuncAPIView(generics.RetrieveAPIView):
     # filter_class = InstrumentFilter
     serializer_class = AlertItemRetrieveSerializer
     # pagination_class = StandardResultsSetPagination
@@ -48,12 +28,14 @@ class AlertItemRetrieveAPIView(generics.RetrieveAPIView):
     # TODO: https://django-oauth-toolkit.readthedocs.io/en/latest/rest-framework/permissions.html#tokenmatchesoasrequirements
 
     @transaction.atomic
-    def get(self, request, slug=None):
+    def post(self, request, slug=None):
         """
         Retrieve
         """
         obj = get_object_or_404(AlertItem, slug=slug)
         self.check_object_permissions(request, obj)  # Validate permissions.
+        obj.state = AlertItem.ALERT_ITEM_STATE.READ
+        obj.save()
         serializer = AlertItemRetrieveSerializer(obj, many=False)
         return Response(
             data=serializer.data,
