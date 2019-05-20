@@ -10,16 +10,18 @@ from foundation.models import *
 
 
 class AlertItemAdmin(admin.ModelAdmin):
-    raw_id_fields = ['user', 'device', 'instrument', 'production', 'production_crop']
-    list_filter = ['condition', 'state',]
-    list_display = ['slug', 'id', 'user', 'condition', 'state',]
+    raw_id_fields = [
+        'user', 'device', 'instrument', 'production', 'production_crop'
+    ]
+    list_filter = [
+        'type_of', 'condition', 'state',
+    ]
+    list_display = [
+        'slug', 'type_of', 'user', 'condition', 'state',
+    ]
     ordering = ['-id',]
     readonly_fields = [
-        # 'created_at', 'created_by', 'created_from',
-        # 'created_from_is_public', 'last_modified_at', 'last_modified_by',
-        # 'last_modified_from', 'last_modified_from_is_public', 'activated_at',
-        # 'last_measured_value', 'last_measured_at',
-        # 'last_measured_unit_of_measure', 'get_environment_variables_file_url',
+        'created_at', 'id', 'slug'
     ]
     formfield_overrides = {
         JSONField: {'widget': PrettyJSONWidget }

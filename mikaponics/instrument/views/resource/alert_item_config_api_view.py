@@ -9,13 +9,13 @@ from rest_framework import generics
 from rest_framework import authentication, viewsets, permissions, status,  parsers, renderers
 from rest_framework.response import Response
 
-from instrument.serializers import InstrumentAlertConfigRetrieveUpdateDestroySerializer
+from instrument.serializers import AlertItemConfigRetrieveUpdateDestroySerializer
 from foundation.models import Instrument
 
 
-class InstrumentAlertConfigRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+class AlertItemConfigRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes= (OAuth2Authentication,)
-    serializer_class = InstrumentAlertConfigRetrieveUpdateDestroySerializer
+    serializer_class = AlertItemConfigRetrieveUpdateDestroySerializer
     # pagination_class = StandardResultsSetPagination
     permission_classes = (
         permissions.IsAuthenticated,
@@ -36,7 +36,7 @@ class InstrumentAlertConfigRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateD
         """
         skill_set = get_object_or_404(Instrument, pk=pk)
         self.check_object_permissions(request, skill_set)  # Validate permissions.
-        serializer = InstrumentAlertConfigRetrieveUpdateDestroySerializer(skill_set, many=False)
+        serializer = AlertItemConfigRetrieveUpdateDestroySerializer(skill_set, many=False)
         return Response(
             data=serializer.data,
             status=status.HTTP_200_OK
@@ -49,7 +49,7 @@ class InstrumentAlertConfigRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateD
         """
         skill_set = get_object_or_404(Instrument, pk=pk)
         self.check_object_permissions(request, skill_set)  # Validate permissions.
-        serializer = InstrumentAlertConfigRetrieveUpdateDestroySerializer(skill_set, data=request.data)
+        serializer = AlertItemConfigRetrieveUpdateDestroySerializer(skill_set, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)

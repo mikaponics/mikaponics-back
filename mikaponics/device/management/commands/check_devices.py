@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from foundation import constants
-from foundation.models import InstrumentAlert, Device, TimeSeriesDatum
+from foundation.models import AlertItem, Device, TimeSeriesDatum
 
 
 class Command(BaseCommand):

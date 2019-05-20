@@ -9,12 +9,12 @@ urlpatterns = (
         name='mikaponics_download_data_api_endpoint'
     ),
     path('instrument/<int:pk>/alert-config',
-        views.InstrumentAlertConfigRetrieveUpdateDestroyAPIView.as_view(),
-        name='mikaponics_instrument_alert_config_api_endpoint'
+        views.AlertItemConfigRetrieveUpdateDestroyAPIView.as_view(),
+        name='mikaponics_alert_item_config_api_endpoint'
     ),
     path('api/instruments',
         views.InstrumentListAPIView.as_view(),
-        name='mikaponics_instrument_alert_config_api_endpoint'
+        name='mikaponics_alert_item_config_api_endpoint'
     ),
     path('api/instrument/analyses',
         views.InstrumentAnalysisListCreateAPIView.as_view(),

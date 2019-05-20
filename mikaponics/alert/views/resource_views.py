@@ -12,11 +12,11 @@ from alert.serializers import (
     AlertItemListSerializer,
     AlertItemRetrieveSerializer
 )
+from alert.filters.alert_item_filter import AlertItemFilter
 from foundation.models import AlertItem
 
 
 class AlertItemsListAPIView(generics.ListAPIView):
-    # filter_class = InstrumentFilter
     serializer_class = AlertItemListSerializer
     # pagination_class = StandardResultsSetPagination
     permission_classes = (
@@ -25,6 +25,7 @@ class AlertItemsListAPIView(generics.ListAPIView):
         # CanListCreateInstrumentPermission
     )
     # TODO: https://django-oauth-toolkit.readthedocs.io/en/latest/rest-framework/permissions.html#tokenmatchesoasrequirements
+    filterset_class = AlertItemFilter
 
     @transaction.atomic
     def get_queryset(self):

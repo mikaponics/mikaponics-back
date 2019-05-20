@@ -155,7 +155,7 @@ class TimeSeriesDatumAdmin(admin.ModelAdmin):
 admin.site.register(TimeSeriesDatum, TimeSeriesDatumAdmin)
 
 
-# class InstrumentAlertAdmin(admin.ModelAdmin):
+# class AlertItemAdmin(admin.ModelAdmin):
 #     list_display = [
 #         'id',
 #         'instrument',
@@ -176,7 +176,7 @@ admin.site.register(TimeSeriesDatum, TimeSeriesDatumAdmin)
 #     # def has_delete_permission(self, request, obj=None):
 #     #     return False
 #
-# admin.site.register(InstrumentAlert, InstrumentAlertAdmin)
+# admin.site.register(AlertItem, AlertItemAdmin)
 
 
 class InstrumentAnalysisAdmin(admin.ModelAdmin):

@@ -1,4 +1,4 @@
-from instrument.serializers.instrument_alert_config_serializers import InstrumentAlertConfigRetrieveUpdateDestroySerializer
+from instrument.serializers.alert_item_config_serializers import AlertItemConfigRetrieveUpdateDestroySerializer
 from instrument.serializers.instrument_crud_serializers import (
     InstrumentListSerializer,
     InstrumentRetrieveUpdateSerializer

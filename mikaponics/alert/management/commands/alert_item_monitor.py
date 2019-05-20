@@ -13,7 +13,7 @@ from foundation import constants
 from foundation.models import Instrument
 from foundation.model_resources import (
     instrument_find_alarming_datum_in_system,
-    create_instrument_alert_in_system_if_possible
+    create_alert_item_in_system_if_possible
 )
 
 
@@ -65,4 +65,4 @@ class Command(BaseCommand):
     def process_instrument(self, instrument, utc_today, utc_today_minus_some_minutes):
         datum, alert_state = instrument_find_alarming_datum_in_system(instrument, utc_today_minus_some_minutes, utc_today)
         if datum:
-            create_instrument_alert_in_system_if_possible(instrument, datum)
+            create_alert_item_in_system_if_possible(instrument, datum)

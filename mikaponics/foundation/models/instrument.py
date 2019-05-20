@@ -618,26 +618,26 @@ class Instrument(models.Model):
         and return the alert status of the datum in the parameter. Returns the
         status by the parameter datum.
         """
-        from foundation.models.instrument_alert import InstrumentAlert
+        from foundation.models.alert_item import AlertItem
         if datum.value:
             if self.red_above_value:
                 if datum.value >= self.red_above_value:
-                    return InstrumentAlert.INSTRUMENT_ALERT_STATE.RED_ABOVE_VALUE
+                    return AlertItem.INSTRUMENT_ALERT_STATE.RED_ABOVE_VALUE
             if self.orange_above_value:
                 if datum.value >= self.orange_above_value:
-                    return InstrumentAlert.INSTRUMENT_ALERT_STATE.ORANGE_ABOVE_VALUE
+                    return AlertItem.INSTRUMENT_ALERT_STATE.ORANGE_ABOVE_VALUE
             if self.yellow_above_value:
                 if datum.value >= self.yellow_above_value:
-                    return InstrumentAlert.INSTRUMENT_ALERT_STATE.YELLOW_ABOVE_VALUE
+                    return AlertItem.INSTRUMENT_ALERT_STATE.YELLOW_ABOVE_VALUE
             if self.red_below_value:
                 if datum.value <= self.red_below_value:
-                    return InstrumentAlert.INSTRUMENT_ALERT_STATE.RED_BELOW_VALUE
+                    return AlertItem.INSTRUMENT_ALERT_STATE.RED_BELOW_VALUE
             if self.orange_below_value:
                 if datum.value <= self.orange_below_value:
-                    return InstrumentAlert.INSTRUMENT_ALERT_STATE.ORANGE_BELOW_VALUE
+                    return AlertItem.INSTRUMENT_ALERT_STATE.ORANGE_BELOW_VALUE
             if self.yellow_below_value:
                 if datum.value <= self.yellow_below_value:
-                    return InstrumentAlert.INSTRUMENT_ALERT_STATE.YELLOW_BELOW_VALUE
+                    return AlertItem.INSTRUMENT_ALERT_STATE.YELLOW_BELOW_VALUE
         return None
 
     def find_alarming_datum(self, start_dt, end_dt, skip_datum=None):

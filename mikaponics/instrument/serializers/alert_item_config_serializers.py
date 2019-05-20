@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from foundation.models import Instrument
 
 
-class InstrumentAlertConfigRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
+class AlertItemConfigRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
 
     max_value = serializers.CharField(
         read_only=True,

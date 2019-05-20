@@ -28,9 +28,21 @@ class AlertItemListSerializer(serializers.ModelSerializer):
     icon = serializers.CharField(read_only=True, source="get_icon")
     absolute_url = serializers.CharField(read_only=True, source="get_absolute_url")
 
+    pretty_type_of = serializers.CharField(read_only=True, source="get_pretty_type_of")
+    pretty_state = serializers.CharField(read_only=True, source="get_pretty_state")
+    pretty_condition = serializers.CharField(read_only=True, source="get_pretty_condition")
+
     class Meta:
         model = AlertItem
         fields = (
+            'type_of',
+            'state',
+            'condition',
+
+            'pretty_type_of',
+            'pretty_state',
+            'pretty_condition',
+
             'device_name',
             'device_slug',
             'device_timezone',
@@ -39,9 +51,8 @@ class AlertItemListSerializer(serializers.ModelSerializer):
             'instrument_slug',
             'instrument_absolute_url',
             'instrument_unit_of_measure',
-            'datum_timestamp',
-            'datum_value',
-            'state',
+            'timestamp',
+            'value',
             'created_at',
             'icon',
             'absolute_url',

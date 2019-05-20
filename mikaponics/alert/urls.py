@@ -7,7 +7,7 @@ urlpatterns = (
     ############################################################################
     # path('email/instrument-alert/<int:pk>',
     #     AlertEmailWebBrowserView.as_view(),
-    #     name='mikaponics_instrument_alerts_email'
+    #     name='mikaponics_alert_items_email'
     # ),
     path('api/alerts',
         AlertItemsListAPIView.as_view(),

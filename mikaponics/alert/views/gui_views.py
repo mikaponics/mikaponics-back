@@ -3,15 +3,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 
 from foundation.mixins import MikaponicsListView, MikaponicsDetailView
-from foundation.models import Device, Instrument, InstrumentAlert
+from foundation.models import Device, Instrument, AlertItem
 from foundation.utils import reverse_with_full_domain
 
 
 class AlertEmailWebBrowserView(LoginRequiredMixin, MikaponicsDetailView):
     context_object_name = 'alert'
-    template_name = 'alert/email/instrument_alert_view.html'
+    template_name = 'alert/email/alert_item_view.html'
     menu_id = "alert"
-    model = InstrumentAlert
+    model = AlertItem
 
     def get_context_data(self, **kwargs):
         # Get the context of this class based view.
@@ -21,11 +21,11 @@ class AlertEmailWebBrowserView(LoginRequiredMixin, MikaponicsDetailView):
 
         # Update our context.
         context['me'] = self.request.user
-        context['ALERT_STATE'] = InstrumentAlert.INSTRUMENT_ALERT_STATE
+        context['ALERT_STATE'] = AlertItem.INSTRUMENT_ALERT_STATE
         context['url'] = settings.MIKAPONICS_FRONTEND_HTTP_PROTOCOL+settings.MIKAPONICS_FRONTEND_HTTP_DOMAIN+alert.instrument.get_absolute_url()
 
         context['web_view_url'] = reverse_with_full_domain(
-            reverse_url_id='mikaponics_instrument_alerts_email',
+            reverse_url_id='mikaponics_alert_items_email',
             resolve_url_args=[alert.id]
         )
 

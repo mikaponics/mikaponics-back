@@ -37,7 +37,7 @@ class AlertItem(models.Model):
             ),
         )
         index_together = (
-            ('user', 'created_at', 'state'),
+            ('user', 'type_of', 'state', 'created_at', ),
         )
 
     '''
@@ -213,10 +213,20 @@ class AlertItem(models.Model):
         super(AlertItem, self).save(*args, **kwargs)
 
     def __str__(self):
-        return str(self.id)
+        return str(self.slug)
 
     def get_absolute_url(self):
+        if self.type_of == self.ALERT_TYPE_OF.INSTRUMENT:
+            return "/instrument-alert/"+str(self.slug)
         return "/alert/"+str(self.slug)
+
+    def get_pretty_type_of(self):
+        result = dict(self.ALERT_TYPE_OF_CHOICES).get(self.type_of)
+        return str(result)
+
+    def get_pretty_state(self):
+        result = dict(self.ALERT_TYPE_OF_CHOICES).get(self.state)
+        return str(result)
 
     def get_pretty_condition(self):
         return dict(self.ALERT_ITEM_CONDITION_CHOICES).get(self.condition)

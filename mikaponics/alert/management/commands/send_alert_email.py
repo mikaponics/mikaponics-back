@@ -61,7 +61,7 @@ class Command(BaseCommand):
         # Generate the links.
         url = settings.MIKAPONICS_FRONTEND_HTTP_PROTOCOL+settings.MIKAPONICS_FRONTEND_HTTP_DOMAIN+instrument.get_absolute_url()
         web_view_url = reverse_with_full_domain(
-            reverse_url_id='mikaponics_instrument_alerts_email',
+            reverse_url_id='mikaponics_alert_items_email',
             resolve_url_args=[alert.id]
         )
         subject = "Mikaponics: Mikapod Notification"
@@ -81,8 +81,8 @@ class Command(BaseCommand):
         # https://templates.mailchimp.com/resources/inline-css/
 
         # Plug-in the data into our templates and render the data.
-        text_content = render_to_string('alert/email/instrument_alert_view.txt', param)
-        html_content = render_to_string('alert/email/instrument_alert_view.html', param)
+        text_content = render_to_string('alert/email/alert_item_view.txt', param)
+        html_content = render_to_string('alert/email/alert_item_view.html', param)
 
         # Generate our address.
         from_email = settings.DEFAULT_FROM_EMAIL
