@@ -44,6 +44,19 @@ class AlertItem(models.Model):
     Constants & Choices
     '''
 
+    class ALERT_TYPE_OF:
+        PRODUCTION = 1
+        PRODUCTION_CROP = 2
+        DEVICE = 3
+        INSTRUMENT = 4
+
+    ALERT_TYPE_OF_CHOICES = (
+        (ALERT_TYPE_OF.PRODUCTION, _('Production')),
+        (ALERT_TYPE_OF.PRODUCTION_CROP, _('Production Crop')),
+        (ALERT_TYPE_OF.DEVICE, _('Device')),
+        (ALERT_TYPE_OF.INSTRUMENT, _('Instrument')),
+    )
+
     class ALERT_ITEM_STATE:
         ACTIVE = 1
         ARCHIVED = 2
@@ -101,6 +114,13 @@ class AlertItem(models.Model):
         null=False,
         related_name="alerts",
         on_delete=models.CASCADE
+    )
+    type_of = models.PositiveSmallIntegerField(
+        _("Type of"),
+        help_text=_('The type of alert.'),
+        blank=False,
+        null=False,
+        choices=ALERT_TYPE_OF_CHOICES,
     )
     device = models.ForeignKey(
         "Device",
