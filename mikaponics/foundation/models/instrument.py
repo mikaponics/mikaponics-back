@@ -91,12 +91,14 @@ class Instrument(models.Model):
         CONNECTED = 2
         DISCONNECTED = 3
         ERROR = 4
+        ARCHIVED = 5 # A.k.a. "Deleted".
 
     INSTRUMENT_STATE_CHOICES = (
         (INSTRUMENT_STATE.NEW, _('New')),
         (INSTRUMENT_STATE.CONNECTED, _('Connected')),
         (INSTRUMENT_STATE.DISCONNECTED, _('Disconnected')),
         (INSTRUMENT_STATE.ERROR, _('Error')),
+        (INSTRUMENT_STATE.ARCHIVED, _('Archived')),
     )
 
     class INSTRUMENT_ALERT_FREQUENCY_IN_SECONDS:

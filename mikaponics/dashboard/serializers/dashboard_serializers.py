@@ -14,7 +14,7 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
-from foundation.models import Device, Invoice, Product
+from foundation.models import Device, Invoice, Product, TaskItem
 from dashboard.serializers import (
     DashboardDeviceListSerializer,
     DashboardProductionListSerializer
@@ -27,8 +27,9 @@ logger = logging.getLogger(__name__)
 class DashboardSerializer(serializers.Serializer):
     timestamp = serializers.SerializerMethodField()
     devices = serializers.SerializerMethodField()
-    # devices =
     productions = DashboardProductionListSerializer(many=True)
+    active_task_items_count = serializers.SerializerMethodField()
+    # active_alerts_count = serializers.SerializerMethodField()
 
     # Meta Information.
     class Meta:
@@ -42,8 +43,29 @@ class DashboardSerializer(serializers.Serializer):
 
     def get_devices(self, obj):
         try:
-            active_devices = obj.devices.filter(state=Device.DEVICE_STATE.ONLINE).order_by('-last_measured_at')
+            user = self.context['authenticated_by']
+            active_devices = obj.devices.filter(
+                Q(user=user)&
+                ~Q(state=Device.DEVICE_STATE.ARCHIVED)
+            ).order_by('-last_measured_at')
             s = DashboardDeviceListSerializer(active_devices, many=True)
             return s.data
         except Exception as e:
+            print("DashboardSerializer | get_devices:", e)
             return None
+
+    def get_active_task_items_count(self, obj):
+        try:
+            user = self.context['authenticated_by']
+            return TaskItem.objects.filter(user=user, is_closed=False).count()
+        except Exception as e:
+            print("DashboardSerializer | get_active_task_items_count:", e)
+            return None
+
+    # def get_active_alerts_count(self, obj):
+    #     try:
+    #         user = self.context['authenticated_by']
+    #         return TaskItem.objects.filter(user=user, is_closed=False).count()
+    #     except Exception as e:
+    #         print("DashboardSerializer | get_active_task_items_count:", e)
+    #         return None

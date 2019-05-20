@@ -17,7 +17,7 @@ from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
 from foundation.models import Device, Instrument, TimeSeriesDatum
-from foundation.model_resources import create_instrument_alert_in_system_if_possible
+# from foundation.model_resources import create_instrument_alert_in_system_if_possible
 
 logger = logging.getLogger(__name__)
 
@@ -148,10 +148,10 @@ class TimeSeriesDatumCreateSerializer(serializers.Serializer):
         instrument.last_modified_from_is_public = authenticated_user_from_is_public
         instrument.save()
 
-        '''
-        Create an alarm if possible.
-        '''
-        create_instrument_alert_in_system_if_possible(instrument, time_series_datum)
+        # '''
+        # Create an alarm if possible.
+        # '''
+        # create_instrument_alert_in_system_if_possible(instrument, time_series_datum)
 
         '''
         Add our debugging information fields and return our validated data.

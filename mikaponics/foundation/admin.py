@@ -143,7 +143,7 @@ class TimeSeriesDatumAdmin(admin.ModelAdmin):
     raw_id_fields = ['instrument',]
     readonly_fields = [
         # 'instrument', 'value', 'timestamp'
-        'next', 'previous',
+        'next', 'previous', 'created_from', 'created_from_is_public',
     ]
 
     # def has_add_permission(self, request, obj=None):
@@ -155,28 +155,28 @@ class TimeSeriesDatumAdmin(admin.ModelAdmin):
 admin.site.register(TimeSeriesDatum, TimeSeriesDatumAdmin)
 
 
-class InstrumentAlertAdmin(admin.ModelAdmin):
-    list_display = [
-        'id',
-        'instrument',
-        'datum_timestamp',
-        'datum_value',
-        'state',
-        'created_at',
-
-    ]
-    list_filter = ['state',]
-    ordering = ['-id',]
-    raw_id_fields = ['instrument',]
-    readonly_fields = ['id','created_at','slug',]
-
-    # def has_add_permission(self, request, obj=None):
-    #     return False
-    #
-    # def has_delete_permission(self, request, obj=None):
-    #     return False
-
-admin.site.register(InstrumentAlert, InstrumentAlertAdmin)
+# class InstrumentAlertAdmin(admin.ModelAdmin):
+#     list_display = [
+#         'id',
+#         'instrument',
+#         'datum_timestamp',
+#         'datum_value',
+#         'state',
+#         'created_at',
+#
+#     ]
+#     list_filter = ['state',]
+#     ordering = ['-id',]
+#     raw_id_fields = ['instrument',]
+#     readonly_fields = ['id','created_at','slug',]
+#
+#     # def has_add_permission(self, request, obj=None):
+#     #     return False
+#     #
+#     # def has_delete_permission(self, request, obj=None):
+#     #     return False
+#
+# admin.site.register(InstrumentAlert, InstrumentAlertAdmin)
 
 
 class InstrumentAnalysisAdmin(admin.ModelAdmin):
@@ -215,3 +215,33 @@ class InstrumentSimulatorAdmin(admin.ModelAdmin):
     #     return False
 
 admin.site.register(InstrumentSimulator, InstrumentSimulatorAdmin)
+
+
+class TaskItemAdmin(admin.ModelAdmin):
+    list_display = ['slug', 'id', 'type_of', 'last_modified_at']
+    list_filter = ['type_of',]
+    # search_fields = ['device_id',]
+    raw_id_fields = ['user',]
+    ordering = ['-created_at',]
+    readonly_fields = [
+        'id', 'created_by', 'created_by', 'created_from', 'created_from_is_public',
+        'last_modified_by', 'last_modified_at', 'last_modified_from', 'last_modified_from_is_public'
+    ]
+    formfield_overrides = {
+        JSONField: {'widget': PrettyJSONWidget }
+    }
+
+    def save_model(self, request, obj, form, change):
+        """
+        Override the `save` function in `Django Admin` to include audit details.
+        """
+        client_ip, is_routable = get_client_ip(request)
+        obj.created_by = request.user
+        obj.created_from = client_ip
+        obj.created_from_is_public = is_routable
+        obj.last_modified_by = request.user
+        obj.last_modified_from = client_ip
+        obj.last_modified_from_is_public = is_routable
+        super().save_model(request, obj, form, change)
+
+admin.site.register(TaskItem, TaskItemAdmin)

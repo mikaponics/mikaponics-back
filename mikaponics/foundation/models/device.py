@@ -89,12 +89,14 @@ class Device(models.Model):
         ONLINE = 2
         OFFLINE = 3
         ERROR = 4
+        ARCHIVED = 5 # A.k.a. "Deleted".
 
     DEVICE_STATE_CHOICES = (
         (DEVICE_STATE.NEW, _('New')),
         (DEVICE_STATE.ONLINE, _('Online')),
         (DEVICE_STATE.OFFLINE, _('Offline')),
         (DEVICE_STATE.ERROR, _('Error')),
+        (DEVICE_STATE.ARCHIVED, _('Archived')),
     )
 
     '''
