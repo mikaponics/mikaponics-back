@@ -47,6 +47,8 @@ class ProductionCropRetrieveSerializer(serializers.ModelSerializer):
             'type_of',
             'evaluation_score',
             'evaluation_error',
+            'evaluation_passes',
+            'evaluation_failures',
             'evaluated_at',
             'absolute_url',
         )

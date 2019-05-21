@@ -279,12 +279,19 @@ class ProductionCrop(models.Model):
         null=True,
         max_length=255,
     )
-    evaluation_dict = JSONField(
-        _("Evaluation Dictionary"),
-        help_text=_('The evaluation details for this particular score in the present date and time.'),
+    evaluation_passes = JSONField(
+        _("Evaluation Pass(es)"),
+        help_text=_('The dictionary of instrument slugs which passed the evaluation.'),
         blank=True,
         null=True,
-        max_length=511,
+        max_length=127,
+    )
+    evaluation_failures = JSONField(
+        _("Evaluation Failure(s)"),
+        help_text=_('The dictionary of instrument slugs and the condition failed for the instrument in the computed evaluation.'),
+        blank=True,
+        null=True,
+        max_length=255,
     )
     evaluated_at = models.DateTimeField(
         _("Evaluated At"),

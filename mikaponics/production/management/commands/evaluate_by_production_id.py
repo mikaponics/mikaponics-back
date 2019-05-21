@@ -69,7 +69,8 @@ class Command(BaseCommand):
                 # Always reset our crop evaluation before beginning...
                 production_crop.evaluation_score = None
                 production_crop.evaluation_error = None
-                production_crop.evaluation_dict = {}
+                production_crop.evaluation_passes = []
+                production_crop.evaluation_failures = []
                 production_crop.save()
 
                 # Begin our evaluation!
@@ -260,26 +261,40 @@ class Command(BaseCommand):
         # STEP 3:
         # EVALUATE THE CONDITION WITH OUR LATEST DATA AND LOG WHERE OUR
         # CONDITION FAILS SO WE WILL KNOW WHAT HAPPENED TO OUR SCORE.
+        has_failure = False
         is_over = datum.value > condition.max_value
         if is_over:
-            production_crop.evaluation_dict[condition.get_pretty_instrument_type_of()] = {
-                'failure_reason': 'is_over',
-                'condition_id': condition.id,
-                'condition_type_of': condition.get_pretty_instrument_type_of(),
+            production_crop.evaluation_failures.append({
+                'instrument_slug': instrument.slug,
+                'failure_reason': 'is_over_max_value',
+                # 'condition_id': condition.id,
+                # 'condition_type_of': condition.get_pretty_instrument_type_of(),
                 'actual_value': datum.value,
                 'max_value': condition.max_value,
-            }
+            })
             production_crop.save()
+            has_failure = True
 
         is_under = datum.value < condition.min_value
         if is_under:
-            production_crop.evaluation_dict[condition.get_pretty_instrument_type_of()] = {
-                'failure_reason': 'is_under',
-                'condition_id': condition.id,
-                'condition_type_of': condition.get_pretty_instrument_type_of(),
+            production_crop.evaluation_failures.append({
+                'instrument_slug': instrument.slug,
+                'failure_reason': 'is_under_min_value',
+                # 'condition_id': condition.id,
+                # 'condition_type_of': condition.get_pretty_instrument_type_of(),
                 'actual_value': datum.value,
                 'min_value': condition.min_value,
-            }
+            })
+            production_crop.save()
+            has_failure = True
+
+        if not has_failure:
+            production_crop.evaluation_passes.append({
+                'instrument_slug': instrument.slug,
+                # 'condition_id': condition.id,
+                # 'condition_type_of': condition.get_pretty_instrument_type_of(),
+                'actual_value': datum.value,
+            })
             production_crop.save()
 
         # Return our final evaluation and no error status.
