@@ -447,5 +447,8 @@ class Production(models.Model):
         result = dict(self.GROW_SYSTEM_CHOICES).get(self.grow_system)
         return str(result)
 
+    def get_pretty_last_modified_at(self):
+        return str(self.last_modified_at)
+
     def get_absolute_url(self):
         return "/production/"+self.slug

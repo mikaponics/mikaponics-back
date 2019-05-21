@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 class DashboardProductionListSerializer(serializers.ModelSerializer):
     crops = serializers.SerializerMethodField()
     absolute_url = serializers.ReadOnlyField(source='get_absolute_url')
+    last_modified_pretty_at = serializers.ReadOnlyField(source='get_pretty_last_modified_at')
 
     class Meta:
         model = Production
@@ -34,6 +35,7 @@ class DashboardProductionListSerializer(serializers.ModelSerializer):
             'evaluation_score',
             'evaluation_has_error',
             'evaluated_at',
+            'last_modified_pretty_at',
             'absolute_url',
         )
 
