@@ -209,14 +209,16 @@ class Command(BaseCommand):
         is_over = datum.value > condition.max_value
         if is_over:
             production_crop.evaluation_dict[condition.get_pretty_instrument_type_of()] = {
-                'failure_reason': 'is_over'
+                'failure_reason': 'is_over',
+                'condition_id': condition.id
             }
             production_crop.save()
 
         is_under = datum.value < condition.min_value
         if is_under:
             production_crop.evaluation_dict[condition.get_pretty_instrument_type_of()] = {
-                'failure_reason': 'is_under'
+                'failure_reason': 'is_under',
+                'condition_id': condition.id
             }
             production_crop.save()
 
