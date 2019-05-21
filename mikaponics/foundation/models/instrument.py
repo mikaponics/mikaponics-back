@@ -53,24 +53,26 @@ class Instrument(models.Model):
     '''
     class INSTRUMENT_TYPE:
         HUMIDITY = 1
-        TEMPERATURE = 2
-        TVOC = 3
-        CO2 = 4
-        AIR_PRESSURE = 5
-        ALTITUDE = 6
-        WATER_LEVEL = 7
-        POWER_USAGE = 8
-        PH = 9
-        EC = 10
-        ORP = 11
-        CAMERA = 12
-        HEAT_VISION = 13
-        UV_LIGHT = 14
-        TRIAD_SPECTROSCOPY = 15
+        AIR_TEMPERATURE = 2
+        WATER_TEMPERATURE = 3
+        TVOC = 4
+        CO2 = 5
+        AIR_PRESSURE = 6
+        ALTITUDE = 7
+        WATER_LEVEL = 8
+        POWER_USAGE = 9
+        PH = 10
+        EC = 11
+        ORP = 12
+        CAMERA = 13
+        HEAT_VISION = 14
+        UV_LIGHT = 15
+        TRIAD_SPECTROSCOPY = 16
 
     INSTRUMENT_TYPE_OF_CHOICES = (
         (INSTRUMENT_TYPE.HUMIDITY, _('Humidity')),
-        (INSTRUMENT_TYPE.TEMPERATURE, _('Temperature')),
+        (INSTRUMENT_TYPE.AIR_TEMPERATURE, _('Air Temperature')),
+        (INSTRUMENT_TYPE.WATER_TEMPERATURE, _('Water Temperature')),
         (INSTRUMENT_TYPE.TVOC, _('Total Volatile Organic Compound')),
         (INSTRUMENT_TYPE.CO2, _('Carbon Dioxide')),
         (INSTRUMENT_TYPE.AIR_PRESSURE, _('Air Pressure')),
@@ -521,7 +523,7 @@ class Instrument(models.Model):
     def get_unit_of_measure(self):
         if self.type_of == Instrument.INSTRUMENT_TYPE.HUMIDITY:
             return "%"
-        elif self.type_of == Instrument.INSTRUMENT_TYPE.TEMPERATURE:
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.AIR_TEMPERATURE or self.type_of == Instrument.INSTRUMENT_TYPE.WATER_TEMPERATURE:
             return "℃"
         elif self.type_of == Instrument.INSTRUMENT_TYPE.TVOC:
             return "PPB"
@@ -557,7 +559,7 @@ class Instrument(models.Model):
         """
         if self.type_of == Instrument.INSTRUMENT_TYPE.HUMIDITY:
             return "tint"
-        elif self.type_of == Instrument.INSTRUMENT_TYPE.TEMPERATURE:
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.AIR_TEMPERATURE or self.type_of == Instrument.INSTRUMENT_TYPE.WATER_TEMPERATURE:
             return "thermometer-three-quarters"
 
         elif self.type_of == Instrument.INSTRUMENT_TYPE.TVOC:

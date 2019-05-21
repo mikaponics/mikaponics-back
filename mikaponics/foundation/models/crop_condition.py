@@ -119,3 +119,48 @@ class CropCondition(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+    def get_pretty_instrument_type_of(self):
+        result = dict(self.INSTRUMENT_TYPE_OF_CHOICES).get(self.type_of)
+        return str(result)
+
+    def get_transcoded_instrument_type_of(self):
+        """
+        Function will transcode the `type_id` of this class to the `type_id` of
+        the `Instrument` class by transcoding the values.
+        """
+        from foundation.models.instrument import Instrument
+
+        if self.type_of == CropCondition.INSTRUMENT_TYPE.HUMIDITY:
+            return Instrument.INSTRUMENT_TYPE.HUMIDITY
+
+        elif self.type_of == CropCondition.INSTRUMENT_TYPE.DAY_AIR_TEMPERATURE:
+            return Instrument.INSTRUMENT_TYPE.AIR_TEMPERATURE
+
+        elif self.type_of == CropCondition.INSTRUMENT_TYPE.NIGHT_AIR_TEMPERATURE:
+            return Instrument.INSTRUMENT_TYPE.AIR_TEMPERATURE
+
+        elif self.type_of == CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE:
+            return Instrument.INSTRUMENT_TYPE.WATER_TEMPERATURE
+
+        elif self.type_of == CropCondition.INSTRUMENT_TYPE.TVOC:
+            return Instrument.INSTRUMENT_TYPE.TVOC
+
+        elif self.type_of == CropCondition.INSTRUMENT_TYPE.CO2:
+            return Instrument.INSTRUMENT_TYPE.CO2
+
+        elif self.type_of == CropCondition.INSTRUMENT_TYPE.AIR_PRESSURE:
+            return Instrument.INSTRUMENT_TYPE.AIR_PRESSURE
+
+        elif self.type_of == CropCondition.INSTRUMENT_TYPE.ALTITUDE:
+            return Instrument.INSTRUMENT_TYPE.ALTITUDE
+
+        elif self.type_of == CropCondition.INSTRUMENT_TYPE.PH:
+            return Instrument.INSTRUMENT_TYPE.PH
+
+        elif self.type_of == CropCondition.INSTRUMENT_TYPE.EC:
+            return Instrument.INSTRUMENT_TYPE.EC
+
+        elif self.type_of == CropCondition.INSTRUMENT_TYPE.ORP:
+            return Instrument.INSTRUMENT_TYPE.ORP
+        return None
