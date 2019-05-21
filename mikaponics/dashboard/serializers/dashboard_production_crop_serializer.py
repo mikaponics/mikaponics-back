@@ -30,5 +30,8 @@ class DashboardProductionCropListSerializer(serializers.ModelSerializer):
         fields = (
             'pretty_name',
             'pretty_score',
+            'evaluation_score',
+            'evaluation_error',
+            'evaluated_at',
             'absolute_url',
         )

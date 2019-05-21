@@ -45,5 +45,8 @@ class ProductionCropRetrieveSerializer(serializers.ModelSerializer):
             'last_modified_at',
             'slug',
             'type_of',
+            'evaluation_score',
+            'evaluation_error',
+            'evaluated_at',
             'absolute_url',
         )

@@ -50,6 +50,9 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
             'fish',
             'crops',
             'device',
+            'evaluation_score',
+            'evaluation_has_error',
+            'evaluated_at',
             'absolute_url',
         )
 
