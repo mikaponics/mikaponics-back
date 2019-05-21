@@ -22,6 +22,7 @@ class DeviceListCreateSerializer(serializers.ModelSerializer):
     )
     type_of = serializers.IntegerField(required=False, allow_null=True)
     state = serializers.IntegerField(required=False, allow_null=True)
+    pretty_state = serializers.ReadOnlyField(source='get_pretty_state')
     created_at = serializers.DateTimeField(read_only=True)
     last_modified_at = serializers.DateTimeField(read_only=True)
     absolute_url = serializers.ReadOnlyField(source='get_absolute_url')
@@ -36,6 +37,7 @@ class DeviceListCreateSerializer(serializers.ModelSerializer):
             'user',
             'type_of',
             'state',
+            'pretty_state',
             'created_at',
             'last_modified_at',
             'absolute_url'
@@ -46,7 +48,8 @@ class DeviceInstrumentSerializer(serializers.ModelSerializer):
     absolute_url = serializers.ReadOnlyField(source='get_absolute_url')
     absolute_parent_url = serializers.ReadOnlyField(source='get_absolute_parent_url')
     unit_of_measure = serializers.ReadOnlyField(source='get_unit_of_measure')
-    state = serializers.ReadOnlyField(source='get_pretty_state')
+    state = serializers.IntegerField()
+    pretty_state = serializers.ReadOnlyField(source='get_pretty_state')
     last_measured_pretty_value = serializers.ReadOnlyField(source='get_pretty_last_measured_value')
     last_measured_pretty_at = serializers.ReadOnlyField(source='get_pretty_last_measured_at')
     slug = serializers.SlugField(required=False, allow_blank=True, allow_null=True)
@@ -65,6 +68,7 @@ class DeviceInstrumentSerializer(serializers.ModelSerializer):
             'last_measured_pretty_value',
             'last_measured_pretty_at',
             'state',
+            'pretty_state',
             'slug',
             'timezone',
             'name',
@@ -89,6 +93,8 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
     last_measured_pretty_value = serializers.ReadOnlyField(source='get_pretty_last_measured_value')
     last_measured_pretty_at = serializers.ReadOnlyField(source='get_pretty_last_measured_at')
     instruments = serializers.SerializerMethodField()
+    state = serializers.IntegerField()
+    pretty_state = serializers.ReadOnlyField(source='get_pretty_state')
 
     class Meta:
         model = Device
@@ -99,6 +105,7 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
             'name',
             'description',
             'state',
+            'pretty_state',
             'slug',
             'absolute_url',
             'last_measured_value',
