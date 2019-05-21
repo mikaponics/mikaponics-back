@@ -333,6 +333,13 @@ class Production(models.Model):
         null=True,
         validators=[MinValueValidator(0.0), MaxValueValidator(100)],
     )
+    evaluation_has_error = models.BooleanField(
+        _("Evaluation has Error?"),
+        help_text=_('Indicates if there was an error with the evaluation or not.'),
+        default=False,
+        blank=True,
+        editable=False,
+    )
     evaluated_at = models.DateTimeField(
         _("Evaluated At"),
         help_text=_('The datetime of the when the evaluation was done.'),

@@ -75,8 +75,31 @@ class Command(BaseCommand):
                 # Begin our evaluation!
                 self.begin_processing_production_crop(production_crop)
 
-        #TODO: EVALUATE PRODUCTION.
+        with freeze_time(production.last_modified_at):
+            self.begin_processing_production(production)
+
+    def begin_processing_production(self, production):
         production.refresh_from_db()
+        total_score = 0
+        has_error = False
+        for production_crop in production.crops.all():
+            if production_crop.evaluation_score:
+                total_score += production_crop.evaluation_score
+            if production_crop.evaluation_error:
+                has_error = True
+
+        if has_error:
+            production.evaluation_has_error = True
+        production.evaluation_score = total_score
+        production.evaluated_at = timezone.now()
+        production.save()
+        self.stdout.write(
+            self.style.SUCCESS(_('%(dt)s | EVALUATION | Production %(slug)s finished.') % {
+                'dt': str(timezone.now()),
+                'slug': production.slug
+            })
+        )
+        return # Stop this ETL.
 
     def begin_processing_production_crop(self, production_crop):
         # STEP 1:
