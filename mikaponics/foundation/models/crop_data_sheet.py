@@ -100,12 +100,6 @@ class CropDataSheet(models.Model):
         blank=True,
         related_name="data_sheets"
     )
-    life_dict = JSONField(
-        _("Life-Support System Requirements"),
-        help_text=_('The grow data for this crop used for optimal growth and baseline life-support requirements.'),
-        blank=False,
-        null=False,
-    )
 
 
     '''

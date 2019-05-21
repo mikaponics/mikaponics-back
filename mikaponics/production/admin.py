@@ -30,6 +30,30 @@ class CropLifeCycleStageAdmin(admin.ModelAdmin):
 admin.site.register(CropLifeCycleStage, CropLifeCycleStageAdmin)
 
 
+
+class CropConditionAdmin(admin.ModelAdmin):
+    list_display = [
+        'data_sheet', 'type_of', 'stage',
+
+    ]
+    list_filter = ['stage', 'data_sheet']
+    ordering = ['id',]
+    raw_id_fields = []
+    readonly_fields = ['id',]
+    formfield_overrides = {
+        JSONField: {'widget': PrettyJSONWidget }
+    }
+
+    # def has_add_permission(self, request, obj=None):
+    #     return False
+    #
+    # def has_delete_permission(self, request, obj=None):
+    #     return False
+
+admin.site.register(CropCondition, CropConditionAdmin)
+
+
+
 class CropDataSheetAdmin(admin.ModelAdmin):
     list_display = [
         'name', 'type_of'

@@ -14,7 +14,7 @@ from djmoney.money import Money
 from oauthlib.common import generate_token
 
 from foundation.constants import *
-from foundation.models import Store, Product, Shipper, User, CropLifeCycleStage, CropDataSheet, CropSubstrate
+from foundation.models import Store, Product, Shipper, User, CropLifeCycleStage, CropCondition, CropDataSheet, CropSubstrate
 
 
 class Command(BaseCommand):
@@ -29,8 +29,9 @@ class Command(BaseCommand):
         '''
         Create our data for crops.
         '''
-        # LIFE CYCLE STAGES
-        #-----------------------------------------------------------------------
+        #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#
+        #                           LIFE CYCLE STAGES                          #
+        #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#
         CropLifeCycleStage.objects.update_or_create(id=1,  defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.PLANT,     'order_number': 1,  'name': "Germinating",       'slug': 'germinating',})
         CropLifeCycleStage.objects.update_or_create(id=2,  defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.PLANT,     'order_number': 2,  'name': "Growing",           'slug': 'growing',})
         CropLifeCycleStage.objects.update_or_create(id=3,  defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.PLANT,     'order_number': 3,  'name': "Flowering",         'slug': 'flowering',})
@@ -45,8 +46,9 @@ class Command(BaseCommand):
         CropLifeCycleStage.objects.update_or_create(id=12, defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.FISHSTOCK, 'order_number': 12, 'name': "Adult Fish",        'slug': 'adult-fish',})
         CropLifeCycleStage.objects.update_or_create(id=13, defaults={ 'type_of': CropLifeCycleStage.TYPE_OF.FISHSTOCK, 'order_number': 13, 'name': "Death",             'slug': 'death',})
 
-        # SUBSTRATE
-        #-----------------------------------------------------------------------
+        #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#
+        #                               SUBSTRATE                              #
+        #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#
         CropSubstrate.objects.update_or_create(id=1, defaults={ 'type_of': 1, 'order_number': 10000, 'name': "Other (Please specify)",       'slug': 'other',})
         CropSubstrate.objects.update_or_create(id=2, defaults={ 'type_of': 1, 'order_number': 1,     'name': "Clay Pebbles",                 'slug': 'clay-pebbles',})
         CropSubstrate.objects.update_or_create(id=3, defaults={ 'type_of': 1, 'order_number': 2,     'name': "River Rock",                   'slug': 'river-rock',})
@@ -69,7 +71,11 @@ class Command(BaseCommand):
         CropSubstrate.objects.update_or_create(id=20, defaults={'type_of': 2, 'order_number': 1,    'name': "Fresh Water",                  'slug': 'fresh-water',})
         CropSubstrate.objects.update_or_create(id=21, defaults={'type_of': 2, 'order_number': 2,    'name': "Salt Water",                   'slug': 'salt-water',})
 
-        # DEFAULT OPTION
+        #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#
+        #                       CROP DATA SHEET & CONDITION                    #
+        #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#
+        #-----------------------------------------------------------------------
+        #                            DEFAULT OPTION
         #-----------------------------------------------------------------------
         CropDataSheet.objects.update_or_create(
            id=1,
@@ -82,8 +88,12 @@ class Command(BaseCommand):
            }
         )
 
-        # PLANTS
-        #-----------------------------------------------------------------------
+        ########################################################################
+        #                                PLANTS                                #
+        ########################################################################
+        #----------------------------------------------------------------------#
+        #                               CANNABIS                               #
+        #----------------------------------------------------------------------#
         crop, was_created = CropDataSheet.objects.update_or_create(
            id=2,
            defaults={
@@ -98,6 +108,9 @@ class Command(BaseCommand):
         )
         crop.stages.set([1,2,3,4,5,6])
 
+        #----------------------------------------------------------------------#
+        #                               TOMATO                                 #
+        #----------------------------------------------------------------------#
         crop, was_created = CropDataSheet.objects.update_or_create(
            id=3,
            defaults={
@@ -105,44 +118,85 @@ class Command(BaseCommand):
                'order_number': 2,
                'type_of': CropDataSheet.TYPE_OF.PLANT,
                'name': "Tomato",
-               'life_dict': {                                              # (1)
-                    'default': {
-                        'ph': {
-                            'max': 6.5,
-                            'min': 5.5,
-                            'value': 'ph'
-                        },
-                        "spacing": {
-                            'min': 16,
-                            'max': 24,
-                            'unit': 'inch'
-                        },
-                        'growth_time': {
-                            'min': 50,
-                            'max': 70,
-                            'unit': 'days'
-                        },
-                        'temperature': {
-                            'night_max': 16,
-                            'night_min': 13,
-                            'day_max': 30,
-                            'day_min': 22,
-                            'unit': '°C'
-                        },
-                        'size': {
-                            'width_max': 24,
-                            'width_min': 32,
-                            'height_max': 24,
-                            'height_min': 72,
-                            'unit': 'inch'
-                        },
-                        'stocking_density': 'high'
-                    }
-               }
            }
         )
         crop.stages.set([1,2,3,4,5,6])
 
+        # HUMIDITY
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.HUMIDITY, data_sheet=crop, stage_id=1, defaults={'data_sheet': crop, 'stage_id': 1, 'type_of': CropCondition.INSTRUMENT_TYPE.HUMIDITY, 'max_value': 100, 'min_value': 0})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.HUMIDITY, data_sheet=crop, stage_id=2, defaults={'data_sheet': crop, 'stage_id': 2, 'type_of': CropCondition.INSTRUMENT_TYPE.HUMIDITY, 'max_value': 100, 'min_value': 0})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.HUMIDITY, data_sheet=crop, stage_id=3, defaults={'data_sheet': crop, 'stage_id': 3, 'type_of': CropCondition.INSTRUMENT_TYPE.HUMIDITY, 'max_value': 100, 'min_value': 0})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.HUMIDITY, data_sheet=crop, stage_id=4, defaults={'data_sheet': crop, 'stage_id': 4, 'type_of': CropCondition.INSTRUMENT_TYPE.HUMIDITY, 'max_value': 100, 'min_value': 0})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.HUMIDITY, data_sheet=crop, stage_id=5, defaults={'data_sheet': crop, 'stage_id': 5, 'type_of': CropCondition.INSTRUMENT_TYPE.HUMIDITY, 'max_value': 100, 'min_value': 0})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.HUMIDITY, data_sheet=crop, stage_id=6, defaults={'data_sheet': crop, 'stage_id': 6, 'type_of': CropCondition.INSTRUMENT_TYPE.HUMIDITY, 'max_value': 100, 'min_value': 0})
+
+        # DAY AIR TEMPERATURE (1)
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.DAY_AIR_TEMPERATURE, data_sheet=crop, stage_id=1, defaults={'data_sheet': crop, 'stage_id': 1, 'type_of': CropCondition.INSTRUMENT_TYPE.DAY_AIR_TEMPERATURE, 'max_value': 26, 'min_value': 22})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.DAY_AIR_TEMPERATURE, data_sheet=crop, stage_id=2, defaults={'data_sheet': crop, 'stage_id': 2, 'type_of': CropCondition.INSTRUMENT_TYPE.DAY_AIR_TEMPERATURE, 'max_value': 26, 'min_value': 22})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.DAY_AIR_TEMPERATURE, data_sheet=crop, stage_id=3, defaults={'data_sheet': crop, 'stage_id': 3, 'type_of': CropCondition.INSTRUMENT_TYPE.DAY_AIR_TEMPERATURE, 'max_value': 26, 'min_value': 22})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.DAY_AIR_TEMPERATURE, data_sheet=crop, stage_id=4, defaults={'data_sheet': crop, 'stage_id': 4, 'type_of': CropCondition.INSTRUMENT_TYPE.DAY_AIR_TEMPERATURE, 'max_value': 26, 'min_value': 22})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.DAY_AIR_TEMPERATURE, data_sheet=crop, stage_id=5, defaults={'data_sheet': crop, 'stage_id': 5, 'type_of': CropCondition.INSTRUMENT_TYPE.DAY_AIR_TEMPERATURE, 'max_value': 26, 'min_value': 22})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.DAY_AIR_TEMPERATURE, data_sheet=crop, stage_id=6, defaults={'data_sheet': crop, 'stage_id': 6, 'type_of': CropCondition.INSTRUMENT_TYPE.DAY_AIR_TEMPERATURE, 'max_value': 26, 'min_value': 22})
+
+        # NIGHT AIR TEMPERATURE (1)
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.NIGHT_AIR_TEMPERATURE, data_sheet=crop, stage_id=1, defaults={'data_sheet': crop, 'stage_id': 1, 'type_of': CropCondition.INSTRUMENT_TYPE.NIGHT_AIR_TEMPERATURE, 'max_value': 16, 'min_value': 12})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.NIGHT_AIR_TEMPERATURE, data_sheet=crop, stage_id=2, defaults={'data_sheet': crop, 'stage_id': 2, 'type_of': CropCondition.INSTRUMENT_TYPE.NIGHT_AIR_TEMPERATURE, 'max_value': 16, 'min_value': 12})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.NIGHT_AIR_TEMPERATURE, data_sheet=crop, stage_id=3, defaults={'data_sheet': crop, 'stage_id': 3, 'type_of': CropCondition.INSTRUMENT_TYPE.NIGHT_AIR_TEMPERATURE, 'max_value': 16, 'min_value': 12})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.NIGHT_AIR_TEMPERATURE, data_sheet=crop, stage_id=4, defaults={'data_sheet': crop, 'stage_id': 4, 'type_of': CropCondition.INSTRUMENT_TYPE.NIGHT_AIR_TEMPERATURE, 'max_value': 16, 'min_value': 12})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.NIGHT_AIR_TEMPERATURE, data_sheet=crop, stage_id=5, defaults={'data_sheet': crop, 'stage_id': 5, 'type_of': CropCondition.INSTRUMENT_TYPE.NIGHT_AIR_TEMPERATURE, 'max_value': 16, 'min_value': 12})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.NIGHT_AIR_TEMPERATURE, data_sheet=crop, stage_id=6, defaults={'data_sheet': crop, 'stage_id': 6, 'type_of': CropCondition.INSTRUMENT_TYPE.NIGHT_AIR_TEMPERATURE, 'max_value': 16, 'min_value': 12})
+
+        # PPM (TVOC) (2)
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.TVOC, data_sheet=crop, stage_id=1, defaults={'data_sheet': crop, 'stage_id': 1, 'type_of': CropCondition.INSTRUMENT_TYPE.TVOC, 'min_value': 1400, 'max_value': 3500})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.TVOC, data_sheet=crop, stage_id=2, defaults={'data_sheet': crop, 'stage_id': 2, 'type_of': CropCondition.INSTRUMENT_TYPE.TVOC, 'min_value': 1400, 'max_value': 3500})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.TVOC, data_sheet=crop, stage_id=3, defaults={'data_sheet': crop, 'stage_id': 3, 'type_of': CropCondition.INSTRUMENT_TYPE.TVOC, 'min_value': 1400, 'max_value': 3500})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.TVOC, data_sheet=crop, stage_id=4, defaults={'data_sheet': crop, 'stage_id': 4, 'type_of': CropCondition.INSTRUMENT_TYPE.TVOC, 'min_value': 1400, 'max_value': 3500})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.TVOC, data_sheet=crop, stage_id=5, defaults={'data_sheet': crop, 'stage_id': 5, 'type_of': CropCondition.INSTRUMENT_TYPE.TVOC, 'min_value': 1400, 'max_value': 3500})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.TVOC, data_sheet=crop, stage_id=6, defaults={'data_sheet': crop, 'stage_id': 6, 'type_of': CropCondition.INSTRUMENT_TYPE.TVOC, 'min_value': 1400, 'max_value': 3500})
+
+        # CO2 (3)
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.CO2, data_sheet=crop, stage_id=1, defaults={'data_sheet': crop, 'stage_id': 1, 'type_of': CropCondition.INSTRUMENT_TYPE.CO2, 'max_value': 1000, 'min_value': 600})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.CO2, data_sheet=crop, stage_id=2, defaults={'data_sheet': crop, 'stage_id': 2, 'type_of': CropCondition.INSTRUMENT_TYPE.CO2, 'max_value': 1000, 'min_value': 600})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.CO2, data_sheet=crop, stage_id=3, defaults={'data_sheet': crop, 'stage_id': 3, 'type_of': CropCondition.INSTRUMENT_TYPE.CO2, 'max_value': 1000, 'min_value': 600})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.CO2, data_sheet=crop, stage_id=4, defaults={'data_sheet': crop, 'stage_id': 4, 'type_of': CropCondition.INSTRUMENT_TYPE.CO2, 'max_value': 1000, 'min_value': 600})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.CO2, data_sheet=crop, stage_id=5, defaults={'data_sheet': crop, 'stage_id': 5, 'type_of': CropCondition.INSTRUMENT_TYPE.CO2, 'max_value': 1000, 'min_value': 600})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.CO2, data_sheet=crop, stage_id=6, defaults={'data_sheet': crop, 'stage_id': 6, 'type_of': CropCondition.INSTRUMENT_TYPE.CO2, 'max_value': 1000, 'min_value': 600})
+
+        # WATER TEMPERATURE (4)
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=1, defaults={'data_sheet': crop, 'stage_id': 1, 'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 26, 'min_value': 18})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=2, defaults={'data_sheet': crop, 'stage_id': 2, 'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 26, 'min_value': 18})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=3, defaults={'data_sheet': crop, 'stage_id': 3, 'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 26, 'min_value': 18})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=4, defaults={'data_sheet': crop, 'stage_id': 4, 'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 26, 'min_value': 18})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=5, defaults={'data_sheet': crop, 'stage_id': 5, 'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 26, 'min_value': 18})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=6, defaults={'data_sheet': crop, 'stage_id': 6, 'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 26, 'min_value': 18})
+
+        # PH (1)
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.PH, data_sheet=crop, stage_id=1, defaults={'data_sheet': crop, 'stage_id': 1, 'type_of': CropCondition.INSTRUMENT_TYPE.PH, 'max_value': 6.5, 'min_value': 5.5})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.PH, data_sheet=crop, stage_id=2, defaults={'data_sheet': crop, 'stage_id': 2, 'type_of': CropCondition.INSTRUMENT_TYPE.PH, 'max_value': 6.5, 'min_value': 5.5})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.PH, data_sheet=crop, stage_id=3, defaults={'data_sheet': crop, 'stage_id': 3, 'type_of': CropCondition.INSTRUMENT_TYPE.PH, 'max_value': 6.5, 'min_value': 5.5})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.PH, data_sheet=crop, stage_id=4, defaults={'data_sheet': crop, 'stage_id': 4, 'type_of': CropCondition.INSTRUMENT_TYPE.PH, 'max_value': 6.5, 'min_value': 5.5})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.PH, data_sheet=crop, stage_id=5, defaults={'data_sheet': crop, 'stage_id': 5, 'type_of': CropCondition.INSTRUMENT_TYPE.PH, 'max_value': 6.5, 'min_value': 5.5})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.PH, data_sheet=crop, stage_id=6, defaults={'data_sheet': crop, 'stage_id': 6, 'type_of': CropCondition.INSTRUMENT_TYPE.PH, 'max_value': 6.5, 'min_value': 5.5})
+
+        # EC (2)
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.EC, data_sheet=crop, stage_id=1, defaults={'data_sheet': crop, 'stage_id': 1, 'type_of': CropCondition.INSTRUMENT_TYPE.EC, 'max_value': 50, 'min_value': 20})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.EC, data_sheet=crop, stage_id=2, defaults={'data_sheet': crop, 'stage_id': 2, 'type_of': CropCondition.INSTRUMENT_TYPE.EC, 'max_value': 50, 'min_value': 20})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.EC, data_sheet=crop, stage_id=3, defaults={'data_sheet': crop, 'stage_id': 3, 'type_of': CropCondition.INSTRUMENT_TYPE.EC, 'max_value': 50, 'min_value': 20})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.EC, data_sheet=crop, stage_id=4, defaults={'data_sheet': crop, 'stage_id': 4, 'type_of': CropCondition.INSTRUMENT_TYPE.EC, 'max_value': 50, 'min_value': 20})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.EC, data_sheet=crop, stage_id=5, defaults={'data_sheet': crop, 'stage_id': 5, 'type_of': CropCondition.INSTRUMENT_TYPE.EC, 'max_value': 50, 'min_value': 20})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.EC, data_sheet=crop, stage_id=6, defaults={'data_sheet': crop, 'stage_id': 6, 'type_of': CropCondition.INSTRUMENT_TYPE.EC, 'max_value': 50, 'min_value': 20})
+
+        # ORP
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.ORP, data_sheet=crop, stage_id=1, defaults={'data_sheet': crop, 'stage_id': 1, 'type_of': CropCondition.INSTRUMENT_TYPE.ORP, 'max_value': 100, 'min_value': 0})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.ORP, data_sheet=crop, stage_id=2, defaults={'data_sheet': crop, 'stage_id': 2, 'type_of': CropCondition.INSTRUMENT_TYPE.ORP, 'max_value': 100, 'min_value': 0})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.ORP, data_sheet=crop, stage_id=3, defaults={'data_sheet': crop, 'stage_id': 3, 'type_of': CropCondition.INSTRUMENT_TYPE.ORP, 'max_value': -40, 'min_value': 60})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.ORP, data_sheet=crop, stage_id=4, defaults={'data_sheet': crop, 'stage_id': 4, 'type_of': CropCondition.INSTRUMENT_TYPE.ORP, 'max_value': -40, 'min_value': 60})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.ORP, data_sheet=crop, stage_id=5, defaults={'data_sheet': crop, 'stage_id': 5, 'type_of': CropCondition.INSTRUMENT_TYPE.ORP, 'max_value': -40, 'min_value': 60})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.ORP, data_sheet=crop, stage_id=6, defaults={'data_sheet': crop, 'stage_id': 6, 'type_of': CropCondition.INSTRUMENT_TYPE.ORP, 'max_value': -40, 'min_value': 60})
+
+        #----------------------------------------------------------------------#
+        #                            TOMATO (KUMATO)                           #
+        #----------------------------------------------------------------------#
         crop, was_created = CropDataSheet.objects.update_or_create(
            id=4,
            defaults={
@@ -150,46 +204,16 @@ class Command(BaseCommand):
                'order_number': 3,
                'type_of': CropDataSheet.TYPE_OF.PLANT,
                'name': "Tomato (Kumato)",
-               'life_dict': {
-                    'default': {
-                        'ph': {
-                            'max': 6.5,
-                            'min': 5.5,
-                            'value': 'ph'
-                        },
-                        "spacing": {
-                            'min': 16,
-                            'max': 24,
-                            'unit': 'inch'
-                        },
-                        'growth_time': {
-                            'min': 50,
-                            'max': 70,
-                            'unit': 'days'
-                        },
-                        'temperature': {
-                            'night_max': 16,
-                            'night_min': 13,
-                            'day_max': 30,
-                            'day_min': 22,
-                            'unit': '°C'
-                        },
-                        'size': {
-                            'width_max': 24,
-                            'width_min': 32,
-                            'height_max': 24,
-                            'height_min': 72,
-                            'unit': 'inch'
-                        },
-                        'stocking_density': 'high'
-                    }
-               }
            }
         )
         crop.stages.set([1,2,3,4,5,6])
 
-        # FISHSTOCK
-        #-----------------------------------------------------------------------
+        ########################################################################
+        #                              FISHSTOCK                               #
+        ########################################################################
+        #----------------------------------------------------------------------#
+        #                              Goldfish                                #
+        #----------------------------------------------------------------------#
         crop, was_created = CropDataSheet.objects.update_or_create(
            id=1000,
            defaults={
@@ -197,32 +221,22 @@ class Command(BaseCommand):
                'order_number': 1000,
                'type_of': CropDataSheet.TYPE_OF.FISHSTOCK,
                'name': "Goldfish",
-               'life_dict': {                                              # (1)
-                   'default': {  # THIS REPRESENTS FOR ALL THE STAGES OF GROWTH.
-                        'temperature': {
-                            'max': 32,
-                            'min': 2,
-                            'unit': '°C'
-                        },
-                        'optimal_temperature': {
-                            'max': 32,
-                            'min': 18,
-                            'unit': '°C'
-                        },
-                        'type': 'Omnivore',
-                        'mature_size': {},
-                        'maturity_time': {
-                            'min': 3,
-                            'max': 3,
-                            'unit': 'years'
-                        },
-                        'oxygen_needs': 'low'
-                   }
-               }
            }
         )
         crop.stages.set([7,8,9,10,11,12,13])
 
+        # WATER TEMPERATURE (1)
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=7,  defaults={'data_sheet': crop, 'stage_id': 7,  'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 32, 'min_value': 2})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=8,  defaults={'data_sheet': crop, 'stage_id': 8,  'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 32, 'min_value': 2})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=9,  defaults={'data_sheet': crop, 'stage_id': 9,  'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 32, 'min_value': 2})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=10, defaults={'data_sheet': crop, 'stage_id': 10, 'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 32, 'min_value': 2})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=11, defaults={'data_sheet': crop, 'stage_id': 11, 'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 32, 'min_value': 2})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=12, defaults={'data_sheet': crop, 'stage_id': 12, 'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 32, 'min_value': 2})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=13, defaults={'data_sheet': crop, 'stage_id': 13, 'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 32, 'min_value': 2})
+
+        #----------------------------------------------------------------------#
+        #                               Tilapia                                #
+        #----------------------------------------------------------------------#
         crop, was_created = CropDataSheet.objects.update_or_create(
            id=1001,
            defaults={
@@ -230,34 +244,22 @@ class Command(BaseCommand):
                'order_number': 1001,
                'type_of': CropDataSheet.TYPE_OF.FISHSTOCK,
                'name': "Tilapia",
-               'life_dict': {                                              # (1)
-                    'default': { # THIS REPRESENTS FOR ALL THE STAGES OF GROWTH.
-                        'temperature': {
-                            'max': 32,
-                            'min': 15,
-                            'unit': '°C'
-                        },
-                        'optimal_temperature': {
-                            'max': 27,
-                            'min': 23,
-                            'unit': '°C'
-                        },
-                        'type': 'Omnivore',
-                        'mature_size': {
-                            'weight': 1.5,
-                            'unit': 'lb.'
-                        },
-                        'maturity_time': {
-                            'min': 9,
-                            'max': 12,
-                            'unit': 'months'
-                        },
-                        'oxygen_needs': 'low'
-                    }
-               }
            }
         )
         crop.stages.set([7,8,9,10,11,12,13])
 
+        # WATER TEMPERATURE (1)
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=7,  defaults={'data_sheet': crop, 'stage_id': 7,  'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 32, 'min_value': 15})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=8,  defaults={'data_sheet': crop, 'stage_id': 8,  'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 32, 'min_value': 15})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=9,  defaults={'data_sheet': crop, 'stage_id': 9,  'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 32, 'min_value': 15})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=10, defaults={'data_sheet': crop, 'stage_id': 10, 'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 32, 'min_value': 15})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=11, defaults={'data_sheet': crop, 'stage_id': 11, 'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 32, 'min_value': 15})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=12, defaults={'data_sheet': crop, 'stage_id': 12, 'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 32, 'min_value': 15})
+        CropCondition.objects.update_or_create(type_of=CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, data_sheet=crop, stage_id=13, defaults={'data_sheet': crop, 'stage_id': 13, 'type_of': CropCondition.INSTRUMENT_TYPE.WATER_TEMPERATURE, 'max_value': 32, 'min_value': 15})
+
         # DEVELOPER NOTES:
         # (1) HLA-6721-7 - Adapted from Appendix 1 of Somerville, C., and et. Al. 2014. Small-scale aquaponic food production. Integrated fish and plant farming. FAO Fisheries and Aquaculture Technical Paper No. 589. VIA http://pods.dasnr.okstate.edu/docushare/dsweb/Get/Document-10035/HLA-6721web.pdf by Aquaponics - OSU Fact Sheets - Oklahoma State University.
+        # (2) https://growguru.co.za/blogs/hydroponic/ph-tds-ppm-ec-levels-for-hydroponic-vegetables
+        # (3) CO2 - http://magazine.aga.com/better-greenhouses-tomatoes-with-co2/
+        # (4) WATER TEMP - https://www.gardeningknowhow.com/special/containers/hydroponic-water-temperature.htm
+        # (5) HOW AQUAPONICS WORKS - https://aces.nmsu.edu/pubs/_circulars/CR680/welcome.html

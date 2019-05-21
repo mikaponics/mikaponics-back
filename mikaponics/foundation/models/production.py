@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.gis.db.models import PointField
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.indexes import BrinIndex
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
@@ -317,6 +318,37 @@ class Production(models.Model):
     notes_at_finish = models.TextField(
         _("Comments at finish"),
         help_text=_('Any notes to add upon the completion of the crop production.'),
+        blank=True,
+        null=True,
+    )
+
+    #
+    # Evaluation Fields
+    #
+
+    evaluation_score = models.FloatField(
+        _("Evaluation"),
+        help_text=_('The evaluation score of the current production in the current present date and time.'),
+        blank=True,
+        null=True,
+        validators=[MinValueValidator(0.0), MaxValueValidator(100)],
+    )
+    is_evaluation_score_indeterminate = models.BooleanField(
+        _("Is evaluation score indeterminate?"),
+        help_text=_('Value determines if the production score can be computed or not. If this is `true`, the reason is because the user is growing a `other` crop which our system does not have a record of.'),
+        default=False,
+        blank=True,
+    )
+    evaluation_dict = JSONField(
+        _("Evaluation Dictionary"),
+        help_text=_('The evaluation details for this particular score in the present date and time.'),
+        blank=True,
+        null=True,
+        max_length=511,
+    )
+    evaluated_at = models.DateTimeField(
+        _("Evaluated At"),
+        help_text=_('The datetime of the when the evaluation was done.'),
         blank=True,
         null=True,
     )

@@ -285,6 +285,12 @@ class ProductionCrop(models.Model):
         null=True,
         max_length=511,
     )
+    evaluated_at = models.DateTimeField(
+        _("Evaluated At"),
+        help_text=_('The datetime of the when the evaluation was done.'),
+        blank=True,
+        null=True,
+    )
 
     #
     # Audit detail fields
