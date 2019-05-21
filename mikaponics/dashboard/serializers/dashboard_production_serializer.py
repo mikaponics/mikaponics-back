@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
 
 class DashboardProductionListSerializer(serializers.ModelSerializer):
     crops = serializers.SerializerMethodField()
+    evaluation_letter = serializers.SerializerMethodField()
     absolute_url = serializers.ReadOnlyField(source='get_absolute_url')
     last_modified_pretty_at = serializers.ReadOnlyField(source='get_pretty_last_modified_at')
 
@@ -33,6 +34,7 @@ class DashboardProductionListSerializer(serializers.ModelSerializer):
             'description',
             'crops',
             'evaluation_score',
+            'evaluation_letter',
             'evaluation_has_error',
             'evaluated_at',
             'last_modified_pretty_at',
@@ -46,4 +48,11 @@ class DashboardProductionListSerializer(serializers.ModelSerializer):
             return s.data
         except Exception as e:
             print("DashboardProductionListSerializer | get_crops |", e)
+            return None
+
+    def get_evaluation_letter(self, obj):
+        try:
+            return obj.get_evaluation_letter()
+        except Exception as e:
+            print("DashboardProductionListSerializer | get_evaluation_letter |", e)
             return None

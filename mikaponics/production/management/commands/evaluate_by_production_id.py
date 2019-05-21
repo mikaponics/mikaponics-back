@@ -97,15 +97,25 @@ class Command(BaseCommand):
 
         if has_error:
             production.evaluation_has_error = True
-        production.evaluation_score = total_score
-        production.evaluated_at = timezone.now()
-        production.save()
-        self.stdout.write(
-            self.style.SUCCESS(_('%(dt)s | EVALUATION | Production %(slug)s finished.') % {
-                'dt': str(timezone.now()),
-                'slug': production.slug
-            })
-        )
+
+        try:
+            production.evaluation_score = total_score / production.crops.count()
+            production.evaluated_at = timezone.now()
+            production.save()
+            self.stdout.write(
+                self.style.SUCCESS(_('%(dt)s | EVALUATION | Production %(slug)s finished.') % {
+                    'dt': str(timezone.now()),
+                    'slug': production.slug
+                })
+            )
+        except ZeroDivisionError:
+            self.stdout.write(
+                self.style.ERROR(_('%(dt)s | EVALUATION | Production %(slug)s failed final evaluation.') % {
+                    'dt': str(timezone.now()),
+                    'slug': production.slug
+                })
+            )
+
         return # Stop this ETL.
 
     def begin_processing_production_crop(self, production_crop):

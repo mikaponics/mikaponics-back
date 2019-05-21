@@ -452,3 +452,21 @@ class Production(models.Model):
 
     def get_absolute_url(self):
         return "/production/"+self.slug
+
+    def get_evaluation_letter(self):
+        if self.evaluation_has_error:
+            return "Has error"
+        if self.evaluation_score is None:
+            return "Not evaluated yet"
+        if self.evaluation_score < 50:
+            return "F"
+        elif self.evaluation_score >= 50 and self.evaluation_score < 60:
+            return "D"
+        elif self.evaluation_score >= 60 and self.evaluation_score < 70:
+            return "C"
+        elif self.evaluation_score >= 70 and self.evaluation_score < 80:
+            return "B"
+        elif self.evaluation_score >= 80 and self.evaluation_score < 90:
+            return "A"
+        elif self.evaluation_score >= 90:
+            return "A+"
