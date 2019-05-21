@@ -68,20 +68,20 @@ class Command(BaseCommand):
         production_crop = self.process_is_indterminate(production_crop)
 
     def process_is_indterminate(self, production_crop):
-        # CASE 1 OF 2:
-        # The user selected the "Other" option in the data sheet.
-        if production_crop.data_sheet.type_of == CropDataSheet.TYPE_OF.NONE:
-            production_crop.is_evaluation_score_indeterminate = True
-            production_crop.save()
-            self.stdout.write(
-                self.style.SUCCESS(_('%(dt)s | EVALUATION | Production crop %(slug)s has become evaluation score is indterminate.') % {
-                    'dt': str(timezone.now()),
-                    'slug': production_crop.slug
-                })
-            )
-        # CASE 2 OF 2:
-        # The user selected a non "Other" option in the data sheet.
-        else:
-            production_crop.is_evaluation_score_indeterminate = False
-            production_crop.save()
+        # # CASE 1 OF 2:
+        # # The user selected the "Other" option in the data sheet.
+        # if production_crop.data_sheet.type_of == CropDataSheet.TYPE_OF.NONE:
+        #     production_crop.is_evaluation_score_indeterminate = True
+        #     production_crop.save()
+        #     self.stdout.write(
+        #         self.style.SUCCESS(_('%(dt)s | EVALUATION | Production crop %(slug)s has become evaluation score is indterminate.') % {
+        #             'dt': str(timezone.now()),
+        #             'slug': production_crop.slug
+        #         })
+        #     )
+        # # CASE 2 OF 2:
+        # # The user selected a non "Other" option in the data sheet.
+        # else:
+        #     production_crop.is_evaluation_score_indeterminate = False
+        #     production_crop.save()
         return production_crop

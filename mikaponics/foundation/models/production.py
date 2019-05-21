@@ -333,11 +333,12 @@ class Production(models.Model):
         null=True,
         validators=[MinValueValidator(0.0), MaxValueValidator(100)],
     )
-    is_evaluation_score_indeterminate = models.BooleanField(
-        _("Is evaluation score indeterminate?"),
-        help_text=_('Value determines if the production score can be computed or not. If this is `true`, the reason is because the user is growing a `other` crop which our system does not have a record of.'),
-        default=False,
+    evaluation_error = models.CharField(
+        _("Evaluation Error"),
+        help_text=_('The evaluation error message explaining why the evaluation could not be computed.'),
         blank=True,
+        null=True,
+        max_length=255,
     )
     evaluation_dict = JSONField(
         _("Evaluation Dictionary"),
