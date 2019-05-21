@@ -83,8 +83,7 @@ class Command(BaseCommand):
                'slug': 'other',
                'order_number': 10000,
                'type_of': CropDataSheet.TYPE_OF.NONE,
-               'name': "Other",
-               'life_dict': {}
+               'name': "Other"
            }
         )
 
@@ -100,10 +99,7 @@ class Command(BaseCommand):
                'slug': 'cannabis',
                'order_number': 1,
                'type_of': CropDataSheet.TYPE_OF.PLANT,
-               'name': "Cannabis",
-               'life_dict': {
-                   'default': {}
-               }
+               'name': "Cannabis"
            }
         )
         crop.stages.set([1,2,3,4,5,6])
