@@ -266,11 +266,15 @@ class Command(BaseCommand):
         if is_over:
             production_crop.evaluation_failures.append({
                 'instrument_slug': instrument.slug,
+                'instrument_icon': instrument.get_icon(),
+                'pretty_instrument_type_of': instrument.get_pretty_instrument_type_of(),
                 'failure_reason': 'is_over_max_value',
                 # 'condition_id': condition.id,
                 # 'condition_type_of': condition.get_pretty_instrument_type_of(),
                 'actual_value': datum.value,
                 'max_value': condition.max_value,
+                'timestamp': str(timezone.now()),
+                'message': 'Please decrease to below '+str(condition.max_value)+' '+instrument.get_unit_of_measure()+"."
             })
             production_crop.save()
             has_failure = True
@@ -279,11 +283,15 @@ class Command(BaseCommand):
         if is_under:
             production_crop.evaluation_failures.append({
                 'instrument_slug': instrument.slug,
+                'instrument_icon': instrument.get_icon(),
+                'pretty_instrument_type_of': instrument.get_pretty_instrument_type_of(),
                 'failure_reason': 'is_under_min_value',
                 # 'condition_id': condition.id,
                 # 'condition_type_of': condition.get_pretty_instrument_type_of(),
                 'actual_value': datum.value,
                 'min_value': condition.min_value,
+                'timestamp': str(timezone.now()),
+                'message': 'Please increase to above '+str(condition.min_value)+' '+instrument.get_unit_of_measure()+"."
             })
             production_crop.save()
             has_failure = True
@@ -291,9 +299,12 @@ class Command(BaseCommand):
         if not has_failure:
             production_crop.evaluation_passes.append({
                 'instrument_slug': instrument.slug,
+                'instrument_icon': instrument.get_icon(),
+                'pretty_instrument_type_of': instrument.get_pretty_instrument_type_of(),
                 # 'condition_id': condition.id,
                 # 'condition_type_of': condition.get_pretty_instrument_type_of(),
                 'actual_value': datum.value,
+                'timestamp': str(timezone.now())
             })
             production_crop.save()
 

@@ -24,6 +24,7 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
     fish = serializers.SerializerMethodField()
     crops = serializers.SerializerMethodField()
     device = DeviceRetrieveUpdateDestroySerializer(many=False, required=True)
+    evaluation_letter = serializers.ReadOnlyField(source="get_evaluation_letter")
 
     class Meta:
         model = Production
@@ -51,6 +52,7 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
             'crops',
             'device',
             'evaluation_score',
+            'evaluation_letter',
             'evaluation_has_error',
             'evaluated_at',
             'absolute_url',

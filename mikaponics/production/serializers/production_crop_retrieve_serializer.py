@@ -14,7 +14,7 @@ from foundation.models import ProductionCrop
 
 class ProductionCropRetrieveSerializer(serializers.ModelSerializer):
     pretty_name = serializers.ReadOnlyField(source="get_pretty_name")
-    pretty_score = serializers.ReadOnlyField(source="get_evaluation_letter")
+    evaluation_letter = serializers.ReadOnlyField(source="get_evaluation_letter")
     pretty_state_at_finish = serializers.ReadOnlyField(source="get_pretty_state_at_finish")
     data_sheet = serializers.CharField(required=True, allow_blank=False, source="data_sheet.name")
     crop_slug = serializers.CharField(required=True, allow_blank=False, source="data_sheet.slug")
@@ -26,7 +26,6 @@ class ProductionCropRetrieveSerializer(serializers.ModelSerializer):
         model = ProductionCrop
         fields = (
             'pretty_name',
-            'pretty_score',
             'pretty_state_at_finish',
             'data_sheet',
             'data_sheet_other',
@@ -46,6 +45,7 @@ class ProductionCropRetrieveSerializer(serializers.ModelSerializer):
             'slug',
             'type_of',
             'evaluation_score',
+            'evaluation_letter',
             'evaluation_error',
             'evaluation_passes',
             'evaluation_failures',
