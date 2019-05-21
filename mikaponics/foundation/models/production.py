@@ -333,20 +333,6 @@ class Production(models.Model):
         null=True,
         validators=[MinValueValidator(0.0), MaxValueValidator(100)],
     )
-    evaluation_error = models.CharField(
-        _("Evaluation Error"),
-        help_text=_('The evaluation error message explaining why the evaluation could not be computed.'),
-        blank=True,
-        null=True,
-        max_length=255,
-    )
-    evaluation_dict = JSONField(
-        _("Evaluation Dictionary"),
-        help_text=_('The evaluation details for this particular score in the present date and time.'),
-        blank=True,
-        null=True,
-        max_length=511,
-    )
     evaluated_at = models.DateTimeField(
         _("Evaluated At"),
         help_text=_('The datetime of the when the evaluation was done.'),
