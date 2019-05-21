@@ -79,7 +79,14 @@ class Command(BaseCommand):
             self.begin_processing_production(production)
 
     def begin_processing_production(self, production):
+        # Refresh the latest data and then clear it before beginning our
+        # evaluation of the `Production` object.
         production.refresh_from_db()
+        production.evaluation_has_error = False
+        production.evaluation_score = None
+        production.evaluated_at = None
+
+        # Evaluate the `Production` object.
         total_score = 0
         has_error = False
         for production_crop in production.crops.all():
@@ -248,7 +255,9 @@ class Command(BaseCommand):
             production_crop.evaluation_dict[condition.get_pretty_instrument_type_of()] = {
                 'failure_reason': 'is_over',
                 'condition_id': condition.id,
-                'condition_type_of': condition.get_pretty_instrument_type_of()
+                'condition_type_of': condition.get_pretty_instrument_type_of(),
+                'actual_value': datum.value,
+                'max_value': condition.max_value,
             }
             production_crop.save()
 
@@ -257,7 +266,9 @@ class Command(BaseCommand):
             production_crop.evaluation_dict[condition.get_pretty_instrument_type_of()] = {
                 'failure_reason': 'is_under',
                 'condition_id': condition.id,
-                'condition_type_of': condition.get_pretty_instrument_type_of()
+                'condition_type_of': condition.get_pretty_instrument_type_of(),
+                'actual_value': datum.value,
+                'min_value': condition.min_value,
             }
             production_crop.save()
 

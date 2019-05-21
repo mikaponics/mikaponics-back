@@ -72,12 +72,13 @@ class Command(BaseCommand):
         Process online devices.
         '''
         if device.state == Device.DEVICE_STATE.ONLINE:
-            if last_measured_utc_timestamp < utc_today_minus_some_minutes:
-                device.state = Device.DEVICE_STATE.OFFLINE
-                device.save()
-                self.stdout.write(
-                    self.style.WARNING(_('%(dt)s | CD | Device # %(id)s has become offline.') % {
-                        'id': str(device.id),
-                        'dt': str(timezone.now())
-                    })
-                )
+            if last_measured_utc_timestamp and utc_today_minus_some_minutes:
+                if last_measured_utc_timestamp < utc_today_minus_some_minutes:
+                    device.state = Device.DEVICE_STATE.OFFLINE
+                    device.save()
+                    self.stdout.write(
+                        self.style.WARNING(_('%(dt)s | CD | Device # %(id)s has become offline.') % {
+                            'id': str(device.id),
+                            'dt': str(timezone.now())
+                        })
+                    )
