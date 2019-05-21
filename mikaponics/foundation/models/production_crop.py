@@ -266,7 +266,7 @@ class ProductionCrop(models.Model):
     #
 
     evaluation_score = models.FloatField(
-        _("Evaluation"),
+        _("Evaluation Score"),
         help_text=_('The evaluation score of the current crop in the current present date and time.'),
         blank=True,
         null=True,

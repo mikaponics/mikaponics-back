@@ -84,7 +84,10 @@ class Command(BaseCommand):
                 })
             )
             return # Stop this ETL.
+
+        # RUN THE EVALUATION FOR THE PARTICULAR PRODUCTION CROP.
         production_crop = self.process_crop_score(production_crop)
+
         self.stdout.write(
             self.style.SUCCESS(_('%(dt)s | EVALUATION | Production crop %(slug)s finished evaluation.') % {
                 'dt': str(timezone.now()),
@@ -149,7 +152,21 @@ class Command(BaseCommand):
                         'instrument': condition.get_pretty_instrument_type_of()
                     })
                 )
-                return production_crop
+                break; # STOP THIS FOR-LOOP.
+
+        # ATTACH TIMESTAMP OF WHEN THE EVALUATION OCCURED FOR THE PRODUCTION CROP.
+        production_crop.evaluated_at = timezone.now()
+
+        # COMPUTER OUR SCORE.
+        try:
+            production_crop.evaluation_score = (pass_count / conditions_count) * 100
+        except ZeroDivisionError:
+            production_crop.evaluation_score = None
+
+        # SAVE OUR OBJECT.
+        production_crop.save()
+
+        # RETURN OUR EVALUATED PRODUCTION CROP.
         return production_crop
 
     def evaluate(self, production_crop, device, condition):
@@ -210,7 +227,8 @@ class Command(BaseCommand):
         if is_over:
             production_crop.evaluation_dict[condition.get_pretty_instrument_type_of()] = {
                 'failure_reason': 'is_over',
-                'condition_id': condition.id
+                'condition_id': condition.id,
+                'condition_type_of': condition.get_pretty_instrument_type_of()
             }
             production_crop.save()
 
@@ -218,7 +236,8 @@ class Command(BaseCommand):
         if is_under:
             production_crop.evaluation_dict[condition.get_pretty_instrument_type_of()] = {
                 'failure_reason': 'is_under',
-                'condition_id': condition.id
+                'condition_id': condition.id,
+                'condition_type_of': condition.get_pretty_instrument_type_of()
             }
             production_crop.save()
 
