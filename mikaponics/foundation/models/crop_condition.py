@@ -65,7 +65,7 @@ class CropCondition(models.Model):
         default_permissions = ()
         permissions = (
         )
-        unique_together = ("data_sheet", "stage", 'type_of')
+        # unique_together = ("data_sheet", "stage", 'type_of')
         index_together = ("data_sheet", "stage", 'type_of')
 
     '''
