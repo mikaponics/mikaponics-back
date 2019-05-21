@@ -67,6 +67,7 @@ class Command(BaseCommand):
             with freeze_time(production_crop.last_modified_at):
 
                 # Always reset our crop evaluation before beginning...
+                production_crop.evaluation_score = None
                 production_crop.evaluation_error = None
                 production_crop.evaluation_dict = {}
                 production_crop.save()
@@ -74,7 +75,14 @@ class Command(BaseCommand):
                 # Begin our evaluation!
                 self.begin_processing_production_crop(production_crop)
 
+        #TODO: EVALUATE PRODUCTION.
+        production.refresh_from_db()
+
     def begin_processing_production_crop(self, production_crop):
+        # STEP 1:
+        # CHECK TO SEE IF WE GET AN "INDETERMINATE" ERROR WHICH IS CAUSED IF
+        # THE USER SELECTED THE "OTHER" CROP OPTION. WE NEED TO STOP THIS
+        # FUNCTION IF THIS ERROR OCCURES EARLY ON.
         production_crop = self.process_is_crop_indeterminate(production_crop)
         if production_crop.evaluation_error is not None:
             self.stdout.write(
@@ -85,8 +93,9 @@ class Command(BaseCommand):
             )
             return # Stop this ETL.
 
+        # STEP 2:
         # RUN THE EVALUATION FOR THE PARTICULAR PRODUCTION CROP.
-        production_crop = self.process_crop_score(production_crop)
+        production_crop = self.process_crop_score(production_crop) #TODO: BREAK UP!
 
         self.stdout.write(
             self.style.SUCCESS(_('%(dt)s | EVALUATION | Production crop %(slug)s finished evaluation.') % {
@@ -100,24 +109,12 @@ class Command(BaseCommand):
         Function will check to see if the `ProductionCrop` is `Other` so we
         can generate an error, else continue with our evaluation.
         """
-        # CASE 1 OF 2:
         # The user selected the "Other" option in the data sheet.
         if production_crop.data_sheet.type_of == CropDataSheet.TYPE_OF.NONE:
             production_crop.evaluation_error = "Indeterminate - You are growing a `other` crop which we do not support"
             production_crop.save()
             self.stdout.write(
                 self.style.SUCCESS(_('%(dt)s | EVALUATION | Production crop %(slug)s has become evaluation score is indterminate.') % {
-                    'dt': str(timezone.now()),
-                    'slug': production_crop.slug
-                })
-            )
-        # CASE 2 OF 2:
-        # The user selected a non "Other" option in the data sheet.
-        else:
-            production_crop.evaluation_error = None
-            production_crop.save()
-            self.stdout.write(
-                self.style.SUCCESS(_('%(dt)s | EVALUATION | Production crop %(slug)s evaluation is possible...') % {
                     'dt': str(timezone.now()),
                     'slug': production_crop.slug
                 })
