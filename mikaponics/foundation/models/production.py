@@ -380,15 +380,43 @@ class Production(models.Model):
     # Alarm configuration.
     #
 
-    alert_below_value = models.FloatField(
-        _("Alert below value"),
-        help_text=_('The value that if is less then or equal to then our system will trigger an alet.'),
+    yellow_below_value = models.FloatField(
+        _("Yellow below value"),
+        help_text=_('The value that if is less then or equal to then our system will trigger a yellow alert.'),
         blank=True,
         null=True,
     )
-    alert_delay_in_seconds = models.PositiveSmallIntegerField(
-        _("Alert delay (seconds)"),
-        help_text=_('The time that yellow alerts will be sent from the last time an alert was sent.'),
+    orange_below_value = models.FloatField(
+        _("Orange below value"),
+        help_text=_('The value that if is less then or equal to then our system will trigger a orange alert.'),
+        blank=True,
+        null=True,
+    )
+    red_below_value = models.FloatField(
+        _("Red below value"),
+        help_text=_('The value that if is less then or equal to then our system will trigger a red alert.'),
+        blank=True,
+        null=True,
+    )
+    red_alert_delay_in_seconds = models.PositiveSmallIntegerField(
+        _("Red alert delay (seconds)"),
+        help_text=_('The time that red alerts will be sent from the last time the red alert was sent.'),
+        blank=True,
+        null=False,
+        default=ALERT_FREQUENCY_IN_SECONDS.EVERY_MINUTE,
+        choices=ALERT_FREQUENCY_IN_SECONDS_CHOICES,
+    )
+    orange_alert_delay_in_seconds = models.PositiveSmallIntegerField(
+        _("Orange alert delay (seconds)"),
+        help_text=_('The time that orange alerts will be sent from the last time the orange alert was sent.'),
+        blank=True,
+        null=False,
+        default=ALERT_FREQUENCY_IN_SECONDS.EVERY_MINUTE,
+        choices=ALERT_FREQUENCY_IN_SECONDS_CHOICES,
+    )
+    yellow_alert_delay_in_seconds = models.PositiveSmallIntegerField(
+        _("Yellow alert delay (seconds)"),
+        help_text=_('The time that yellow alerts will be sent from the last time the yellow alert was sent.'),
         blank=True,
         null=False,
         default=ALERT_FREQUENCY_IN_SECONDS.EVERY_MINUTE,
@@ -518,3 +546,17 @@ class Production(models.Model):
             return "A"
         elif self.evaluation_score >= 90:
             return "A+"
+
+    def get_alert_condition(self):
+        from foundation.models.alert_item import AlertItem
+        if self.evaluation_score:
+            if self.red_below_value:
+                if self.evaluation_score <= self.red_below_value:
+                    return AlertItem.ALERT_ITEM_CONDITION.RED_BELOW_VALUE
+            if self.orange_below_value:
+                if self.evaluation_score <= self.orange_below_value:
+                    return AlertItem.ALERT_ITEM_CONDITION.ORANGE_BELOW_VALUE
+            if self.yellow_below_value:
+                if self.evaluation_score <= self.yellow_below_value:
+                    return AlertItem.ALERT_ITEM_CONDITION.YELLOW_BELOW_VALUE
+        return None

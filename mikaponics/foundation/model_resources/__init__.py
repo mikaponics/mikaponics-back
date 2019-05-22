@@ -11,5 +11,5 @@ from foundation.model_resources.coupon_resources import (
 )
 from foundation.model_resources.production_alert_resources import (
     create_production_alert_item_in_system_if_possible,
-    can_production_alert_create_alert_in_system
+    can_production_create_alert_in_system
 )
