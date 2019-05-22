@@ -1,0 +1,30 @@
+{% load staticfiles i18n foundation_tags %}
+Production Notification
+{% now "m/d/Y" %}
+
+Alert Name
+{{ alert.production.name }}
+
+Description
+{{ alert.production.description }}
+
+Quality Grading
+{{ alert.production.get_evaluation_letter }}
+
+Evaluated At
+{{ alert.production.evaluated_at }}
+
+Status
+{% if alert.is_red_alert %}
+  Red Alert
+{% elif alert.is_orange_alert %}
+  Orange Alert
+{% elif alert.is_yellow_alert %}
+  Yellow Alert
+{% endif %}
+
+Link:
+{{ url }}
+
+Link in Browser:
+{{ web_view_url }}
