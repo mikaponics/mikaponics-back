@@ -35,7 +35,7 @@ def run_production_alert_item_monitor_func():
     """
     from foundation.models import Production
 
-    for production in Production.objects.filter(state=Production.PRODUCTION_STATE.OPERATING).objects.iterator(chunk_size=250):
+    for production in Production.objects.filter(state=Production.PRODUCTION_STATE.OPERATING).iterator(chunk_size=250):
         call_command('production_alert_monitor', production.id, verbosity=0)
 
 
