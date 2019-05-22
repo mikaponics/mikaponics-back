@@ -2,8 +2,8 @@
 Mikapod Notification
 {% now "m/d/Y" %}
 
-Device ID #
-{{ alert.datum.instrument.device.id }}
+Device Name
+{{ alert.datum.instrument.device.name }}
 
 Instrument Type
 {{ alert.datum.get_pretty_instrument }}

@@ -1,3 +1,4 @@
+from alert.views.gui_views.instrument_alert_email_view import InstrumentAlertEmailWebBrowserView
 from alert.views.gui_views.production_alert_email_view import ProductionAlertEmailWebBrowserView
 from alert.views.resource_views.alert_item_list_view import AlertItemsListAPIView
 from alert.views.resource_views.alert_item_retrieve_view import AlertItemRetrieveAPIView

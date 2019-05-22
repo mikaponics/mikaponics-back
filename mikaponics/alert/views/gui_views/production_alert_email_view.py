@@ -24,7 +24,7 @@ class ProductionAlertEmailWebBrowserView(LoginRequiredMixin, MikaponicsDetailVie
         context['alert'] = alert
         context['url'] = settings.MIKAPONICS_FRONTEND_HTTP_PROTOCOL+settings.MIKAPONICS_FRONTEND_HTTP_DOMAIN+alert.production.get_absolute_url()
         context['web_view_url'] = reverse_with_full_domain(
-            reverse_url_id='mikaponics_alert_items_email',
+            reverse_url_id='mikaponics_production_alert_items_email',
             resolve_url_args=[alert.id]
         )
 

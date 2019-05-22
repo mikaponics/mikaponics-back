@@ -7,9 +7,9 @@ from foundation.models import Device, Instrument, AlertItem
 from foundation.utils import reverse_with_full_domain
 
 
-class AlertEmailWebBrowserView(LoginRequiredMixin, MikaponicsDetailView):
+class InstrumentAlertEmailWebBrowserView(LoginRequiredMixin, MikaponicsDetailView):
     context_object_name = 'alert'
-    template_name = 'alert/email/alert_item_view.html'
+    template_name = 'alert/email/instrument_alert_view.html'
     menu_id = "alert"
     model = AlertItem
 
@@ -21,11 +21,10 @@ class AlertEmailWebBrowserView(LoginRequiredMixin, MikaponicsDetailView):
 
         # Update our context.
         context['me'] = self.request.user
-        context['ALERT_STATE'] = AlertItem.INSTRUMENT_ALERT_STATE
+        context['alert'] = alert
         context['url'] = settings.MIKAPONICS_FRONTEND_HTTP_PROTOCOL+settings.MIKAPONICS_FRONTEND_HTTP_DOMAIN+alert.instrument.get_absolute_url()
-
         context['web_view_url'] = reverse_with_full_domain(
-            reverse_url_id='mikaponics_alert_items_email',
+            reverse_url_id='mikaponics_instrument_alert_items_email',
             resolve_url_args=[alert.id]
         )
 
