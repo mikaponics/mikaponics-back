@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import django_rq
+from django_rq import job
 from rq_scheduler import Scheduler
 from datetime import datetime, timedelta
 from django.apps import AppConfig
@@ -7,6 +8,7 @@ from django.conf import settings
 from django.core.management import call_command
 
 
+@job
 def run_instrument_alert_item_monitor_func():
     """
     Function will be called in the background runtime loop to handle iterating
@@ -19,10 +21,12 @@ def run_instrument_alert_item_monitor_func():
         call_command('instrument_alert_monitor', instrument.id, verbosity=0)
 
 
+@job
 def run_instrument_send_alert_email_func(alert_id):
     call_command('send_instrument_alert_email', alert_id, verbosity=0)
 
 
+@job
 def run_production_alert_item_monitor_func():
     """
     Function will be called in the background runtime loop to handle iterating
@@ -31,9 +35,10 @@ def run_production_alert_item_monitor_func():
     """
     from foundation.models import Production
 
-    for production in Production.objects.iterator(chunk_size=250):
+    for production in Production.filter(state=Production.PRODUCTION_STATE.OPERATING).objects.iterator(chunk_size=250):
         call_command('production_alert_monitor', production.id, verbosity=0)
 
 
+@job
 def run_send_production_alert_email_func(alert_id):
     call_command('send_production_alert_email', alert_id, verbosity=0)

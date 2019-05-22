@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import django_rq
+from django_rq import job
 from rq_scheduler import Scheduler
 from datetime import datetime, timedelta
 from django.apps import AppConfig
@@ -8,6 +9,7 @@ from django.core.management import call_command
 from django.db.models import Q, Prefetch
 
 
+@job
 def run_production_evaluation_handling_func():
     """
     Function will be called in the background runtime loop to handle iterating

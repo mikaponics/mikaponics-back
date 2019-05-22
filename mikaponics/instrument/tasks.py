@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import django_rq
+from django_rq import job
 from rq_scheduler import Scheduler
 from datetime import datetime, timedelta
 from django.apps import AppConfig
@@ -8,6 +9,7 @@ from django.core.management import call_command
 from django.db.models import Q, Prefetch
 
 
+@job
 def run_instruments_handling_func():
     """
     Function will be called in the background runtime loop to handle iterating
@@ -20,6 +22,7 @@ def run_instruments_handling_func():
         call_command('compute_instrument_statistics', instrument.id, verbosity=0)
 
 
+@job
 def run_instrument_simulators_func():
     """
     Function used to simulate instruments in our system.
@@ -33,6 +36,7 @@ def run_instrument_simulators_func():
         call_command('instrument_simulator_tick', simulator.id, verbosity=0)
 
 
+@job
 def run_power_usage_instrument_simulators_func():
     """
     Function used to simulate "power usage" instrument.

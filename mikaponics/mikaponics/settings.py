@@ -390,7 +390,7 @@ RQ_QUEUES = {
         'PORT': 6379,
         'DB': 0,
         # 'PASSWORD': '',
-        'DEFAULT_TIMEOUT': 360,
+        'DEFAULT_TIMEOUT': 666,
     }
 }
 RQ_SHOW_ADMIN_LINK = True
