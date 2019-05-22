@@ -21,3 +21,19 @@ from django.core.management import call_command
 #
 # def run_send_alert_email(instrument_id):
 #     call_command('send_alert_email', instrument_id, verbosity=0)
+
+
+def run_production_alert_item_monitor_func():
+    """
+    Function will be called in the background runtime loop to handle iterating
+    over all the production objects and performing our applications business
+    logic on them.
+    """
+    from foundation.models import Production
+
+    for production in Production.objects.iterator(chunk_size=250):
+        call_command('production_alert_monitor', production.id, verbosity=0)
+
+
+def run_send_production_alert_email_func(instrument_id):
+    call_command('send_production_alert_email', production_id, verbosity=0)

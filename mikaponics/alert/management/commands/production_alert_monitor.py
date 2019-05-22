@@ -69,4 +69,4 @@ class Command(BaseCommand):
                     'pid': str(production.id),
                 })
             )
-            #TODO: ADD CODE FOR SENDING EMAILS.
+            call_command('send_production_alert_email', alert_item.id, verbosity=0)
