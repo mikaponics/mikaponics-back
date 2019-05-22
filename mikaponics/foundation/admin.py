@@ -217,6 +217,25 @@ class InstrumentSimulatorAdmin(admin.ModelAdmin):
 admin.site.register(InstrumentSimulator, InstrumentSimulatorAdmin)
 
 
+class DeviceSimulatorAdmin(admin.ModelAdmin):
+    list_display = [
+        'device', 'is_running'
+
+    ]
+    list_filter = ['is_running',]
+    ordering = ['-id',]
+    raw_id_fields = ['device',]
+    readonly_fields = ['id',]
+
+    # def has_add_permission(self, request, obj=None):
+    #     return False
+    #
+    # def has_delete_permission(self, request, obj=None):
+    #     return False
+
+admin.site.register(DeviceSimulator, DeviceSimulatorAdmin)
+
+
 class TaskItemAdmin(admin.ModelAdmin):
     list_display = ['slug', 'id', 'type_of', 'last_modified_at']
     list_filter = ['type_of',]

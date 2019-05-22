@@ -7,6 +7,7 @@ from foundation.models.time_series_json_datum import TimeSeriesJSONDatum
 from foundation.models.device_report import DeviceReport
 from foundation.models.instrument_analysis import InstrumentAnalysis
 from foundation.models.instrument_simulator import InstrumentSimulator
+from foundation.models.device_simulator import DeviceSimulator
 
 from foundation.models.store import Store
 from foundation.models.product import Product
