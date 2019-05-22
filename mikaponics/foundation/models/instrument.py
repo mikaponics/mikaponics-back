@@ -614,7 +614,7 @@ class Instrument(models.Model):
         self.last_measured_unit_of_measure = datum.get_unit_of_measure()
         self.save()
 
-    def get_alert_state_by_datum(self, datum):
+    def get_alert_condition_by_datum(self, datum):
         """
         Function used to check if the time-series datum would trigger an alert
         and return the alert status of the datum in the parameter. Returns the
@@ -624,43 +624,20 @@ class Instrument(models.Model):
         if datum.value:
             if self.red_above_value:
                 if datum.value >= self.red_above_value:
-                    return AlertItem.INSTRUMENT_ALERT_STATE.RED_ABOVE_VALUE
+                    return AlertItem.ALERT_ITEM_CONDITION.RED_ABOVE_VALUE
             if self.orange_above_value:
                 if datum.value >= self.orange_above_value:
-                    return AlertItem.INSTRUMENT_ALERT_STATE.ORANGE_ABOVE_VALUE
+                    return AlertItem.ALERT_ITEM_CONDITION.ORANGE_ABOVE_VALUE
             if self.yellow_above_value:
                 if datum.value >= self.yellow_above_value:
-                    return AlertItem.INSTRUMENT_ALERT_STATE.YELLOW_ABOVE_VALUE
+                    return AlertItem.ALERT_ITEM_CONDITION.YELLOW_ABOVE_VALUE
             if self.red_below_value:
                 if datum.value <= self.red_below_value:
-                    return AlertItem.INSTRUMENT_ALERT_STATE.RED_BELOW_VALUE
+                    return AlertItem.ALERT_ITEM_CONDITION.RED_BELOW_VALUE
             if self.orange_below_value:
                 if datum.value <= self.orange_below_value:
-                    return AlertItem.INSTRUMENT_ALERT_STATE.ORANGE_BELOW_VALUE
+                    return AlertItem.ALERT_ITEM_CONDITION.ORANGE_BELOW_VALUE
             if self.yellow_below_value:
                 if datum.value <= self.yellow_below_value:
-                    return AlertItem.INSTRUMENT_ALERT_STATE.YELLOW_BELOW_VALUE
+                    return AlertItem.ALERT_ITEM_CONDITION.YELLOW_BELOW_VALUE
         return None
-
-    def find_alarming_datum(self, start_dt, end_dt, skip_datum=None):
-        """
-        Function will look through all the time-series data from the start
-        datetime to the end datetime range to find the LATEST datum which will
-        trigger an alarm. The priority of states would be:
-        - Red above value
-        - Orange above value
-        - Yellow above value
-        - Red below value
-        - Orange below value
-        - Yellow below value
-        """
-        data = self.time_series_data.filter(
-            Q(timestamp__range=[start_dt, end_dt])&
-            ~Q(id=skip_datum.id)
-        ).order_by('-id').iterator(chunk_size=250)
-
-        for datum in data:
-            alert_state = self.get_possible_alert_state_by_datum(datum)
-            if alert_state:
-                return dateum, alert_state
-        return None, None

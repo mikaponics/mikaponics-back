@@ -20,6 +20,11 @@ class AlertItemManager(models.Manager):
         except AlertItem.DoesNotExist:
             return None
 
+    def get_latest_by_instrument(self, instrument):
+        try:
+            return AlertItem.objects.filter(instrument=instrument).latest('created_at')
+        except AlertItem.DoesNotExist:
+            return None
 
 class AlertItem(models.Model):
     """

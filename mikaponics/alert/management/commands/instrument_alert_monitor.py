@@ -13,7 +13,7 @@ from foundation import constants
 from foundation.models import Instrument
 from foundation.model_resources import (
     instrument_find_alarming_datum_in_system,
-    create_alert_item_in_system_if_possible
+    create_instrument_alert_item_in_system_if_possible
 )
 
 
@@ -23,7 +23,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         """
         Run manually in console:
-        python manage.py alert_item_monitor 1
+        python manage.py instrument_alert_monitor 1
         """
         parser.add_argument('id', nargs='+', type=int)
 
@@ -33,7 +33,7 @@ class Command(BaseCommand):
         Either check the device for the inputted `id` value or check all devices.
         """
         utc_today = timezone.now()
-        utc_today_minus_some_minutes = utc_today - timedelta(minutes=5)
+        utc_today_minus_some_minutes = utc_today - timedelta(minutes=500)
 
         # Get user input.
         id = options['id'][0]
@@ -63,6 +63,9 @@ class Command(BaseCommand):
         )
 
     def process_instrument(self, instrument, utc_today, utc_today_minus_some_minutes):
+        # STEP 1:
+        # FIND A RECORD WHICH WOULD CAUSE AN ALARM STATE.
         datum, alert_state = instrument_find_alarming_datum_in_system(instrument, utc_today_minus_some_minutes, utc_today)
         if datum:
-            create_alert_item_in_system_if_possible(instrument, datum)
+            alert_item = create_instrument_alert_item_in_system_if_possible(datum, alert_state)
+            # call_command('send_instrument_alert_email', alert_item.id, verbosity=0)
