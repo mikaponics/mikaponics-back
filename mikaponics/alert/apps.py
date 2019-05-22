@@ -38,17 +38,17 @@ class AlertConfig(AppConfig):
         start_dt = start_dt + timedelta(minutes=1)
         start_dt = start_dt.replace(second=0, microsecond=0)
 
-        # # Run our background process.
-        # scheduler.schedule(
-        #     scheduled_time=start_dt,                 #  Time for first execution, in UTC timezone
-        #     func=run_alert_item_monitor_func,  # Function to be queued
-        #     args=[],                                 # Arguments passed into function when executed
-        #     kwargs={},                               # Keyword arguments passed into function when executed
-        #     interval=60,                             # Time before the function is called again, in seconds
-        #     repeat=None,                             # Repeat this number of times (None means repeat forever)
-        #     meta={'type': 'instrument'},             # Arbitrary pickleable data on the job itself
-        #     timeout=timeout.seconds                  # Automatically terminate process if exceeds this time.
-        # )
+        # Run our background process.
+        scheduler.schedule(
+            scheduled_time=start_dt,                      #  Time for first execution, in UTC timezone
+            func=run_instrument_alert_item_monitor_func,  # Function to be queued
+            args=[],                                      # Arguments passed into function when executed
+            kwargs={},                                    # Keyword arguments passed into function when executed
+            interval=60,                                  # Time before the function is called again, in seconds
+            repeat=None,                                  # Repeat this number of times (None means repeat forever)
+            meta={'type': 'instrument'},                  # Arbitrary pickleable data on the job itself
+            timeout=timeout.seconds                       # Automatically terminate process if exceeds this time.
+        )
 
         # Run our background process.
         scheduler.schedule(

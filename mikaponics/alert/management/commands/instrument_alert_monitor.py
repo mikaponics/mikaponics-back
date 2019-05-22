@@ -68,4 +68,5 @@ class Command(BaseCommand):
         datum, alert_state = instrument_find_alarming_datum_in_system(instrument, utc_today_minus_some_minutes, utc_today)
         if datum:
             alert_item = create_instrument_alert_item_in_system_if_possible(datum, alert_state)
-            # call_command('send_instrument_alert_email', alert_item.id, verbosity=0)
+            if alert_item:
+                call_command('send_instrument_alert_email', alert_item.id, verbosity=0)
