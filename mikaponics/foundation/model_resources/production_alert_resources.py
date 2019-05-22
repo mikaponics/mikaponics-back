@@ -95,7 +95,7 @@ def can_production_create_alert_in_system(production, alert_condition):
         purposes only.
         '''
         print("----------------------------------------------")
-        print("can_alert_create_alert_in_system")
+        print("can_production_create_alert_in_system")
         print("----------------------------------------------")
         print("Previous Alert:", latest_alert.id)
         print(">>> alert_condition:", alert_condition)

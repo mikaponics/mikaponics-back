@@ -96,7 +96,7 @@ def can_instrument_create_alert_in_system(instrument, alert_condition):
         purposes only.
         '''
         print("----------------------------------------------")
-        print("can_alert_create_alert_in_system")
+        print("can_instrument_create_alert_in_system")
         print("----------------------------------------------")
         print("Alert:", latest_alert.id)
         print(">>> dt_diff_in_seconds:", dt_diff_in_seconds)
