@@ -141,6 +141,35 @@ class Production(models.Model):
         (GROW_SYSTEM.OTHER_SYSTEM, _('Other (Please specify)')),
     )
 
+    class ALERT_FREQUENCY_IN_SECONDS:
+        EVERY_MINUTE = 60
+        EVERY_2_MINUTES = 120
+        EVERY_5_MINUTES = 300
+        EVERY_10_MINUTES = 600
+        EVERY_20_MINUTES = 1200
+        EVERY_30_MINUTES = 1800
+        EVERY_HOUR = 3600
+        EVERY_2_HOURS = 7200
+        EVERY_4_HOURS = 14400
+        EVERY_6_HOURS = 21600
+        EVERY_12_HOURS = 43200
+        EVERY_24_HOURS = 86400
+
+    ALERT_FREQUENCY_IN_SECONDS_CHOICES = (
+        (ALERT_FREQUENCY_IN_SECONDS.EVERY_MINUTE, _('Every minute')),
+        (ALERT_FREQUENCY_IN_SECONDS.EVERY_2_MINUTES, _('Every 2 minutes')),
+        (ALERT_FREQUENCY_IN_SECONDS.EVERY_5_MINUTES, _('Every 5 minutes')),
+        (ALERT_FREQUENCY_IN_SECONDS.EVERY_10_MINUTES, _('Every 10 minutes')),
+        (ALERT_FREQUENCY_IN_SECONDS.EVERY_20_MINUTES, _('Every 20 minutes')),
+        (ALERT_FREQUENCY_IN_SECONDS.EVERY_30_MINUTES, _('Every 30 minutes')),
+        (ALERT_FREQUENCY_IN_SECONDS.EVERY_HOUR, _('Every hour')),
+        (ALERT_FREQUENCY_IN_SECONDS.EVERY_2_HOURS, _('Every 2 hours')),
+        (ALERT_FREQUENCY_IN_SECONDS.EVERY_4_HOURS, _('Every 4 hours')),
+        (ALERT_FREQUENCY_IN_SECONDS.EVERY_6_HOURS, _('Every 6 hours')),
+        (ALERT_FREQUENCY_IN_SECONDS.EVERY_12_HOURS, _('Every 12 hours')),
+        (ALERT_FREQUENCY_IN_SECONDS.EVERY_24_HOURS, _('Every 24 hours')),
+    )
+
 
     '''
     Object Managers
@@ -345,6 +374,25 @@ class Production(models.Model):
         help_text=_('The datetime of the when the evaluation was done.'),
         blank=True,
         null=True,
+    )
+
+    #
+    # Alarm configuration.
+    #
+
+    alert_below_value = models.FloatField(
+        _("Alert below value"),
+        help_text=_('The value that if is less then or equal to then our system will trigger an alet.'),
+        blank=True,
+        null=True,
+    )
+    alert_delay_in_seconds = models.PositiveSmallIntegerField(
+        _("Alert delay (seconds)"),
+        help_text=_('The time that yellow alerts will be sent from the last time an alert was sent.'),
+        blank=True,
+        null=False,
+        default=ALERT_FREQUENCY_IN_SECONDS.EVERY_MINUTE,
+        choices=ALERT_FREQUENCY_IN_SECONDS_CHOICES,
     )
 
     #

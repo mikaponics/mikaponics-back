@@ -14,6 +14,12 @@ class AlertItemManager(models.Manager):
         for item in items.all():
             item.delete()
 
+    def get_latest_by_production(self, production):
+        try:
+            return AlertItem.objects.filter(production=production).latest('created_at')
+        except AlertItem.DoesNotExist:
+            return None
+
 
 class AlertItem(models.Model):
     """

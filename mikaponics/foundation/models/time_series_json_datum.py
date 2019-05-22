@@ -12,62 +12,62 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
 
-class TimeSeriesDatumManager(models.Manager):
+class TimeSeriesJSONDatumManager(models.Manager):
     def delete_all(self):
-        items = TimeSeriesDatum.objects.all()
+        items = TimeSeriesJSONDatum.objects.all()
         for item in items.all():
             item.delete()
 
-    def seed(self, instrument, length=25):
-        # Pre-generate our timestamps.
-        dt_array = []
-        for i in range(0,length):
-            # Create our datetime.
-            dt = timezone.now() - timedelta(minutes=i)
-            dt = dt.replace(second=0, microsecond=0)
-            dt_array.append(dt)
+    # def seed(self, instrument, length=25):
+    #     # Pre-generate our timestamps.
+    #     dt_array = []
+    #     for i in range(0,length):
+    #         # Create our datetime.
+    #         dt = timezone.now() - timedelta(minutes=i)
+    #         dt = dt.replace(second=0, microsecond=0)
+    #         dt_array.append(dt)
+    #
+    #     # Create the `time_step` we will be using.
+    #     time_step = timezone.now() - timedelta(minutes=i)
+    #     time_step = time_step.replace(hour=0, minute=1, second=0, microsecond=0)
+    #
+    #     # Generate our time-series data. We will iterate through our
+    #     # timestamps array in reverse so the OLDEST records get created FIRST
+    #     # until the NEWEST records are created LAST; therefore, our time-series
+    #     # data will be in the natural invoice.
+    #     results = []
+    #     faker = Faker('en_CA')
+    #     previous = None
+    #     for dt in reversed(dt_array):
+    #         # Create the current record.
+    #         data, was_created = TimeSeriesJSONDatum.objects.get_or_create(
+    #             instrument = instrument,
+    #             timestamp = dt,
+    #             defaults = {
+    #                 'instrument': instrument,
+    #                 'timestamp': dt,
+    #                 'value': faker.pyfloat(left_digits=2, right_digits=2, positive=True),
+    #                 'time_step': time_step,
+    #                 'previous':  previous,
+    #                 'created_from': '127.0.0.1',
+    #                 'created_from_is_public': False
+    #             }
+    #         )
+    #         results.append(data)
+    #
+    #         # Save the previous record to have this current record as new.
+    #         if previous:
+    #             previous.next = data
+    #             previous.save()
+    #
+    #         # This record becomes the previous record.
+    #         previous = data
+    #     return results
 
-        # Create the `time_step` we will be using.
-        time_step = timezone.now() - timedelta(minutes=i)
-        time_step = time_step.replace(hour=0, minute=1, second=0, microsecond=0)
 
-        # Generate our time-series data. We will iterate through our
-        # timestamps array in reverse so the OLDEST records get created FIRST
-        # until the NEWEST records are created LAST; therefore, our time-series
-        # data will be in the natural invoice.
-        results = []
-        faker = Faker('en_CA')
-        previous = None
-        for dt in reversed(dt_array):
-            # Create the current record.
-            data, was_created = TimeSeriesDatum.objects.get_or_create(
-                instrument = instrument,
-                timestamp = dt,
-                defaults = {
-                    'instrument': instrument,
-                    'timestamp': dt,
-                    'value': faker.pyfloat(left_digits=2, right_digits=2, positive=True),
-                    'time_step': time_step,
-                    'previous':  previous,
-                    'created_from': '127.0.0.1',
-                    'created_from_is_public': False
-                }
-            )
-            results.append(data)
-
-            # Save the previous record to have this current record as new.
-            if previous:
-                previous.next = data
-                previous.save()
-
-            # This record becomes the previous record.
-            previous = data
-        return results
-
-
-class TimeSeriesDatum(models.Model):
+class TimeSeriesJSONDatum(models.Model):
     """
-    Class used to track a single `float` value per `unit of time`.
+    Class used to track a single `JSON` object per `unit of time`.
     """
 
     '''
@@ -75,9 +75,9 @@ class TimeSeriesDatum(models.Model):
     '''
     class Meta:
         app_label = 'foundation'
-        db_table = 'mika_time_series_data'
-        verbose_name = _('Time-Series Datum')
-        verbose_name_plural = _('Time-Series Data')
+        db_table = 'mika_time_series_json_data'
+        verbose_name = _('Time-Series JSON Datum')
+        verbose_name_plural = _('Time-Series JSON Data')
         default_permissions = ()
         unique_together = ("instrument", "timestamp")
         permissions = (
@@ -102,7 +102,7 @@ class TimeSeriesDatum(models.Model):
     '''
     Object Managers
     '''
-    objects = TimeSeriesDatumManager()
+    objects = TimeSeriesJSONDatumManager()
 
     '''
     Fields
@@ -121,7 +121,7 @@ class TimeSeriesDatum(models.Model):
         help_text=_('The instrument this datum belongs to.'),
         blank=False,
         null=False,
-        related_name="time_series_data",
+        related_name="time_series_json_data",
         on_delete=models.CASCADE
     )
     timestamp = models.DateTimeField(
@@ -136,18 +136,6 @@ class TimeSeriesDatum(models.Model):
         blank=False,
         null=False,
     )
-    value = models.FloatField(
-        _("Value"),
-        help_text=_('The value of the datum.'),
-        blank=True,
-        null=True,
-    )
-
-    #
-    # Additional fields for enhancement.
-    #
-
-    # NOTE: Used to geo-tag time-series data if programmer likes.
     location = PointField(
         _("Location"),
         help_text=_('A longitude and latitude coordinates of this time-series datum.'),
@@ -156,6 +144,17 @@ class TimeSeriesDatum(models.Model):
         srid=4326,
         db_index=True
     )
+    image_value = models.ImageField(
+        _("Image Value"),
+        help_text=_('The image file of the time-series datum.'),
+        blank=True,
+        null=True,
+        upload_to='uploads/time-series-data/%Y/%m/%d/'
+    )
+
+    #
+    # Additional fields for enhancement.
+    #
 
     # NOTE: We want to structure this model to support a chained linked-list
     # data structure so we can do aggregate date modifications more easily.
