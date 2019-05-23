@@ -8,6 +8,7 @@ from django.contrib.postgres.search import SearchVector, SearchVectorField
 from django.contrib.postgres.indexes import BrinIndex
 from django.db import models
 from django.db import transaction
+from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -29,6 +30,11 @@ class TaskItemManager(models.Manager):
 
 
 class TaskItem(models.Model):
+
+    '''
+    Metadata
+    '''
+
     class Meta:
         app_label = 'foundation'
         db_table = 'mika_task_items'
@@ -47,7 +53,27 @@ class TaskItem(models.Model):
             ('user', 'created_at', 'is_closed'),
         )
 
+    '''
+    Constants & Choices
+    '''
+
+    class TYPE_OF:
+        PRODUCTION_INSPECTION = 1
+
+    TYPE_OF_CHOICES = (
+        (TYPE_OF.PRODUCTION_INSPECTION, _('Production Inspection')),
+    )
+
+    '''
+    Object Managers
+    '''
+
     objects = TaskItemManager()
+
+    '''
+    Fields
+    '''
+
     id = models.BigAutoField(
         _("ID"),
         primary_key=True,
@@ -160,9 +186,9 @@ class TaskItem(models.Model):
         blank=True
     )
 
-    #
-    #  FUNCTIONS
-    #
+    '''
+    Methods
+    '''
 
     def __str__(self):
         return str(self.id)
@@ -188,3 +214,9 @@ class TaskItem(models.Model):
                 self.slug = slugify(self.user)+"-task-"+str(count)+"-"+get_random_string(length=8)
 
         super(TaskItem, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return "/task/"+str(self.slug)
+
+    def get_pretty_type_of(self):
+        return "Production Inspection"
