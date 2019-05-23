@@ -140,6 +140,43 @@ class TaskItem(models.Model):
     )
 
     #
+    #  REFERENCE FIELDS
+    #
+
+    device = models.ForeignKey(
+        "Device",
+        help_text=_('The device this task belongs to.'),
+        blank=True,
+        null=True,
+        related_name="task_items",
+        on_delete=models.SET_NULL
+    )
+    instrument = models.ForeignKey(
+        "Instrument",
+        help_text=_('The instrument this task belongs to.'),
+        blank=True,
+        null=True,
+        related_name="task_items",
+        on_delete=models.SET_NULL
+    )
+    production = models.ForeignKey(
+        "Production",
+        help_text=_('The production this task belongs to.'),
+        blank=True,
+        null=True,
+        related_name="task_items",
+        on_delete=models.SET_NULL
+    )
+    production_crop = models.ForeignKey(
+        "ProductionCrop",
+        help_text=_('The production crop this task belongs to.'),
+        blank=True,
+        null=True,
+        related_name="task_items",
+        on_delete=models.SET_NULL
+    )
+
+    #
     #  SYSTEM FIELDS
     #
 

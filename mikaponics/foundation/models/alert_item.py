@@ -125,7 +125,7 @@ class AlertItem(models.Model):
         help_text=_('The user this alert belongs to.'),
         blank=False,
         null=False,
-        related_name="alerts",
+        related_name="alert_items",
         on_delete=models.CASCADE
     )
     type_of = models.PositiveSmallIntegerField(
@@ -140,7 +140,7 @@ class AlertItem(models.Model):
         help_text=_('The device this alert belongs to.'),
         blank=True,
         null=True,
-        related_name="alerts",
+        related_name="alert_items",
         on_delete=models.SET_NULL
     )
     instrument = models.ForeignKey(
@@ -148,7 +148,7 @@ class AlertItem(models.Model):
         help_text=_('The instrument this alert belongs to.'),
         blank=True,
         null=True,
-        related_name="alerts",
+        related_name="alert_items",
         on_delete=models.SET_NULL
     )
     production = models.ForeignKey(
@@ -156,7 +156,7 @@ class AlertItem(models.Model):
         help_text=_('The production this alert belongs to.'),
         blank=True,
         null=True,
-        related_name="alerts",
+        related_name="alert_items",
         on_delete=models.SET_NULL
     )
     production_crop = models.ForeignKey(
@@ -164,7 +164,7 @@ class AlertItem(models.Model):
         help_text=_('The production crop this alert belongs to.'),
         blank=True,
         null=True,
-        related_name="alerts",
+        related_name="alert_items",
         on_delete=models.SET_NULL
     )
     timestamp = models.DateTimeField(
