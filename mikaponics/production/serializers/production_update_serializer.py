@@ -14,6 +14,9 @@ from production.serializers.production_crop_retrieve_serializer import Productio
 
 
 class ProductionUpdateSerializer(serializers.ModelSerializer):
+    day_starts_at = serializers.TimeField(required=False, allow_null=True,)
+    day_finishes_at = serializers.TimeField(required=False, allow_null=True,)
+
     class Meta:
         model = Production
         fields = (
@@ -30,6 +33,9 @@ class ProductionUpdateSerializer(serializers.ModelSerializer):
             'was_success_at_finish',
             'failure_reason',
             'notes_at_finish',
+            'has_day_and_night_cycle',
+            'day_starts_at',
+            'day_finishes_at',
         )
 
     def validate_failure_reason(self, value):

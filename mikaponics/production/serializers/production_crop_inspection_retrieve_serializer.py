@@ -46,5 +46,6 @@ class ProductionCropInspectionRetrieveSerializer(serializers.ModelSerializer):
             'failure_reason',
             'notes',
             'created_at',
-            'last_modified_at'
+            'last_modified_at',
+            'at_duration'
         )

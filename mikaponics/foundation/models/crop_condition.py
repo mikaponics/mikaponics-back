@@ -53,6 +53,17 @@ class CropCondition(models.Model):
         (INSTRUMENT_TYPE.UV_LIGHT, _('UV Light')),
     )
 
+    class OPERATION_CYCLE:
+        CONTINUOUS_CYCLE = 1
+        DAY_CYCLE = 2
+        NIGHT_CYCLE = 3
+
+    OPERATION_CYCLE_CHOICES = (
+        (OPERATION_CYCLE.CONTINUOUS_CYCLE, _('Continuous Cycle')),
+        (OPERATION_CYCLE.DAY_CYCLE, _('Day Cycle')),
+        (OPERATION_CYCLE.NIGHT_CYCLE, _('Night Cycle')),
+    )
+
     '''
     Metadata
     '''
@@ -66,7 +77,7 @@ class CropCondition(models.Model):
         permissions = (
         )
         # unique_together = ("data_sheet", "stage", 'type_of')
-        index_together = ("data_sheet", "stage", 'type_of')
+        index_together = ("data_sheet", "stage", 'type_of', 'operation_cycle')
 
     '''
     Object Manager
@@ -95,6 +106,13 @@ class CropCondition(models.Model):
         blank=False,
         null=False,
         choices=INSTRUMENT_TYPE_OF_CHOICES,
+    )
+    operation_cycle = models.PositiveSmallIntegerField(
+        _("Operation Cycle"),
+        help_text=_('The operation cycle this condition belongs to.'),
+        blank=False,
+        null=False,
+        choices=OPERATION_CYCLE_CHOICES,
     )
 
     # --- VALUE --- #

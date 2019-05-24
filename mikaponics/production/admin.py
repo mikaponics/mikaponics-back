@@ -33,10 +33,10 @@ admin.site.register(CropLifeCycleStage, CropLifeCycleStageAdmin)
 
 class CropConditionAdmin(admin.ModelAdmin):
     list_display = [
-        'id', 'data_sheet', 'type_of', 'stage',
+        'id', 'data_sheet', 'type_of', 'stage', 'operation_cycle',
 
     ]
-    list_filter = ['stage', 'data_sheet']
+    list_filter = ['stage', 'data_sheet', 'operation_cycle',]
     ordering = ['id',]
     raw_id_fields = []
     readonly_fields = ['id',]

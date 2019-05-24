@@ -100,6 +100,12 @@ class CropDataSheet(models.Model):
         blank=True,
         related_name="data_sheets"
     )
+    has_day_and_night_cycle = models.BooleanField(
+        _("Has Night?"),
+        help_text=_('Indicates if this crop has a dark period (night) to rest and encourage flowering or specialized growth.'),
+        default=False,
+        blank=True,
+    )
 
 
     '''

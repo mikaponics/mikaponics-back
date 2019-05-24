@@ -15,7 +15,7 @@ from djmoney.money import Money
 from oauthlib.common import generate_token
 
 from foundation.constants import *
-from foundation.models import Production, ProductionCrop, CropDataSheet, TimeSeriesDatum
+from foundation.models import Production, ProductionCrop, CropDataSheet, CropCondition, TimeSeriesDatum
 
 
 class Command(BaseCommand):
@@ -174,11 +174,43 @@ class Command(BaseCommand):
         # (4) Fetch the latest time-series datum for the device.
 
         stage = production_crop.stage
-        conditions = production_crop.data_sheet.conditions.filter(stage=stage).order_by('id')
+        operation_cycle = production_crop.production.get_operation_cycle()
+        conditions = production_crop.data_sheet.conditions.filter(
+            stage=stage,
+            operation_cycle=operation_cycle
+        ).order_by('id')
+
+        # If no conditions where found, that means we need to fallback on our
+        # continious operation conditions as there is no data for the night/day
+        # cycle.
+        if conditions.count() == 0:
+            self.stdout.write(
+                self.style.WARNING(_('%(dt)s | EVALUATION | Cannot find conditions for "%(oc)s", falling back to "continuous cycle".') % {
+                    'dt': str(timezone.now()),
+                    'oc': production_crop.production.get_pretty_operation_cycle()
+                })
+            )
+            conditions = production_crop.data_sheet.conditions.filter(
+                stage=stage,
+                operation_cycle=CropCondition.OPERATION_CYCLE.CONTINUOUS_CYCLE
+            ).order_by('id')
+
         device = production_crop.production.device
-        conditions_count = conditions.count()
+
+        # IMPORTANT:
+        # Why are we doing "device.instruments.count()" instead of the
+        # "conditions.count()" code? The reason is we want to have evaluations
+        # be determined what `instrument` the device has instead of all the
+        # possible conditions for various instruments. By doing it this way,
+        # we allow our system to support multiple devices with multiple
+        # evaluation ratings - i.e. dynamic evaluations.
+        conditions_count = device.instruments.count()
+
+        # Variable used to count how many conditions where successfully met.
         pass_count = 0
 
+        # Iterate through all the conditions and evaluate them, if any
+        # errors occur then we will need to break the for-loop.
         for condition in conditions.all():
             did_pass, has_error = self.evaluate(production_crop, device, condition)
             if did_pass:

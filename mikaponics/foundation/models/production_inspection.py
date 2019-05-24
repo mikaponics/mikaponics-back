@@ -225,6 +225,12 @@ class ProductionInspection(models.Model):
         blank=True,
         editable=False,
     )
+    at_duration = models.DurationField(
+        _("At duration"),
+        help_text=_('The value that this inspection was saved during the duration of the productiion since start.'),
+        blank=True,
+        editable=False,
+    )
 
     '''
     Methods

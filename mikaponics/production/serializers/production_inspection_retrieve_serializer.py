@@ -35,6 +35,7 @@ class ProductionInspectionRetrieveSerializer(serializers.ModelSerializer):
             'created_at',
             'last_modified_at',
             'crops',
+            'at_duration'
         )
 
     def get_crops(self, obj):

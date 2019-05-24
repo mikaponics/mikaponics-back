@@ -9,6 +9,7 @@ TODO
 from __future__ import unicode_literals
 import stripe
 import uuid
+from pytz import timezone as pytz_timezone
 from datetime import date, datetime, timedelta
 from django.db import models
 from django.core.mail import send_mail
@@ -828,3 +829,8 @@ class User(AbstractBaseUser, PermissionsMixin):
                 raise Exception("Method name not found.")
         except AttributeError:
             pass
+
+    def get_now(self):
+        user_timezone = pytz_timezone(self.timezone)
+        now_utc = datetime.now(pytz_timezone('UTC'))
+        return now_utc.astimezone(user_timezone)

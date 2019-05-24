@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import uuid
 import pytz
+from datetime import datetime
+from datetime import timedelta
 from faker import Faker
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -170,6 +172,16 @@ class Production(models.Model):
         (ALERT_FREQUENCY_IN_SECONDS.EVERY_24_HOURS, _('Every 24 hours')),
     )
 
+    class OPERATION_CYCLE:
+        CONTINUOUS_CYCLE = 1
+        DAY_CYCLE = 2
+        NIGHT_CYCLE = 3
+
+    OPERATION_CYCLE_CHOICES = (
+        (OPERATION_CYCLE.CONTINUOUS_CYCLE, _('Continuous Cycle')),
+        (OPERATION_CYCLE.DAY_CYCLE, _('Day Cycle')),
+        (OPERATION_CYCLE.NIGHT_CYCLE, _('Night Cycle')),
+    )
 
     '''
     Object Managers
@@ -229,6 +241,24 @@ class Production(models.Model):
         null=False,
         related_name="productions",
         on_delete=models.CASCADE
+    )
+    has_day_and_night_cycle = models.BooleanField(
+        _("Has day/night cycle?"),
+        help_text=_('Indicates if this production will have a day/night cycle else this production is a continuous operation.'),
+        default=False,
+        blank=True,
+    )
+    day_starts_at = models.TimeField(
+        _("Night Start"),
+        help_text=_('The start time to the night (dark period).'),
+        blank=True,
+        null=True,
+    )
+    day_finishes_at = models.TimeField(
+        _("Night Finish"),
+        help_text=_('The finish time to the night (dark period).'),
+        blank=True,
+        null=True,
     )
 
     #
@@ -560,3 +590,61 @@ class Production(models.Model):
                 if self.evaluation_score <= self.yellow_below_value:
                     return AlertItem.ALERT_ITEM_CONDITION.YELLOW_BELOW_VALUE
         return None
+
+    def get_runtime_duration(self):
+        """
+        Function returns the python `timedelta` of either:
+        (1) Start date to current date
+        (2) Start date to finish date
+        """
+        d1 = datetime.now()
+        d2 = datetime.now()
+
+
+
+
+        time_difference = d1 - d2
+        time_difference_in_minutes = time_difference / timedelta(minutes=1)
+        return timedelta(minutes=time_difference_in_minutes)
+
+
+
+        if self.finished_at:
+            print("TODO: get_runtime_duration");
+            return datetime.timedelta(days=20, hours=10)
+        else:
+            print("TODO: get_runtime_duration");
+            return datetime.timedelta(days=20, hours=10)
+
+    def get_operation_cycle(self):
+        """
+        Function will return an indication of whether this production is in
+        (1) continuous (2) day or (3) night operation cycle.
+        """
+        # STEP 1:
+        # Check to see if the night has been set, if not then return the
+        # continuous cycle.
+        if self.has_day_and_night_cycle is False:
+            return self.OPERATION_CYCLE.CONTINUOUS_CYCLE
+
+        # STEP 2:
+        # Get the timezone aware python `datetime` object of the user's time.
+        aware_dt = self.user.get_now()
+
+        # print(aware_dt.time())
+        # print(self.day_starts_at)
+        # print(self.day_finishes_at)
+
+        # STEP 3:
+        # Check the time of the current time and if it is within the specified
+        # night start and finish time then return the night cycle status, else
+        # return the day cycle status.
+        if aware_dt.time() >= self.day_starts_at:
+            if aware_dt.time() <= self.day_finishes_at:
+                return self.OPERATION_CYCLE.DAY_CYCLE
+        return self.OPERATION_CYCLE.NIGHT_CYCLE
+
+    def get_pretty_operation_cycle(self):
+        operation_cycle = self.get_operation_cycle()
+        result = dict(self.OPERATION_CYCLE_CHOICES).get(operation_cycle)
+        return str(result)

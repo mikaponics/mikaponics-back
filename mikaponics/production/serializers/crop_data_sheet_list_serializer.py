@@ -19,4 +19,5 @@ class CropDataSheetListSerializer(serializers.ModelSerializer):
             'name',
             'type_of',
             'slug',
+            'has_day_and_night_cycle'
         )

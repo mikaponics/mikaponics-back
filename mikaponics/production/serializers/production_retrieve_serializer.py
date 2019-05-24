@@ -25,6 +25,9 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
     crops = serializers.SerializerMethodField()
     device = DeviceRetrieveUpdateDestroySerializer(many=False, required=True)
     evaluation_letter = serializers.ReadOnlyField(source="get_evaluation_letter")
+    runtime_duration = serializers.DurationField(source='get_runtime_duration')
+    operation_cycle = serializers.IntegerField(source='get_operation_cycle')
+
 
     class Meta:
         model = Production
@@ -51,10 +54,15 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
             'fish',
             'crops',
             'device',
+            'has_day_and_night_cycle',
+            'day_starts_at',
+            'day_finishes_at',
             'evaluation_score',
             'evaluation_letter',
             'evaluation_has_error',
             'evaluated_at',
+            'runtime_duration',
+            'operation_cycle',
             'absolute_url',
         )
 

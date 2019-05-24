@@ -21,6 +21,9 @@ class ProductionCreateSerializer(serializers.Serializer):
     type_of = serializers.IntegerField(required=True)
     grow_system = serializers.IntegerField(required=True)
     grow_system_other = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    has_day_and_night_cycle = serializers.BooleanField(required=False)
+    day_starts_at = serializers.TimeField(required=False, allow_null=True,)
+    day_finishes_at = serializers.TimeField(required=False, allow_null=True,)
     plants_array = serializers.JSONField(required=True)
     fish_array = serializers.JSONField(required=True)
 
@@ -36,6 +39,9 @@ class ProductionCreateSerializer(serializers.Serializer):
             'type_of',
             'grow_system',
             'grow_system_other',
+            'has_day_and_night_cycle',
+            'day_starts_at',
+            'day_finishes_at',
             'plants_array',
             'fish_array'
         )
@@ -64,6 +70,9 @@ class ProductionCreateSerializer(serializers.Serializer):
         type_of = validated_data.get('type_of', None)
         grow_system = validated_data.get('grow_system', None)
         grow_system_other = validated_data.get('grow_system_other', None)
+        has_day_and_night_cycle = validated_data.get('has_day_and_night_cycle', None)
+        day_starts_at = validated_data.get('day_starts_at', None)
+        day_finishes_at = validated_data.get('day_finishes_at', None)
         plants_array = validated_data.get('plants_array', [])
         fish_array = validated_data.get('fish_array', [])
 
@@ -81,6 +90,9 @@ class ProductionCreateSerializer(serializers.Serializer):
             grow_system_other=grow_system_other,
             started_at=timezone.now(),
             state=Production.PRODUCTION_STATE.OPERATING,
+            has_day_and_night_cycle=has_day_and_night_cycle,
+            day_starts_at=day_starts_at,
+            day_finishes_at=day_finishes_at,
             created_by=authenticated_by,
             created_from=authenticated_from,
             created_from_is_public=authenticated_from_is_public,
