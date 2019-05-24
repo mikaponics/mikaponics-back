@@ -35,9 +35,6 @@ def run_device_simulators_func():
     """
     Function used to simulate device in our system.
     """
-    from foundation.models import Device, DeviceSimulator
-
+    from foundation.models import DeviceSimulator
     for deviceSimulator in DeviceSimulator.objects.filter(is_running=True).iterator(chunk_size=250):
-        for instrument in deviceSimulator.device.instruments.all():
-            if instrument.simulator:
-                call_command('instrument_simulator_tick', instrument.simulator.id, verbosity=0)
+        deviceSimulator.tick()

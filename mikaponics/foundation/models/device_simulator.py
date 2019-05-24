@@ -91,3 +91,17 @@ class DeviceSimulator(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+    def tick(self):
+        from foundation.models import Device, TimeSeriesDatum
+
+        for instrument in self.device.instruments.all():
+
+            # Make sure the device is active.
+            instrument.device.state = Device.DEVICE_STATE.ONLINE
+            instrument.device.save()
+
+            TimeSeriesDatum.objects.seed(instrument, 1)
+
+            # Reset the device's cached items.
+            instrument.device.invalidate_all()
