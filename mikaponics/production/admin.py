@@ -184,9 +184,9 @@ class ProductionInspectionAdmin(admin.ModelAdmin):
     inlines = [
         ProductionCropInspectionInline,
     ]
-    raw_id_fields = ['production',]
+    raw_id_fields = ['production', 'task_item']
     list_filter = ['did_pass', 'state',]
-    list_display = ['slug', 'production', 'did_pass', 'created_at', 'state',]
+    list_display = ['slug', 'production', 'did_pass', 'created_at', 'state', 'task_item',]
     ordering = ['-id',]
     readonly_fields = [
         'id', 'created_at', 'created_by', 'created_from',

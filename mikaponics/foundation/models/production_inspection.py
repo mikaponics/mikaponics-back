@@ -172,6 +172,20 @@ class ProductionInspection(models.Model):
         null=True,
     )
 
+    #
+    #  The task this inspection belongs to.
+    #
+
+    task_item = models.ForeignKey(
+        "TaskItem",
+        verbose_name=_('Task Item'),
+        help_text=_("The task item this inspection belongs to."),
+        blank=True,
+        null=True,
+        related_name="+", # One-to-one task to inspection mapping.
+        on_delete=models.SET_NULL
+    )
+
 
     #
     # Audit detail fields

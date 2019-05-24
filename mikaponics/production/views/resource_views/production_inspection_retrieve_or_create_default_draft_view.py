@@ -57,6 +57,7 @@ class ProductionInspectionRetrieveOrCreateDefaultDraftAPIView(generics.RetrieveA
         default_draft_inspection, was_created = ProductionInspection.objects.get_or_create(
             production__slug=slug,
             state=ProductionInspection.STATE.DRAFT,
+            task_item__isnull=True,
             defaults={
                 'production': production,
                 'state': ProductionInspection.STATE.DRAFT,

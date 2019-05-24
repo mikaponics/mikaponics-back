@@ -175,6 +175,14 @@ class TaskItem(models.Model):
         related_name="task_items",
         on_delete=models.SET_NULL
     )
+    production_inspection = models.ForeignKey(
+        "ProductionInspection",
+        help_text=_('The production inspection this task belongs to.'),
+        blank=True,
+        null=True,
+        related_name="+",  # One-to-one task to inspection mapping.
+        on_delete=models.SET_NULL
+    )
 
     #
     #  SYSTEM FIELDS
@@ -228,7 +236,7 @@ class TaskItem(models.Model):
     '''
 
     def __str__(self):
-        return str(self.id)
+        return str(self.slug)
 
     def save(self, *args, **kwargs):
         """
