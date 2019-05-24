@@ -597,24 +597,16 @@ class Production(models.Model):
         (1) Start date to current date
         (2) Start date to finish date
         """
-        d1 = datetime.now()
-        d2 = datetime.now()
-
-
-
-
-        time_difference = d1 - d2
-        time_difference_in_minutes = time_difference / timedelta(minutes=1)
-        return timedelta(minutes=time_difference_in_minutes)
-
-
-
+        aware_start_dt = self.started_at
         if self.finished_at:
-            print("TODO: get_runtime_duration");
-            return datetime.timedelta(days=20, hours=10)
+            time_difference = self.finished_at - aware_start_dt
+            time_difference_in_minutes = time_difference / timedelta(minutes=1)
+            return timedelta(minutes=time_difference_in_minutes)
         else:
-            print("TODO: get_runtime_duration");
-            return datetime.timedelta(days=20, hours=10)
+            utc_today = timezone.now()
+            time_difference = utc_today - aware_start_dt
+            time_difference_in_minutes = time_difference / timedelta(minutes=1)
+            return timedelta(minutes=time_difference_in_minutes)
 
     def get_operation_cycle(self):
         """

@@ -191,7 +191,7 @@ class ProductionInspectionAdmin(admin.ModelAdmin):
     readonly_fields = [
         'id', 'created_at', 'created_by', 'created_from',
         'created_from_is_public', 'last_modified_at', 'last_modified_by',
-        'last_modified_from', 'last_modified_from_is_public',
+        'last_modified_from', 'last_modified_from_is_public', 'at_duration'
     ]
 
     def save_model(self, request, obj, form, change):
@@ -223,7 +223,7 @@ class ProductionCropInspectionAdmin(admin.ModelAdmin):
     readonly_fields = [
         'id', 'created_at', 'created_by', 'created_from',
         'created_from_is_public', 'last_modified_at', 'last_modified_by',
-        'last_modified_from', 'last_modified_from_is_public',
+        'last_modified_from', 'last_modified_from_is_public', 'at_duration'
     ]
 
     def save_model(self, request, obj, form, change):

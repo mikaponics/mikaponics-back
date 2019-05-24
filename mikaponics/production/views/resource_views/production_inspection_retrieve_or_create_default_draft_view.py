@@ -66,6 +66,7 @@ class ProductionInspectionRetrieveOrCreateDefaultDraftAPIView(generics.RetrieveA
                 'last_modified_by': request.user,
                 'last_modified_from': client_ip,
                 'last_modified_from_is_public': is_routable,
+                'at_duration': production.get_runtime_duration()
             }
         )
 
@@ -84,6 +85,7 @@ class ProductionInspectionRetrieveOrCreateDefaultDraftAPIView(generics.RetrieveA
                     last_modified_by=request.user,
                     last_modified_from=client_ip,
                     last_modified_from_is_public=is_routable,
+                    at_duration=production.get_runtime_duration()
                 )
 
         # Serialize our object to JSON data.
