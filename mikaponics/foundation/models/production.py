@@ -473,6 +473,12 @@ class Production(models.Model):
     # PRODUCTION INSPECTION REMINDER TASK FIELDS
     #
 
+    inspections_start_at = models.DateTimeField(
+        _("Inspections start at"),
+        help_text=_('The date/time this production\'s inspections will start.'),
+        blank=True,
+        null=True,
+    )
     inspection_frequency = models.PositiveSmallIntegerField(
         _("Inspections frequency"),
         help_text=_('The frequency to create `production inspection` tasks.'),
@@ -683,7 +689,7 @@ class Production(models.Model):
     def generate_next_inspection_datetime(self):
         if self.inspection_frequency == self.INSPECTION_FREQUENCY.NEVER:
             return None
-        now_dt = timezone.now() if self.next_inspection_at is None else self.next_inspection_at
+        now_dt = self.inspections_start_at if self.next_inspection_at is None else self.next_inspection_at
         if self.inspection_frequency == self.INSPECTION_FREQUENCY.DAILY:
             return now_dt + timedelta(hours=24)
         elif self.inspection_frequency == self.INSPECTION_FREQUENCY.WEEKLY:

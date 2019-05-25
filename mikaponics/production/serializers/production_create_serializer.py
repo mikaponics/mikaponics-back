@@ -26,6 +26,7 @@ class ProductionCreateSerializer(serializers.Serializer):
     day_finishes_at = serializers.TimeField(required=False, allow_null=True,)
     plants_array = serializers.JSONField(required=True)
     fish_array = serializers.JSONField(required=True)
+    inspections_start_at = serializers.DateTimeField(required=True, allow_null=False,)
     inspection_frequency = serializers.IntegerField(required=True, allow_null=False)
     yellow_below_value = serializers.FloatField(required=False, allow_null=True)
     orange_below_value = serializers.FloatField(required=False, allow_null=True)
@@ -50,6 +51,7 @@ class ProductionCreateSerializer(serializers.Serializer):
             'day_finishes_at',
             'plants_array',
             'fish_array',
+            'inspections_start_at',
             'inspection_frequency',
             'yellow_below_value',
             'orange_below_value',
@@ -91,6 +93,7 @@ class ProductionCreateSerializer(serializers.Serializer):
 
         device = Device.objects.get(slug=device_slug)
 
+        inspections_start_at = validated_data.get('inspections_start_at', None)
         inspection_frequency = validated_data.get('inspection_frequency', None)
         yellow_below_value = validated_data.get('yellow_below_value', None)
         orange_below_value = validated_data.get('orange_below_value', None)
@@ -120,6 +123,7 @@ class ProductionCreateSerializer(serializers.Serializer):
             last_modified_by=authenticated_by,
             last_modified_from=authenticated_from,
             last_modified_from_is_public=authenticated_from_is_public,
+            inspections_start_at=inspections_start_at,
             inspection_frequency=inspection_frequency,
             yellow_below_value=yellow_below_value,
             orange_below_value=orange_below_value,
@@ -133,6 +137,7 @@ class ProductionCreateSerializer(serializers.Serializer):
         production.next_inspection_at = production.generate_next_inspection_datetime()
         production.save()
 
+        # Save our plants.
         for plant in plants_array:
             data_sheet = CropDataSheet.objects.filter(slug=plant['plant_slug']).first()
             substrate = CropSubstrate.objects.filter(slug=plant['substrate_slug']).first()
@@ -148,6 +153,7 @@ class ProductionCreateSerializer(serializers.Serializer):
                 type_of=ProductionCrop.TYPE_OF.PLANT
             )
 
+        # Save our fish.
         for fish in fish_array:
             data_sheet = CropDataSheet.objects.filter(slug=fish['fish_slug']).first()
             substrate = CropSubstrate.objects.filter(slug=fish['substrate_slug']).first()
