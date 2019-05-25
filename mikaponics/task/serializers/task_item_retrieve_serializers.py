@@ -17,6 +17,7 @@ from foundation.models import TaskItem
 class TaskItemRetrieveSerializer(serializers.ModelSerializer):
     pretty_type_of = serializers.CharField(read_only=True, source="get_pretty_type_of")
     absolute_url = serializers.CharField(read_only=True, source="get_absolute_url")
+    production_inspection_slug = serializers.CharField(read_only=True, source="production_inspection.slug", allow_null=False)
 
     class Meta:
         model = TaskItem
@@ -30,6 +31,7 @@ class TaskItemRetrieveSerializer(serializers.ModelSerializer):
             'created_at',
             'last_modified_at',
             'is_closed',
+            'production_inspection_slug',
             'link',
             'is_external_link',
             'absolute_url',
