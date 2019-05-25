@@ -679,3 +679,17 @@ class Production(models.Model):
     def get_pretty_inspection_frequency(self):
         result = dict(self.INSPECTION_FREQUENCY_CHOICES).get(self.inspection_frequency)
         return str(result)
+
+    def generate_next_inspection_datetime(self):
+        if self.inspection_frequency == self.INSPECTION_FREQUENCY.NEVER:
+            return None
+        now_dt = timezone.now() if self.next_inspection_at is None else self.next_inspection_at
+        if self.inspection_frequency == self.INSPECTION_FREQUENCY.DAILY:
+            return now_dt + timedelta(hours=24)
+        elif self.inspection_frequency == self.INSPECTION_FREQUENCY.WEEKLY:
+            return now_dt + timedelta(days=7)
+        elif self.inspection_frequency == self.INSPECTION_FREQUENCY.BI_WEEKLY:
+            return now_dt + timedelta(days=14)
+        elif self.inspection_frequency == self.INSPECTION_FREQUENCY.MONTHLY:
+            return now_dt + timedelta(days=30)
+        return None

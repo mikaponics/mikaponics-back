@@ -129,6 +129,10 @@ class ProductionCreateSerializer(serializers.Serializer):
             yellow_alert_delay_in_seconds=yellow_alert_delay_in_seconds,
         )
 
+        # Generate the next inspection date and attach it to the production.
+        production.next_inspection_at = production.generate_next_inspection_datetime()
+        production.save()
+
         for plant in plants_array:
             data_sheet = CropDataSheet.objects.filter(slug=plant['plant_slug']).first()
             substrate = CropSubstrate.objects.filter(slug=plant['substrate_slug']).first()
