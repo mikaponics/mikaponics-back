@@ -167,21 +167,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         (REPORT_EMAIL_FREQUENCY.MONTHLY, _('Monthly')),
     )
 
-    class PRODUCTION_INSPECTION_FREQUENCY:
-        NEVER = 1
-        DAILY = 2
-        WEEKLY = 3
-        BI_WEEKLY = 3
-        MONTHLY = 4
-
-    PRODUCTION_INSPECTION_FREQUENCY_CHOICES = (
-        (PRODUCTION_INSPECTION_FREQUENCY.NEVER, _('Never')),
-        (PRODUCTION_INSPECTION_FREQUENCY.DAILY, _('Daily')),
-        (PRODUCTION_INSPECTION_FREQUENCY.WEEKLY, _('Weekly')),
-        (PRODUCTION_INSPECTION_FREQUENCY.BI_WEEKLY, _('Bi-Weekly')),
-        (PRODUCTION_INSPECTION_FREQUENCY.MONTHLY, _('Monthly')),
-    )
-
     '''
     Fields
     '''
@@ -415,25 +400,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_('Apartment, suite, unit, building, floor, etc.'),
         blank=True,
         null=True,
-    )
-
-    #
-    # PRODUCTION INSPECTION REMINDER TASK FIELDS
-    #
-
-    production_inspection_task_frequency = models.PositiveSmallIntegerField(
-        _("Production Inspection Task frequency"),
-        help_text=_('The frequency to create `production inspection` tasks.'),
-        blank=True,
-        null=False,
-        default=PRODUCTION_INSPECTION_FREQUENCY.WEEKLY,
-        choices=PRODUCTION_INSPECTION_FREQUENCY_CHOICES,
-    )
-    last_production_inspection_task_created_at = models.DateTimeField(
-        _('Last production inspection task created at'),
-        help_text=_('The date and time of the last production inspection task was created.'),
-        blank=True,
-        null=True
     )
 
     #

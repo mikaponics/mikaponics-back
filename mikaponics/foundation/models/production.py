@@ -183,6 +183,22 @@ class Production(models.Model):
         (OPERATION_CYCLE.NIGHT_CYCLE, _('Night Cycle')),
     )
 
+    class INSPECTION_FREQUENCY:
+        NEVER = 1
+        DAILY = 2
+        WEEKLY = 3
+        BI_WEEKLY = 4
+        MONTHLY = 5
+
+    INSPECTION_FREQUENCY_CHOICES = (
+        (INSPECTION_FREQUENCY.NEVER, _('Never')),
+        (INSPECTION_FREQUENCY.DAILY, _('Daily')),
+        (INSPECTION_FREQUENCY.WEEKLY, _('Weekly')),
+        (INSPECTION_FREQUENCY.BI_WEEKLY, _('Bi-Weekly')),
+        (INSPECTION_FREQUENCY.MONTHLY, _('Monthly')),
+    )
+
+
     '''
     Object Managers
     '''
@@ -454,6 +470,25 @@ class Production(models.Model):
     )
 
     #
+    # PRODUCTION INSPECTION REMINDER TASK FIELDS
+    #
+
+    inspection_frequency = models.PositiveSmallIntegerField(
+        _("Inspections frequency"),
+        help_text=_('The frequency to create `production inspection` tasks.'),
+        blank=True,
+        null=False,
+        default=INSPECTION_FREQUENCY.WEEKLY,
+        choices=INSPECTION_FREQUENCY_CHOICES,
+    )
+    next_inspection_at = models.DateTimeField(
+        _('Next inspection at'),
+        help_text=_('The date and time of the next scheduled inspection.'),
+        blank=True,
+        null=True
+    )
+
+    #
     # Audit detail fields
     #
 
@@ -639,4 +674,8 @@ class Production(models.Model):
     def get_pretty_operation_cycle(self):
         operation_cycle = self.get_operation_cycle()
         result = dict(self.OPERATION_CYCLE_CHOICES).get(operation_cycle)
+        return str(result)
+
+    def get_pretty_inspection_frequency(self):
+        result = dict(self.INSPECTION_FREQUENCY_CHOICES).get(self.scheduled_inspection_frequency)
         return str(result)

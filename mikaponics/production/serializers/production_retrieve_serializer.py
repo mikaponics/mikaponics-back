@@ -27,7 +27,7 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
     evaluation_letter = serializers.ReadOnlyField(source="get_evaluation_letter")
     runtime_duration = serializers.DurationField(source='get_runtime_duration')
     operation_cycle = serializers.IntegerField(source='get_operation_cycle')
-
+    pretty_inspection_frequency = serializers.ReadOnlyField(source="get_pretty_inspection_frequency")
 
     class Meta:
         model = Production
@@ -63,6 +63,9 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
             'evaluated_at',
             'runtime_duration',
             'operation_cycle',
+            'inspection_frequency',
+            'pretty_inspection_frequency',
+            'next_inspection_at',
             'absolute_url',
         )
 

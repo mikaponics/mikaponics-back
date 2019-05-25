@@ -16,6 +16,7 @@ from production.serializers.production_crop_retrieve_serializer import Productio
 class ProductionUpdateSerializer(serializers.ModelSerializer):
     day_starts_at = serializers.TimeField(required=False, allow_null=True,)
     day_finishes_at = serializers.TimeField(required=False, allow_null=True,)
+    inspection_frequency = serializers.IntegerField(required=True, allow_null=False)
 
     class Meta:
         model = Production
@@ -36,6 +37,8 @@ class ProductionUpdateSerializer(serializers.ModelSerializer):
             'has_day_and_night_cycle',
             'day_starts_at',
             'day_finishes_at',
+            'inspection_frequency',
+            #TODO: ALERT RED/ORANGE/YELLOW
         )
 
     def validate_failure_reason(self, value):
