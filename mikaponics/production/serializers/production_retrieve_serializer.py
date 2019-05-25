@@ -66,6 +66,12 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
             'inspection_frequency',
             'pretty_inspection_frequency',
             'next_inspection_at',
+            'yellow_below_value',
+            'orange_below_value',
+            'red_below_value',
+            'red_alert_delay_in_seconds',
+            'orange_alert_delay_in_seconds',
+            'yellow_alert_delay_in_seconds',
             'absolute_url',
         )
 

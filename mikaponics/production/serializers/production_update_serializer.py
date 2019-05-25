@@ -38,7 +38,12 @@ class ProductionUpdateSerializer(serializers.ModelSerializer):
             'day_starts_at',
             'day_finishes_at',
             'inspection_frequency',
-            #TODO: ALERT RED/ORANGE/YELLOW
+            'yellow_below_value',
+            'orange_below_value',
+            'red_below_value',
+            'red_alert_delay_in_seconds',
+            'orange_alert_delay_in_seconds',
+            'yellow_alert_delay_in_seconds'
         )
 
     def validate_failure_reason(self, value):
