@@ -26,7 +26,13 @@ class ProductionCreateSerializer(serializers.Serializer):
     day_finishes_at = serializers.TimeField(required=False, allow_null=True,)
     plants_array = serializers.JSONField(required=True)
     fish_array = serializers.JSONField(required=True)
-
+    inspection_frequency = serializers.IntegerField(required=True, allow_null=False)
+    yellow_below_value = serializers.FloatField(required=False, allow_null=True)
+    orange_below_value = serializers.FloatField(required=False, allow_null=True)
+    red_below_value = serializers.FloatField(required=True, allow_null=False)
+    red_alert_delay_in_seconds = serializers.IntegerField(required=True, allow_null=False)
+    orange_alert_delay_in_seconds = serializers.IntegerField(required=False, allow_null=False)
+    yellow_alert_delay_in_seconds = serializers.IntegerField(required=False, allow_null=False)
 
     class Meta:
         model = Production
@@ -43,7 +49,14 @@ class ProductionCreateSerializer(serializers.Serializer):
             'day_starts_at',
             'day_finishes_at',
             'plants_array',
-            'fish_array'
+            'fish_array',
+            'inspection_frequency',
+            'yellow_below_value',
+            'orange_below_value',
+            'red_below_value',
+            'red_alert_delay_in_seconds',
+            'orange_alert_delay_in_seconds',
+            'yellow_alert_delay_in_seconds'
         )
 
     def validate_device_slug(self, value):
@@ -78,6 +91,14 @@ class ProductionCreateSerializer(serializers.Serializer):
 
         device = Device.objects.get(slug=device_slug)
 
+        inspection_frequency = validated_data.get('inspection_frequency', None)
+        yellow_below_value = validated_data.get('yellow_below_value', None)
+        orange_below_value = validated_data.get('orange_below_value', None)
+        red_below_value = validated_data.get('red_below_value', None)
+        red_alert_delay_in_seconds = validated_data.get('red_alert_delay_in_seconds', None)
+        orange_alert_delay_in_seconds = validated_data.get('orange_alert_delay_in_seconds', None)
+        yellow_alert_delay_in_seconds = validated_data.get('yellow_alert_delay_in_seconds', None)
+
         production = Production.objects.create(
             user=authenticated_by,
             device=device,
@@ -99,6 +120,13 @@ class ProductionCreateSerializer(serializers.Serializer):
             last_modified_by=authenticated_by,
             last_modified_from=authenticated_from,
             last_modified_from_is_public=authenticated_from_is_public,
+            inspection_frequency=inspection_frequency,
+            yellow_below_value=yellow_below_value,
+            orange_below_value=orange_below_value,
+            red_below_value=red_below_value,
+            red_alert_delay_in_seconds=red_alert_delay_in_seconds,
+            orange_alert_delay_in_seconds=orange_alert_delay_in_seconds,
+            yellow_alert_delay_in_seconds=yellow_alert_delay_in_seconds,
         )
 
         for plant in plants_array:

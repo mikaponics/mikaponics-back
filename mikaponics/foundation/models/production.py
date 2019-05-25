@@ -448,7 +448,7 @@ class Production(models.Model):
         _("Red alert delay (seconds)"),
         help_text=_('The time that red alerts will be sent from the last time the red alert was sent.'),
         blank=True,
-        null=False,
+        null=True,
         default=ALERT_FREQUENCY_IN_SECONDS.EVERY_MINUTE,
         choices=ALERT_FREQUENCY_IN_SECONDS_CHOICES,
     )
@@ -456,7 +456,7 @@ class Production(models.Model):
         _("Orange alert delay (seconds)"),
         help_text=_('The time that orange alerts will be sent from the last time the orange alert was sent.'),
         blank=True,
-        null=False,
+        null=True,
         default=ALERT_FREQUENCY_IN_SECONDS.EVERY_MINUTE,
         choices=ALERT_FREQUENCY_IN_SECONDS_CHOICES,
     )
@@ -464,7 +464,7 @@ class Production(models.Model):
         _("Yellow alert delay (seconds)"),
         help_text=_('The time that yellow alerts will be sent from the last time the yellow alert was sent.'),
         blank=True,
-        null=False,
+        null=True,
         default=ALERT_FREQUENCY_IN_SECONDS.EVERY_MINUTE,
         choices=ALERT_FREQUENCY_IN_SECONDS_CHOICES,
     )
@@ -677,5 +677,5 @@ class Production(models.Model):
         return str(result)
 
     def get_pretty_inspection_frequency(self):
-        result = dict(self.INSPECTION_FREQUENCY_CHOICES).get(self.scheduled_inspection_frequency)
+        result = dict(self.INSPECTION_FREQUENCY_CHOICES).get(self.inspection_frequency)
         return str(result)
