@@ -97,6 +97,7 @@ INSTALLED_APPS = [
     'production',
     'alert',
     'task',
+    'data'
 ]
 
 AUTH_USER_MODEL = 'foundation.User'

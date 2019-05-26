@@ -188,6 +188,9 @@ mikaponics/mikaponics/whoosh_index
 # Do not share real-life production data.
 prod_*.csv
 
+# Do not save any uploads.
+mikaponics/uploads
+
 # Project related notes.
 private_notes.txt
 

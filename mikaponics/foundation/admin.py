@@ -132,29 +132,6 @@ class InstrumentAdmin(admin.ModelAdmin):
 admin.site.register(Instrument, InstrumentAdmin)
 
 
-class TimeSeriesDatumAdmin(admin.ModelAdmin):
-    """
-    Read-only class GUI to prevent the administrators from adding data that
-    was not created by the instrument. This is done to protect the administrator
-    from themeselves.
-    """
-    list_display = ['id', 'instrument_id', 'value', 'timestamp',]
-    ordering = ['-id',]
-    raw_id_fields = ['instrument',]
-    readonly_fields = [
-        # 'instrument', 'value', 'timestamp'
-        'next', 'previous', 'created_from', 'created_from_is_public',
-    ]
-
-    # def has_add_permission(self, request, obj=None):
-    #     return False
-    #
-    # def has_delete_permission(self, request, obj=None):
-    #     return False
-
-admin.site.register(TimeSeriesDatum, TimeSeriesDatumAdmin)
-
-
 # class AlertItemAdmin(admin.ModelAdmin):
 #     list_display = [
 #         'id',

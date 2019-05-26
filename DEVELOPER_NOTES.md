@@ -14,6 +14,7 @@ pip install psycopg2-binary               # Postgres SQL ODBC
 pip install django-oauth-toolkit          # oAuth 2.0 Client and Provider Framework
 pip install Pillow                        # Req: ImageField
 pip install djangorestframework           # RESTful API Endpoint Generator
+pip install django-extra-fields           # Django REST Framework extensions
 pip install gunicorn                      # Web-Server Helper
 pip install django-starterkit             # Django starter kit
 pip install django-filter                 # Generic system for filtering Django QuerySets based on user selections
