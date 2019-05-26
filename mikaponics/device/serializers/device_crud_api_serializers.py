@@ -90,7 +90,6 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
     state = serializers.SerializerMethodField()
     slug = serializers.ReadOnlyField()
     absolute_url = serializers.ReadOnlyField(source='get_absolute_url')
-    last_measured_pretty_value = serializers.ReadOnlyField(source='get_pretty_last_measured_value')
     last_measured_pretty_at = serializers.ReadOnlyField(source='get_pretty_last_measured_at')
     instruments = serializers.SerializerMethodField()
     state = serializers.IntegerField()
@@ -108,10 +107,7 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
             'pretty_state',
             'slug',
             'absolute_url',
-            'last_measured_value',
             'last_measured_at',
-            'last_measured_unit_of_measure',
-            'last_measured_pretty_value',
             'last_measured_pretty_at',
             'instruments',
         )

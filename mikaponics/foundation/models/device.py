@@ -194,24 +194,9 @@ class Device(models.Model):
         default=DEVICE_STATE.NEW,
         choices=DEVICE_STATE_CHOICES,
     )
-    last_measured_value = models.FloatField(
-        _("Last measured value"),
-        help_text=_('The last measured value since operation.'),
-        blank=True,
-        null=True,
-        editable=False,
-    )
     last_measured_at = models.DateTimeField(
         _("Last measured at"),
         help_text=_('The datetime of the last measured value since operation.'),
-        blank=True,
-        null=True,
-        editable=False,
-    )
-    last_measured_unit_of_measure = models.CharField(
-        _("Last measured unit of measure"),
-        help_text=_('The last measured unit of measure since operation.'),
-        max_length=7,
         blank=True,
         null=True,
         editable=False,

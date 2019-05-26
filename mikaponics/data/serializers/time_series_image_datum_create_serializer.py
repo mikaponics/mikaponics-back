@@ -134,6 +134,23 @@ class TimeSeriesImageDatumCreateSerializer(serializers.Serializer):
                 time_series_datum.previous = previous_time_series_datum
                 time_series_datum.save()
 
+        ## Update our device / instrument with our latest record.
+        instrument.device.last_measured_at = time_series_datum.timestamp
+        instrument.device.save()
+        instrument.last_measured_at = time_series_datum.timestamp
+        instrument.save()
+
+        # Update the device state and fill out our audit details.
+        instrument.device.state = Device.DEVICE_STATE.ONLINE
+        instrument.device.last_modified_by = authenticated_user
+        instrument.device.last_modified_from = authenticated_user_from
+        instrument.device.last_modified_from_is_public = authenticated_user_from_is_public
+        instrument.device.save()
+        instrument.last_modified_by = authenticated_user
+        instrument.last_modified_from = authenticated_user_from
+        instrument.last_modified_from_is_public = authenticated_user_from_is_public
+        instrument.save()
+
         '''
         Add our debugging information fields and return our validated data.
         '''
