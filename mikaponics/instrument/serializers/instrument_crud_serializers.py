@@ -30,8 +30,9 @@ class InstrumentRetrieveUpdateSerializer(serializers.ModelSerializer):
     absolute_url = serializers.SerializerMethodField()
     icon = serializers.CharField(read_only=True, source='get_icon')
     unit_of_measure = serializers.CharField(read_only=True, source='get_unit_of_measure')
-    type_of = serializers.CharField(read_only=True, source='get_pretty_instrument_type_of')
     timezone = serializers.ReadOnlyField(source='device.timezone')
+    pretty_type_of = serializers.CharField(read_only=True, source='get_pretty_instrument_type_of')
+    last_camera_snapshot = serializers.SerializerMethodField()
 
     class Meta:
         model = Instrument
@@ -52,6 +53,7 @@ class InstrumentRetrieveUpdateSerializer(serializers.ModelSerializer):
             'slug',
             'icon',
             'state',
+            'last_camera_snapshot',
             'last_measured_value',
             'last_measured_at',
             'last_24h_min_value',
@@ -67,6 +69,7 @@ class InstrumentRetrieveUpdateSerializer(serializers.ModelSerializer):
             'last_24h_variance_value',
             'unit_of_measure',
             'type_of',
+            'pretty_type_of',
             'timezone',
         )
 
@@ -75,3 +78,10 @@ class InstrumentRetrieveUpdateSerializer(serializers.ModelSerializer):
 
     def get_absolute_url(self, obj):
         return obj.get_absolute_url()
+
+    def get_last_camera_snapshot(self, obj):
+        try:
+            return obj.last_camera_snapshot.get_image_absolute_url()
+        except Exception as e:
+            pass
+        return None

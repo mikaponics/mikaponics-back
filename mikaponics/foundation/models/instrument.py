@@ -200,6 +200,14 @@ class Instrument(models.Model):
         choices=INSTRUMENT_STATE_CHOICES,
         editable=False, # Note: Only instrument or web-app can change this state, not admin user!
     )
+    last_camera_snapshot = models.ForeignKey(
+        "TimeSeriesImageDatum",
+        help_text=_('The latest snapshot image capture by the camera instrument. This field is only used by the camera instrument.'),
+        related_name="+",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+    )
     last_measured_value = models.FloatField(
         _("Last measured value"),
         help_text=_('The last measured value since operation.'),

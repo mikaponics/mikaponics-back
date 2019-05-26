@@ -135,9 +135,9 @@ class TimeSeriesImageDatumCreateSerializer(serializers.Serializer):
                 time_series_datum.save()
 
         ## Update our device / instrument with our latest record.
-        instrument.device.last_measured_at = time_series_datum.timestamp
+        instrument.device.last_camera_snapshot = time_series_datum
         instrument.device.save()
-        instrument.last_measured_at = time_series_datum.timestamp
+        instrument.last_camera_snapshot = time_series_datum
         instrument.save()
 
         # Update the device state and fill out our audit details.

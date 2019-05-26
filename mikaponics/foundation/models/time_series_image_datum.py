@@ -2,6 +2,7 @@
 import pytz
 from datetime import datetime, timedelta
 from faker import Faker
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.db.models import PointField
 from django.contrib.postgres.fields import JSONField
@@ -219,3 +220,8 @@ class TimeSeriesImageDatum(models.Model):
 
     # def get_def get_absolute_url(self):
     #     return reverse('mikaponics_device_detail', args=[self.id])n reverse('mikaponics_device_detail', args=[self.id])
+
+    def get_image_absolute_url(self):
+        if self.image_value:
+            return settings.MIKAPONICS_BACKEND_HTTP_PROTOCOL+settings.MIKAPONICS_BACKEND_HTTP_DOMAIN+"/"+self.image_value.url
+        return None

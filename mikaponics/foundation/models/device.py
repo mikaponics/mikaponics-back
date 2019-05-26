@@ -194,12 +194,21 @@ class Device(models.Model):
         default=DEVICE_STATE.NEW,
         choices=DEVICE_STATE_CHOICES,
     )
-    last_measured_at = models.DateTimeField(
-        _("Last measured at"),
-        help_text=_('The datetime of the last measured value since operation.'),
+    last_measurement = models.ForeignKey(
+        "TimeSeriesDatum",
+        help_text=_('The latest measured reading by the device.'),
+        related_name="+",
+        on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        editable=False,
+    )
+    last_camera_snapshot= models.ForeignKey(
+        "TimeSeriesImageDatum",
+        help_text=_('The latest snapshot image capture by the camera instrument in the device. This field is only used by the camera instrument.'),
+        related_name="+",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
     )
 
     #

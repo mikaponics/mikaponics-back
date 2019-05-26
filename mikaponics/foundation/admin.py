@@ -73,7 +73,7 @@ class DeviceAdmin(admin.ModelAdmin):
         'uuid', 'created_at', 'created_by', 'created_from',
         'created_from_is_public', 'last_modified_at', 'last_modified_by',
         'last_modified_from', 'last_modified_from_is_public', 'activated_at',
-        'last_measured_at',
+        'last_measurement', 'last_camera_snapshot',
         'get_environment_variables_file_url',
     ]
     formfield_overrides = {
