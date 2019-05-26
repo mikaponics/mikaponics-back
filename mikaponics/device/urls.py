@@ -15,5 +15,4 @@ urlpatterns = (
     path('api/device/<str:slug>/profile', views.DeviceProfileAPIView.as_view(), name='mikaponics_device_profile_api_endpoint'),
     path('api/device-operations/activate', views.DeviceActivateOperationAPIView.as_view(), name='mikaponics_device_activate_operation_api_endpoint'),
     path('api/device-operations/submit-data', views.DeviceInstrumentSetTimeSeriesDatumeOperationAPIView.as_view(), name='mikaponics_device_submit_dat_operation_api_endpoint'),
-    # path('api/data', views.TimeSeriesDataListCreateAPIView.as_view(), name='mikaponics_list_create_tsd_api_endpoint'),
 )
