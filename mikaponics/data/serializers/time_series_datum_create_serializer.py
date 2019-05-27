@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate
 from django.db import transaction
+from django.db import IntegrityError
 from django.db.models import Q, Prefetch
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
@@ -114,16 +115,22 @@ class TimeSeriesDatumCreateSerializer(serializers.Serializer):
             previous_time_series_datum = TimeSeriesDatum.objects.filter(instrument=instrument).latest('timestamp')
         except TimeSeriesDatum.DoesNotExist:
             previous_time_series_datum = None
+        except IntegrityError:
+            return validated_data
 
-        # Create our record.
-        time_series_datum = TimeSeriesDatum.objects.create(
-            instrument=instrument,
-            value=value,
-            timestamp=local_aware_dt,
-            time_step=time_step,
-            created_from=authenticated_user_from,
-            created_from_is_public=authenticated_user_from_is_public
-        )
+        # Create our record and if it already exists then do nothing.
+        try:
+            time_series_datum = TimeSeriesDatum.objects.create(
+                instrument=instrument,
+                value=value,
+                timestamp=local_aware_dt,
+                time_step=time_step,
+                created_from=authenticated_user_from,
+                created_from_is_public=authenticated_user_from_is_public
+            )
+        except IntegrityError:
+            print("WARNING: Skipped creating a time-series record")
+            return validated_data
 
         # Link to our chain-link data structure.
         if previous_time_series_datum:
