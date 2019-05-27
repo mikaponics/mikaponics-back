@@ -29,4 +29,10 @@ pip install Faker                         # Library that generates fake data for
 pip install stripe                        # Stripe payment merchant library
 pip install django-prettyjson             # Pretty JSON viewer in Django forms, admin, or templates.
 pip install freezegun                     # Python datetime override library
+pip install django-storages               # Collection of custom storage backends for Django.
 ```
+
+DigitalOcean Tutorials:
+* [How To Create a DigitalOcean Space and API Key](https://www.digitalocean.com/community/tutorials/how-to-create-a-digitalocean-space-and-api-key)
+* [How To Set Up Object Storage with Django](https://www.digitalocean.com/community/tutorials/how-to-set-up-object-storage-with-django)
+* [How to Set Up a Scalable Django App with DigitalOcean Managed Databases and Spaces](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-scalable-django-app-with-digitalocean-managed-databases-and-spaces)

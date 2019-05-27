@@ -32,7 +32,7 @@ class InstrumentRetrieveUpdateSerializer(serializers.ModelSerializer):
     unit_of_measure = serializers.CharField(read_only=True, source='get_unit_of_measure')
     timezone = serializers.ReadOnlyField(source='device.timezone')
     pretty_type_of = serializers.CharField(read_only=True, source='get_pretty_instrument_type_of')
-    last_camera_snapshot = serializers.SerializerMethodField()
+    last_camera_snapshot = serializers.ImageField(source="last_camera_snapshot.image_value", read_only=True)
 
     class Meta:
         model = Instrument
@@ -78,10 +78,3 @@ class InstrumentRetrieveUpdateSerializer(serializers.ModelSerializer):
 
     def get_absolute_url(self, obj):
         return obj.get_absolute_url()
-
-    def get_last_camera_snapshot(self, obj):
-        try:
-            return obj.last_camera_snapshot.get_image_absolute_url()
-        except Exception as e:
-            pass
-        return None

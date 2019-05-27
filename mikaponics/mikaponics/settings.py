@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     'djmoney',
     # 'social_django',
     'prettyjson',
+    'storages',
 
     # Our Apps
     'account',
@@ -251,21 +252,39 @@ LOCALE_PATHS = (
 )
 
 
+
 '''
 Static files (CSS, JavaScript, Images)
 https://docs.djangoproject.com/en/2.1/howto/static-files/
 '''
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"), # Attach directory.
-]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# STATIC_HOST = env("MIKAPONICS_DJANGO_STATIC_HOST", default="")
-STATIC_HOST = ""
-STATIC_URL = STATIC_HOST + '/staticfiles/' # Output directory
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
 
-# # http://whitenoise.evans.io/en/stable/django.html#add-compression-and-caching-support
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_ENDPOINT_URL = env('AWS_S3_ENDPOINT_URL')
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_LOCATION = 'static'
+AWS_STATIC_LOCATION = 'static'
+AWS_DEFAULT_ACL = 'private'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
+AWS_LOCATION = 'static'
+STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_LOCATION)
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+AWS_PUBLIC_MEDIA_LOCATION = 'media/public'
+DEFAULT_FILE_STORAGE = 'mikaponics.s3utils.PublicMediaStorage'
+
+AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
+PRIVATE_FILE_STORAGE = 'mikaponics.s3utils.PrivateMediaStorage'
+
 
 
 """

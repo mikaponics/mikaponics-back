@@ -12,6 +12,8 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
+from mikaponics.s3utils import PrivateMediaStorage
+
 
 class TimeSeriesImageDatumManager(models.Manager):
     def delete_all(self):
@@ -150,7 +152,8 @@ class TimeSeriesImageDatum(models.Model):
         help_text=_('The image file of the time-series datum.'),
         blank=True,
         null=True,
-        upload_to='uploads/time-series-data/%Y/%m/%d/'
+        upload_to='image-data/%Y/%m/%d/',
+        storage=PrivateMediaStorage()
     )
 
     #

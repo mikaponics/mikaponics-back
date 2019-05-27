@@ -190,6 +190,7 @@ prod_*.csv
 
 # Do not save any uploads.
 mikaponics/uploads
+mikaponics/media
 
 # Project related notes.
 private_notes.txt
