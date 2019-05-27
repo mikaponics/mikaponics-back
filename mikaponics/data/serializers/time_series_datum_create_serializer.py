@@ -110,7 +110,10 @@ class TimeSeriesDatumCreateSerializer(serializers.Serializer):
         Create datum object in database and update device & instrument.
         '''
         # Get our previous record.
-        previous_time_series_datum = TimeSeriesDatum.objects.filter(instrument=instrument).latest('timestamp')
+        try:
+            previous_time_series_datum = TimeSeriesDatum.objects.filter(instrument=instrument).latest('timestamp')
+        except TimeSeriesDatum.DoesNotExist:
+            previous_time_series_datum = None
 
         # Create our record.
         time_series_datum = TimeSeriesDatum.objects.create(
@@ -123,11 +126,12 @@ class TimeSeriesDatumCreateSerializer(serializers.Serializer):
         )
 
         # Link to our chain-link data structure.
-        previous_time_series_datum.next = time_series_datum
-        previous_time_series_datum.save()
         if previous_time_series_datum:
-            time_series_datum.previous = previous_time_series_datum
-            time_series_datum.save()
+            previous_time_series_datum.next = time_series_datum
+            previous_time_series_datum.save()
+            if previous_time_series_datum:
+                time_series_datum.previous = previous_time_series_datum
+                time_series_datum.save()
 
         # Update our device / instrument with our latest record.
         instrument.last_measured_value = time_series_datum.value
@@ -158,23 +162,3 @@ class TimeSeriesDatumCreateSerializer(serializers.Serializer):
         validated_data['local_datetime'] = str(local_aware_dt)
         validated_data['local_timezone'] = str(instrument.device.timezone)
         return validated_data
-
-
-class TimeSeriesDataListSerializer(serializers.Serializer):
-    instrument_slug = serializers.SlugField(source="instrument.slug")
-    value = serializers.FloatField()
-    timestamp = serializers.DateTimeField()
-
-    class Meta:
-        fields = (
-            'instrument_slug',
-            'value',
-            'timestamp',
-        )
-
-    def setup_eager_loading(cls, queryset):
-        """ Perform necessary eager loading of data. """
-        queryset = queryset.prefetch_related(
-            'instrument',
-        )
-        return queryset
