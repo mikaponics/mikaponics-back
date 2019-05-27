@@ -48,9 +48,10 @@ class DashboardSerializer(serializers.Serializer):
             active_devices = obj.devices.filter(
                 Q(user=user)&
                 ~Q(state=Device.DEVICE_STATE.ARCHIVED)
-            ).order_by('-last_measured_at')
+            ).order_by('-last_modified_at')
             s = DashboardDeviceListSerializer(active_devices, many=True)
-            return s.data
+            serialized_data = s.data
+            return serialized_data
         except Exception as e:
             print("DashboardSerializer | get_devices:", e)
             return None

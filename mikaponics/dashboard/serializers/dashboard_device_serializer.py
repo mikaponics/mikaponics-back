@@ -23,8 +23,8 @@ logger = logging.getLogger(__name__)
 class DashboardDeviceListSerializer(serializers.ModelSerializer):
     absolute_url = serializers.ReadOnlyField(source='get_absolute_url')
     state = serializers.ReadOnlyField(source='get_pretty_state')
-    last_measured_pretty_value = serializers.ReadOnlyField(source='get_pretty_last_measured_value')
-    last_measured_pretty_at = serializers.ReadOnlyField(source='get_pretty_last_measured_at')
+    # last_measured_pretty_value = serializers.ReadOnlyField(source='get_pretty_last_measured_value')
+    # last_measured_pretty_at = serializers.ReadOnlyField(source='get_pretty_last_measured_at')
 
     class Meta:
         model = Device
@@ -32,10 +32,11 @@ class DashboardDeviceListSerializer(serializers.ModelSerializer):
             'name',
             'description',
             'state',
-            'last_measured_value',
-            'last_measured_pretty_value',
-            'last_measured_pretty_at',
-            'last_measured_at',
-            'last_measured_unit_of_measure',
+            # 'last_measured_value',
+            # 'last_measured_pretty_value',
+            # 'last_measured_pretty_at',
+            # 'last_measured_at',
+            # 'last_measured_unit_of_measure',
+            'last_modified_at',
             'absolute_url',
         )
