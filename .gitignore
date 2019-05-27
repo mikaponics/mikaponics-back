@@ -198,3 +198,4 @@ private_notes.txt
 # Do not share collected static files.
 mikaponics/mikaponics/static
 mikaponics/staticfiles
+mikaponics/static

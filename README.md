@@ -86,6 +86,7 @@ This project uses the ``PostGres`` database and as a result requires setup befor
   python manage.py init_crop_data_sheets
   python manage.py create_admin_user "bart@mikasoftware.com" "123password" "Bart" "Mika";
   python manage.py setup_resource_server_authorization
+  python manage.py collectstatic
   ```
 
 2. Register the app with the following social-auth services. Also read [this tutorial](https://simpleisbetterthancomplex.com/tutorial/2016/10/24/how-to-add-social-login-to-django.html) on setting these up.
