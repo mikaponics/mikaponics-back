@@ -59,14 +59,15 @@ class Command(BaseCommand):
         )
 
     def process_device(self, device, utc_today_minus_some_minutes):
-        self.process_offline_status(device, utc_today_minus_some_minutes)
+        if device.last_measurement:
+            self.process_offline_status(device, utc_today_minus_some_minutes)
 
     def process_offline_status(self, device, utc_today_minus_some_minutes):
         """
         If the device last updated time was less then the specified amount
         then we need to set the status of the device to be offline.
         """
-        last_measured_utc_timestamp = device.last_measured_at
+        last_measured_utc_timestamp = device.last_measurement.timestamp
 
         '''
         Process online devices.
