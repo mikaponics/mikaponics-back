@@ -689,16 +689,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         today = timezone.now()
         return today >= self.pr_expiry_date
 
-    def get_dashboard_path(self):
-        """
-        Function will return either the onbarding PATH or the dashboard PATH
-        based on whether the user was "onboarded" or not.
-        """
-        if self.was_onboarded:
-            return "/dashboard"
-        else:
-            return "/onboard"
-
     @cached_property
     def latest_invoice(self):
         """

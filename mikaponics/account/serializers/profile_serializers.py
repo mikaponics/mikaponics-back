@@ -80,7 +80,6 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
     was_email_activated = serializers.ReadOnlyField()
     was_onboarded = serializers.ReadOnlyField()
     onboarding_survey_data = serializers.ReadOnlyField()
-    dashboard_path = serializers.CharField(read_only=True, source="get_dashboard_path",)
     latest_invoice = InvoiceListCreateSerializer(read_only=True, many=False)
     referral_link = serializers.SerializerMethodField()
 
@@ -105,7 +104,6 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
             'location',
             'created_at',
             'last_modified_at',
-            'dashboard_path',
             'timezone',
             'latest_invoice',
             'referral_link',
