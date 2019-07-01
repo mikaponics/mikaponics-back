@@ -13,8 +13,10 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 
-from foundation.models import Invoice, Product
+from foundation.models import Invoice, Product, Device
+from device.serializers.device_crud_api_serializers import DeviceListCreateSerializer
 from ecommerce.serializers.invoice_list_create_serializers import InvoiceListCreateSerializer
+from dashboard.serializers import DashboardDeviceListSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +37,7 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
     customer_id = serializers.CharField(read_only=True,)
     customer_data = serializers.JSONField(read_only=True,)
     subscription_status = serializers.CharField(read_only=True,)
+    devices = serializers.SerializerMethodField()
 
     # --- User Details ---
     email = serializers.CharField(required=True,allow_blank=False,)
@@ -145,7 +148,31 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
         return self.context.get('scope', None)
 
     def get_referral_link(self, obj):
-        return settings.MIKAPONICS_FRONTEND_HTTP_PROTOCOL + settings.MIKAPONICS_FRONTEND_HTTP_DOMAIN + "/register/"+str(obj.referral_code)
+        try:
+            referral_code = None
+            if isinstance(obj, dict):
+                referral_code = str(obj['referral_code'])
+            else:
+                referral_code = str(obj.referral_code)
+            return settings.MIKAPONICS_FRONTEND_HTTP_PROTOCOL + settings.MIKAPONICS_FRONTEND_HTTP_DOMAIN + "/register/"+str(referral_code)
+        except KeyError:
+            pass
+        except Exception as e:
+            print("ProfileInfoRetrieveUpdateSerializer | get_referral_link:", e)
+        return None
+
+    def get_devices(self, obj):
+        try:
+            active_devices = obj.devices.filter(
+                Q(user=obj)&
+                ~Q(state=Device.DEVICE_STATE.ARCHIVED)
+            ).order_by('-last_modified_at')
+            s = DashboardDeviceListSerializer(active_devices, many=True)
+            serialized_data = s.data
+            return serialized_data
+        except Exception as e:
+            print("ProfileInfoRetrieveUpdateSerializer | get_devices:", e)
+        return None
 
     def update(self, instance, validated_data):
         """
