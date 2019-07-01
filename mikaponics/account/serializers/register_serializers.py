@@ -34,6 +34,11 @@ class RegisterSerializer(serializers.Serializer):
         return value
 
     def validate_referral_code(self, value):
+        # CASE 1 OF 2: Empty value
+        if value == None or value == 'None' or value == 'null' or value == '':
+            return None
+
+        # CASE 2 OF 2: Non-Empty Value
         if User.objects.filter(referral_code=value).exists():
             return value
         else:

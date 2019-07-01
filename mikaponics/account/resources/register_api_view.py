@@ -52,6 +52,4 @@ class RegisterAPIView(APIView):
         django_rq.enqueue(run_send_user_was_created_to_staff_email_func, email=authenticated_user.email)
 
         # Return a simple message indicating that the user was registered.
-        return Response(data={
-            'detail': _('Your account has been registered. Please check your email for verification.')
-        }, status=status.HTTP_201_CREATED)
+        return Response(data={}, status=status.HTTP_201_CREATED)
