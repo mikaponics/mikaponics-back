@@ -22,12 +22,6 @@ class AlertItemConfigRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroy
         # IsAuthenticatedAndIsActivePermission,
         # CanRetrieveUpdateDestroyInvoicePermission
     )
-    parser_classes = (
-        parsers.FormParser,
-        parsers.MultiPartParser,
-        parsers.JSONParser,
-    )
-    renderer_classes = (renderers.JSONRenderer,)
 
     @transaction.atomic
     def get(self, request, pk=None):

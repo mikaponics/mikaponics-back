@@ -21,12 +21,6 @@ class InvoiceCalculationFuncView(generics.CreateAPIView):
         # IsAuthenticatedAndIsActivePermission,
         # CanListCreateWorkInvoicePermission
     )
-    parser_classes = (
-        parsers.FormParser,
-        parsers.MultiPartParser,
-        parsers.JSONParser,
-    )
-    renderer_classes = (renderers.JSONRenderer,)
 
     @transaction.atomic
     def put(self, request, pk=None):

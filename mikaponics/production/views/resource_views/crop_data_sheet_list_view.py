@@ -47,12 +47,6 @@ class CropDataSheetListAPIView(generics.ListAPIView):
         # IsAuthenticatedAndIsActivePermission,
         # CanRetrieveUpdateDestroyInvoicePermission
     )
-    parser_classes = (
-        parsers.FormParser,
-        parsers.MultiPartParser,
-        parsers.JSONParser,
-    )
-    renderer_classes = (renderers.JSONRenderer,)
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = CropDataSheetFilter
 

@@ -27,13 +27,6 @@ class PaymentEventAPIView(APIView):
     """
     throttle_classes = ()
     permission_classes = ()
-    parser_classes = (
-        parsers.FormParser,
-        parsers.MultiPartParser,
-        parsers.JSONParser,
-    )
-
-    renderer_classes = (renderers.JSONRenderer,)
 
     def post(self, request):
         # Defensive Code: Make sure that Stripe sent the request before we

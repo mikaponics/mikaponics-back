@@ -33,7 +33,6 @@ class DeviceListCreateSerializer(serializers.ModelSerializer):
             'slug',
             'name',
             'description',
-            'uuid',
             'user',
             'type_of',
             'state',
@@ -78,7 +77,6 @@ class DeviceInstrumentSerializer(serializers.ModelSerializer):
 
 
 class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
-    uuid = serializers.ReadOnlyField()
     activated_at = serializers.ReadOnlyField()
     name = serializers.CharField(
         required=True,
@@ -88,12 +86,12 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
         required=True,
         allow_blank=False,
     )
-    state = serializers.SerializerMethodField()
+
     slug = serializers.ReadOnlyField()
     absolute_url = serializers.ReadOnlyField(source='get_absolute_url')
     # last_measured_pretty_at = serializers.ReadOnlyField(source='get_pretty_last_measured_at')
     instruments = serializers.SerializerMethodField()
-    state = serializers.IntegerField()
+    state = serializers.IntegerField(read_only=True)
     pretty_state = serializers.ReadOnlyField(source='get_pretty_state')
 
     class Meta:
@@ -112,12 +110,6 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
             # 'last_measured_pretty_at',
             'instruments',
         )
-
-    def get_state(self, obj):
-        try:
-            return obj.get_pretty_state()
-        except Exception as e:
-            return None
 
     def get_instruments(self, obj):
         try:

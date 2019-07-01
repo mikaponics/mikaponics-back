@@ -68,6 +68,7 @@ class Instrument(models.Model):
         HEAT_VISION = 14
         UV_LIGHT = 15
         TRIAD_SPECTROSCOPY = 16
+        ILLUMINANCE = 17
 
     INSTRUMENT_TYPE_OF_CHOICES = (
         (INSTRUMENT_TYPE.HUMIDITY, _('Humidity')),
@@ -86,6 +87,7 @@ class Instrument(models.Model):
         (INSTRUMENT_TYPE.HEAT_VISION, _('Heat Vision')),
         (INSTRUMENT_TYPE.UV_LIGHT, _('UV Light')),
         (INSTRUMENT_TYPE.TRIAD_SPECTROSCOPY, _('Triad Spectroscopy')),
+        (INSTRUMENT_TYPE.ILLUMINANCE, _('Illuminance')),
     )
 
     class INSTRUMENT_STATE:

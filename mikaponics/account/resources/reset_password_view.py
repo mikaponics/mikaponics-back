@@ -26,12 +26,6 @@ class ResetPasswordAPIView(APIView):
     permission_classes = (
         permissions.AllowAny,
     )
-    parser_classes = (
-        parsers.FormParser,
-        parsers.MultiPartParser,
-        parsers.JSONParser,
-    )
-    renderer_classes = (renderers.JSONRenderer,)
 
     def post(self, request, format=None):
         client_ip, is_routable = get_client_ip(self.request)

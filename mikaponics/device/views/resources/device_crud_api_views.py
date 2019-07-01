@@ -55,12 +55,6 @@ class DeviceRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
         # IsAuthenticatedAndIsActivePermission,
         # CanRetrieveUpdateDestroyDevicePermission
     )
-    parser_classes = (
-        parsers.FormParser,
-        parsers.MultiPartParser,
-        parsers.JSONParser,
-    )
-    renderer_classes = (renderers.JSONRenderer,)
 
     @transaction.atomic
     def get(self, request, slug=None):
@@ -132,12 +126,6 @@ class DeviceProfileAPIView(generics.RetrieveUpdateDestroyAPIView):
         # IsAuthenticatedAndIsActivePermission,
         # CanListCreateWorkInvoicePermission
     )
-    parser_classes = (
-        parsers.FormParser,
-        parsers.MultiPartParser,
-        parsers.JSONParser,
-    )
-    renderer_classes = (renderers.JSONRenderer,)
 
     @transaction.atomic
     def get(self, request, slug=None):

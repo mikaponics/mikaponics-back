@@ -25,13 +25,6 @@ from account.serializers import ActivateSerializer, ProfileInfoRetrieveUpdateSer
 class ActivateAPIView(APIView):
     throttle_classes = ()
     permission_classes = ()
-    parser_classes = (
-        parsers.FormParser,
-        parsers.MultiPartParser,
-        parsers.JSONParser,
-    )
-
-    renderer_classes = (renderers.JSONRenderer,)
 
     def post(self, request):
         # Get the IP of the user.

@@ -30,12 +30,6 @@ class ProductionListCreateAPIView(generics.ListCreateAPIView):
         # IsAuthenticatedAndIsActivePermission,
         # CanRetrieveUpdateDestroyInvoicePermission
     )
-    parser_classes = (
-        parsers.FormParser,
-        parsers.MultiPartParser,
-        parsers.JSONParser,
-    )
-    renderer_classes = (renderers.JSONRenderer,)
 
     def get_queryset(self):
         """

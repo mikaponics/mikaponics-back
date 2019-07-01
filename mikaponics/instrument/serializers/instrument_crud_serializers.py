@@ -31,6 +31,7 @@ class InstrumentRetrieveUpdateSerializer(serializers.ModelSerializer):
     icon = serializers.CharField(read_only=True, source='get_icon')
     unit_of_measure = serializers.CharField(read_only=True, source='get_unit_of_measure')
     timezone = serializers.ReadOnlyField(source='device.timezone')
+    type_of = serializers.IntegerField(read_only=True)
     pretty_type_of = serializers.CharField(read_only=True, source='get_pretty_instrument_type_of')
     last_camera_snapshot = serializers.ImageField(source="last_camera_snapshot.image_value", read_only=True)
 

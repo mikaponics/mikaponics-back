@@ -34,12 +34,6 @@ class ProductionInspectionRetrieveOrCreateDefaultDraftAPIView(generics.RetrieveA
         # IsAuthenticatedAndIsActivePermission,
         # CanRetrieveUpdateDestroyInvoicePermission
     )
-    parser_classes = (
-        parsers.FormParser,
-        parsers.MultiPartParser,
-        parsers.JSONParser,
-    )
-    renderer_classes = (renderers.JSONRenderer,)
 
     @transaction.atomic
     def get(self, request, slug=None):

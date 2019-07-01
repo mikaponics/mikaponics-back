@@ -358,10 +358,12 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
+        'rest_framework_msgpack.renderers.MessagePackRenderer',
         # 'rest_framework.renderers.BrowsableAPIRenderer'  # Not to be used in prod.
     ],
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
+        'rest_framework_msgpack.parsers.MessagePackParser',
         # 'rest_framework.parsers.FormParser',
         # 'rest_framework.parsers.MultiPartParser',
     ),

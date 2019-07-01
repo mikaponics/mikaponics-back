@@ -30,12 +30,6 @@ class InvoiceListCreateAPIView(generics.ListCreateAPIView):
         # IsAuthenticatedAndIsActivePermission,
         # CanRetrieveUpdateDestroyInvoicePermission
     )
-    parser_classes = (
-        parsers.FormParser,
-        parsers.MultiPartParser,
-        parsers.JSONParser,
-    )
-    renderer_classes = (renderers.JSONRenderer,)
 
     def get_queryset(self):
         """
@@ -69,12 +63,6 @@ class InvoiceRetrieveDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
         # IsAuthenticatedAndIsActivePermission,
         # CanRetrieveUpdateDestroyInvoicePermission
     )
-    parser_classes = (
-        parsers.FormParser,
-        parsers.MultiPartParser,
-        parsers.JSONParser,
-    )
-    renderer_classes = (renderers.JSONRenderer,)
 
     @transaction.atomic
     def get(self, request, slug=None):
@@ -125,12 +113,6 @@ class InvoiceRetrieveUpdateBillingAddressAPIView(generics.RetrieveUpdateDestroyA
         # IsAuthenticatedAndIsActivePermission,
         # CanRetrieveUpdateDestroyInvoicePermission
     )
-    parser_classes = (
-        parsers.FormParser,
-        parsers.MultiPartParser,
-        parsers.JSONParser,
-    )
-    renderer_classes = (renderers.JSONRenderer,)
 
     @transaction.atomic
     def put(self, request, pk=None):
@@ -161,12 +143,6 @@ class InvoiceRetrieveUpdateShippingAddressAPIView(generics.RetrieveUpdateDestroy
         # IsAuthenticatedAndIsActivePermission,
         # CanRetrieveUpdateDestroyInvoicePermission
     )
-    parser_classes = (
-        parsers.FormParser,
-        parsers.MultiPartParser,
-        parsers.JSONParser,
-    )
-    renderer_classes = (renderers.JSONRenderer,)
 
     @transaction.atomic
     def put(self, request, pk=None):
@@ -197,12 +173,6 @@ class InvoiceSendEmailAPIView(generics.UpdateAPIView):
         # IsAuthenticatedAndIsActivePermission,
         # CanRetrieveUpdateDestroyInvoicePermission
     )
-    parser_classes = (
-        parsers.FormParser,
-        parsers.MultiPartParser,
-        parsers.JSONParser,
-    )
-    renderer_classes = (renderers.JSONRenderer,)
 
     @transaction.atomic
     def put(self, request, slug=None):

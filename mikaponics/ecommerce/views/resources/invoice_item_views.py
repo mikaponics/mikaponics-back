@@ -58,12 +58,6 @@ class InvoiceItemRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIV
         # IsAuthenticatedAndIsActivePermission,
         # CanRetrieveUpdateDestroyInvoiceItemPermission
     )
-    parser_classes = (
-        parsers.FormParser,
-        parsers.MultiPartParser,
-        parsers.JSONParser,
-    )
-    renderer_classes = (renderers.JSONRenderer,)
 
     def get(self, request, pk=None):
         """
