@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import django_filters
+import stripe
 from djmoney.money import Money
 from ipware import get_client_ip
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasScope
@@ -18,11 +19,12 @@ from foundation.constants import (
     MIKAPONICS_DEFAULT_SUBSCRIPTION_ID,
     MIKAPONICS_DEFAULT_SHIPPER_ID
 )
-from foundation.models import Store, Product, Shipper, Invoice, InvoiceItem
+from foundation.models import User, Store, Product, Shipper, Invoice, InvoiceItem
 from ecommerce.serializers import (
     SubscriptionRetrieveSerializer,
     SubscriptionUpdateSerializer
 )
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class SubscriptionAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -59,3 +61,23 @@ class SubscriptionAPIView(generics.RetrieveUpdateDestroyAPIView):
 
         serializer = SubscriptionRetrieveSerializer(request.user)
         return Response(serializer.data)
+
+    def delete(self, request, format=None):
+        # Get the user's IP address.
+        client_ip, is_routable = get_client_ip(self.request)
+
+        try:
+            # Perform our cancellation with the payment merchant.
+            stripe.Subscription.delete(request.user.subscription_id)
+
+            # Update our system.
+            request.user.subscription_id = None
+            request.user.subscription_status = User.SUBSCRIPTION_STATUS.CANCELED
+            request.user.subscription_start_date = None
+            request.user.save()
+        except Exception as e:
+            raise exceptions.ValidationError(str(e))
+
+        return Response(data={
+            'details': 'Deleted'
+        })

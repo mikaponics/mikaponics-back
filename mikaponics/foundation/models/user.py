@@ -503,6 +503,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True,
         null=True,
     )
+    subscription_id = models.CharField(
+        _("Subscription ID"),
+        max_length=127,
+        help_text=_('The subscription ID assigned by the payment merchant to the customer for the active subscription.'),
+        blank=True,
+        null=True,
+    )
     subscription_status = models.CharField(
         _("Subscription Status"),
         help_text=_('The customer subscription status from the payment merchant.'),

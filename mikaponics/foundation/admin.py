@@ -39,7 +39,7 @@ class UserAdmin(BaseUserAdmin):
         ('E-Ecommerce',
             {'fields':
                 (
-                'was_onboarded', 'customer_id','customer_data',
+                'was_onboarded', 'customer_id','customer_data', 'subscription_id',
                 'subscription_status', 'subscription_start_date', 'subscription_data',
                 'referral_code', 'referred_by',
                 )

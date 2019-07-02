@@ -128,6 +128,7 @@ class SubscriptionUpdateSerializer(serializers.Serializer):
             user.subscription_status = User.SUBSCRIPTION_STATUS.ACTIVE
             user.subscription_start_date = get_timestamp_of_first_date_for_next_month()
             user.subscription_data = result
+            user.subscription_id = result['id']
             user.save()
 
         return validated_data
