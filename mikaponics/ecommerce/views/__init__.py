@@ -15,3 +15,4 @@ from ecommerce.views.gui.email_views import (
     receipt_email_page,
     onboarded_email_page
 )
+from ecommerce.views.resources.purchase_subscription_crud_views import PurchaseSubscriptionAPIView

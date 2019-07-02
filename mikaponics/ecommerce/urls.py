@@ -14,6 +14,12 @@ urlpatterns = (
         name='mikaponics_onboarded_email'
     ),
     ############################################################################
+    # --- Misc ---
+    path('api/subscription',
+        views.PurchaseSubscriptionAPIView.as_view(),
+        name='mikaponics_subscription_api_endpoint'
+    ),
+
     # --- ONBOARDING ---
     path('api/onboarding',
         views.OnboardingAPIView.as_view(),
