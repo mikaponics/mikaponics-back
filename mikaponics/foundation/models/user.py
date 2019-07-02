@@ -790,3 +790,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         user_timezone = pytz_timezone(self.timezone)
         now_utc = datetime.now(pytz_timezone('UTC'))
         return now_utc.astimezone(user_timezone)
+
+    def get_pretty_subscription_status(self):
+        result = dict(self.SUBSCRIPTION_STATUS_CHOICES).get(self.subscription_status)
+        return str(result)

@@ -14,7 +14,7 @@ from ecommerce.serializers.onboarding_update_serializers import OnboardingUpdate
 from ecommerce.serializers.purchase_device_list_retrieve_serializers import PurchaseDeviceInvoiceListSerializer
 from ecommerce.serializers.purchase_device_list_retrieve_serializers import PurchaseDeviceRetrieveSerializer
 from ecommerce.serializers.purchase_device_update_serializers import PurchaseDeviceUpdateSerializer
-from ecommerce.serializers.purchase_subscription_crud_serializers import (
-    PurchaseSubscriptionRetrieveSerializer,
-    PurchaseSubscriptionUpdateSerializer
+from ecommerce.serializers.subscription_crud_serializers import (
+    SubscriptionRetrieveSerializer,
+    SubscriptionUpdateSerializer
 )
