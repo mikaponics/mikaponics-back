@@ -40,7 +40,8 @@ class PurchaseSubscriptionAPIView(generics.RetrieveUpdateDestroyAPIView):
         # Get the user's IP address.
         client_ip, is_routable = get_client_ip(self.request)
         serializer = PurchaseSubscriptionRetrieveSerializer(data={
-            'product_id': settings.STRIPE_MONTHLY_PLAN_ID,
+            'id': settings.STRIPE_MONTHLY_PLAN_ID,
+            'name': settings.STRIPE_MONTHLY_PLAN_NAME,
             'amount_in_dollars': float(settings.STRIPE_MONTHLY_PLAN_AMOUNT),
             'amount_in_cents': float(settings.STRIPE_MONTHLY_PLAN_AMOUNT) * 100,
             'currency': settings.STRIPE_MONTHLY_PLAN_CURRENCY,

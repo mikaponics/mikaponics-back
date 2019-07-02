@@ -29,7 +29,8 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class PurchaseSubscriptionRetrieveSerializer(serializers.Serializer):
-    product_id = serializers.CharField()
+    id = serializers.CharField()
+    name = serializers.CharField()
     amount_in_dollars = serializers.FloatField()
     amount_in_cents = serializers.FloatField()
     currency = serializers.CharField()
@@ -37,7 +38,8 @@ class PurchaseSubscriptionRetrieveSerializer(serializers.Serializer):
     # Meta Information.
     class Meta:
         fields = (
-            'product_id',
+            'id',
+            'name',
             'amount_in_dollars',
             'amount_in_cents',
             'currency'
@@ -45,7 +47,8 @@ class PurchaseSubscriptionRetrieveSerializer(serializers.Serializer):
 
 
 class PurchaseSubscriptionUpdateSerializer(serializers.Serializer):
-    product_id = serializers.CharField()
+    id = serializers.CharField()
+    name = serializers.CharField()
     amount_in_dollars = serializers.FloatField()
     amount_in_cents = serializers.FloatField()
     currency = serializers.CharField()
@@ -53,7 +56,8 @@ class PurchaseSubscriptionUpdateSerializer(serializers.Serializer):
     # Meta Information.
     class Meta:
         fields = (
-            'product_id',
+            'id',
+            'name',
             'amount_in_dollars',
             'amount_in_cents',
             'currency'
