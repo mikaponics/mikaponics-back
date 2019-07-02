@@ -37,6 +37,7 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
     customer_id = serializers.CharField(read_only=True,)
     customer_data = serializers.JSONField(read_only=True,)
     subscription_status = serializers.CharField(read_only=True,)
+    subscription_start_date = serializers.DateTimeField(read_only=True,)
     devices = serializers.SerializerMethodField()
 
     # --- User Details ---
@@ -99,6 +100,7 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
             'customer_id',
             'customer_data',
             'subscription_status',
+            'subscription_start_date',
             'was_email_activated',
             'was_onboarded',
             'onboarding_survey_data',

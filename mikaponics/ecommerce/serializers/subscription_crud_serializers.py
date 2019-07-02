@@ -125,8 +125,9 @@ class SubscriptionUpdateSerializer(serializers.Serializer):
             print("PAYMENT MERCHANT SUBSCRIPTION RESULTS\n", result) # For debugging purposes only.
 
             # Update our model object to be saved.
-            user.subscription_status = User.SUBSCRIPTION_STATUS.ACTIVE;
-            user.subscription_data = result;
+            user.subscription_status = User.SUBSCRIPTION_STATUS.ACTIVE
+            user.subscription_start_date = get_timestamp_of_first_date_for_next_month()
+            user.subscription_data = result
             user.save()
 
         return validated_data

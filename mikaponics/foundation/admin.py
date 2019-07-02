@@ -40,7 +40,8 @@ class UserAdmin(BaseUserAdmin):
             {'fields':
                 (
                 'was_onboarded', 'customer_id','customer_data',
-                'subscription_status', 'referral_code', 'referred_by',
+                'subscription_status', 'subscription_start_date', 'subscription_data',
+                'referral_code', 'referred_by',
                 )
             }
         ),

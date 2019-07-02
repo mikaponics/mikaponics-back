@@ -512,6 +512,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=SUBSCRIPTION_STATUS.NOT_INTERESTED,
         choices=SUBSCRIPTION_STATUS_CHOICES,
     )
+    subscription_start_date = models.DateTimeField(
+        _('Subscription Start Date'),
+        help_text=_('The date when the subscription started / will start.'),
+        blank=True,
+        null=True,
+    )
     subscription_data = JSONField(
         _("Subscription Data"),
         help_text=_('The subscription details from the payment merchant.'),
