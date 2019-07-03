@@ -19,3 +19,4 @@ from ecommerce.views.gui.email_views import (
     onboarded_email_page
 )
 from ecommerce.views.resources.subscription_crud_views import SubscriptionAPIView
+from ecommerce.views.resources.calculate_purchase_device_func_view import CalculatePurchaseDeviceFuncAPIView

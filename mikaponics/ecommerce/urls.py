@@ -23,6 +23,10 @@ urlpatterns = (
         views.SubscriptionAPIView.as_view(),
         name='mikaponics_subscription_api_endpoint'
     ),
+    path('api/calculate-purchase-device-receipt',
+        views.CalculatePurchaseDeviceFuncAPIView.as_view(),
+        name='mikaponics_calculate_purchase_device_receipt_api_endpoint'
+    ),
 
     # --- ONBOARDING ---
     path('api/onboarding',

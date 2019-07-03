@@ -19,3 +19,4 @@ from ecommerce.serializers.subscription_crud_serializers import (
     SubscriptionRetrieveSerializer,
     SubscriptionUpdateSerializer
 )
+from ecommerce.serializers.calculate_purchase_device_func_serializer import CalculatePurchaseDeviceFuncSerializer
