@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import django_rq
+from decimal import Decimal
+from djmoney.money import Money
 import stripe
 import logging
 from djmoney.money import Money
@@ -24,7 +26,8 @@ from foundation.utils import (
     get_timestamp_of_first_date_for_next_month,
     get_first_date_for_next_month
 )
-from foundation.models import User, Product, Shipper, Invoice, InvoiceItem
+from foundation.models import User, Product, Shipper, Invoice, InvoiceItem, Store
+from foundation.model_resources import find_usable_coupon_for_user
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +46,7 @@ class CalculatePurchaseDeviceFuncSerializer(serializers.Serializer):
     shipping_locality = serializers.CharField(write_only=True, required=True, allow_null=False)
 
     # OUTPUT.
-    totalBeforeTax = serializers.FloatField(read_only=True)
+    total_before_tax = serializers.FloatField(read_only=True)
     tax = serializers.FloatField(read_only=True)
     totalAfterTax = serializers.FloatField(read_only=True)
     shipping = serializers.FloatField(read_only=True)
@@ -55,7 +58,10 @@ class CalculatePurchaseDeviceFuncSerializer(serializers.Serializer):
     class Meta:
         fields = (
             'cart',
-            'totalBeforeTax',
+            'shipping_country',
+            'shipping_region',
+            'shipping_locality',
+            'total_before_tax',
             'tax',
             'totalAfterTax',
             'shipping',
@@ -68,19 +74,62 @@ class CalculatePurchaseDeviceFuncSerializer(serializers.Serializer):
         """
         Override this function to include extra functionality.
         """
+        #-----------------#
+        # Get our inputs. #
+        #-----------------#
+        user = self.context.get('by')
         from_ip = self.context.get('from')
         from_ip_is_public = self.context.get('from_is_public')
         default_shipper = Shipper.objects.get(id=MIKAPONICS_DEFAULT_SHIPPER_ID)
+        default_store = Store.objects.default_store
         cart = validated_data['cart']
+        shipping_country = validated_data.get('shipping_country')
+        shipping_region = validated_data.get('shipping_region')
 
-        print(cart) #TODO: PROCESSING.
+        #--------------------------------#
+        # Perform our calculations here. #
+        #--------------------------------#
+        total_before_tax = 0;
+        for product in cart:
+            total_before_tax += product.get('totalPrice')
+        total_before_tax = Decimal(total_before_tax)
 
-        validated_data['totalBeforeTax'] = 666;
-        validated_data['tax'] = 666;
-        validated_data['totalAfterTax'] = 666;
-        validated_data['shipping'] = 666;
-        validated_data['credit'] = 666;
-        validated_data['grand_total'] = 666;
-        validated_data['grand_total_in_cents'] = 666;
+        # Calculate the tax.
+        tax = 0
+        tax_percent = default_store.get_tax_rate(shipping_country, shipping_region)
+        if tax_percent:
+            tax_rate = tax_percent / Decimal(100.00)
+            tax = total_before_tax * tax_rate
+        else:
+            tax_percent = Decimal(0.00)
+        total_after_tax = total_before_tax + tax
 
+        # # Calculate grand total
+        grand_total = total_after_tax
+
+        # Calculate the credit.
+        credit = 0
+        coupon = find_usable_coupon_for_user(user)
+        if coupon:
+            credit = coupon.credit
+
+        # Step 1: Apply the credit.
+        if credit:
+            grand_total -= credit
+
+        # Step 2: Apply the shipping.
+        if default_shipper:
+            shipping_price = default_shipper.shipping_price
+            grand_total += shipping_price.amount
+
+        #----------------------------------#
+        # Set our outputs and return them. #
+        #----------------------------------#
+        validated_data['total_before_tax'] = total_before_tax;
+        validated_data['tax'] = tax;
+        validated_data['totalAfterTax'] = total_after_tax;
+        validated_data['shipping'] = default_shipper.shipping_price.amount
+        validated_data['credit'] = credit;
+        validated_data['grand_total'] = grand_total;
+        validated_data['grand_total_in_cents'] = grand_total * 100;
         return validated_data

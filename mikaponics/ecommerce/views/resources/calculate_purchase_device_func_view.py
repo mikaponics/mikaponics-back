@@ -38,9 +38,9 @@ class CalculatePurchaseDeviceFuncAPIView(generics.RetrieveUpdateDestroyAPIView):
         client_ip, is_routable = get_client_ip(self.request)
 
         serializer = CalculatePurchaseDeviceFuncSerializer(data=request.data, context={
-            'authenticated_by': request.user,
-            'authenticated_from': client_ip,
-            'authenticated_from_is_public': is_routable
+            'by': request.user,
+            'from': client_ip,
+            'from_is_public': is_routable
         })
         serializer.is_valid(raise_exception=True)
         serializer.save()
