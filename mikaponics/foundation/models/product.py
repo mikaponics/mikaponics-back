@@ -30,6 +30,21 @@ class Product(models.Model):
             # ("can_delete_opening_hours_specification", "Can delete opening hours specifications"),
         )
 
+    '''
+    Constants & Choices
+    '''
+
+    class STATE:
+        DRAFT = 1
+        COMING_SOON = 2
+        PUBLISHED = 3
+
+    STATE_CHOICES = (
+        (STATE.DRAFT, _('Draft')),
+        (STATE.COMING_SOON, _('Coming Soon')),
+        (STATE.PUBLISHED, _('Publised')),
+    )
+
     objects = ProductManager()
     store = models.ForeignKey(
         "Store",
@@ -39,10 +54,48 @@ class Product(models.Model):
         related_name="products",
         on_delete=models.CASCADE
     )
+    state = models.PositiveSmallIntegerField(
+        _("State"),
+        help_text=_('The state of product.'),
+        blank=False,
+        null=False,
+        default=STATE.DRAFT,
+        choices=STATE_CHOICES,
+    )
+    slug = models.SlugField(
+        _("Slug"),
+        help_text=_('The unique slug used for this product.'),
+        max_length=127,
+        blank=False,
+        null=False,
+        db_index=True,
+        unique=True,
+    )
+    sort_number = models.PositiveSmallIntegerField(
+        _("Sort #"),
+        help_text=_('The sort number of product.'),
+        blank=False,
+        null=False,
+        default=0,
+    )
+    icon = models.CharField(
+        _("Icon"),
+        max_length=31,
+        help_text=_('The icon for this product.'),
+        blank=False,
+        null=False,
+    )
     name = models.CharField(
         _("Name"),
         max_length=31,
         help_text=_('The name of this product.'),
+        blank=False,
+        null=False,
+    )
+    short_description = models.CharField(
+        _("Short Description"),
+        max_length=127,
+        help_text=_('The short description of this product.'),
         blank=False,
         null=False,
     )

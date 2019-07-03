@@ -112,14 +112,18 @@ class Production(models.Model):
     )
 
     class TYPE_OF:
-        AQUAPONICS = 1
-        HYDROPONICS = 2
-        AQUACULTURE = 3
+        OTHER = 1
+        SOIL = 2
+        AQUAPONICS = 3
+        HYDROPONICS = 4
+        AQUACULTURE = 5
 
     TYPE_OF_CHOICES = (
+        (TYPE_OF.SOIL, _('Soil')),
         (TYPE_OF.AQUAPONICS, _('Aquaponics')),
         (TYPE_OF.HYDROPONICS, _('Hydroponics')),
         (TYPE_OF.AQUACULTURE, _('Aquaculture')),
+        (TYPE_OF.OTHER, _('Other')),
     )
 
     class GROW_SYSTEM:
@@ -218,7 +222,7 @@ class Production(models.Model):
     )
     state = models.PositiveSmallIntegerField(
         _("State"),
-        help_text=_('The state of coupon.'),
+        help_text=_('The state of production.'),
         blank=False,
         null=False,
         default=PRODUCTION_STATE.PREPARING,
@@ -345,6 +349,13 @@ class Production(models.Model):
         blank=False,
         null=False,
         choices=TYPE_OF_CHOICES,
+    )
+    type_of_other = models.CharField(
+        _("Type of (Other)"),
+        help_text=_('The details of the other type of.'),
+        blank=True,
+        null=True,
+        max_length=63,
     )
     grow_system = models.PositiveSmallIntegerField(
         _("Grow System"),

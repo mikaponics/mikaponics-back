@@ -65,28 +65,67 @@ class Command(BaseCommand):
         product to offer in the onboarding code.
         '''
         Product.objects.update_or_create(
-            id=MIKAPONICS_DEFAULT_PRODUCT_ID,
+            id=MIKAPONICS_SOIL_PRODUCT_ID,
             store=store,
             defaults={
-                'id': MIKAPONICS_DEFAULT_PRODUCT_ID,
+                'id': MIKAPONICS_SOIL_PRODUCT_ID,
                 'store': store,
-                'name': "Mikapod",
-                'description': 'Mikapod aquaponics/hydroponics telemetry device',
-                "price": Money(249.99, 'CAD')
+                'slug': 'soil',
+                'sort_number': 1,
+                'icon': 'seedling',
+                'name': "Mikapod - Soil",
+                "short_description": "Device used for monitoring soil based planting solution.",
+                'description': 'Mikapod soil telemetry device',
+                'price': Money(249.99, 'CAD'),
+                'state': Product.STATE.PUBLISHED
             }
         )
-
-        '''
-        Add support for public data feed.
-        '''
         Product.objects.update_or_create(
-            id=2,
+            id=MIKAPONICS_HYDROPONICS_PRODUCT_ID,
             store=store,
             defaults={
-                'id': 2,
+                'id': MIKAPONICS_HYDROPONICS_PRODUCT_ID,
                 'store': store,
-                'name': "Data Feed",
-                "price": Money(0, 'CAD')
+                'slug': 'hydroponic',
+                'sort_number': 2,
+                'icon': 'water',
+                'name': "Mikapod - Hydroponics",
+                "short_description": "Device used for monitoring pure water based planting solution.",
+                'description': 'Mikapod hydroponics telemetry device',
+                "price": Money(249.99, 'CAD'),
+                'state': Product.STATE.COMING_SOON
+            }
+        )
+        Product.objects.update_or_create(
+            id=MIKAPONICS_AQUAPONICS_PRODUCT_ID,
+            store=store,
+            defaults={
+                'id': MIKAPONICS_AQUAPONICS_PRODUCT_ID,
+                'store': store,
+                'slug': 'aquaponic',
+                'sort_number': 3,
+                'icon': 'fish',
+                'name': "Mikapod - Aquaponics",
+                "short_description": "Device used for monitoring a water and aquaculture mixed planting solution.",
+                'description': 'Mikapod aquaponics telemetry device',
+                "price": Money(249.99, 'CAD'),
+                'state': Product.STATE.COMING_SOON
+            }
+        )
+        Product.objects.update_or_create(
+            id=MIKAPONICS_ALGAE_PRODUCT_ID,
+            store=store,
+            defaults={
+                'id': MIKAPONICS_ALGAE_PRODUCT_ID,
+                'store': store,
+                'slug': 'algae',
+                'sort_number': 4,
+                'icon': 'vial',
+                'name': "Mikapod - Algae",
+                "short_description": "Device used for monitoring algae (ex. Sparilina) based planting solution.",
+                'description': 'Mikapod algae telemetry device',
+                "price": Money(249.99, 'CAD'),
+                'state': Product.STATE.COMING_SOON
             }
         )
 

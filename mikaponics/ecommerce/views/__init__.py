@@ -1,3 +1,6 @@
+from ecommerce.views.resources.product_list_views import (
+    ProductListAPIView
+)
 from ecommerce.views.resources.invoice_item_views import (
     InvoiceItemRetrieveUpdateDestroyAPIView
 )

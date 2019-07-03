@@ -15,6 +15,10 @@ urlpatterns = (
     ),
     ############################################################################
     # --- Misc ---
+    path('api/products',
+        views.ProductListAPIView.as_view(),
+        name='mikaponics_product_list_api_endpoint'
+    ),
     path('api/subscription',
         views.SubscriptionAPIView.as_view(),
         name='mikaponics_subscription_api_endpoint'
