@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
 from datetime import datetime
-from ipware import get_client_ip
 from django.conf.urls import url, include
 from django.conf import settings
 from django.contrib.auth.models import Group
@@ -31,9 +30,6 @@ class LoginAPIView(APIView):
     permission_classes = ()
 
     def post(self, request):
-        # Get the IP of the user.
-        client_ip, is_routable = get_client_ip(self.request)
-
         # Serializer to get our login details.
         serializer = LoginSerializer(data=request.data, context={
             'request': request,
@@ -52,7 +48,7 @@ class LoginAPIView(APIView):
         # logging in from multiple locations and may log out from multiple
         # locations so we don't want the user using the same token every time.
         aware_dt = timezone.now()
-        expires_dt = aware_dt.replace(aware_dt.year + 1776)
+        expires_dt = aware_dt + timezone.timedelta(days=1)
         access_token = AccessToken.objects.create(
             application=application,
             user=authenticated_user,
@@ -61,11 +57,18 @@ class LoginAPIView(APIView):
             scope='read,write,introspection'
         )
 
+        refresh_token = RefreshToken.objects.create(
+            application = application,
+            user = authenticated_user,
+            access_token=access_token,
+            token=generate_token()
+        )
+
         serializer = ProfileInfoRetrieveUpdateSerializer(request.user, many=False, context={
             'authenticated_by': request.user,
-            'authenticated_from': client_ip,
-            'authenticated_from_is_public': is_routable,
-            'token': str(access_token),
-            'scope': access_token.scope,
+            'authenticated_from': request.client_ip,
+            'authenticated_from_is_public': request.client_ip_is_routable,
+            'access_token': access_token,
+            'refresh_token': refresh_token
         })
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -28,7 +28,8 @@ def get_todays_date_plus_days(days=0):
 
 class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
     # --- Authentication Credentials ---
-    token = serializers.SerializerMethodField()
+    access_token = serializers.SerializerMethodField()
+    refresh_token = serializers.SerializerMethodField()
     scope = serializers.SerializerMethodField()
 
     # --- Misc Fields ---
@@ -91,7 +92,8 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
     class Meta:
         fields = (
             # --- Authentication Credentials ---
-            'token',
+            'access_token',
+            'refresh_token',
             'scope',
 
             # --- Misc Fields ---
@@ -143,8 +145,25 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
             'shipping_telephone',
         )
 
-    def get_token(self, obj):
-        return self.context.get('token', None)
+    def get_access_token(self, obj):
+        access_token = self.context.get('access_token', None)
+        if access_token:
+            return {
+                'token': str(access_token),
+                'expires': int(access_token.expires.timestamp()),
+                'scope': str(access_token.scope)
+            }
+        return None
+
+    def get_refresh_token(self, obj):
+        refresh_token = self.context.get('refresh_token', None)
+        if refresh_token:
+            revoked_at = int(refresh_token.revoked.timestamp()) if refresh_token.revoked is not None else None
+            return {
+                'token': str(refresh_token),
+                'revoked': revoked_at,
+            }
+        return None
 
     def get_scope(self, obj):
         return self.context.get('scope', None)

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import django_filters
-from ipware import get_client_ip
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasScope
 from django.conf import settings
 from django.db import transaction
@@ -14,6 +13,7 @@ from rest_framework import authentication, viewsets, permissions, status,  parse
 from rest_framework.response import Response
 
 from account.serializers import ProfileInfoRetrieveUpdateSerializer
+from foundation.drf.permissions import DisableOptionsPermission
 
 
 class ProfileInfoRetrieveUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -21,6 +21,7 @@ class ProfileInfoRetrieveUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProfileInfoRetrieveUpdateSerializer
     # pagination_class = StandardResultsSetPagination
     permission_classes = (
+        DisableOptionsPermission,
         permissions.IsAuthenticated,
         # IsAuthenticatedAndIsActivePermission,
         # CanRetrieveUpdateDestroyInvoicePermission
@@ -34,7 +35,6 @@ class ProfileInfoRetrieveUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
         """
         Retrieve
         """
-        client_ip, is_routable = get_client_ip(self.request)
         self.check_object_permissions(request, request.user)  # Validate permissions.
 
         # Fetch our application and token for the user.
@@ -43,10 +43,10 @@ class ProfileInfoRetrieveUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
 
         serializer = ProfileInfoRetrieveUpdateSerializer(request.user, context={
             'authenticated_by': request.user,
-            'authenticated_from': client_ip,
-            'authenticated_from_is_public': is_routable,
-            'token': str(access_token),
-            'scope': 'read,write,introspection'
+            'authenticated_from': request.client_ip,
+            'authenticated_from_is_public': request.client_ip_is_routable,
+            'access_token': access_token,
+            'refresh_token': access_token.refresh_token
         })
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -55,7 +55,6 @@ class ProfileInfoRetrieveUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
         """
         Update
         """
-        client_ip, is_routable = get_client_ip(self.request)
         self.check_object_permissions(request, request.user)  # Validate permissions.
 
         # Fetch our application and token for the user.
@@ -64,10 +63,10 @@ class ProfileInfoRetrieveUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
 
         serializer = ProfileInfoRetrieveUpdateSerializer(request.user, data=request.data, context={
             'authenticated_by': request.user,
-            'authenticated_from': client_ip,
-            'authenticated_from_is_public': is_routable,
-            'token': str(access_token),
-            'scope': 'read,write,introspection'
+            'authenticated_from': request.client_ip,
+            'authenticated_from_is_public': request.client_ip_is_routable,
+            'access_token': access_token,
+            'refresh_token': access_token.refresh_token
         })
         serializer.is_valid(raise_exception=True)
         serializer.save()

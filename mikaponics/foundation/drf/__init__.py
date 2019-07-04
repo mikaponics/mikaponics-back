@@ -1,0 +1,1 @@
+from foundation.drf.permissions import DisableOptionsPermission

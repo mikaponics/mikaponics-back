@@ -625,6 +625,12 @@ class Instrument(models.Model):
         elif self.type_of == Instrument.INSTRUMENT_TYPE.TRIAD_SPECTROSCOPY:
             return "sun"
 
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.ILLUMINANCE:
+            return "lightbulb"
+
+        elif self.type_of == Instrument.INSTRUMENT_TYPE.SOIL_MOISTURE:
+            return "fill-drip"
+
         return ""
 
     def get_pretty_instrument_type_of(self):
