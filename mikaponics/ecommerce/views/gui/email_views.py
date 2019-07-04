@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import condition
 
 from foundation import constants
-from foundation.models import User
+from foundation.models import User, Invoice
 from foundation.utils import reverse_with_full_domain
 
 

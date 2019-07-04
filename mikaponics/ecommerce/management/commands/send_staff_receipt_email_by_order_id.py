@@ -44,7 +44,7 @@ class Command(BaseCommand):
         staff_email_addresses = get_staff_email_addresses()
 
         # Generate the data.
-        url = settings.MIKAPONICS_BACKEND_HTTP_PROTOCOL+settings.MIKAPONICS_BACKEND_HTTP_DOMAIN+"/en/admin/foundation/user/"+str(user.id)+"/change/"
+        url = settings.MIKAPONICS_BACKEND_HTTP_PROTOCOL+settings.MIKAPONICS_BACKEND_HTTP_DOMAIN+"/en/admin/foundation/user/"+str(invoice.user.id)+"/change/"
         web_view_url = reverse_with_full_domain(
             reverse_url_id='mikaponics_invoice_receipt_email',
             resolve_url_args=[invoice.id]
