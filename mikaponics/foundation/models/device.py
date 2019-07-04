@@ -410,14 +410,6 @@ class Device(models.Model):
     def get_absolute_url(self):
         return "/device/"+str(self.slug)
 
-    def get_environment_variables_file_url(self):
-        aURL = None
-        if self.id:
-            aURL =  settings.MIKAPONICS_BACKEND_HTTP_PROTOCOL
-            aURL += settings.MIKAPONICS_BACKEND_HTTP_DOMAIN
-            aURL += reverse('mikaponics_device_environment_variable_file_detail', args=[self.id])
-        return aURL
-
     def get_pretty_state(self):
         result = dict(self.DEVICE_STATE_CHOICES).get(self.state)
         return str(result)

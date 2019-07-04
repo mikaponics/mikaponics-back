@@ -153,8 +153,8 @@ class Instrument(models.Model):
     device = models.ForeignKey(
         "Device",
         help_text=_('The device which this instrument belongs to.'),
-        blank=True,
-        null=True,
+        blank=False,
+        null=False,
         related_name="instruments",
         on_delete=models.CASCADE
     )
@@ -164,12 +164,6 @@ class Instrument(models.Model):
         blank=False,
         null=False,
         choices=INSTRUMENT_TYPE_OF_CHOICES,
-    )
-    configuration = JSONField(
-        _("Configuration"),
-        help_text=_('The configuration details of this instrument with device.'),
-        blank=False,
-        null=False,
     )
     data_interval_in_seconds = models.PositiveSmallIntegerField(
         _("Data Interval (Seconds)"),
