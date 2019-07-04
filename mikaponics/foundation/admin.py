@@ -65,7 +65,14 @@ admin.site.register(User, UserAdmin)
 admin.site.unregister(Group)
 
 
+class InstrumentInline(admin.TabularInline):
+    model = Instrument
+
+
 class DeviceAdmin(admin.ModelAdmin):
+    inlines = [
+        InstrumentInline,
+    ]
     raw_id_fields = ['user', 'invoice',]
     list_filter = ['product', 'state',]
     list_display = ['slug', 'id', 'name', 'user', 'product', 'state',]
