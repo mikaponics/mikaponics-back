@@ -69,6 +69,8 @@ class Instrument(models.Model):
         UV_LIGHT = 15
         TRIAD_SPECTROSCOPY = 16
         ILLUMINANCE = 17
+        SOIL_MOISTURE = 18
+        SOIL_TEMPERATURE = 19
 
     INSTRUMENT_TYPE_OF_CHOICES = (
         (INSTRUMENT_TYPE.HUMIDITY, _('Humidity')),
@@ -88,6 +90,8 @@ class Instrument(models.Model):
         (INSTRUMENT_TYPE.UV_LIGHT, _('UV Light')),
         (INSTRUMENT_TYPE.TRIAD_SPECTROSCOPY, _('Triad Spectroscopy')),
         (INSTRUMENT_TYPE.ILLUMINANCE, _('Illuminance')),
+        (INSTRUMENT_TYPE.SOIL_MOISTURE, _('Soil Moisture')),
+        (INSTRUMENT_TYPE.SOIL_TEMPERATURE, _('Soil Temperature')),
     )
 
     class INSTRUMENT_STATE:
