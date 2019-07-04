@@ -123,8 +123,8 @@ class Device(models.Model):
     user = models.ForeignKey(
         "User",
         help_text=_('The user whom owns this device.'),
-        blank=True,
-        null=True,
+        blank=False,
+        null=False,
         related_name="devices",
         on_delete=models.CASCADE
     )
