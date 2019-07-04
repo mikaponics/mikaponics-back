@@ -134,6 +134,21 @@ class Instrument(models.Model):
         (INSTRUMENT_ALERT_FREQUENCY_IN_SECONDS.EVERY_24_HOURS, _('Every 24 hours')),
     )
 
+    class TIME_STEP:
+        EVERY_MINUTE = timedelta(minutes=1)
+        EVERY_5_MINUTES = timedelta(minutes=5)
+        EVERY_15_MINUTES = timedelta(minutes=15)
+        EVERY_30_MINUTES = timedelta(minutes=30)
+        EVERY_HOUR = timedelta(hours=1)
+
+    TIME_STEP_CHOICES = (
+        (TIME_STEP.EVERY_MINUTE, _('Every minute')),
+        (TIME_STEP.EVERY_5_MINUTES, _('Every 5 minutes')),
+        (TIME_STEP.EVERY_15_MINUTES, _('Every 15 minutes')),
+        (TIME_STEP.EVERY_30_MINUTES, _('Every 30 minutes')),
+        (TIME_STEP.EVERY_HOUR, _('Every hour')),
+    )
+
     '''
     Object Managers
     '''
@@ -165,12 +180,13 @@ class Instrument(models.Model):
         null=False,
         choices=INSTRUMENT_TYPE_OF_CHOICES,
     )
-    data_interval_in_seconds = models.PositiveSmallIntegerField(
-        _("Data Interval (Seconds)"),
-        help_text=_('The data interval this instrument will poll by. Interval measured in seconds.'),
-        blank=True,
+    time_step = models.DurationField(
+        _("Time Step"),
+        help_text=_('The time difference between the previous time series datum to the new time-series datum. This is the interval which will be used for all time-series data generated.'),
+        blank=False,
         null=False,
-        default=60, # 60 seconds is 1 minute.
+        default=TIME_STEP.EVERY_MINUTE,
+        choices=TIME_STEP_CHOICES,
     )
     slug = models.SlugField(
         _("Slug"),

@@ -130,7 +130,7 @@ class TimeSeriesJSONDatum(models.Model):
         blank=False,
         null=False,
     )
-    time_step = models.TimeField(
+    time_step = models.DurationField(
         _("Time Step"),
         help_text=_('The time difference between the previous time series datum to this time-series datum.'),
         blank=False,
