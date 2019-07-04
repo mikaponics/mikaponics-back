@@ -14,7 +14,7 @@ urlpatterns = (
         name='mikaponics_onboarded_email'
     ),
     ############################################################################
-    # --- Misc ---
+    # --- FINANCIAL TRANSACTIONS ---
     path('api/purchase',
         views.PurchaseAPIView.as_view(),
         name='mikaponics_purchase_api_endpoint'
@@ -30,18 +30,6 @@ urlpatterns = (
     path('api/calculate-purchase-device-receipt',
         views.CalculatePurchaseDeviceFuncAPIView.as_view(),
         name='mikaponics_calculate_purchase_device_receipt_api_endpoint'
-    ),
-
-    # --- ONBOARDING ---
-    path('api/onboarding',
-        views.OnboardingAPIView.as_view(),
-        name='mikaponics_onboard_invoice_api_endpoint'
-    ),
-
-    # --- DEVICE PURCHASE ---
-    path('api/purchase-device',
-        views.PurchaseDeviceAPIView.as_view(),
-        name='mikaponics_purchase_device_api_endpoint'
     ),
 
     # --- INVOICE ---
