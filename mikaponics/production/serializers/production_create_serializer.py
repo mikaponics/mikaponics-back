@@ -19,6 +19,7 @@ class ProductionCreateSerializer(serializers.Serializer):
     device_slug = serializers.SlugField(required=True, allow_blank=False, allow_null=False)
     environment = serializers.IntegerField(required=True)
     type_of = serializers.IntegerField(required=True)
+    type_of_other = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     grow_system = serializers.IntegerField(required=True)
     grow_system_other = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     has_day_and_night_cycle = serializers.BooleanField(required=False)
@@ -44,6 +45,7 @@ class ProductionCreateSerializer(serializers.Serializer):
             'device_slug',
             'environment',
             'type_of',
+            'type_of_other',
             'grow_system',
             'grow_system_other',
             'has_day_and_night_cycle',
@@ -72,6 +74,12 @@ class ProductionCreateSerializer(serializers.Serializer):
                 raise exceptions.ValidationError(_('Please fill in this field.'))
         return value
 
+    def validate_type_of_other(self, value):
+        if self.context['type_of'] == Production.TYPE_OF.OTHER:
+            if value == None or value == '':
+                raise exceptions.ValidationError(_('Please fill in this field.'))
+        return value
+
     def create(self, validated_data):
         # Get our validated data and context data.
         name = validated_data.get('name', None)
@@ -83,6 +91,7 @@ class ProductionCreateSerializer(serializers.Serializer):
         authenticated_from_is_public = self.context['authenticated_from_is_public']
         environment = validated_data.get('environment', None)
         type_of = validated_data.get('type_of', None)
+        type_of_other = validated_data.get('type_of_other', None)
         grow_system = validated_data.get('grow_system', None)
         grow_system_other = validated_data.get('grow_system_other', None)
         has_day_and_night_cycle = validated_data.get('has_day_and_night_cycle', None)
@@ -110,6 +119,7 @@ class ProductionCreateSerializer(serializers.Serializer):
             is_commercial=is_commercial,
             environment=environment,
             type_of=type_of,
+            type_of_other=type_of_other,
             grow_system=grow_system,
             grow_system_other=grow_system_other,
             started_at=timezone.now(),
