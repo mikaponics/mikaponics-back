@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import django_filters
-from ipware import get_client_ip
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasScope
 from django.conf import settings
 from django.db import transaction
@@ -46,21 +45,19 @@ class ProductionInspectionListCreateAPIView(generics.ListCreateAPIView):
         """
         Update
         """
-        client_ip, is_routable = get_client_ip(self.request)
         self.check_object_permissions(request, request.user)  # Validate permissions.
-        grow_system = request.data.get("grow_system")
         write_serializer = ProductionInspectionCreateSerializer(data=request.data, context={
             'authenticated_by': request.user,
-            'authenticated_from': client_ip,
-            'authenticated_from_is_public': is_routable,
-            'did_pass': did_pass,
-        })
+            'authenticated_from': request.client_ip,
+            'authenticated_from_is_public': request.client_ip_is_routable,
+            'did_pass': request.data.get("did_pass", None),
+        });
         write_serializer.is_valid(raise_exception=True)
         validated_data = write_serializer.save()
         production = validated_data['production']
         read_serializer = ProductionInspectionRetrieveSerializer(production, many=False, context={
             'authenticated_by': request.user,
-            'authenticated_from': client_ip,
-            'authenticated_from_is_public': is_routable,
+            'authenticated_from': request.client_ip,
+            'authenticated_from_is_public': request.client_ip_is_routable,
         })
         return Response(read_serializer.data, status=status.HTTP_201_CREATED)
