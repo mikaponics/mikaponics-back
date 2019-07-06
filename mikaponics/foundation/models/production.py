@@ -455,7 +455,7 @@ class Production(models.Model):
         blank=True,
         null=True,
     )
-    red_alert_delay_in_seconds = models.PositiveSmallIntegerField(
+    red_alert_delay_in_seconds = models.PositiveIntegerField(
         _("Red alert delay (seconds)"),
         help_text=_('The time that red alerts will be sent from the last time the red alert was sent.'),
         blank=True,
@@ -463,7 +463,7 @@ class Production(models.Model):
         default=ALERT_FREQUENCY_IN_SECONDS.EVERY_MINUTE,
         choices=ALERT_FREQUENCY_IN_SECONDS_CHOICES,
     )
-    orange_alert_delay_in_seconds = models.PositiveSmallIntegerField(
+    orange_alert_delay_in_seconds = models.PositiveIntegerField(
         _("Orange alert delay (seconds)"),
         help_text=_('The time that orange alerts will be sent from the last time the orange alert was sent.'),
         blank=True,
@@ -471,7 +471,7 @@ class Production(models.Model):
         default=ALERT_FREQUENCY_IN_SECONDS.EVERY_MINUTE,
         choices=ALERT_FREQUENCY_IN_SECONDS_CHOICES,
     )
-    yellow_alert_delay_in_seconds = models.PositiveSmallIntegerField(
+    yellow_alert_delay_in_seconds = models.PositiveIntegerField(
         _("Yellow alert delay (seconds)"),
         help_text=_('The time that yellow alerts will be sent from the last time the yellow alert was sent.'),
         blank=True,
@@ -490,7 +490,7 @@ class Production(models.Model):
         blank=True,
         null=True,
     )
-    inspection_frequency = models.PositiveSmallIntegerField(
+    inspection_frequency = models.PositiveIntegerField(
         _("Inspections frequency"),
         help_text=_('The frequency to create `production inspection` tasks.'),
         blank=True,
