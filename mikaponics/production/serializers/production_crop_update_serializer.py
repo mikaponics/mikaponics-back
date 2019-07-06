@@ -44,7 +44,7 @@ class ProductionCropUpdateSerializer(serializers.ModelSerializer):
         return value
 
     def validate_state_failure_reason_at_finish(self, value):
-        state_at_finish = self.context['state_at_finish']
+        state_at_finish = self.context.get('state_at_finish', None)
         # print("validate_state_failure_reason_at_finish | state_at_finish ->", state_at_finish)
         # print("validate_state_failure_reason_at_finish | failure_reason ->", value)
         if state_at_finish in [ProductionCrop.CROP_STATE_AT_FINISH.CROPS_DIED, ProductionCrop.CROP_STATE_AT_FINISH.CROPS_WERE_TERMINATED]:
@@ -53,7 +53,7 @@ class ProductionCropUpdateSerializer(serializers.ModelSerializer):
         return value
 
     def validate_harvest_failure_reason_at_finish(self, value):
-        harvest_at_finish = self.context['harvest_at_finish']
+        harvest_at_finish = self.context.get('harvest_at_finish', None)
         # print("validate_state_failure_reason_at_finish | harvest_at_finish ->", harvest_at_finish)
         # print("validate_state_failure_reason_at_finish | failure_reason ->", value)
         if harvest_at_finish in [ProductionCrop.HARVEST_REVIEW.TERRIBLE, ProductionCrop.HARVEST_REVIEW.BAD]:
@@ -76,6 +76,9 @@ class ProductionCropUpdateSerializer(serializers.ModelSerializer):
         instance.harvest_at_finish = harvest_at_finish
         instance.harvest_failure_reason_at_finish = harvest_failure_reason_at_finish
         instance.harvest_notes_at_finish = harvest_notes_at_finish
+        instance.last_modified_by = self.context.get('authenticated_by')
+        instance.last_modified_by = self.context.get('authenticated_from')
+        instance.last_modified_by = self.context.get('authenticated_from_is_public')
         instance.save()
         validated_data['production_crop'] = instance
         return validated_data
