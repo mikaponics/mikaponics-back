@@ -82,7 +82,7 @@ class ProductionInspectionCreateSerializer(serializers.ModelSerializer):
         # Step 2: Create our crop inspections.
         self.process_crop_inspections(inspection, user, ip, ip_from_is_public, crop_inspections)
 
-        return validated_data
+        return inspection
 
     def process_crop_inspections(self, inspection, user, ip, ip_from_is_public, crop_inspections):
         '''
@@ -90,8 +90,6 @@ class ProductionInspectionCreateSerializer(serializers.ModelSerializer):
         serializes them and then saves them to the database.
         '''
         for crop_inspection in crop_inspections:
-            # print(crop_inspection)  # For debugging purposes only.
-            # crop_inspection['production_crop'] = ProductionCrop.objects.get(slug=crop_inspection['slug'])
             crop_inspection['inspection'] = inspection
             serializer = ProductionCropInspectionCreateSerializer(data=crop_inspection, context={
                 'authenticated_by': user,
@@ -101,4 +99,3 @@ class ProductionInspectionCreateSerializer(serializers.ModelSerializer):
             })
             serializer.is_valid(raise_exception=True)
             validated_data = serializer.save()
-            print(validated_data)
