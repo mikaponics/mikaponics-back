@@ -64,11 +64,14 @@ class ProductionInspectionCreateSerializer(serializers.ModelSerializer):
         # Step 1: Create our inspection.
         inspection, was_created = ProductionInspection.objects.get_or_create(
             production=production,
-            state=ProductionInspection.STATE.DRAFT,
+            state=ProductionInspection.STATE.SUBMITTED,
             task_item__isnull=True,
             defaults={
                 'production': production,
-                'state': ProductionInspection.STATE.DRAFT,
+                'state': ProductionInspection.STATE.SUBMITTED,
+                'did_pass': did_pass,
+                'failure_reason': failure_reason,
+                'notes': 'notes',
                 'created_by': user,
                 'created_from': ip,
                 'created_from_is_public': ip_from_is_public,
