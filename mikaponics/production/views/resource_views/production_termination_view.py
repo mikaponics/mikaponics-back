@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import django_filters
-from ipware import get_client_ip
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasScope
 from django.conf import settings
 from django.db import transaction
@@ -33,20 +32,20 @@ class ProductionTerminationAPIView(generics.RetrieveUpdateAPIView):
         """
         Update
         """
-        client_ip, is_routable = get_client_ip(self.request)
         object = get_object_or_404(Production, slug=slug)
         self.check_object_permissions(request, object)  # Validate permissions.
         write_serializer = ProductionTerminationSerializer(object, data=request.data, context={
             'authenticated_by': request.user,
-            'authenticated_from': client_ip,
-            'authenticated_from_is_public': is_routable,
+            'authenticated_from': request.client_ip,
+            'authenticated_from_is_public': request.client_ip_is_routable,
+            'was_success_at_finish': request.data.get("was_success_at_finish", None)
         })
         write_serializer.is_valid(raise_exception=True)
         write_serializer.save()
         object.refresh_from_db()
         read_serializer = ProductionRetrieveSerializer(object, many=False, context={
             'authenticated_by': request.user,
-            'authenticated_from': client_ip,
-            'authenticated_from_is_public': is_routable,
+            'authenticated_from': request.client_ip,
+            'authenticated_from_is_public': request.client_ip_is_routable,
         })
         return Response(read_serializer.data, status=status.HTTP_200_OK)

@@ -10,6 +10,7 @@ from production.views.resource_views.production_crop_retrieve_update_views impor
 from production.views.resource_views.production_inspection_retrieve_update_view import *
 from production.views.resource_views.production_crop_inspection_retrieve_update_view import *
 from production.views.resource_views.production_inspection_list_create_view import *
+from production.views.resource_views.production_termination_view import *
 
 
 urlpatterns = (
@@ -37,10 +38,10 @@ urlpatterns = (
         ProductionCropRetrieveUpdateAPIView.as_view(),
         name='mikaponics_production_retrieve_update_api_endpoint'
     ),
-    # path('api/production-termination/<str:slug>',
-    #     ProductionTerminationAPIView.as_view(),
-    #     name='mikaponics_production_termination_api_endpoint'
-    # ),
+    path('api/production-termination/<str:slug>',
+        ProductionTerminationAPIView.as_view(),
+        name='mikaponics_production_termination_api_endpoint'
+    ),
     path('api/production-inspections',
         ProductionInspectionListCreateAPIView.as_view(),
         name='mikaponics_production_inspection_list_create_api_endpoint'
