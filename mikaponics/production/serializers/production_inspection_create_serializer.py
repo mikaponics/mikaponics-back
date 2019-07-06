@@ -82,8 +82,6 @@ class ProductionInspectionCreateSerializer(serializers.ModelSerializer):
         # Step 2: Create our crop inspections.
         self.process_crop_inspections(inspection, user, ip, ip_from_is_public, crop_inspections)
 
-        raise exceptions.ValidationError(_('This is a hard stop.'))
-
         return validated_data
 
     def process_crop_inspections(self, inspection, user, ip, ip_from_is_public, crop_inspections):

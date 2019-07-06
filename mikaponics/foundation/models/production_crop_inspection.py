@@ -248,6 +248,7 @@ class ProductionCropInspection(models.Model):
         _("At duration"),
         help_text=_('The value that this crop inspection was saved during the duration of the productiion since start.'),
         blank=True,
+        null=True,
         editable=False,
     )
 
@@ -276,6 +277,9 @@ class ProductionCropInspection(models.Model):
             # through the various slugs until a unique slug is found.
             while ProductionCropInspection.objects.filter(slug=self.slug).exists():
                 self.slug = self.production_inspection.slug+"-crop-"+str(count)+"-"+get_random_string(length=16)
+
+        if not self.at_duration:
+            self.at_duration = self.production_crop.production.get_runtime_duration()
 
         super(ProductionCropInspection, self).save(*args, **kwargs)
 

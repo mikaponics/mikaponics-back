@@ -29,6 +29,7 @@ class ProductionCropInspectionCreateSerializer(serializers.ModelSerializer):
     )
     review = serializers.IntegerField(required=True, allow_null=False,)
     stage = serializers.CharField(required=True, allow_blank=True, allow_null=True,)
+    slug = serializers.SlugField(read_only=True)
 
     class Meta:
         model = ProductionCropInspection
@@ -39,6 +40,7 @@ class ProductionCropInspectionCreateSerializer(serializers.ModelSerializer):
             'failure_reason',
             'stage',
             'notes',
+            'slug',
         )
 
     def validate_failure_reason(self, value):
@@ -71,7 +73,7 @@ class ProductionCropInspectionCreateSerializer(serializers.ModelSerializer):
         stage = CropLifeCycleStage.objects.get(slug=stage)
 
         # Create our object.
-        crop_inspection, was_created = ProductionCropInspection.objects.create(
+        crop_inspection = ProductionCropInspection.objects.create(
             production_crop=production_crop,
             production_inspection=inspection,
             state=ProductionCropInspection.STATE.SUBMITTED,
@@ -84,8 +86,9 @@ class ProductionCropInspectionCreateSerializer(serializers.ModelSerializer):
             created_from_is_public=authenticated_from_is_public,
             last_modified_by=authenticated_by,
             last_modified_from=authenticated_from,
-            last_modified_from_is_public=authenticated_from_is_public,
-            at_duration=production_crop.production.get_runtime_duration()
+            last_modified_from_is_public=authenticated_from_is_public
         )
 
+        # Return our values.
+        validated_data['slug'] = crop_inspection.slug
         return validated_data
