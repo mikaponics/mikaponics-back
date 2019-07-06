@@ -31,7 +31,7 @@ class ProductionUpdateSerializer(serializers.ModelSerializer):
             'grow_system_other',
             'started_at',
             'finished_at',
-            'was_success_at_finish',
+            'was_success',
             'failure_reason',
             'notes_at_finish',
             'has_day_and_night_cycle',
@@ -47,10 +47,10 @@ class ProductionUpdateSerializer(serializers.ModelSerializer):
         )
 
     def validate_failure_reason(self, value):
-        was_success_at_finish = self.context['was_success_at_finish']
-        # print("was_success_at_finish ->", was_success_at_finish)
+        was_success = self.context['was_success']
+        # print("was_success ->", was_success)
         # print("failure_reason ->", value)
-        if was_success_at_finish == False or was_success_at_finish == 'false' or was_success_at_finish == 'False':
+        if was_success == False or was_success == 'false' or was_success == 'False':
             if value == None or value == '':
                 raise exceptions.ValidationError(_('Please fill in this field.'))
         return value

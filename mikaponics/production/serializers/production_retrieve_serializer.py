@@ -47,7 +47,7 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
             'grow_system_other',
             'started_at',
             'finished_at',
-            'was_success_at_finish',
+            'was_success',
             'failure_reason',
             'notes_at_finish',
             'plants',

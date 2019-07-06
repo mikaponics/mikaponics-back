@@ -38,7 +38,7 @@ class ProductionTerminationAPIView(generics.RetrieveUpdateAPIView):
             'authenticated_by': request.user,
             'authenticated_from': request.client_ip,
             'authenticated_from_is_public': request.client_ip_is_routable,
-            'was_success_at_finish': request.data.get("was_success_at_finish", None)
+            'was_success': request.data.get("was_success", None)
         })
         write_serializer.is_valid(raise_exception=True)
         write_serializer.save()
