@@ -19,7 +19,10 @@ def run_instrument_alert_item_monitor_func():
     """
     from foundation.models import Instrument
 
-    for instrument in Instrument.objects.iterator(chunk_size=250, device__user_subscription_status=User.SUBSCRIPTION_STATUS.ACTIVE):
+    # DEVELOPERS NOTE:
+    # (1) It is a business logic that users whom don't a subscription will not
+    #     receive an alert.
+    for instrument in Instrument.objects.filter(device__user__subscription_status=User.SUBSCRIPTION_STATUS.ACTIVE).iterator(chunk_size=250):
         call_command('instrument_alert_monitor', instrument.id, verbosity=0)
 
 
@@ -37,7 +40,10 @@ def run_production_alert_item_monitor_func():
     """
     from foundation.models import Production
 
-    for production in Production.objects.filter(state=Production.PRODUCTION_STATE.OPERATING, user_subscription_status=User.SUBSCRIPTION_STATUS.ACTIVE).iterator(chunk_size=250):
+    # DEVELOPERS NOTE:
+    # (1) It is a business logic that users whom don't a subscription will not
+    #     receive an alert.
+    for production in Production.objects.filter(state=Production.PRODUCTION_STATE.OPERATING, user__subscription_status=User.SUBSCRIPTION_STATUS.ACTIVE).iterator(chunk_size=250):
         call_command('production_alert_monitor', production.id, verbosity=0)
 
 
