@@ -215,6 +215,24 @@ class ProductionCropInspection(models.Model):
         null=True,
         max_length=15,
     )
+    pest_problems = models.ManyToManyField(
+        "ProblemDataSheet",
+        help_text=_('Stages of development this crop has in their lifespan.'),
+        blank=True,
+        related_name="production_crop_inspections_from_pest_problems"
+    )
+    disease_problems = models.ManyToManyField(
+        "ProblemDataSheet",
+        help_text=_('Stages of development this crop has in their lifespan.'),
+        blank=True,
+        related_name="production_crop_inspections_from_disease_problems"
+    )
+    abiotic_problems = models.ManyToManyField(
+        "ProblemDataSheet",
+        help_text=_('Stages of development this crop has in their lifespan.'),
+        blank=True,
+        related_name="production_crop_inspections_from_abiotic_problems"
+    )
 
     #
     # Audit detail fields
