@@ -39,6 +39,10 @@ class ProductionCropInspectionCreateSerializer(serializers.ModelSerializer):
             'review',
             'failure_reason',
             'stage',
+            'average_length',
+            'average_width',
+            'average_height',
+            'average_measure_unit',
             'notes',
             'slug',
         )
@@ -67,6 +71,10 @@ class ProductionCropInspectionCreateSerializer(serializers.ModelSerializer):
         review = validated_data.get('review', None)
         failure_reason = validated_data.get('failure_reason', None)
         stage = validated_data.get('stage', None)
+        average_length = validated_data.get('average_length', None)
+        average_width = validated_data.get('average_width', None)
+        average_height = validated_data.get('average_height', None)
+        average_measure_unit = validated_data.get('average_measure_unit', None)
         notes = validated_data.get('notes', None)
 
         # Extract the stage.
@@ -80,6 +88,10 @@ class ProductionCropInspectionCreateSerializer(serializers.ModelSerializer):
             review=review,
             failure_reason=failure_reason,
             stage=stage,
+            average_length=average_length,
+            average_width=average_width,
+            average_height=average_height,
+            average_measure_unit=average_measure_unit,
             notes=notes,
             created_by=authenticated_by,
             created_from=authenticated_from,

@@ -22,6 +22,10 @@ class ProductionCropInspectionUpdateSerializer(serializers.ModelSerializer):
             'review',
             'failure_reason',
             'stage',
+            'average_length',
+            'average_width',
+            'average_height',
+            'average_measure_unit',
             'notes',
         )
 
@@ -46,9 +50,13 @@ class ProductionCropInspectionUpdateSerializer(serializers.ModelSerializer):
         state = validated_data.get('state', ProductionCropInspection.STATE.DRAFT)
         if state is not None:
             instance.state = state
-        review = validated_data.get('review', None)
-        failure_reason = validated_data.get('failure_reason', None)
-        notes = validated_data.get('notes', None)
+        review = validated_data.get('review', instance.review)
+        failure_reason = validated_data.get('failure_reason', instance.failure_reason)
+        notes = validated_data.get('notes', instance.notes)
+        average_length = validated_data.get('average_length', instance.average_length)
+        average_width = validated_data.get('average_width', instance.average_width)
+        average_height = validated_data.get('average_height', instance.average_height)
+        average_measure_unit = validated_data.get('average_measure_unit', instance.average_measure_unit)
 
         # # For debugging purposes only.
         # print("SLUG:", instance.slug)
@@ -64,6 +72,10 @@ class ProductionCropInspectionUpdateSerializer(serializers.ModelSerializer):
         instance.review = review
         instance.failure_reason = failure_reason
         instance.stage = stage
+        instance.average_length = average_length
+        instance.average_width = vaverage_width
+        instance.average_height = average_height
+        instance.average_measure_unit = average_measure_unit
         instance.notes = notes
         instance.last_modified_by = authenticated_by
         instance.last_modified_from = authenticated_from

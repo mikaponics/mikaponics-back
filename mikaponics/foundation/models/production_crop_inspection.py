@@ -190,7 +190,31 @@ class ProductionCropInspection(models.Model):
         blank=True,
         null=True,
     )
-
+    average_length = models.FloatField(
+        verbose_name=_('Average Length'),
+        help_text=_('The average length of the production crop at inspection.'),
+        blank=True,
+        null=True,
+    )
+    average_width = models.FloatField(
+        verbose_name=_('Average Width'),
+        help_text=_('The average wdith of the production crop at inspection.'),
+        blank=True,
+        null=True,
+    )
+    average_height = models.FloatField(
+        verbose_name=_('Average Height'),
+        help_text=_('The average height of the production crop at inspection.'),
+        blank=True,
+        null=True,
+    )
+    average_measure_unit = models.CharField(
+        _("Average Measure Unit of measurement"),
+        help_text=_('A unit of measurement used for the averages measurements at inspection.'),
+        blank=True,
+        null=True,
+        max_length=15,
+    )
 
     #
     # Audit detail fields
