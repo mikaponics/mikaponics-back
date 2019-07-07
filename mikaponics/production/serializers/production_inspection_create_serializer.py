@@ -62,24 +62,19 @@ class ProductionInspectionCreateSerializer(serializers.ModelSerializer):
         crop_inspections = validated_data.get('crop_inspections', None)
 
         # Step 1: Create our inspection.
-        inspection, was_created = ProductionInspection.objects.get_or_create(
+        inspection = ProductionInspection.objects.get_or_create(
             production=production,
             state=ProductionInspection.STATE.SUBMITTED,
-            task_item__isnull=True,
-            defaults={
-                'production': production,
-                'state': ProductionInspection.STATE.SUBMITTED,
-                'did_pass': did_pass,
-                'failure_reason': failure_reason,
-                'notes': 'notes',
-                'created_by': user,
-                'created_from': ip,
-                'created_from_is_public': ip_from_is_public,
-                'last_modified_by': user,
-                'last_modified_from': ip,
-                'last_modified_from_is_public': ip_from_is_public,
-                'at_duration': production.get_runtime_duration()
-            }
+            did_pass=did_pass,
+            failure_reason=failure_reason,
+            notes=notes,
+            created_by=user,
+            created_from=ip,
+            created_from_is_public=ip_from_is_public,
+            last_modified_by=user,
+            last_modified_from=ip,
+            last_modified_from_is_public=ip_from_is_public,
+            at_duration=production.get_runtime_duration()
         )
 
         # Step 2: Create our crop inspections.
