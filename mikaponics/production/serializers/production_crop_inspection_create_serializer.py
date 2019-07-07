@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 
+from foundation.drf import BlankableFloatField
 from foundation.models import ProductionCrop, ProductionInspection, ProductionCropInspection, CropLifeCycleStage, ProblemDataSheet
 from production.serializers.problem_data_sheet_list_serializer import ProblemDataSheetListSerializer
 
@@ -44,6 +45,9 @@ class ProductionCropInspectionCreateSerializer(serializers.ModelSerializer):
         required=False,
         allow_null=True,
     )
+    average_length = BlankableFloatField(required=False, allow_null=True,)
+    average_width = BlankableFloatField(required=False, allow_null=True,)
+    average_height = BlankableFloatField(required=False, allow_null=True,)
 
     class Meta:
         model = ProductionCropInspection
