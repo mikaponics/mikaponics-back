@@ -14,49 +14,59 @@ from production.serializers.production_crop_list_serializer import ProductionCro
 
 
 class ProductionCropUpdateSerializer(serializers.ModelSerializer):
-    # data_sheet = serializers.CharField(required=True, allow_blank=False, source="data_sheet.name")
     crop_slug = serializers.CharField(required=True, allow_blank=False, source="data_sheet.slug")
-    # substrate = serializers.CharField(required=True, allow_blank=False, source="substrate.name")
-    # substrate_slug = serializers.CharField(required=True, allow_blank=False, source="substrate.slug")
-    state_at_finish = serializers.IntegerField(required=True, allow_null=False,)
-    state_failure_reason_at_finish = serializers.CharField(required=False, allow_blank=True, allow_null=True,)
-    notes = serializers.CharField(required=False, allow_blank=True, allow_null=True,)
-    harvest_at_finish = serializers.IntegerField(required=True,)
-    harvest_failure_reason_at_finish = serializers.CharField(required=False, allow_blank=True, allow_null=True,)
-    harvest_notes = serializers.CharField(required=False, allow_blank=True, allow_null=True,)
+    was_harvested = serializers.BooleanField(required=False, allow_null=False,)
+    harvest_failure_reason = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    harvest_yield = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    harvest_quality = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    harvest_weight = serializers.CharField(required=False, allow_blank=True, allow_null=True)
 
     class Meta:
         model = ProductionCrop
         fields = (
             'slug',
             'crop_slug',
-            'state_at_finish',
-            'state_failure_reason_at_finish',
-            'notes',
-            'harvest_at_finish',
-            'harvest_failure_reason_at_finish',
+
+            # At Finish Fields
+            'was_harvested',
+            'harvest_failure_reason',
+            'harvest_failure_reason_other',
+            'harvest_yield',
+            'harvest_quality',
             'harvest_notes',
-            # 'will_close',
+            'harvest_weight',
+            'harvest_weight_unit',
+            'average_length',
+            'average_width',
+            'average_height',
+            'was_alive_after_harvest',
+            'notes',
         )
 
-    def validate_state_at_finish(self, value):
-        print("validate_state_at_finish | state_at_finish ->", value)
-        return value
-
-    def validate_state_failure_reason_at_finish(self, value):
-        state_at_finish = self.context.get('state_at_finish', None)
-        # print("validate_state_failure_reason_at_finish | state_at_finish ->", state_at_finish)
-        # print("validate_state_failure_reason_at_finish | failure_reason ->", value)
-        if state_at_finish in [ProductionCrop.CROP_STATE_AT_FINISH.CROPS_DIED, ProductionCrop.CROP_STATE_AT_FINISH.CROPS_WERE_TERMINATED]:
+    def validate_harvest_failure_reason(self, value):
+        was_harvested = self.context.get('was_harvested', None)
+        if was_harvested == False or was_harvested == 'false':
             if value == None or value == '' or value == 'None':
                 raise exceptions.ValidationError(_('Please fill in this field.'))
         return value
 
-    def validate_harvest_failure_reason_at_finish(self, value):
-        harvest_at_finish = self.context.get('harvest_at_finish', None)
-        # print("validate_state_failure_reason_at_finish | harvest_at_finish ->", harvest_at_finish)
-        # print("validate_state_failure_reason_at_finish | failure_reason ->", value)
-        if harvest_at_finish in [ProductionCrop.HARVEST_REVIEW.TERRIBLE, ProductionCrop.HARVEST_REVIEW.BAD]:
+    def validate_harvest_failure_reason_other(self, value):
+        harvest_failure_reason = self.context.get('harvest_failure_reason', None)
+        if harvest_failure_reason == ProductionCrop.HARVEST_FAILURE_REASON.OTHER_PROBLEM:
+            if value == None or value == '' or value == 'None':
+                raise exceptions.ValidationError(_('Please fill in this field.'))
+        return value
+
+    def validate_harvest_yield(self, value):
+        was_harvested = self.context.get('was_harvested', None)
+        if was_harvested == True or was_harvested == 'true':
+            if value == None or value == '' or value == 'None':
+                raise exceptions.ValidationError(_('Please fill in this field.'))
+        return value
+
+    def validate_harvest_quality(self, value):
+        was_harvested = self.context.get('was_harvested', None)
+        if was_harvested == True or was_harvested == 'true':
             if value == None or value == '' or value == 'None':
                 raise exceptions.ValidationError(_('Please fill in this field.'))
         return value
@@ -77,8 +87,8 @@ class ProductionCropUpdateSerializer(serializers.ModelSerializer):
         instance.harvest_failure_reason_at_finish = harvest_failure_reason_at_finish
         instance.harvest_notes = harvest_notes
         instance.last_modified_by = self.context.get('authenticated_by')
-        instance.last_modified_by = self.context.get('authenticated_from')
-        instance.last_modified_by = self.context.get('authenticated_from_is_public')
+        instance.last_modified_from = self.context.get('authenticated_from')
+        instance.last_modified_from_is_public= self.context.get('authenticated_from_is_public')
         instance.save()
         validated_data['production_crop'] = instance
         return validated_data
