@@ -23,7 +23,7 @@ class ProductionInspectionCreateSerializer(serializers.ModelSerializer):
     slug = serializers.SlugField(read_only=True,)
     state = serializers.IntegerField(read_only=True,)
     did_pass = serializers.BooleanField(required=True,)
-    failure_reason = serializers.CharField(required=False, allow_blank=True)
+    failure_reason = serializers.CharField(required=False, allow_blank=True, allow_null=True,)
     notes = serializers.CharField(required=False, allow_blank=True)
     crop_inspections = serializers.JSONField(required=True, allow_null=False)
 
