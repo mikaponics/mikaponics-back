@@ -450,7 +450,10 @@ class ProductionCrop(models.Model):
         if self.data_sheet_other:
             return self.data_sheet_other
         else:
-            return self.data_sheet.name
+            name = self.data_sheet.name
+            if self.variety:
+                name += " (" + self.variety + ")"
+            return name
 
     def get_pretty_substrate_name(self):
         if self.substrate_other:
