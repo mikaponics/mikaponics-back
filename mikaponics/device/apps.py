@@ -7,7 +7,7 @@ from django.conf import settings
 from django.core.management import call_command
 from django.utils import timezone
 
-from device.tasks import *
+
 
 
 class DeviceConfig(AppConfig):
@@ -22,6 +22,9 @@ class DeviceConfig(AppConfig):
         """
         On django runtime, load up the following code.
         """
+        # Load our tasks when this app finished loading and is ready.
+        from device.tasks import run_devices_handling_func, run_device_simulators_func
+
         scheduler = django_rq.get_scheduler('default')
 
         # Delete previously loaded ETLs.

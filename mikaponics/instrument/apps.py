@@ -7,8 +7,6 @@ from django.conf import settings
 from django.core.management import call_command
 from django.utils import timezone
 
-from instrument.tasks import *
-
 
 class InstrumentConfig(AppConfig):
     """
@@ -22,6 +20,13 @@ class InstrumentConfig(AppConfig):
         """
         On django runtime, load up the following code.
         """
+        # Load our tasks when this app finished loading and is ready.
+        from instrument.tasks import (
+            run_instruments_handling_func,
+            run_instrument_simulators_func,
+            run_power_usage_instrument_simulators_func
+        )
+
         scheduler = django_rq.get_scheduler('default')
 
         # Delete previously loaded ETLs.

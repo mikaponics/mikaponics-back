@@ -7,8 +7,6 @@ from django.conf import settings
 from django.core.management import call_command
 from django.utils import timezone
 
-from production.tasks import *
-
 
 class ProductionConfig(AppConfig):
     """
@@ -22,6 +20,11 @@ class ProductionConfig(AppConfig):
         """
         On django runtime, load up the following code.
         """
+        # Load our tasks when this app finished loading and is ready.
+        from production.tasks import  (
+            run_production_evaluation_handling_func,
+            run_schedule_next_production_inspection_handling_func
+        )
         scheduler = django_rq.get_scheduler('default')
 
         # Delete previously loaded ETLs.
