@@ -7,6 +7,8 @@ from django.apps import AppConfig
 from django.conf import settings
 from django.core.management import call_command
 
+from foundation.models import User
+
 
 @job
 def run_instrument_alert_item_monitor_func():

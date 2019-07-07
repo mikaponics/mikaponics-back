@@ -7,8 +7,6 @@ from django.conf import settings
 from django.core.management import call_command
 from django.utils import timezone
 
-from alert.tasks import *
-
 
 class AlertConfig(AppConfig):
     """
@@ -22,6 +20,12 @@ class AlertConfig(AppConfig):
         """
         On django runtime, load up the following code.
         """
+        # Load our tasks when this app finished loading and is ready.
+        from alert.tasks import (
+            run_instrument_alert_item_monitor_func,
+            run_production_alert_item_monitor_func
+        )
+
         scheduler = django_rq.get_scheduler('default')
 
         # Delete previously loaded ETLs.

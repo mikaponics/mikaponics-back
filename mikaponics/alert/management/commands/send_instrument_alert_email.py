@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from foundation.constants import *
-from foundation.models import AlertItem
+from foundation.models import AlertItem, User
 from foundation.utils import reverse_with_full_domain
 
 
@@ -40,6 +40,10 @@ class Command(BaseCommand):
         try:
             for id in options['id']:
                 alert = AlertItem.objects.get(id=id)
+                if alert.instrument.device.user.subscription_status != User.SUBSCRIPTION_STATUS.ACTIVE:
+                    raise CommandError(_('%(dt)s | SIAE | Alert cannot be sent because user is not subscribed!') % {
+                        'dt': str(timezone.now())
+                    })
                 self.begin_processing(alert)
 
         except AlertItem.DoesNotExist:
