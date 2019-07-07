@@ -49,7 +49,7 @@ class ProductionRetrieveSerializer(serializers.ModelSerializer):
             'finished_at',
             'was_success',
             'failure_reason',
-            'notes_at_finish',
+            'notes',
             'plants',
             'fish',
             'crops',

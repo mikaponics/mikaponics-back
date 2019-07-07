@@ -18,7 +18,7 @@ class ProductionTerminationSerializer(serializers.ModelSerializer):
     finished_at = serializers.DateField(required=True,)
     was_success = serializers.BooleanField(required=True,)
     failure_reason = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-    notes_at_finish = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    notes = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     crops = serializers.JSONField(required=True, allow_null=False)
 
     class Meta:
@@ -27,7 +27,7 @@ class ProductionTerminationSerializer(serializers.ModelSerializer):
             'finished_at',
             'was_success',
             'failure_reason',
-            'notes_at_finish',
+            'notes',
             'crops',
         )
 
@@ -46,7 +46,7 @@ class ProductionTerminationSerializer(serializers.ModelSerializer):
         finished_at = validated_data.get('finished_at', None)
         was_success = validated_data.get('was_success', None)
         failure_reason = validated_data.get('failure_reason', None)
-        notes_at_finish = validated_data.get('notes_at_finish', None)
+        notes = validated_data.get('notes', None)
         crops = validated_data.get('crops', None)
 
         # Update the production.
@@ -54,7 +54,7 @@ class ProductionTerminationSerializer(serializers.ModelSerializer):
         instance.finished_at = finished_at
         instance.was_success = was_success
         instance.failure_reason = failure_reason
-        instance.notes_at_finish = notes_at_finish
+        instance.notes = notes
         instance.last_modified_by = authenticated_by
         instance.last_modified_from = authenticated_from
         instance.last_modified_from_is_public = authenticated_from_is_public

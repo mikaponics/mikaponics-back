@@ -33,7 +33,7 @@ class ProductionUpdateSerializer(serializers.ModelSerializer):
             'finished_at',
             'was_success',
             'failure_reason',
-            'notes_at_finish',
+            'notes',
             'has_day_and_night_cycle',
             'day_starts_at',
             'day_finishes_at',

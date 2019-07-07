@@ -401,9 +401,9 @@ class Production(models.Model):
         blank=True,
         null=True,
     )
-    notes_at_finish = models.TextField(
-        _("Comments at finish"),
-        help_text=_('Any notes to add upon the completion of the crop production.'),
+    notes = models.TextField(
+        _("Comments"),
+        help_text=_('Any notes to add upon the completion or operation of the production.'),
         blank=True,
         null=True,
     )

@@ -93,34 +93,36 @@ class ProductionCrop(models.Model):
         (TYPE_OF.NONE, _('None')),
     )
 
-    class CROP_STATE_AT_FINISH:
-        CROPS_DIED = 1
-        CROPS_WERE_ALIVE = 2
-        CROPS_WERE_ALIVE_WITH_HARVEST = 3
-        CROPS_WERE_TERMINATED = 4
-        CROPS_WERE_TERMINATED_WITH_HARVEST = 5
+    class HARVEST_FAILURE_REASON:
+        OTHER_PROBLEM = 1
+        PEST_PROBLEM = 2
+        DISEASE_PROBLEM = 3
+        ABIOTIC_PROBLEM = 4
+        TECHNICAL_FAILURE = 5
+        HUMAN_ERROR = 6
 
-    CROP_STATE_AT_FINISH_CHOICES = (
-        (CROP_STATE_AT_FINISH.CROPS_DIED, _('Crops died')),
-        (CROP_STATE_AT_FINISH.CROPS_WERE_ALIVE, _('Crops were alive')),
-        (CROP_STATE_AT_FINISH.CROPS_WERE_ALIVE_WITH_HARVEST, _('Crops were alive at harvest')),
-        (CROP_STATE_AT_FINISH.CROPS_WERE_TERMINATED, _('Crops were terminated')),
-        (CROP_STATE_AT_FINISH.CROPS_WERE_TERMINATED_WITH_HARVEST, _('Crops were terminated with harvest')),
+    HARVEST_FAILURE_REASON_CHOICES = (
+        (HARVEST_FAILURE_REASON.PEST_PROBLEM, _('Pest Problem')),
+        (HARVEST_FAILURE_REASON.DISEASE_PROBLEM, _('Disease Problem')),
+        (HARVEST_FAILURE_REASON.ABIOTIC_PROBLEM, _('Abiotic Problem')),
+        (HARVEST_FAILURE_REASON.TECHNICAL_FAILURE, _('Technical Problem')),
+        (HARVEST_FAILURE_REASON.HUMAN_ERROR, _('Human Error')),
+        (HARVEST_FAILURE_REASON.OTHER_PROBLEM, _('Other')),
     )
 
-    class HARVEST_REVIEW:
+    class HARVEST_RATING:
         TERRIBLE = 1
         BAD = 2
         AVERAGE = 3
         GOOD = 4
         EXCELLENT = 5
 
-    HARVEST_REVIEW_CHOICES = (
-        (HARVEST_REVIEW.EXCELLENT, _('Excellent')),
-        (HARVEST_REVIEW.GOOD, _('Bad')),
-        (HARVEST_REVIEW.AVERAGE, _('Average')),
-        (HARVEST_REVIEW.BAD, _('Good')),
-        (HARVEST_REVIEW.TERRIBLE, _('Excellent')),
+    HARVEST_RATING_CHOICES = (
+        (HARVEST_RATING.EXCELLENT, _('Excellent')),
+        (HARVEST_RATING.GOOD, _('Bad')),
+        (HARVEST_RATING.AVERAGE, _('Average')),
+        (HARVEST_RATING.BAD, _('Good')),
+        (HARVEST_RATING.TERRIBLE, _('Excellent')),
     )
 
 
@@ -222,41 +224,86 @@ class ProductionCrop(models.Model):
         related_name="production_crops",
         on_delete=models.CASCADE,
     )
-    state_at_finish = models.PositiveSmallIntegerField(
-        verbose_name=_('State at finish'),
-        help_text=_('The state of the crop when the production has finished.'),
+    was_harvested = models.NullBooleanField(
+        _("Was this crop production harvseted?"),
+        help_text=_('Indicates if this crop production was harvested or not.'),
+        default=None,
+        blank=True,
+    )
+    harvest_failure_reason = models.PositiveSmallIntegerField(
+        verbose_name=_('Harvest Failure Reason'),
+        help_text=_('The reason why this crop production was not harvested.'),
         blank=True,
         null=True,
-        choices=CROP_STATE_AT_FINISH_CHOICES,
+        choices=HARVEST_FAILURE_REASON_CHOICES,
     )
-    state_failure_reason_at_finish = models.TextField(
-        _("Failure reason at finish"),
-        help_text=_('Th failure reason of the crop when the production has finished.'),
+    harvest_failure_reason_other = models.CharField(
+        _("Harvest Failure Reason (Other)"),
+        help_text=_('A reason why the harvest failed that our system does not know.'),
+        blank=True,
+        null=True,
+        max_length=255,
+    )
+    harvest_yield = models.PositiveSmallIntegerField(
+        verbose_name=_('Harvest yield'),
+        help_text=_('The harvest yield rating when the crop production has finished.'),
+        blank=True,
+        null=True,
+        choices=HARVEST_RATING_CHOICES,
+    )
+    harvest_quality = models.PositiveSmallIntegerField(
+        verbose_name=_('Harvest quality'),
+        help_text=_('The harvest quality rating when the crop production has finished.'),
+        blank=True,
+        null=True,
+        choices=HARVEST_RATING_CHOICES,
+    )
+    harvest_notes = models.TextField(
+        _("Harvest notes"),
+        help_text=_('Any notes or notes of the harvest when the crop production has finished or during operation.'),
         blank=True,
         null=True,
     )
-    notes_at_finish = models.TextField(
-        _("Comments at finish"),
+    harvest_weight = models.FloatField(
+        verbose_name=_('Harvest weight'),
+        help_text=_('The harvest weight at completion.'),
+        blank=True,
+        null=True,
+    )
+    harvest_weight_unit = models.CharField(
+        _("Harvest weight unit of measure"),
+        help_text=_('The harvest weight unit of measure at completion.'),
+        blank=True,
+        null=True,
+        max_length=15,
+    )
+    average_length = models.FloatField(
+        verbose_name=_('Average Length'),
+        help_text=_('The average length of the production crop at completion.'),
+        blank=True,
+        null=True,
+    )
+    average_width = models.FloatField(
+        verbose_name=_('Average Width'),
+        help_text=_('The average wdith of the production crop at completion.'),
+        blank=True,
+        null=True,
+    )
+    average_height = models.FloatField(
+        verbose_name=_('Average Height'),
+        help_text=_('The average height of the production crop at completion.'),
+        blank=True,
+        null=True,
+    )
+    was_alive_after_harvest = models.NullBooleanField(
+        _("Was alive after harvest?"),
+        help_text=_('Indicates if this `crop` organism was considered alive when harvested or not.'),
+        default=None,
+        blank=True,
+    )
+    notes = models.TextField(
+        _("Notes at finish"),
         help_text=_('Any notes or notes of the crop when the production has finished.'),
-        blank=True,
-        null=True,
-    )
-    harvest_at_finish = models.PositiveSmallIntegerField(
-        verbose_name=_('Harvest review at finish'),
-        help_text=_('The harvest review made by the user when the production has finished.'),
-        blank=True,
-        null=True,
-        choices=HARVEST_REVIEW_CHOICES,
-    )
-    harvest_failure_reason_at_finish = models.TextField(
-        _("Harvest failure at finish"),
-        help_text=_('The harvest failure reason of the crop when the production has finished.'),
-        blank=True,
-        null=True,
-    )
-    harvest_notes_at_finish = models.TextField(
-        _("Harvest notes at finish"),
-        help_text=_('Any notes or notes of the harvest when the production has finished.'),
         blank=True,
         null=True,
     )

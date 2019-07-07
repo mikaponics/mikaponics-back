@@ -20,10 +20,10 @@ class ProductionCropUpdateSerializer(serializers.ModelSerializer):
     # substrate_slug = serializers.CharField(required=True, allow_blank=False, source="substrate.slug")
     state_at_finish = serializers.IntegerField(required=True, allow_null=False,)
     state_failure_reason_at_finish = serializers.CharField(required=False, allow_blank=True, allow_null=True,)
-    notes_at_finish = serializers.CharField(required=False, allow_blank=True, allow_null=True,)
+    notes = serializers.CharField(required=False, allow_blank=True, allow_null=True,)
     harvest_at_finish = serializers.IntegerField(required=True,)
     harvest_failure_reason_at_finish = serializers.CharField(required=False, allow_blank=True, allow_null=True,)
-    harvest_notes_at_finish = serializers.CharField(required=False, allow_blank=True, allow_null=True,)
+    harvest_notes = serializers.CharField(required=False, allow_blank=True, allow_null=True,)
 
     class Meta:
         model = ProductionCrop
@@ -32,10 +32,10 @@ class ProductionCropUpdateSerializer(serializers.ModelSerializer):
             'crop_slug',
             'state_at_finish',
             'state_failure_reason_at_finish',
-            'notes_at_finish',
+            'notes',
             'harvest_at_finish',
             'harvest_failure_reason_at_finish',
-            'harvest_notes_at_finish',
+            'harvest_notes',
             # 'will_close',
         )
 
@@ -66,16 +66,16 @@ class ProductionCropUpdateSerializer(serializers.ModelSerializer):
         crop_slug = validated_data.get('crop_slug', None)
         state_at_finish = validated_data.get('state_at_finish', None)
         state_failure_reason_at_finish = validated_data.get('state_failure_reason_at_finish', None)
-        notes_at_finish = validated_data.get('notes_at_finish', None)
+        notes = validated_data.get('notes', None)
         harvest_at_finish = validated_data.get('harvest_at_finish', None)
         harvest_failure_reason_at_finish = validated_data.get('harvest_failure_reason_at_finish', None)
-        harvest_notes_at_finish = validated_data.get('harvest_notes_at_finish', None)
+        harvest_notes = validated_data.get('harvest_notes', None)
         instance.state_at_finish = state_at_finish
         instance.state_failure_reason_at_finish = state_failure_reason_at_finish
-        instance.notes_at_finish = notes_at_finish
+        instance.notes = notes
         instance.harvest_at_finish = harvest_at_finish
         instance.harvest_failure_reason_at_finish = harvest_failure_reason_at_finish
-        instance.harvest_notes_at_finish = harvest_notes_at_finish
+        instance.harvest_notes = harvest_notes
         instance.last_modified_by = self.context.get('authenticated_by')
         instance.last_modified_by = self.context.get('authenticated_from')
         instance.last_modified_by = self.context.get('authenticated_from_is_public')
