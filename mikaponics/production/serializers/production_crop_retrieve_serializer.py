@@ -29,6 +29,7 @@ class ProductionCropRetrieveSerializer(serializers.ModelSerializer):
             # 'pretty_state_at_finish',
             'data_sheet',
             'data_sheet_other',
+            'variety',
             'crop_slug',
             'quantity',
             'substrate',

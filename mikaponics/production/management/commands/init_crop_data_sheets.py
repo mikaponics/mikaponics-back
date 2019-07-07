@@ -192,21 +192,6 @@ class Command(BaseCommand):
         CropCondition.objects.update_or_create(id=53, defaults={'data_sheet': crop, 'stage_id': 5, 'type_of': CropCondition.INSTRUMENT_TYPE.ORP, 'max_value': -40, 'min_value': 60, 'operation_cycle': CropCondition.OPERATION_CYCLE.CONTINUOUS_CYCLE,})
         CropCondition.objects.update_or_create(id=54, defaults={'data_sheet': crop, 'stage_id': 6, 'type_of': CropCondition.INSTRUMENT_TYPE.ORP, 'max_value': -40, 'min_value': 60, 'operation_cycle': CropCondition.OPERATION_CYCLE.CONTINUOUS_CYCLE,})
 
-        #----------------------------------------------------------------------#
-        #                            TOMATO (KUMATO)                           #
-        #----------------------------------------------------------------------#
-        crop, was_created = CropDataSheet.objects.update_or_create(
-           id=4,
-           defaults={
-               'slug': 'tomato-kumato',                                    # (1)
-               'order_number': 3,
-               'type_of': CropDataSheet.TYPE_OF.PLANT,
-               'name': "Tomato (Kumato)",
-               'has_day_and_night_cycle': True,
-           }
-        )
-        crop.stages.set([1,2,3,4,5,6])
-
         ########################################################################
         #                              FISHSTOCK                               #
         ########################################################################

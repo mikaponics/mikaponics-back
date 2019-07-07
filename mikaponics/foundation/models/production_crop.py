@@ -183,6 +183,13 @@ class ProductionCrop(models.Model):
         null=True,
         max_length=255,
     )
+    variety = models.CharField(
+        _("Variety"),
+        max_length=127,
+        help_text=_('The variety name of the crop.'),
+        blank=True,
+        null=True,
+    )
     quantity = models.PositiveSmallIntegerField(
         verbose_name=_('Quantity'),
         help_text=_('The quantity of plants or fish that are being produced.'),

@@ -21,6 +21,7 @@ class ProductionCropCreateSerializer(serializers.ModelSerializer):
         fields = (
             'data_sheet',
             'data_sheet_other',
+            'variety',
             'quantity',
             'slug',
             'absolute_url',
