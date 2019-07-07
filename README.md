@@ -84,6 +84,7 @@ This project uses the ``PostGres`` database and as a result requires setup befor
   python manage.py migrate
   python manage.py init_mikaponics
   python manage.py init_crop_data_sheets
+  python manage.py init_problem_data_sheets
   python manage.py create_admin_user "bart@mikasoftware.com" "123password" "Bart" "Mika";
   python manage.py setup_resource_server_authorization
   python manage.py collectstatic

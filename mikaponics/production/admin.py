@@ -95,6 +95,29 @@ class CropSubstrateAdmin(admin.ModelAdmin):
 admin.site.register(CropSubstrate, CropSubstrateAdmin)
 
 
+class ProblemDataSheetAdmin(admin.ModelAdmin):
+    list_display = [
+        'text', 'type_of', 'slug',
+
+    ]
+    list_filter = ['type_of',]
+    ordering = ['type_of', 'text',]
+    raw_id_fields = []
+    readonly_fields = ['id',]
+    formfield_overrides = {
+        JSONField: {'widget': PrettyJSONWidget }
+    }
+
+    # def has_add_permission(self, request, obj=None):
+    #     return False
+    #
+    # def has_delete_permission(self, request, obj=None):
+    #     return False
+
+admin.site.register(ProblemDataSheet, ProblemDataSheetAdmin)
+
+
+
 class ProductionCropInline(admin.TabularInline):
     model = ProductionCrop
 

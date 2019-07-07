@@ -20,6 +20,7 @@ from foundation.models.crop_life_cycle_stage import CropLifeCycleStage
 from foundation.models.crop_data_sheet import CropDataSheet
 from foundation.models.crop_substrate import CropSubstrate
 from foundation.models.crop_condition import CropCondition
+from foundation.models.problem_data_sheet import ProblemDataSheet
 from foundation.models.production import Production
 from foundation.models.production_crop import ProductionCrop
 from foundation.models.production_inspection import ProductionInspection
