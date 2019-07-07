@@ -11,6 +11,7 @@ from rest_framework.response import Response
 
 from foundation.models import ProductionCropInspection
 from production.serializers.crop_life_cycle_stage_list_serializer import CropLifeCycleStageListSerializer
+from production.serializers.problem_data_sheet_list_serializer import ProblemDataSheetListSerializer
 
 
 class ProductionCropInspectionRetrieveSerializer(serializers.ModelSerializer):
@@ -25,6 +26,7 @@ class ProductionCropInspectionRetrieveSerializer(serializers.ModelSerializer):
     production_crop_type_of = serializers.IntegerField(required=True, source="production_crop.type_of")
     production_crop_absolute_url = serializers.CharField(required=True, allow_blank=False, source="production_crop.get_absolute_url")
     absolute_url = serializers.CharField(required=True, allow_blank=False, source="get_absolute_url")
+    problems = serializers.SerializerMethodField()
 
     class Meta:
         model = ProductionCropInspection
@@ -51,5 +53,15 @@ class ProductionCropInspectionRetrieveSerializer(serializers.ModelSerializer):
             'notes',
             'created_at',
             'last_modified_at',
-            'at_duration'
+            'at_duration',
+            'problems'
         )
+
+    def get_problems(self, obj):
+        try:
+            problems = obj.problems.order_by('type_of', 'text',)
+            s = ProblemDataSheetListSerializer(problems, many=True)
+            return s.data;
+        except Exception as e:
+            print("ProductionCropInspectionRetrieveSerializer | get_problems |", e)
+            return []
