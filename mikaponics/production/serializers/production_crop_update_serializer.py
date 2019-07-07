@@ -39,6 +39,7 @@ class ProductionCropUpdateSerializer(serializers.ModelSerializer):
             'average_length',
             'average_width',
             'average_height',
+            'average_measure_unit',
             'was_alive_after_harvest',
             'notes',
         )
@@ -74,21 +75,29 @@ class ProductionCropUpdateSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         slug = validated_data.get('slug', None)
         crop_slug = validated_data.get('crop_slug', None)
-        state_at_finish = validated_data.get('state_at_finish', None)
-        state_failure_reason_at_finish = validated_data.get('state_failure_reason_at_finish', None)
-        notes = validated_data.get('notes', None)
-        harvest_at_finish = validated_data.get('harvest_at_finish', None)
-        harvest_failure_reason_at_finish = validated_data.get('harvest_failure_reason_at_finish', None)
+
+        # At Finish Fields
+        was_harvested = validated_data.get('was_harvested', None)
+        harvest_failure_reason = validated_data.get('harvest_failure_reason', None)
+        harvest_failure_reason_other = validated_data.get('harvest_failure_reason_other', None)
+        harvest_yield = validated_data.get('harvest_yield', None)
+        harvest_quality = validated_data.get('harvest_quality', None)
         harvest_notes = validated_data.get('harvest_notes', None)
-        instance.state_at_finish = state_at_finish
-        instance.state_failure_reason_at_finish = state_failure_reason_at_finish
-        instance.notes = notes
-        instance.harvest_at_finish = harvest_at_finish
-        instance.harvest_failure_reason_at_finish = harvest_failure_reason_at_finish
-        instance.harvest_notes = harvest_notes
+        harvest_weight = validated_data.get('harvest_weight', None)
+        harvest_weight_unit = validated_data.get('harvest_weight_unit', None)
+        average_length = validated_data.get('average_length', None)
+        average_width = validated_data.get('average_width', None)
+        average_height = validated_data.get('average_height', None)
+        average_measure_unit = validated_data.get('average_measure_unit', None)
+        was_alive_after_harvest = validated_data.get('was_alive_after_harvest', None)
+        notes = validated_data.get('notes', None)
+
+        # Audit fields.
         instance.last_modified_by = self.context.get('authenticated_by')
         instance.last_modified_from = self.context.get('authenticated_from')
         instance.last_modified_from_is_public= self.context.get('authenticated_from_is_public')
+
+        # Save and return our data.
         instance.save()
         validated_data['production_crop'] = instance
         return validated_data

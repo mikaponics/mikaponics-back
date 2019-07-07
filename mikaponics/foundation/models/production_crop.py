@@ -295,6 +295,13 @@ class ProductionCrop(models.Model):
         blank=True,
         null=True,
     )
+    average_measure_unit = models.CharField(
+        _("Average Measure Unit of measurement"),
+        help_text=_('A unit of measurement used for the averages measurements.'),
+        blank=True,
+        null=True,
+        max_length=15,
+    )
     was_alive_after_harvest = models.NullBooleanField(
         _("Was alive after harvest?"),
         help_text=_('Indicates if this `crop` organism was considered alive when harvested or not.'),
