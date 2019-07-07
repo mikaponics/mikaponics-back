@@ -9,7 +9,8 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 
-from foundation.models import ProductionCrop, ProductionInspection, ProductionCropInspection, CropLifeCycleStage
+from foundation.models import ProductionCrop, ProductionInspection, ProductionCropInspection, CropLifeCycleStage, ProblemDataSheet
+from production.serializers.problem_data_sheet_list_serializer import ProblemDataSheetListSerializer
 
 
 class ProductionCropInspectionCreateSerializer(serializers.ModelSerializer):
@@ -30,6 +31,18 @@ class ProductionCropInspectionCreateSerializer(serializers.ModelSerializer):
     review = serializers.IntegerField(required=True, allow_null=False,)
     stage = serializers.CharField(required=True, allow_blank=True, allow_null=True,)
     slug = serializers.SlugField(read_only=True)
+    pest_problems = serializers.JSONField(
+        required=False,
+        allow_null=True,
+    )
+    disease_problems = serializers.JSONField(
+        required=False,
+        allow_null=True,
+    )
+    abiotic_problems = serializers.JSONField(
+        required=False,
+        allow_null=True,
+    )
 
     class Meta:
         model = ProductionCropInspection
@@ -45,6 +58,9 @@ class ProductionCropInspectionCreateSerializer(serializers.ModelSerializer):
             'average_measure_unit',
             'notes',
             'slug',
+            'pest_problems',
+            'disease_problems',
+            'abiotic_problems'
         )
 
     def validate_failure_reason(self, value):
@@ -101,6 +117,44 @@ class ProductionCropInspectionCreateSerializer(serializers.ModelSerializer):
             last_modified_from_is_public=authenticated_from_is_public
         )
 
+        # Process our `problems`.
+        self.process_problems(crop_inspection, validated_data)
+
         # Return our values.
         validated_data['slug'] = crop_inspection.slug
         return validated_data
+
+    def process_problems(self, crop_inspection, validated_data):
+        """
+        Function will take the pest, disease and abiotic problems that
+        the user inputted and connect these problems to this crop inspection.
+        """
+        # Get our inputs.
+        pest_problems = validated_data.get('pest_problems', [])
+        disease_problems = validated_data.get('disease_problems', [])
+        abiotic_problems = validated_data.get('abiotic_problems', [])
+
+        # Process inputs.
+        for data in pest_problems:
+            slug = data.get('slug', None)
+            if slug is None: # In case this is from our GUI, this is a convincience code.
+                slug = data.get('value', None)
+            problem = ProblemDataSheet.objects.filter(slug=slug).first()
+            if problem:
+                crop_inspection.problems.add(problem)
+
+        for data in disease_problems:
+            slug = data.get('slug', None)
+            if slug is None: # In case this is from our GUI, this is a convincience code.
+                slug = data.get('value', None)
+            problem = ProblemDataSheet.objects.filter(slug=slug).first()
+            if problem:
+                crop_inspection.problems.add(problem)
+
+        for data in abiotic_problems:
+            slug = data.get('slug', None)
+            if slug is None: # In case this is from our GUI, this is a convincience code.
+                slug = data.get('value', None)
+            problem = ProblemDataSheet.objects.filter(slug=slug).first()
+            if problem:
+                crop_inspection.problems.add(problem)

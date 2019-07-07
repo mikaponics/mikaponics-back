@@ -85,6 +85,7 @@ class ProductionInspectionCreateSerializer(serializers.ModelSerializer):
         # Step 2: Create our crop inspections.
         self.process_crop_inspections(inspection, user, ip, ip_from_is_public, crop_inspections)
 
+        # Step 3: Return our created object.
         return inspection
 
     def process_crop_inspections(self, inspection, user, ip, ip_from_is_public, crop_inspections):
