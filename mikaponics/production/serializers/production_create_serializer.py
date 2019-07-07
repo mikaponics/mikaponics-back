@@ -157,6 +157,7 @@ class ProductionCreateSerializer(serializers.Serializer):
                 stage=stage,
                 data_sheet=data_sheet,
                 data_sheet_other=plant.get('plant_other', None),
+                variety=plant.get('variety', None),
                 quantity=plant['quantity'],
                 substrate=substrate,
                 substrate_other=plant.get('substrate_other', None),
