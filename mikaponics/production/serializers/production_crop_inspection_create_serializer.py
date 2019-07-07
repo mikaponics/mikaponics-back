@@ -31,6 +31,7 @@ class ProductionCropInspectionCreateSerializer(serializers.ModelSerializer):
     review = serializers.IntegerField(required=True, allow_null=False,)
     stage = serializers.CharField(required=True, allow_blank=True, allow_null=True,)
     slug = serializers.SlugField(read_only=True)
+    notes = serializers.CharField(required=False, allow_null=True, allow_blank=True,)
     pest_problems = serializers.JSONField(
         required=False,
         allow_null=True,
