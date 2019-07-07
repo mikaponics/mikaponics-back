@@ -62,7 +62,7 @@ class ProductionInspectionCreateSerializer(serializers.ModelSerializer):
         crop_inspections = validated_data.get('crop_inspections', None)
 
         # Step 1: Create our inspection.
-        inspection = ProductionInspection.objects.get_or_create(
+        inspection = ProductionInspection.objects.create(
             production=production,
             state=ProductionInspection.STATE.SUBMITTED,
             did_pass=did_pass,
