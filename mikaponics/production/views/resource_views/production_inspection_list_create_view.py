@@ -54,11 +54,9 @@ class ProductionInspectionListCreateAPIView(generics.ListCreateAPIView):
         });
         write_serializer.is_valid(raise_exception=True)
         production_inspection = write_serializer.save()
-        print(production_inspection)
         read_serializer = ProductionInspectionRetrieveSerializer(production_inspection, many=False, context={
             'authenticated_by': request.user,
             'authenticated_from': request.client_ip,
             'authenticated_from_is_public': request.client_ip_is_routable,
         })
-        print(read_serializer)
         return Response(read_serializer.data, status=status.HTTP_201_CREATED)
