@@ -60,8 +60,10 @@ class ProductionTerminationSerializer(serializers.ModelSerializer):
         instance.last_modified_from_is_public = authenticated_from_is_public
         instance.save()
 
-        # Update the production crops.
-        self.process_crops(instance, crops)
+        # # Update the production crops.
+        # self.process_crops(instance, crops)
+
+        raise exceptions.ValidationError(_('CLOCK CLOCK CLOCK')) # TODO: REMOVE.
 
         return validated_data
 
@@ -77,8 +79,8 @@ class ProductionTerminationSerializer(serializers.ModelSerializer):
                 'authenticated_by': self.context.get('authenticated_by'),
                 'authenticated_from': self.context.get('authenticated_from'),
                 'authenticated_from_is_public': self.context.get('authenticated_from_is_public'),
-                'state_at_finish': production_crop_dirty_data.get('state_at_finish'),
-                'harvest_at_finish': production_crop_dirty_data.get('harvest_at_finish')
+                'was_harvested': production_crop_dirty_data.get('was_harvested'),
+                'harvest_failure_reason': production_crop_dirty_data.get('harvest_failure_reason')
             })
             serializer.is_valid(raise_exception=True)
             serializer.save()

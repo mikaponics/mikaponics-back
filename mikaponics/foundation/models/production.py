@@ -402,7 +402,7 @@ class Production(models.Model):
         null=True,
     )
     notes = models.TextField(
-        _("Comments"),
+        _("Note(s) / Comment(s)"),
         help_text=_('Any notes to add upon the completion or operation of the production.'),
         blank=True,
         null=True,

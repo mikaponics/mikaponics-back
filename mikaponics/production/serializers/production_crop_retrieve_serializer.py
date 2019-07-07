@@ -15,7 +15,7 @@ from foundation.models import ProductionCrop
 class ProductionCropRetrieveSerializer(serializers.ModelSerializer):
     pretty_name = serializers.ReadOnlyField(source="get_pretty_name")
     evaluation_letter = serializers.ReadOnlyField(source="get_evaluation_letter")
-    pretty_state_at_finish = serializers.ReadOnlyField(source="get_pretty_state_at_finish")
+    # pretty_state_at_finish = serializers.ReadOnlyField(source="get_pretty_state_at_finish")
     data_sheet = serializers.CharField(required=True, allow_blank=False, source="data_sheet.name")
     crop_slug = serializers.CharField(required=True, allow_blank=False, source="data_sheet.slug")
     substrate = serializers.CharField(required=True, allow_blank=False, source="substrate.name")
@@ -26,7 +26,7 @@ class ProductionCropRetrieveSerializer(serializers.ModelSerializer):
         model = ProductionCrop
         fields = (
             'pretty_name',
-            'pretty_state_at_finish',
+            # 'pretty_state_at_finish',
             'data_sheet',
             'data_sheet_other',
             'crop_slug',
@@ -34,12 +34,23 @@ class ProductionCropRetrieveSerializer(serializers.ModelSerializer):
             'substrate',
             'substrate_other',
             'substrate_slug',
-            'state_at_finish',
-            'state_failure_reason_at_finish',
-            'notes',
-            'harvest_at_finish',
-            'harvest_failure_reason_at_finish',
+            'stage',
+
+            # At Finish Fields
+            'was_harvested',
+            'harvest_failure_reason',
+            'harvest_failure_reason_other',
+            'harvest_yield',
+            'harvest_quality',
             'harvest_notes',
+            'harvest_weight',
+            'harvest_weight_unit',
+            'average_length',
+            'average_width',
+            'average_height',
+            'was_alive_after_harvest',
+            'notes',
+
             'created_at',
             'last_modified_at',
             'slug',

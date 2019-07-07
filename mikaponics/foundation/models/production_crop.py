@@ -302,7 +302,7 @@ class ProductionCrop(models.Model):
         blank=True,
     )
     notes = models.TextField(
-        _("Notes at finish"),
+        _("Note(s) / Comment(s)"),
         help_text=_('Any notes or notes of the crop when the production has finished.'),
         blank=True,
         null=True,
