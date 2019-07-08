@@ -54,7 +54,7 @@ class UserAdmin(BaseUserAdmin):
             {'fields': ('has_signed_tos', 'tos_agreement', 'tos_signed_on')}
         ),
     )
-    readonly_fields = ['subscription_status',]
+    readonly_fields = ['id']
 
     search_fields =  ['email',]
     ordering = ['email',]
