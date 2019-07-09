@@ -31,5 +31,6 @@ urlpatterns = (
     # Profile
     url(r'^api/profile$', resources.ProfileInfoRetrieveUpdateAPIView.as_view(), name='mikaponics_profile_info_api_endpoint'),
     url(r'^api/profile-with-token-refresh$', resources.RefreshTokenAPIView.as_view(), name='mikaponics_profile_info_with_token_refresh_api_endpoint'),
+    url(r'^api/applications$', resources.UserApplicationListCreateAPIView.as_view(), name='mikaponics_application_list_create_api_endpoint'),
     ############################################################################
 )

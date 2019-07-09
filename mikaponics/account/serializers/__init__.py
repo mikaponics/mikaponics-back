@@ -5,3 +5,4 @@ from account.serializers.register_serializers import RegisterSerializer
 from account.serializers.send_password_reset_serializer import SendPasswordResetSerializer
 from account.serializers.reset_password_serializer import ResetPasswordSerializer
 from account.serializers.profile_serializers import ProfileInfoRetrieveUpdateSerializer
+from account.serializers.application_list_create_serializers import UserApplicationListCreateSerializer

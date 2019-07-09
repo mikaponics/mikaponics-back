@@ -6,3 +6,4 @@ from account.resources.send_password_reset_view import SendPasswordResetAPIView
 from account.resources.reset_password_view import ResetPasswordAPIView
 from account.resources.profile_info_api_view import ProfileInfoRetrieveUpdateAPIView
 from account.resources.refresh_view import RefreshTokenAPIView
+from account.resources.application_list_create_view import UserApplicationListCreateAPIView

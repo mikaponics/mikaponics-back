@@ -1,4 +1,5 @@
 from foundation.models.user import User
+from foundation.models.user_application import UserApplication
 from foundation.models.device import Device
 from foundation.models.instrument import Instrument
 from foundation.models.time_series_datum import TimeSeriesDatum
