@@ -25,7 +25,7 @@ class InstrumentListSerializer(serializers.ModelSerializer):
 
 
 class InstrumentRetrieveUpdateSerializer(serializers.ModelSerializer):
-
+    uuid = serializers.UUIDField(read_only=True)
     absolute_parent_url = serializers.SerializerMethodField()
     absolute_url = serializers.SerializerMethodField()
     icon = serializers.CharField(read_only=True, source='get_icon')
@@ -38,6 +38,7 @@ class InstrumentRetrieveUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instrument
         fields = (
+            'uuid',
             'max_value',
             'red_above_value',
             'orange_above_value',

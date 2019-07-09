@@ -15,6 +15,7 @@ from foundation.models import Device, Instrument, User
 
 
 class DeviceListCreateSerializer(serializers.ModelSerializer):
+    uuid = serializers.UUIDField(read_only=True)
     user = serializers.PrimaryKeyRelatedField(
         many=False,
         queryset=User.objects.all(),
@@ -31,6 +32,7 @@ class DeviceListCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Device
         fields = (
+            'uuid',
             'slug',
             'name',
             'description',
@@ -46,6 +48,7 @@ class DeviceListCreateSerializer(serializers.ModelSerializer):
 
 
 class DeviceInstrumentSerializer(serializers.ModelSerializer):
+    uuid = serializers.UUIDField(read_only=True)
     absolute_url = serializers.ReadOnlyField(source='get_absolute_url')
     absolute_parent_url = serializers.ReadOnlyField(source='get_absolute_parent_url')
     unit_of_measure = serializers.ReadOnlyField(source='get_unit_of_measure')
@@ -61,6 +64,7 @@ class DeviceInstrumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instrument
         fields = (
+            'uuid',
             'absolute_url',
             'absolute_parent_url',
             'last_measured_value',
@@ -79,6 +83,7 @@ class DeviceInstrumentSerializer(serializers.ModelSerializer):
 
 
 class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
+    uuid = serializers.UUIDField(read_only=True)
     activated_at = serializers.ReadOnlyField()
     name = serializers.CharField(
         required=True,
