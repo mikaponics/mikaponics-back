@@ -12,6 +12,7 @@ from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 
 from foundation.models import Device, Instrument, User
+from foundation.constants import MIKAPONICS_AUTHORIZED_DEVICE_PRODUCT_ID
 
 
 class DeviceAuthorizeSerializer(serializers.ModelSerializer):
@@ -54,7 +55,7 @@ class DeviceAuthorizeSerializer(serializers.ModelSerializer):
         # Create our device.
         device = Device.objects.create(
             is_verified=False,
-            product_id=1, #TODO
+            product_id=MIKAPONICS_AUTHORIZED_DEVICE_PRODUCT_ID,
             name=name,
             description=description,
             user=authenticated_user,

@@ -38,10 +38,12 @@ class Product(models.Model):
         DRAFT = 1
         COMING_SOON = 2
         PUBLISHED = 3
+        HIDDEN = 4
 
     STATE_CHOICES = (
         (STATE.DRAFT, _('Draft')),
         (STATE.COMING_SOON, _('Coming Soon')),
+        (STATE.HIDDEN, _('Hidden')),
         (STATE.PUBLISHED, _('Publised')),
     )
 

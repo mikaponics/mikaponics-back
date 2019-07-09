@@ -128,6 +128,22 @@ class Command(BaseCommand):
                 'state': Product.STATE.COMING_SOON
             }
         )
+        Product.objects.update_or_create(
+            id=MIKAPONICS_AUTHORIZED_DEVICE_PRODUCT_ID,
+            store=store,
+            defaults={
+                'id': MIKAPONICS_AUTHORIZED_DEVICE_PRODUCT_ID,
+                'store': store,
+                'slug': 'authorized-device',
+                'sort_number': 5,
+                'icon': 'seedling',
+                'name': "Authorized Device",
+                "short_description": "Custom device authorized to us Mikaponics.",
+                'description': '',
+                'price': Money(249.99, 'CAD'),
+                'state': Product.STATE.HIDDEN
+            }
+        )
 
         '''
         Create the default shipper for our store.
