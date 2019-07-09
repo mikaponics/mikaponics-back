@@ -40,7 +40,7 @@ from oauth2_provider.models import (
     # RefreshToken
 )
 
-from foundation.models import Device
+from foundation.models import UserApplication, Device
 
 @receiver(post_save, sender=Device)
 def create_oauth_for_device(sender, instance, created, **kwargs):
@@ -66,6 +66,16 @@ def create_oauth_for_device(sender, instance, created, **kwargs):
 def delete_oauth_for_device(sender, instance, **kwargs):
     """
     Function will be fired when a `Device` has been deleted. We want to
+    automatically unauthorize the existing oAuth 2.0 authorization we have
+    for that device.
+    """
+    if instance:
+        Application.objects.filter(name=instance.uuid).delete()
+
+@receiver(post_delete, sender=UserApplication)
+def delete_oauth_for_user_application(sender, instance, **kwargs):
+    """
+    Function will be fired when a `Application` has been deleted. We want to
     automatically unauthorize the existing oAuth 2.0 authorization we have
     for that device.
     """

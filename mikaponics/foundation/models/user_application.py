@@ -10,6 +10,10 @@ from django.db import transaction
 from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from oauth2_provider.models import (
+    Application,
+    AbstractApplication
+)
 
 
 class UserApplicationManager(models.Manager):
@@ -29,6 +33,17 @@ class UserApplicationManager(models.Manager):
 
 
 class UserApplication(models.Model):
+    """
+    Model used to track the user applications that exist in our system. The
+    applications are `OAuth 2.0 Client credentials`. When an object gets created
+    then this class will automatically create out `Application` model and
+    when the object gets deleted then the `Application` gets deleted in the
+    `foundation/signals.py` code.
+
+    This file is dependent on the `Django OAuth Toolkit` so if there is anything
+    not understood then please visit the library documentation via the link:
+    https://django-oauth-toolkit.readthedocs.io/en/latest/index.html
+    """
 
     '''
     Metadata
@@ -162,6 +177,7 @@ class UserApplication(models.Model):
         (1) If we created the object then we will generate a custom slug.
         (a) If user exists then generate slug based on user's name.
         (b) Else generate slug with random string.
+        (c) Create our OAuth 2.0 Authorization Application.
         """
         if not self.slug:
             count = UserApplication.objects.filter(user=self.user).count()
@@ -174,6 +190,25 @@ class UserApplication(models.Model):
             # through the various slugs until a unique slug is found.
             while UserApplication.objects.filter(slug=self.slug).exists():
                 self.slug = slugify(self.user)+"-application-"+str(count)+"-"+get_random_string(length=8)
+
+            # DEVELOPERS NOTE:
+            # (1) We will be creating our OAuth 2.0 application here.
+            # (2) We will be creating only a `confidential grant client credentials`
+            #     type of OAuth 2.0 authorization.
+            # (3) While the `Django OAuth2 Toolkil` library supports creating
+            #     custom models using inheritence (see link: https://django-oauth-toolkit.readthedocs.io/en/latest/advanced_topics.html#extending-the-application-model)
+            #     we will avoid and just map the two models using a `uuid` value.
+            #     We are doing this to keep things simple.
+            application, created = Application.objects.update_or_create(
+                name=str(self.uuid),
+                defaults={
+                    "user": self.user,
+                    "name": str(self.uuid),
+                    "skip_authorization": True,
+                    "authorization_grant_type": AbstractApplication.GRANT_CLIENT_CREDENTIALS,
+                    "client_type": AbstractApplication.CLIENT_CONFIDENTIAL
+                }
+            )
 
         super(UserApplication, self).save(*args, **kwargs)
 
