@@ -181,6 +181,12 @@ class Device(models.Model):
         blank=True,
         null=True,
     )
+    is_verified = models.BooleanField(
+        _("Is verified"),
+        help_text=_('Is this device verified by Mikaponics. Only devices built by Mikaponics can be verified.'),
+        default=False,
+        blank=True,
+    )
 
     #
     # Real-time operation fields.

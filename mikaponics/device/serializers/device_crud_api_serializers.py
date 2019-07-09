@@ -25,6 +25,7 @@ class DeviceListCreateSerializer(serializers.ModelSerializer):
     pretty_state = serializers.ReadOnlyField(source='get_pretty_state')
     created_at = serializers.DateTimeField(read_only=True)
     last_modified_at = serializers.DateTimeField(read_only=True)
+    is_verified = serializers.BooleanField(read_only=True)
     absolute_url = serializers.ReadOnlyField(source='get_absolute_url')
 
     class Meta:
@@ -39,6 +40,7 @@ class DeviceListCreateSerializer(serializers.ModelSerializer):
             'pretty_state',
             'created_at',
             'last_modified_at',
+            'is_verified',
             'absolute_url'
         )
 
@@ -93,6 +95,7 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
     instruments = serializers.SerializerMethodField()
     state = serializers.IntegerField(read_only=True)
     pretty_state = serializers.ReadOnlyField(source='get_pretty_state')
+    is_verified = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Device
@@ -105,6 +108,7 @@ class DeviceRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
             'state',
             'pretty_state',
             'slug',
+            'is_verified',
             'absolute_url',
             # 'last_measured_at',
             # 'last_measured_pretty_at',

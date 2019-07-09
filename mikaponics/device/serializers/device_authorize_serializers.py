@@ -53,6 +53,7 @@ class DeviceAuthorizeSerializer(serializers.ModelSerializer):
 
         # Create our device.
         device = Device.objects.create(
+            is_verified=False,
             product_id=1, #TODO
             name=name,
             description=description,
