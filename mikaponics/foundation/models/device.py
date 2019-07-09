@@ -112,6 +112,12 @@ class Device(models.Model):
     # Specific device fields.
     #
 
+    id = models.BigAutoField(
+        _("ID"),
+        primary_key=True,
+        help_text=_('The unique identifier used by us to identify a device in our system and we keep internal to our system (i.e. we do not release it).'),
+
+    )
     uuid = models.UUIDField(
         help_text=_('The unique identifier used by us to identify a device in our system and we release this value to the customer.'),
         default=uuid.uuid4,

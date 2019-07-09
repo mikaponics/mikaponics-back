@@ -78,7 +78,7 @@ class DeviceAdmin(admin.ModelAdmin):
     list_display = ['slug', 'id', 'name', 'user', 'product', 'state',]
     ordering = ['-id',]
     readonly_fields = [
-        'uuid', 'created_at', 'created_by', 'created_from',
+        'id', 'uuid', 'created_at', 'created_by', 'created_from',
         'created_from_is_public', 'last_modified_at', 'last_modified_by',
         'last_modified_from', 'last_modified_from_is_public', 'activated_at',
         'last_measurement', 'last_camera_snapshot',
