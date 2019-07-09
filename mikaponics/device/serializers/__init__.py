@@ -1,3 +1,5 @@
 from device.serializers.device_crud_api_serializers import DeviceListCreateSerializer
 from device.serializers.device_crud_api_serializers import DeviceRetrieveUpdateDestroySerializer
 from device.serializers.device_crud_api_serializers import DeviceProfileSerializer
+
+from device.serializers.device_authorize_serializers import DeviceAuthorizeSerializer

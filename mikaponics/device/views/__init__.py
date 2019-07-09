@@ -1,3 +1,4 @@
 from device.views.resources.device_crud_api_views import DeviceListCreateAPIView
 from device.views.resources.device_crud_api_views import DeviceRetrieveUpdateDestroyAPIView
 from device.views.resources.device_crud_api_views import DeviceProfileAPIView
+from device.views.resources.device_authorize_views import DeviceAuthorizeAPIView
