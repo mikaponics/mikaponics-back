@@ -161,6 +161,11 @@ class Instrument(models.Model):
     '''
     Fields
     '''
+    id = models.BigAutoField(
+        _("ID"),
+        primary_key=True,
+        help_text=_('The unique identifier used by us to identify an instrument in our system and we keep internal to our system (i.e. we do not release it to the customer).'),
+    )
     uuid = models.UUIDField(
         help_text=_('The unique identifier used by us to identify an instrument in our system and we release this value to the customer.'),
         default=uuid.uuid4,

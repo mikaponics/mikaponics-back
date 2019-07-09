@@ -115,8 +115,7 @@ class Device(models.Model):
     id = models.BigAutoField(
         _("ID"),
         primary_key=True,
-        help_text=_('The unique identifier used by us to identify a device in our system and we keep internal to our system (i.e. we do not release it).'),
-
+        help_text=_('The unique identifier used by us to identify a device in our system and we keep internal to our system (i.e. we do not release it to customer).'),
     )
     uuid = models.UUIDField(
         help_text=_('The unique identifier used by us to identify a device in our system and we release this value to the customer.'),
