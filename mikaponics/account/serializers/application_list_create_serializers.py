@@ -24,6 +24,7 @@ class UserApplicationListCreateSerializer(serializers.ModelSerializer):
     slug = serializers.SlugField(read_only=True,)
     client_id = serializers.CharField(read_only=True, allow_blank=True, allow_null=True,)
     client_secret = serializers.CharField(read_only=True, allow_blank=True, allow_null=True,)
+    created_at = serializers.DateTimeField(read_only=True, allow_null=True,)
 
     class Meta:
         model = UserApplication
@@ -33,6 +34,7 @@ class UserApplicationListCreateSerializer(serializers.ModelSerializer):
             'slug',
             'client_id',
             'client_secret',
+            'created_at',
         )
 
     def setup_eager_loading(cls, queryset):
@@ -67,6 +69,7 @@ class UserApplicationListCreateSerializer(serializers.ModelSerializer):
         app = Application.objects.get(name=instance.uuid)
 
         # Save our outputs and return them.
+        validated_data['created_at'] = instance.created_at
         validated_data['slug'] = instance.slug
         validated_data['client_id'] = app.client_id
         validated_data['client_secret'] = app.client_secret

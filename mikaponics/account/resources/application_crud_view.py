@@ -48,15 +48,15 @@ class UserApplicationListCreateAPIView(generics.ListCreateAPIView):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-#
-# class UserApplicationRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-#     serializer_class = UserApplicationRetrieveUpdateDestroySerializer
-#     # pagination_class = StandardResultsSetPagination
-#     permission_classes = (
-#         # permissions.IsAuthenticated,
-#         # IsAuthenticatedAndIsActivePermission,
-#         # CanRetrieveUpdateDestroyUserApplicationPermission
-#     )
+
+class UserApplicationRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    # serializer_class = UserApplicationRetrieveUpdateDestroySerializer
+    # pagination_class = StandardResultsSetPagination
+    permission_classes = (
+        permissions.IsAuthenticated,
+        # IsAuthenticatedAndIsActivePermission,
+        # CanRetrieveUpdateDestroyUserApplicationPermission
+    )
 #
 #     @transaction.atomic
 #     def get(self, request, slug=None):
@@ -101,18 +101,18 @@ class UserApplicationListCreateAPIView(generics.ListCreateAPIView):
 #             status=status.HTTP_200_OK
 #         )
 #
-#     @transaction.atomic
-#     def delete(self, request, slug=None):
-#         """
-#         Delete
-#         """
-#         device = get_object_or_404(UserApplication, slug=slug)
-#         self.check_object_permissions(request, device)  # Validate permissions.
-#         device.delete()
-#         return Response(data=[], status=status.HTTP_200_OK)
-#
-#
-#
+    @transaction.atomic
+    def delete(self, request, slug=None):
+        """
+        Delete
+        """
+        application = get_object_or_404(UserApplication, slug=slug)
+        self.check_object_permissions(request, application)  # Validate permissions.
+        application.delete()
+        return Response(data=[], status=status.HTTP_200_OK)
+
+
+
 #
 # class UserApplicationProfileAPIView(generics.RetrieveUpdateDestroyAPIView):
 #     serializer_class = UserApplicationProfileSerializer
