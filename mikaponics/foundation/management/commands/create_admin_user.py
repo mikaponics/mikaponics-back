@@ -58,7 +58,9 @@ class Command(BaseCommand):
             shipping_email = email,
             has_signed_tos = True,
             tos_agreement = tos_agreement,
-            tos_signed_on = timezone.now()
+            tos_signed_on = timezone.now(),
+            subscription_status=User.SUBSCRIPTION_STATUS.ACTIVE,
+            subscription_start_date = timezone.now(),
         )
 
         # Generate and assign the password.
