@@ -568,23 +568,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     #
-    # ONBOARDING FIELD
-    #
-
-    was_onboarded = models.BooleanField(
-        _("Was Onboarded"),
-        help_text=_('Was the user onboarded in our system? If yes then allow user access to their dashboard and the remaining features of the site.'),
-        default=False,
-        blank=True
-    )
-    onboarding_survey_data = JSONField(
-        _("Survey data"),
-        help_text=_('The onboarding submitted survey data.'),
-        blank=True,
-        null=True,
-    )
-
-    #
     # PASSWORD RESET FIELDS
     #
 

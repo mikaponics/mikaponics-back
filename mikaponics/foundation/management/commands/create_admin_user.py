@@ -50,7 +50,6 @@ class Command(BaseCommand):
             is_superuser=True,
             is_staff=True,
             was_email_activated=True,
-            was_onboarded=True,
             billing_given_name = first_name,
             billing_last_name = last_name,
             billing_email = email,

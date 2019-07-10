@@ -83,8 +83,6 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
     # --- Misc ---
     timezone = serializers.CharField(required=False,allow_blank=False,)
     was_email_activated = serializers.ReadOnlyField()
-    was_onboarded = serializers.ReadOnlyField()
-    onboarding_survey_data = serializers.ReadOnlyField()
     latest_invoice = InvoiceListCreateSerializer(read_only=True, many=False)
     referral_link = serializers.SerializerMethodField()
 
@@ -104,8 +102,6 @@ class ProfileInfoRetrieveUpdateSerializer(serializers.Serializer):
             'subscription_status',
             'subscription_start_date',
             'was_email_activated',
-            'was_onboarded',
-            'onboarding_survey_data',
             'is_ok_to_email',
             'is_ok_to_text',
             'location',

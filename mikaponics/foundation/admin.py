@@ -12,8 +12,8 @@ from foundation.models import *
 # Define a new User admin
 class UserAdmin(BaseUserAdmin):
     raw_id_fields = ['referred_by',]
-    list_display = ['email', 'is_staff', 'is_active', 'was_email_activated', 'was_onboarded', 'referred_by',]
-    list_filter = ('is_staff',  'is_active', 'was_email_activated', 'was_onboarded', )
+    list_display = ['email', 'is_staff', 'is_active', 'was_email_activated', 'referred_by',]
+    list_filter = ('is_staff',  'is_active', 'was_email_activated', )
 
     fieldsets = (
         (None,
@@ -39,8 +39,8 @@ class UserAdmin(BaseUserAdmin):
         ('E-Ecommerce',
             {'fields':
                 (
-                'was_onboarded', 'customer_id','customer_data', 'subscription_id',
-                'subscription_status', 'subscription_start_date', 'subscription_data',
+                'subscription_status', 'subscription_start_date', 'subscription_data', 'subscription_id',
+                'customer_id','customer_data',
                 'referral_code', 'referred_by',
                 )
             }
