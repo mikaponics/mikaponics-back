@@ -23,13 +23,16 @@ from account.serializers import ActivateSerializer, ProfileInfoRetrieveUpdateSer
 
 
 class ActivateAPIView(APIView):
+    """
+    API endpoint takes the `pr_code` inputted and validates it to see if this
+    code (1) did not expire (2) and code exists. Once validated this API
+    endpoint acts like the "login" API by providing all the necessary items.
+    """
+
     throttle_classes = ()
     permission_classes = ()
 
     def post(self, request):
-        # Get the IP of the user.
-        client_ip, is_routable = get_client_ip(self.request)
-
         # Serializer to get our login details.
         serializer = ActivateSerializer(data=request.data, context={
             'request': request,
@@ -41,27 +44,32 @@ class ActivateAPIView(APIView):
         # Get our web application authorization.
         application = Application.objects.filter(name=settings.MIKAPONICS_RESOURCE_SERVER_NAME).first()
 
-        # Generate our access token which does not have a time limit.
+        # Generate our "NEW" access token which does not have a time limit.
+        # We want to generate a new token every time because the user may be
+        # logging in from multiple locations and may log out from multiple
+        # locations so we don't want the user using the same token every time.
         aware_dt = timezone.now()
-        expires_dt = aware_dt.replace(aware_dt.year + 1776)
-        access_token, created = AccessToken.objects.update_or_create(
+        expires_dt = aware_dt + timezone.timedelta(days=1)
+        access_token = AccessToken.objects.create(
             application=application,
             user=authenticated_user,
-            defaults={
-                'user': authenticated_user,
-                'application': application,
-                'expires': expires_dt,
-                'token': generate_token(),
-                'scope': 'read,write,introspection'
-            },
+            expires=expires_dt,
+            token=generate_token(),
             scope='read,write,introspection'
+        )
+
+        refresh_token = RefreshToken.objects.create(
+            application = application,
+            user = authenticated_user,
+            access_token=access_token,
+            token=generate_token()
         )
 
         serializer = ProfileInfoRetrieveUpdateSerializer(authenticated_user, many=False, context={
             'authenticated_by': authenticated_user,
-            'authenticated_from': client_ip,
-            'authenticated_from_is_public': is_routable,
-            'token': str(access_token),
-            'scope': access_token.scope,
+            'authenticated_from': request.client_ip,
+            'authenticated_from_is_public': request.client_ip_is_routable,
+            'access_token': access_token,
+            'refresh_token': refresh_token
         })
         return Response(serializer.data, status=status.HTTP_200_OK)
