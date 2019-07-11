@@ -29,8 +29,8 @@ class InvoiceItemRetrieveUpdateDestroySerializer(serializers.Serializer):
     product = serializers.PrimaryKeyRelatedField(read_only=True)
     description = serializers.CharField(read_only=True,)
     quantity = serializers.IntegerField(required=False, allow_null=True)
-    unit_price = serializers.CharField(read_only=True)
-    total_price = serializers.CharField(read_only=True)
+    unit_price = serializers.FloatField(read_only=True)
+    total_price = serializers.FloatField(read_only=True)
 
     # Meta Information.
     class Meta:
