@@ -34,7 +34,7 @@ class Command(BaseCommand):
                 override_email = options['override_email'][0]
             except Exception as e:
                 override_email = None
-            invoice = Invoice.objects.get(id=invoice_id)
+            invoice = Invoice.objects.get(id=int(invoice_id))
             self.begin_processing(invoice, override_email)
         except Invoice.DoesNotExist:
             raise CommandError(_('Invoice ID does not exist for value: %s') % str(invoice_id))
