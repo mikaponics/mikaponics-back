@@ -35,7 +35,7 @@ class Command(BaseCommand):
                 user = User.objects.get(email=email)
                 self.begin_processing(user)
         except User.DoesNotExist:
-            raise CommandError(_('Account does not exist with the id: %s') % str(id))
+            raise CommandError(_('Account does not exist with the email: %s') % str(email))
 
         # Return success message.
         self.stdout.write(
