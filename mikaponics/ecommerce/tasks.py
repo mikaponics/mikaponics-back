@@ -9,7 +9,7 @@ from django.core.management import call_command
 
 
 @job
-def run_send_customer_receipt_email_by_invoice_id_func(invoice_id, override_email='-'):
+def run_send_customer_receipt_email_by_invoice_id_func(invoice_id, override_email=None):
     call_command('send_customer_receipt_email_by_order_id', invoice_id, override_email, verbosity=0)
 
 
