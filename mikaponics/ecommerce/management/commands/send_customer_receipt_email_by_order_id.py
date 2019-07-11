@@ -24,13 +24,16 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('invoice_id' , nargs='+', type=int)
-        parser.add_argument('override_email' , nargs='+', type=str)
+        parser.add_argument('override_email' , nargs='?', type=str)
 
 
     def handle(self, *args, **options):
         try:
             invoice_id = options['invoice_id'][0]
-            override_email = options['override_email'][0]
+            try:
+                override_email = options['override_email'][0]
+            except Exception as e:
+                override_email = None
             invoice = Invoice.objects.get(id=invoice_id)
             self.begin_processing(invoice, override_email)
         except Invoice.DoesNotExist:
@@ -68,8 +71,9 @@ class Command(BaseCommand):
         to = [invoice.user.email]
 
         # Override the destination email if we have to.
-        if '@' not in override_email:
-            to = [override_email,]
+        if override_email:
+            if '@' not in override_email:
+                to = [override_email,]
 
         # Send the email.
         msg = EmailMultiAlternatives(subject, text_content, from_email, to)
