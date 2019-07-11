@@ -21,8 +21,3 @@ def run_send_staff_receipt_email_by_invoice_id_func(invoice_id):
 @job
 def run_process_stripe_event_by_id_func(event_id):
     call_command('process_stripe_event_by_id', event_id, verbosity=0)
-
-
-@job
-def run_send_staff_user_onboarded_email_by_user_id_func(user_id):
-    call_command('send_staff_user_onboarded_email_by_user', user_id, verbosity=0)
