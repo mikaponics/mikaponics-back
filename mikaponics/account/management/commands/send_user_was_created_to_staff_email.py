@@ -43,8 +43,6 @@ class Command(BaseCommand):
         )
 
     def begin_processing(self, user):
-        staff_email_addresses = get_staff_email_addresses()
-
         # Generate the data.
         url = settings.MIKAPONICS_BACKEND_HTTP_PROTOCOL+settings.MIKAPONICS_BACKEND_HTTP_DOMAIN+"/en/admin/foundation/user/"+str(user.id)+"/change/"
         web_view_url = reverse_with_full_domain(
@@ -65,7 +63,7 @@ class Command(BaseCommand):
 
         # Generate our address.
         from_email = settings.DEFAULT_FROM_EMAIL
-        to = [staff_email_addresses]
+        to = get_staff_email_addresses()
 
         # Send the email.
         msg = EmailMultiAlternatives(subject, text_content, from_email, to)
