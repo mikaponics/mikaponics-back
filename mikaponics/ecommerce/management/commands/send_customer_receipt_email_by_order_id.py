@@ -42,7 +42,7 @@ class Command(BaseCommand):
 
         # Return success message.
         self.stdout.write(
-            self.style.SUCCESS(_('MIKAPONICS: Activation email was sent successfully.'))
+            self.style.SUCCESS(_('MIKAPONICS: Customer receipt email was sent successfully.'))
         )
 
     def begin_processing(self, invoice, override_email):
@@ -77,8 +77,8 @@ class Command(BaseCommand):
                 validate_email(override_email) # Defensive code
                 if '@' not in override_email:
                     to = override_email
-            except validate_email.ValidationError:
-                pass
+            except Exception as e:
+                pass # Skip this step on error.
 
         # Send the email.
         msg = EmailMultiAlternatives(subject, text_content, from_email, to)
