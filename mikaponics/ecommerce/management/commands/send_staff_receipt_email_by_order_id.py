@@ -32,11 +32,11 @@ class Command(BaseCommand):
                 invoice = Invoice.objects.get(id=invoice_id)
                 self.begin_processing(invoice)
         except Invoice.DoesNotExist:
-            raise CommandError(_('Invoice ID does not exist.'))
+            raise CommandError(_('Invoice ID does not exist for value: %s') % str(invoice_id))
 
         # Return success message.
         self.stdout.write(
-            self.style.SUCCESS(_('MIKAPONICS: Activation email was sent successfully.'))
+            self.style.SUCCESS(_('MIKAPONICS: Send receipt email to staff was sent successfully.'))
         )
 
     def begin_processing(self, invoice):

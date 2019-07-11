@@ -37,7 +37,7 @@ class Command(BaseCommand):
             invoice = Invoice.objects.get(id=invoice_id)
             self.begin_processing(invoice, override_email)
         except Invoice.DoesNotExist:
-            raise CommandError(_('Invoice ID does not exist.'))
+            raise CommandError(_('Invoice ID does not exist for value: %s') % str(invoice_id))
 
         # Return success message.
         self.stdout.write(
@@ -68,12 +68,12 @@ class Command(BaseCommand):
 
         # Generate our address.
         from_email = settings.DEFAULT_FROM_EMAIL
-        to = [invoice.user.email]
+        to = invoice.user.email
 
         # Override the destination email if we have to.
         if override_email:
             if '@' not in override_email:
-                to = [override_email,]
+                to = override_email
 
         # Send the email.
         msg = EmailMultiAlternatives(subject, text_content, from_email, to)
