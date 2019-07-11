@@ -71,7 +71,7 @@ class Command(BaseCommand):
         to = invoice.user.email
 
         # Override the destination email if we have to.
-        if override_email:
+        if override_email != 'None' and override_email != None:
             if '@' not in override_email:
                 to = override_email
 
