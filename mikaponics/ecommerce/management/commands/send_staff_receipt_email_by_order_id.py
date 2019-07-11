@@ -19,7 +19,7 @@ from foundation.model_resources import get_staff_email_addresses
 class Command(BaseCommand):
     """
     Example:
-    python manage.py send_customer_receipt_email_by_order_id 1
+    python manage.py send_staff_receipt_email_by_order_id 1
     """
     help = _('Command will send an receipt email to all the staff based on the invoice ID.')
 
@@ -48,7 +48,7 @@ class Command(BaseCommand):
         )
 
         # Get the parameter.
-        subject = "Mikaponics: Your Receipt is Ready"
+        subject = "Mikaponics: Customer made purchase"
         param = {
             'constants': constants,
             'url': url,
