@@ -26,7 +26,7 @@ def get_todays_date_plus_days(days=0):
 
 class InvoiceListCreateSerializer(serializers.Serializer):
     state = serializers.CharField(read_only=True, source="get_pretty_state")
-    grand_total = serializers.CharField(read_only=True)
+    grand_total = serializers.FloatField(read_only=True)
     slug = serializers.SlugField(read_only=True)
     absolute_url = serializers.ReadOnlyField(source="get_absolute_url")
     purchased_at = serializers.DateTimeField(read_only=True)
