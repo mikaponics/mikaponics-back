@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.core.management.base import BaseCommand, CommandError
 from django.core.mail import EmailMultiAlternatives    # EMAILER
+from django.core.validators import validate_email
 from django.db.models import Q
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -24,7 +25,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('invoice_id' , nargs='+', type=int)
-        parser.add_argument('override_email' , nargs='?', type=str)
+        parser.add_argument('override_email' , nargs='+', type=str)
 
 
     def handle(self, *args, **options):
@@ -68,12 +69,16 @@ class Command(BaseCommand):
 
         # Generate our address.
         from_email = settings.DEFAULT_FROM_EMAIL
-        to = invoice.user.email
+        to = [invoice.user.email,]
 
         # Override the destination email if we have to.
-        if override_email != 'None' and override_email != None:
-            if '@' not in override_email:
-                to = override_email
+        if override_email:
+            try:
+                validate_email(override_email) # Defensive code
+                if '@' not in override_email:
+                    to = override_email
+            except validate_email.ValidationError:
+                pass
 
         # Send the email.
         msg = EmailMultiAlternatives(subject, text_content, from_email, to)
