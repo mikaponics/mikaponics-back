@@ -1,4 +1,8 @@
-# mikaponics-back
+# Mikaponics Backend
+
+[![Documentation Status](https://readthedocs.org/projects/mikaponics-docs/badge/?version=latest)](https://mikaponics-docs.readthedocs.io/en/latest/?badge=latest)
+
+## Introduction
 Online aquaponics / hydroponic device monitoring portal implemented in Python and powered by Django.
 
 
