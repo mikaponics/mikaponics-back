@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 
+from foundation.drf import BlankableFloatField
 from foundation.models import CropDataSheet, Production, ProductionCrop
 from production.serializers.production_crop_list_serializer import ProductionCropListSerializer
 
@@ -19,7 +20,10 @@ class ProductionCropUpdateSerializer(serializers.ModelSerializer):
     harvest_failure_reason = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     harvest_yield = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     harvest_quality = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-    harvest_weight = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    harvest_weight = BlankableFloatField(required=False, allow_null=True)
+    average_length = BlankableFloatField(required=False, allow_null=True,)
+    average_width = BlankableFloatField(required=False, allow_null=True,)
+    average_height = BlankableFloatField(required=False, allow_null=True,)
 
     class Meta:
         model = ProductionCrop
