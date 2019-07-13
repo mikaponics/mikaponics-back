@@ -12,3 +12,15 @@ class BlankableFloatField(serializers.FloatField):
             return None
 
         return super(BlankableFloatField, self).to_internal_value(data)
+
+
+class BlankableIntegerField(serializers.IntegerField):
+    """
+    If field receives an empty string ('') for a integer field then turn it into
+    a None number.
+    """
+    def to_internal_value(self, data):
+        if data == '':
+            return None
+
+        return super(BlankableIntegerField, self).to_internal_value(data)

@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 
-from foundation.drf import BlankableFloatField
+from foundation.drf import BlankableFloatField, BlankableIntegerField
 from foundation.models import CropDataSheet, Production, ProductionCrop
 from production.serializers.production_crop_list_serializer import ProductionCropListSerializer
 
@@ -17,9 +17,9 @@ from production.serializers.production_crop_list_serializer import ProductionCro
 class ProductionCropUpdateSerializer(serializers.ModelSerializer):
     crop_slug = serializers.CharField(required=True, allow_blank=False, source="data_sheet.slug")
     was_harvested = serializers.BooleanField(required=False, allow_null=False,)
-    harvest_failure_reason = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-    harvest_yield = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-    harvest_quality = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    harvest_failure_reason = BlankableIntegerField(required=False, allow_null=True)
+    harvest_yield = BlankableIntegerField(required=False, allow_null=True)
+    harvest_quality = BlankableIntegerField(required=False, allow_null=True)
     harvest_weight = BlankableFloatField(required=False, allow_null=True)
     average_length = BlankableFloatField(required=False, allow_null=True,)
     average_width = BlankableFloatField(required=False, allow_null=True,)
