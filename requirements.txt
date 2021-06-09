@@ -5,7 +5,7 @@ chardet==3.0.4
 Click==7.0
 croniter==0.3.27
 defusedxml==0.5.0
-Django==2.2.1
+Django==2.2.22
 django-anymail==6.0.1
 django-cors-headers==3.0.1
 django-environ==0.4.5
